@@ -10,7 +10,6 @@ const projects = [
     year: "2025 June - 2026 January",
     tags: ["GenUI", "Chain-of-Thought", "Agentic Systems"],
     image: "/antigravity.png",
-    link: "#", // Add actual project link here
   },
   {
     title: "CMU - SmaSH Lab",
@@ -18,7 +17,6 @@ const projects = [
     year: "2024 September - 2025 August",
     tags: ["Adaptive Decision-Making", "Multimodal Voice Interface", "Semantic Filtering"],
     image: "/bmw-genui.png",
-    link: "#", // Add actual project link here
   },
   {
     title: "Emma's Jellyfish",
@@ -26,7 +24,6 @@ const projects = [
     year: "2024 June - Present",
     tags: ["Personal Project", "Personal Agent", "LLM"],
     image: "/smash-lab.png",
-    link: "#", // Add actual project link here
   },
 ];
 
@@ -277,39 +274,14 @@ export default function Home() {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             {/* Hero Section */}
-            <header className="flex flex-col gap-6">
-              <div className="flex items-end gap-3">
-                <div className="flex flex-col gap-2">
-                  <p className="text-sm font-medium uppercase tracking-[0.3em] text-zinc-400">
-                    Product Designer
-                  </p>
-                  <h1 className="text-6xl font-bold tracking-tight text-zinc-950">
-                    Rina Kim
-                  </h1>
-                </div>
-
-                {/* Resume Button */}
-                <a
-                  href="/resume.pdf"
-                  download
-                  className="group flex h-11 w-11 items-center justify-center rounded-full border-1 border-zinc-300 bg-white transition-all duration-300 hover:border-zinc-900 hover:bg-zinc-900 hover:shadow-lg"
-                  aria-label="Download Resume"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="h-5 w-5 text-zinc-600 transition-colors duration-300 group-hover:text-white"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
-                    />
-                  </svg>
-                </a>
+            <header className="flex flex-col gap-8">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-medium uppercase tracking-[0.3em] text-zinc-400">
+                  Product Designer
+                </p>
+                <h1 className="text-6xl font-bold tracking-tight text-zinc-950">
+                  Rina Kim
+                </h1>
               </div>
 
               <div className="flex flex-col gap-6 max-w-3xl">
@@ -340,7 +312,7 @@ export default function Home() {
             </header>
 
             {/* Projects - Vertical Layout */}
-            <section className="flex flex-col gap-10">
+            <section className="flex flex-col gap-16">
               <div className="flex items-end justify-between border-b border-zinc-200 pb-4">
                 <h2 className="text-2xl font-semibold text-zinc-950">
                   Selected Work
@@ -350,61 +322,58 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-20">
                 {projects.map((project, index) => (
-                  <a
+                  <article
                     key={project.title}
-                    href={project.link || "#"}
-                    className="group block cursor-pointer rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_0_40px_rgba(0,0,0,0.08)] hover:bg-zinc-50/50"
+                    className="group flex flex-col gap-6 md:flex-row md:items-start md:gap-8"
                   >
-                    <article className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
-                      {/* Project Number */}
-                      <div className="flex-shrink-0">
-                        <span className="text-6xl font-light tracking-tight text-zinc-200 transition-colors duration-300 group-hover:text-zinc-300">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
+                    {/* Project Number */}
+                    <div className="flex-shrink-0">
+                      <span className="text-6xl font-light tracking-tight text-zinc-200">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    {/* Project Image */}
+                    <div className="flex-shrink-0 md:w-96">
+                      <div className="overflow-hidden rounded-2xl bg-zinc-100">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Project Info */}
+                    <div className="flex flex-1 flex-col gap-4">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-3">
+                          <h3 className="text-3xl font-semibold tracking-tight text-zinc-950">
+                            {project.title}
+                          </h3>
+                          <span className="text-sm font-medium text-zinc-400">
+                            {project.year}
+                          </span>
+                        </div>
+                        <p className="text-base leading-relaxed text-zinc-600">
+                          {project.desc}
+                        </p>
                       </div>
 
-                      {/* Project Image - 20% smaller */}
-                      <div className="flex-shrink-0 md:w-[307px]">
-                        <div className="overflow-hidden rounded-2xl bg-zinc-100 ring-1 ring-zinc-200/50 transition-all duration-500 group-hover:ring-zinc-300">
-                          <img
-                            src={project.image}
-                            alt={project.title}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        </div>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-md bg-zinc-50 px-3 py-1.5 text-xs font-medium text-zinc-700 ring-1 ring-inset ring-zinc-200/50"
+                          >
+                            {tag}
+                          </span>
+                        ))}
                       </div>
-
-                      {/* Project Info */}
-                      <div className="flex flex-1 flex-col gap-4">
-                        <div className="flex flex-col gap-2">
-                          <div className="flex items-center gap-3">
-                            <h3 className="text-3xl font-semibold tracking-tight text-zinc-950 transition-colors duration-300 group-hover:text-zinc-900">
-                              {project.title}
-                            </h3>
-                            <span className="text-sm font-medium text-zinc-400">
-                              {project.year}
-                            </span>
-                          </div>
-                          <p className="text-base leading-relaxed text-zinc-600">
-                            {project.desc}
-                          </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="rounded-md bg-zinc-50 px-3 py-1.5 text-xs font-medium text-zinc-700 ring-1 ring-inset ring-zinc-200/50"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </article>
-                  </a>
+                    </div>
+                  </article>
                 ))}
               </div>
             </section>
@@ -424,148 +393,6 @@ export default function Home() {
 
             {/* Landscape View Through Windshield */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-              {/* Watercolor Clouds - Studio Ghibli Inspired */}
-              <div className="absolute inset-0">
-                {/* Cloud Layer 1 - Large billowing clouds */}
-                <motion.svg
-                  className="absolute left-0 top-8 h-80 w-[800px] opacity-70"
-                  viewBox="0 0 800 320"
-                  initial={{ x: -50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 0.7 }}
-                  transition={{ duration: 3, ease: "easeOut" }}
-                >
-                  <defs>
-                    {/* Watercolor blur filter */}
-                    <filter id="watercolor1" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
-                      <feGaussianBlur in="goo" stdDeviation="3" result="shadow" />
-                    </filter>
-                    {/* Soft pastel gradient - cool blues to warm cream */}
-                    <linearGradient id="cloudGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.4" />
-                      <stop offset="50%" stopColor="#e0f2fe" stopOpacity="0.3" />
-                      <stop offset="100%" stopColor="#fef3c7" stopOpacity="0.2" />
-                    </linearGradient>
-                  </defs>
-                  {/* Cloud blob with organic shapes */}
-                  <path
-                    d="M 150 120 Q 180 80 220 90 Q 260 60 300 80 Q 340 70 370 95 Q 400 85 420 110 Q 430 130 420 155 Q 400 170 370 165 Q 340 175 310 170 Q 280 180 250 165 Q 220 175 190 160 Q 160 170 140 145 Q 130 125 150 120 Z"
-                    fill="url(#cloudGradient1)"
-                    filter="url(#watercolor1)"
-                  />
-                  <ellipse cx="280" cy="140" rx="90" ry="50" fill="#dbeafe" opacity="0.25" filter="url(#watercolor1)" />
-                  <ellipse cx="340" cy="125" rx="70" ry="45" fill="#fbcfe8" opacity="0.15" filter="url(#watercolor1)" />
-                </motion.svg>
-
-                {/* Cloud Layer 2 - Medium clouds with lavender tints */}
-                <motion.svg
-                  className="absolute right-10 top-20 h-64 w-[600px] opacity-60"
-                  viewBox="0 0 600 256"
-                  initial={{ x: 50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 0.6 }}
-                  transition={{ duration: 3.5, delay: 0.3, ease: "easeOut" }}
-                >
-                  <defs>
-                    <filter id="watercolor2" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -8" result="goo" />
-                      <feGaussianBlur in="goo" stdDeviation="4" result="shadow" />
-                    </filter>
-                    <radialGradient id="cloudGradient2">
-                      <stop offset="0%" stopColor="#e9d5ff" stopOpacity="0.35" />
-                      <stop offset="50%" stopColor="#ddd6fe" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#bae6fd" stopOpacity="0.15" />
-                    </radialGradient>
-                  </defs>
-                  <ellipse cx="200" cy="110" rx="120" ry="70" fill="url(#cloudGradient2)" filter="url(#watercolor2)" />
-                  <ellipse cx="280" cy="95" rx="90" ry="55" fill="#fae8ff" opacity="0.3" filter="url(#watercolor2)" />
-                  <path
-                    d="M 120 130 Q 150 100 190 110 Q 230 95 270 115 Q 300 105 320 125 Q 310 145 280 140 Q 240 150 200 145 Q 160 155 130 145 Q 110 140 120 130 Z"
-                    fill="#e0e7ff"
-                    opacity="0.25"
-                    filter="url(#watercolor2)"
-                  />
-                </motion.svg>
-
-                {/* Cloud Layer 3 - Small wispy clouds */}
-                <motion.svg
-                  className="absolute left-1/3 top-32 h-48 w-[400px] opacity-50"
-                  viewBox="0 0 400 192"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 0.5 }}
-                  transition={{ duration: 4, delay: 0.6, ease: "easeOut" }}
-                >
-                  <defs>
-                    <filter id="watercolor3" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" />
-                    </filter>
-                  </defs>
-                  <ellipse cx="150" cy="80" rx="70" ry="40" fill="#f5f3ff" opacity="0.4" filter="url(#watercolor3)" />
-                  <ellipse cx="200" cy="70" rx="55" ry="35" fill="#fef3c7" opacity="0.3" filter="url(#watercolor3)" />
-                  <ellipse cx="180" cy="90" rx="45" ry="28" fill="#dbeafe" opacity="0.35" filter="url(#watercolor3)" />
-                </motion.svg>
-
-                {/* Cloud Layer 4 - Background distant clouds */}
-                <motion.svg
-                  className="absolute right-1/4 top-12 h-56 w-[500px] opacity-40"
-                  viewBox="0 0 500 224"
-                  animate={{
-                    x: [0, -10, 0],
-                    opacity: [0.4, 0.45, 0.4]
-                  }}
-                  transition={{
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <defs>
-                    <filter id="watercolor4" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo" />
-                    </filter>
-                  </defs>
-                  <ellipse cx="240" cy="100" rx="140" ry="65" fill="#f0f9ff" opacity="0.45" filter="url(#watercolor4)" />
-                  <ellipse cx="300" cy="90" rx="100" ry="50" fill="#fef3c7" opacity="0.3" filter="url(#watercolor4)" />
-                </motion.svg>
-
-                {/* Cloud Layer 5 - Gentle floating cloud */}
-                <motion.svg
-                  className="absolute left-1/4 top-48 h-40 w-[350px] opacity-45"
-                  viewBox="0 0 350 160"
-                  animate={{
-                    x: [0, 15, 0],
-                    y: [0, -8, 0],
-                    opacity: [0.45, 0.5, 0.45]
-                  }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <defs>
-                    <filter id="watercolor5" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
-                    </filter>
-                    <linearGradient id="cloudGradient5" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.3" />
-                      <stop offset="50%" stopColor="#fae8ff" stopOpacity="0.35" />
-                      <stop offset="100%" stopColor="#fef3c7" stopOpacity="0.25" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 80 70 Q 110 50 140 60 Q 170 45 200 65 Q 230 55 250 75 Q 240 90 210 85 Q 180 95 150 90 Q 120 100 90 90 Q 70 85 80 70 Z"
-                    fill="url(#cloudGradient5)"
-                    filter="url(#watercolor5)"
-                  />
-                  <ellipse cx="165" cy="75" rx="60" ry="35" fill="#e9d5ff" opacity="0.2" filter="url(#watercolor5)" />
-                </motion.svg>
-              </div>
-
               {/* Sky - Already handled by skyGradient above */}
 
               {/* Horizon and Hills */}
