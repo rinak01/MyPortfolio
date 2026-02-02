@@ -419,478 +419,739 @@ export default function Home() {
             transition={{ duration: 0.7, ease: "easeOut" }}
             style={{ perspective: 1200 }}
           >
-            <div className={`absolute inset-0 ${skyGradient}`} />
-            <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/0 to-black/40" />
+            {/* Stylized Painted Sky - Light Blue Background */}
+            <div className="absolute inset-0 bg-gradient-to-b from-sky-300 via-sky-200 to-sky-100" />
 
-            {/* Landscape View Through Windshield */}
+            {/* Painterly Pink/Purple Fluffy Clouds */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-              {/* Watercolor Clouds - Studio Ghibli Inspired */}
-              <div className="absolute inset-0">
-                {/* Cloud Layer 1 - Large billowing clouds */}
-                <motion.svg
-                  className="absolute left-0 top-8 h-80 w-[800px] opacity-70"
-                  viewBox="0 0 800 320"
-                  initial={{ x: -50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 0.7 }}
-                  transition={{ duration: 3, ease: "easeOut" }}
-                >
-                  <defs>
-                    {/* Watercolor blur filter */}
-                    <filter id="watercolor1" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
-                      <feGaussianBlur in="goo" stdDeviation="3" result="shadow" />
-                    </filter>
-                    {/* Soft pastel gradient - cool blues to warm cream */}
-                    <linearGradient id="cloudGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.4" />
-                      <stop offset="50%" stopColor="#e0f2fe" stopOpacity="0.3" />
-                      <stop offset="100%" stopColor="#fef3c7" stopOpacity="0.2" />
-                    </linearGradient>
-                  </defs>
-                  {/* Cloud blob with organic shapes */}
-                  <path
-                    d="M 150 120 Q 180 80 220 90 Q 260 60 300 80 Q 340 70 370 95 Q 400 85 420 110 Q 430 130 420 155 Q 400 170 370 165 Q 340 175 310 170 Q 280 180 250 165 Q 220 175 190 160 Q 160 170 140 145 Q 130 125 150 120 Z"
-                    fill="url(#cloudGradient1)"
-                    filter="url(#watercolor1)"
-                  />
-                  <ellipse cx="280" cy="140" rx="90" ry="50" fill="#dbeafe" opacity="0.25" filter="url(#watercolor1)" />
-                  <ellipse cx="340" cy="125" rx="70" ry="45" fill="#fbcfe8" opacity="0.15" filter="url(#watercolor1)" />
-                </motion.svg>
+              <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  {/* Painterly brush texture filter */}
+                  <filter id="brushTexture" x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" />
+                  </filter>
+                  <filter id="softBrush" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
+                  </filter>
+                  {/* Cloud gradients - pink to purple */}
+                  <linearGradient id="cloudPink1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#F9A8D4" />
+                    <stop offset="50%" stopColor="#F472B6" />
+                    <stop offset="100%" stopColor="#E879A0" />
+                  </linearGradient>
+                  <linearGradient id="cloudPurple1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#DDD6FE" />
+                    <stop offset="50%" stopColor="#C4B5FD" />
+                    <stop offset="100%" stopColor="#A78BFA" />
+                  </linearGradient>
+                  <linearGradient id="cloudPinkLight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#FECDD3" />
+                    <stop offset="100%" stopColor="#FDA4AF" />
+                  </linearGradient>
+                </defs>
 
-                {/* Cloud Layer 2 - Medium clouds with lavender tints */}
-                <motion.svg
-                  className="absolute right-10 top-20 h-64 w-[600px] opacity-60"
-                  viewBox="0 0 600 256"
-                  initial={{ x: 50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 0.6 }}
-                  transition={{ duration: 3.5, delay: 0.3, ease: "easeOut" }}
-                >
-                  <defs>
-                    <filter id="watercolor2" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -8" result="goo" />
-                      <feGaussianBlur in="goo" stdDeviation="4" result="shadow" />
-                    </filter>
-                    <radialGradient id="cloudGradient2">
-                      <stop offset="0%" stopColor="#e9d5ff" stopOpacity="0.35" />
-                      <stop offset="50%" stopColor="#ddd6fe" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#bae6fd" stopOpacity="0.15" />
-                    </radialGradient>
-                  </defs>
-                  <ellipse cx="200" cy="110" rx="120" ry="70" fill="url(#cloudGradient2)" filter="url(#watercolor2)" />
-                  <ellipse cx="280" cy="95" rx="90" ry="55" fill="#fae8ff" opacity="0.3" filter="url(#watercolor2)" />
-                  <path
-                    d="M 120 130 Q 150 100 190 110 Q 230 95 270 115 Q 300 105 320 125 Q 310 145 280 140 Q 240 150 200 145 Q 160 155 130 145 Q 110 140 120 130 Z"
-                    fill="#e0e7ff"
-                    opacity="0.25"
-                    filter="url(#watercolor2)"
-                  />
-                </motion.svg>
+                {/* Large fluffy cloud - left side */}
+                <g filter="url(#brushTexture)">
+                  <ellipse cx="150" cy="100" rx="140" ry="80" fill="url(#cloudPink1)" opacity="0.85" />
+                  <ellipse cx="220" cy="85" rx="100" ry="65" fill="#FBCFE8" opacity="0.9" />
+                  <ellipse cx="100" cy="120" rx="90" ry="55" fill="url(#cloudPurple1)" opacity="0.7" />
+                  <ellipse cx="180" cy="130" rx="80" ry="50" fill="#F9A8D4" opacity="0.8" />
+                </g>
 
-                {/* Cloud Layer 3 - Small wispy clouds */}
-                <motion.svg
-                  className="absolute left-1/3 top-32 h-48 w-[400px] opacity-50"
-                  viewBox="0 0 400 192"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 0.5 }}
-                  transition={{ duration: 4, delay: 0.6, ease: "easeOut" }}
-                >
-                  <defs>
-                    <filter id="watercolor3" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" />
-                    </filter>
-                  </defs>
-                  <ellipse cx="150" cy="80" rx="70" ry="40" fill="#f5f3ff" opacity="0.4" filter="url(#watercolor3)" />
-                  <ellipse cx="200" cy="70" rx="55" ry="35" fill="#fef3c7" opacity="0.3" filter="url(#watercolor3)" />
-                  <ellipse cx="180" cy="90" rx="45" ry="28" fill="#dbeafe" opacity="0.35" filter="url(#watercolor3)" />
-                </motion.svg>
+                {/* Large fluffy cloud - right side */}
+                <g filter="url(#brushTexture)">
+                  <ellipse cx="1050" cy="90" rx="130" ry="75" fill="url(#cloudPurple1)" opacity="0.85" />
+                  <ellipse cx="980" cy="110" rx="110" ry="70" fill="#FECDD3" opacity="0.9" />
+                  <ellipse cx="1100" cy="130" rx="85" ry="55" fill="url(#cloudPink1)" opacity="0.75" />
+                  <ellipse cx="1020" cy="80" rx="70" ry="45" fill="#DDD6FE" opacity="0.8" />
+                </g>
 
-                {/* Cloud Layer 4 - Background distant clouds */}
-                <motion.svg
-                  className="absolute right-1/4 top-12 h-56 w-[500px] opacity-40"
-                  viewBox="0 0 500 224"
-                  animate={{
-                    x: [0, -10, 0],
-                    opacity: [0.4, 0.45, 0.4]
-                  }}
-                  transition={{
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <defs>
-                    <filter id="watercolor4" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo" />
-                    </filter>
-                  </defs>
-                  <ellipse cx="240" cy="100" rx="140" ry="65" fill="#f0f9ff" opacity="0.45" filter="url(#watercolor4)" />
-                  <ellipse cx="300" cy="90" rx="100" ry="50" fill="#fef3c7" opacity="0.3" filter="url(#watercolor4)" />
-                </motion.svg>
+                {/* Medium cloud - center top */}
+                <g filter="url(#brushTexture)">
+                  <ellipse cx="600" cy="60" rx="100" ry="55" fill="url(#cloudPinkLight)" opacity="0.8" />
+                  <ellipse cx="650" cy="50" rx="80" ry="45" fill="#FBCFE8" opacity="0.85" />
+                  <ellipse cx="550" cy="70" rx="70" ry="40" fill="url(#cloudPurple1)" opacity="0.7" />
+                </g>
 
-                {/* Cloud Layer 5 - Gentle floating cloud */}
-                <motion.svg
-                  className="absolute left-1/4 top-48 h-40 w-[350px] opacity-45"
-                  viewBox="0 0 350 160"
-                  animate={{
-                    x: [0, 15, 0],
-                    y: [0, -8, 0],
-                    opacity: [0.45, 0.5, 0.45]
-                  }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <defs>
-                    <filter id="watercolor5" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
-                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
-                    </filter>
-                    <linearGradient id="cloudGradient5" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.3" />
-                      <stop offset="50%" stopColor="#fae8ff" stopOpacity="0.35" />
-                      <stop offset="100%" stopColor="#fef3c7" stopOpacity="0.25" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 80 70 Q 110 50 140 60 Q 170 45 200 65 Q 230 55 250 75 Q 240 90 210 85 Q 180 95 150 90 Q 120 100 90 90 Q 70 85 80 70 Z"
-                    fill="url(#cloudGradient5)"
-                    filter="url(#watercolor5)"
-                  />
-                  <ellipse cx="165" cy="75" rx="60" ry="35" fill="#e9d5ff" opacity="0.2" filter="url(#watercolor5)" />
-                </motion.svg>
-              </div>
+                {/* Smaller accent clouds */}
+                <g filter="url(#softBrush)">
+                  <ellipse cx="350" cy="140" rx="70" ry="40" fill="#F9A8D4" opacity="0.6" />
+                  <ellipse cx="850" cy="150" rx="80" ry="45" fill="#DDD6FE" opacity="0.55" />
+                  <ellipse cx="450" cy="180" rx="60" ry="35" fill="#FECDD3" opacity="0.5" />
+                </g>
 
-              {/* Sky - Already handled by skyGradient above */}
+                {/* Visible brushstroke texture overlay */}
+                <g opacity="0.15">
+                  <path d="M 100 80 Q 200 60 300 90 Q 400 70 500 100" stroke="#F472B6" strokeWidth="20" fill="none" strokeLinecap="round" />
+                  <path d="M 700 50 Q 850 80 1000 60 Q 1100 90 1150 70" stroke="#C4B5FD" strokeWidth="18" fill="none" strokeLinecap="round" />
+                  <path d="M 200 150 Q 350 120 500 160" stroke="#FDA4AF" strokeWidth="15" fill="none" strokeLinecap="round" />
+                </g>
+              </svg>
+            </div>
 
-              {/* Horizon and Hills */}
-              <div className="absolute inset-x-0 top-32 h-96">
-                {/* Distant Hills Layer 1 */}
-                <svg className="absolute inset-x-0 top-0 h-full w-full" viewBox="0 0 1200 400" preserveAspectRatio="none">
-                  <path
-                    d="M 0 250 Q 200 200 400 220 T 800 200 T 1200 220 L 1200 400 L 0 400 Z"
-                    fill="url(#hillGradient1)"
-                    opacity="0.4"
-                  />
-                  <path
-                    d="M 0 280 Q 300 240 600 260 T 1200 250 L 1200 400 L 0 400 Z"
-                    fill="url(#hillGradient2)"
-                    opacity="0.5"
-                  />
-                  <defs>
-                    <linearGradient id="hillGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#a3e635" stopOpacity="0.3" />
-                      <stop offset="100%" stopColor="#65a30d" stopOpacity="0.5" />
-                    </linearGradient>
-                    <linearGradient id="hillGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#84cc16" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#4d7c0f" stopOpacity="0.6" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
+            {/* Deep Beige/Off-White Window Frame - Upper Dashboard, Roof, A-Pillars */}
+            <div className="pointer-events-none absolute inset-0">
+              <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1200 800" preserveAspectRatio="none">
+                <defs>
+                  {/* Deep beige gradient - matching lower dashboard */}
+                  <linearGradient id="beigeFrameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#D4B89A" />
+                    <stop offset="25%" stopColor="#C9A888" />
+                    <stop offset="50%" stopColor="#BFA080" />
+                    <stop offset="75%" stopColor="#B59878" />
+                    <stop offset="100%" stopColor="#A88E70" />
+                  </linearGradient>
 
-              {/* Road with Perspective */}
-              <div className="absolute inset-x-0 bottom-0 h-2/3">
-                <svg className="absolute inset-x-0 bottom-0 h-full w-full" viewBox="0 0 1200 600" preserveAspectRatio="none">
-                  {/* Road surface */}
-                  <path
-                    d="M 400 0 L 800 0 L 1200 600 L 0 600 Z"
-                    fill="url(#roadGradient)"
-                    opacity="0.6"
-                  />
+                  {/* Beige highlight for edges */}
+                  <linearGradient id="beigeFrameHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#E8D4B8" />
+                    <stop offset="100%" stopColor="#D4C0A0" />
+                  </linearGradient>
 
-                  {/* Center line dashes */}
-                  <path
-                    d="M 600 0 L 600 600"
-                    stroke="rgba(255, 255, 255, 0.4)"
-                    strokeWidth="8"
-                    strokeDasharray="40 30"
-                    opacity="0.5"
-                  />
+                  {/* Inner shadow for depth */}
+                  <linearGradient id="beigeShadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#9A8668" />
+                    <stop offset="100%" stopColor="#8A7858" />
+                  </linearGradient>
 
-                  <defs>
-                    <linearGradient id="roadGradient" x1="50%" y1="0%" x2="50%" y2="100%">
-                      <stop offset="0%" stopColor="#475569" stopOpacity="0.2" />
-                      <stop offset="50%" stopColor="#64748b" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#334155" stopOpacity="0.7" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+                  {/* Soft leather-like texture */}
+                  <filter id="softTexture">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" />
+                    <feDisplacementMap in="SourceGraphic" scale="2" />
+                  </filter>
+                </defs>
 
-                {/* Roadside elements - trees/vegetation */}
-                <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-gradient-radial from-lime-600/20 to-transparent blur-xl" />
-                <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-gradient-radial from-lime-500/20 to-transparent blur-xl" />
+                {/* Top frame / roof lining - curved (10% thinner) */}
+                <path
+                  d="M 0 0 L 1200 0 L 1200 85 Q 900 68 600 72 Q 300 68 0 85 Z"
+                  fill="url(#beigeFrameGrad)"
+                  filter="url(#softTexture)"
+                />
+                {/* Top frame highlight edge */}
+                <path
+                  d="M 0 83 Q 300 66 600 70 Q 900 66 1200 83"
+                  stroke="url(#beigeFrameHighlight)"
+                  strokeWidth="2.5"
+                  fill="none"
+                  opacity="0.6"
+                />
+                {/* Top frame inner shadow */}
+                <path
+                  d="M 0 80 Q 300 63 600 67 Q 900 63 1200 80"
+                  stroke="url(#beigeShadow)"
+                  strokeWidth="1"
+                  fill="none"
+                  opacity="0.4"
+                />
+
+                {/* Left A-pillar (10% thinner) */}
+                <path
+                  d="M 0 0 L 117 0 Q 99 200 81 400 Q 63 600 45 800 L 0 800 Z"
+                  fill="url(#beigeFrameGrad)"
+                  filter="url(#softTexture)"
+                />
+                {/* Left pillar highlight */}
+                <path
+                  d="M 115 10 Q 97 200 79 400 Q 61 600 43 790"
+                  stroke="url(#beigeFrameHighlight)"
+                  strokeWidth="3"
+                  fill="none"
+                  opacity="0.5"
+                />
+                {/* Left pillar inner shadow */}
+                <path
+                  d="M 112 15 Q 94 200 76 400 Q 58 600 40 785"
+                  stroke="url(#beigeShadow)"
+                  strokeWidth="1.5"
+                  fill="none"
+                  opacity="0.3"
+                />
+                {/* Left pillar stitching detail */}
+                <path
+                  d="M 100 30 Q 82 200 64 400 Q 46 600 28 770"
+                  stroke="#9A8A78"
+                  strokeWidth="0.5"
+                  strokeDasharray="5 4"
+                  fill="none"
+                  opacity="0.4"
+                />
+
+                {/* Right A-pillar (10% thinner) */}
+                <path
+                  d="M 1200 0 L 1083 0 Q 1101 200 1119 400 Q 1137 600 1155 800 L 1200 800 Z"
+                  fill="url(#beigeFrameGrad)"
+                  filter="url(#softTexture)"
+                />
+                {/* Right pillar highlight */}
+                <path
+                  d="M 1085 10 Q 1103 200 1121 400 Q 1139 600 1157 790"
+                  stroke="url(#beigeFrameHighlight)"
+                  strokeWidth="3"
+                  fill="none"
+                  opacity="0.5"
+                />
+                {/* Right pillar inner shadow */}
+                <path
+                  d="M 1088 15 Q 1106 200 1124 400 Q 1142 600 1160 785"
+                  stroke="url(#beigeShadow)"
+                  strokeWidth="1.5"
+                  fill="none"
+                  opacity="0.3"
+                />
+                {/* Right pillar stitching detail */}
+                <path
+                  d="M 1100 30 Q 1118 200 1136 400 Q 1154 600 1172 770"
+                  stroke="#9A8A78"
+                  strokeWidth="0.5"
+                  strokeDasharray="5 4"
+                  fill="none"
+                  opacity="0.4"
+                />
+              </svg>
+            </div>
+
+            {/* Frameless Rearview Mirror */}
+            <div className="pointer-events-none absolute left-1/2 top-12 -translate-x-1/2">
+              <motion.div
+                animate={{ rotate: [-0.2, 0.2, -0.2] }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+              >
+                {/* Sleek frameless mirror */}
+                <div className="relative">
+                  <div className="h-12 w-32 rounded-lg bg-gradient-to-b from-slate-700 to-slate-900 shadow-lg">
+                    {/* Mirror reflection */}
+                    <div className="absolute inset-1 rounded-md bg-gradient-to-b from-sky-200/30 via-pink-200/20 to-slate-600/40" />
+                    {/* Edge highlight */}
+                    <div className="absolute inset-0 rounded-lg ring-1 ring-white/10" />
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Lower Dashboard - Matching Deep Beige/Off-White with Upper Frame */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[340px]">
+              <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1200 340" preserveAspectRatio="none">
+                <defs>
+                  {/* Deep beige dashboard gradient - matching upper frame */}
+                  <linearGradient id="beigeDashGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#D4B89A" />
+                    <stop offset="25%" stopColor="#C9A888" />
+                    <stop offset="50%" stopColor="#BFA080" />
+                    <stop offset="75%" stopColor="#B59878" />
+                    <stop offset="100%" stopColor="#A88E70" />
+                  </linearGradient>
+
+                  {/* Light grey middle section - around display */}
+                  <linearGradient id="greyMiddleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#E8E4DE" />
+                    <stop offset="30%" stopColor="#DDD8D0" />
+                    <stop offset="70%" stopColor="#D0CAC0" />
+                    <stop offset="100%" stopColor="#C8C4BC" />
+                  </linearGradient>
+
+                  {/* Geometric faceted pattern for center console - light grey */}
+                  <linearGradient id="facetGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#E0DCD4" />
+                    <stop offset="100%" stopColor="#D0CCC4" />
+                  </linearGradient>
+                  <linearGradient id="facetGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#E8E4DC" />
+                    <stop offset="100%" stopColor="#D8D4CC" />
+                  </linearGradient>
+
+                  {/* Beige highlight for edges */}
+                  <linearGradient id="beigeHighlightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#E8D4B8" />
+                    <stop offset="100%" stopColor="#D4C0A0" />
+                  </linearGradient>
+
+                  <filter id="dashSoftTexture">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" />
+                    <feDisplacementMap in="SourceGraphic" scale="1.5" />
+                  </filter>
+                </defs>
+
+                {/* Main beige dashboard surface - left side (passenger to steering) */}
+                <path
+                  d="M 0 70 Q 150 50 300 55 L 300 340 L 0 340 Z"
+                  fill="url(#beigeDashGrad)"
+                  filter="url(#dashSoftTexture)"
+                />
+
+                {/* Main beige dashboard surface - right side */}
+                <path
+                  d="M 900 55 Q 1050 50 1200 70 L 1200 340 L 900 340 Z"
+                  fill="url(#beigeDashGrad)"
+                  filter="url(#dashSoftTexture)"
+                />
+
+                {/* Light grey middle section - around central display */}
+                <path
+                  d="M 300 55 Q 600 45 900 55 L 900 340 L 300 340 Z"
+                  fill="url(#greyMiddleGrad)"
+                  filter="url(#dashSoftTexture)"
+                />
+
+                {/* Transition blend - left beige to grey */}
+                <linearGradient id="blendLeftGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#C9A888" />
+                  <stop offset="100%" stopColor="#DDD8D0" />
+                </linearGradient>
+                <path
+                  d="M 280 55 L 320 55 L 320 340 L 280 340 Z"
+                  fill="url(#blendLeftGrad)"
+                  opacity="0.7"
+                />
+
+                {/* Transition blend - right grey to beige */}
+                <linearGradient id="blendRightGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#DDD8D0" />
+                  <stop offset="100%" stopColor="#C9A888" />
+                </linearGradient>
+                <path
+                  d="M 880 55 L 920 55 L 920 340 L 880 340 Z"
+                  fill="url(#blendRightGrad)"
+                  opacity="0.7"
+                />
+
+                {/* Dashboard top edge highlight */}
+                <path
+                  d="M 0 72 Q 300 52 600 50 Q 900 52 1200 72"
+                  stroke="url(#beigeHighlightGrad)"
+                  strokeWidth="2.5"
+                  fill="none"
+                  opacity="0.7"
+                />
+
+                {/* Secondary highlight line */}
+                <path
+                  d="M 0 74 Q 300 54 600 52 Q 900 54 1200 74"
+                  stroke="#FFFFFF"
+                  strokeWidth="1"
+                  fill="none"
+                  opacity="0.4"
+                />
+
+                {/* Shadow line below top edge */}
+                <path
+                  d="M 0 78 Q 300 58 600 56 Q 900 58 1200 78"
+                  stroke="#8A7A68"
+                  strokeWidth="1"
+                  fill="none"
+                  opacity="0.3"
+                />
+
+                {/* Dark air vent / trim piece below screen area */}
+                <rect x="350" y="175" width="500" height="14" rx="5" fill="#2A2A2A" />
+                <rect x="352" y="177" width="496" height="10" rx="4" fill="#1A1A1A" />
+                {/* Vent slats - more refined */}
+                <g opacity="0.4">
+                  {[380, 420, 460, 500, 540, 580, 620, 660, 700, 740, 780, 820].map((x) => (
+                    <line key={x} x1={x} y1="179" x2={x} y2="185" stroke="#3A3A3A" strokeWidth="1.5" />
+                  ))}
+                </g>
+                {/* Vent highlight */}
+                <path d="M 355 177 L 845 177" stroke="#404040" strokeWidth="0.5" opacity="0.5" />
+
+                {/* Geometric faceted center console area - light grey */}
+                <g filter="url(#dashSoftTexture)">
+                  {/* Left facet */}
+                  <path d="M 480 205 L 550 205 L 575 290 L 495 290 Z" fill="url(#facetGrad1)" />
+                  {/* Center facet */}
+                  <path d="M 550 205 L 650 205 L 680 290 L 575 290 Z" fill="url(#facetGrad2)" />
+                  {/* Right facet */}
+                  <path d="M 650 205 L 720 205 L 705 290 L 680 290 Z" fill="url(#facetGrad1)" />
+                  {/* Facet edge lines - sharper */}
+                  <path d="M 550 205 L 575 290" stroke="#B8B4AC" strokeWidth="1.5" fill="none" opacity="0.7" />
+                  <path d="M 650 205 L 680 290" stroke="#B8B4AC" strokeWidth="1.5" fill="none" opacity="0.7" />
+                  {/* Facet highlights */}
+                  <path d="M 552 206 L 576 288" stroke="#FFFFFF" strokeWidth="0.5" fill="none" opacity="0.3" />
+                  <path d="M 652 206 L 681 288" stroke="#FFFFFF" strokeWidth="0.5" fill="none" opacity="0.3" />
+                </g>
+
+                {/* Subtle stitching detail on beige sections */}
+                <g stroke="#9A8A78" strokeWidth="0.5" strokeDasharray="4 3" opacity="0.4">
+                  <path d="M 50 100 Q 50 200 60 300" />
+                  <path d="M 1150 100 Q 1150 200 1140 300" />
+                </g>
+              </svg>
+            </div>
+
+            {/* Digital Instrument Cluster - Behind Steering Wheel */}
+            <div className="pointer-events-none absolute bottom-52 left-16">
+              <div className="relative h-20 w-80 rounded-lg bg-gradient-to-b from-slate-900 to-slate-950 shadow-lg">
+                {/* Cluster bezel */}
+                <div className="absolute inset-0 rounded-lg ring-1 ring-slate-700/50" />
+                {/* Screen content */}
+                <div className="absolute inset-1 flex items-center justify-between rounded-md bg-gradient-to-b from-slate-800 to-slate-900 px-4">
+                  {/* Left section - Drive indicator */}
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl font-bold text-emerald-400">D</span>
+                    <div className="h-8 w-px bg-slate-600" />
+                  </div>
+                  {/* Center section - Speed/Info */}
+                  <div className="flex flex-col items-center">
+                    <span className="text-xs text-slate-400">MPH</span>
+                    <span className="text-3xl font-light tabular-nums text-white">42</span>
+                  </div>
+                  {/* Right section - Time & Temp */}
+                  <div className="flex items-center gap-3 text-right">
+                    <div className="h-8 w-px bg-slate-600" />
+                    <div className="flex flex-col">
+                      <span className="text-lg font-medium tabular-nums text-white">12:23</span>
+                      <span className="text-xs text-slate-400">75°F</span>
+                    </div>
+                  </div>
+                </div>
+                {/* Subtle glow effect */}
+                <div className="absolute -inset-1 -z-10 rounded-xl bg-cyan-500/10 blur-md" />
               </div>
             </div>
 
-            {/* Windshield Top Frame */}
-            <div className="pointer-events-none absolute left-0 right-0 top-0 h-24 bg-gradient-to-b from-slate-900/80 via-slate-800/50 to-transparent" />
-
-            {/* Rearview Mirror */}
+            {/* Steering Wheel - Classic Vintage Racing Design - Premium 3D */}
             <motion.div
-              className="pointer-events-none absolute left-1/2 top-8 -translate-x-1/2"
-              animate={{ rotate: [-0.5, 0.5, -0.5] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            >
-              {/* Mirror Mount */}
-              <div className="mx-auto h-12 w-2 rounded-b-full bg-gradient-to-b from-slate-700 to-slate-900" />
-
-              {/* Mirror Frame */}
-              <div className="relative mt-1 overflow-hidden rounded-lg border-2 border-slate-700/80 bg-slate-900/60 p-2 shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-sm">
-                <div className="h-16 w-40 overflow-hidden rounded border border-slate-600/50 bg-gradient-to-b from-sky-300/20 to-slate-800/40">
-                  {/* Reflected road/sky in mirror */}
-                  <div className="h-full w-full bg-gradient-to-b from-sky-400/30 via-slate-300/20 to-slate-500/30" />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Left A-Pillar Shadow */}
-            <div className="pointer-events-none absolute bottom-0 left-0 top-0 w-32 bg-gradient-to-r from-slate-900/70 via-slate-800/40 to-transparent" />
-
-            {/* Right A-Pillar Shadow */}
-            <div className="pointer-events-none absolute bottom-0 right-0 top-0 w-32 bg-gradient-to-l from-slate-900/70 via-slate-800/40 to-transparent" />
-
-            {/* Steering Wheel - Left Side */}
-            <motion.div
-              className="pointer-events-none absolute -left-32 bottom-16 h-[450px] w-[450px]"
-              animate={{ rotate: [-1.5, 1.5, -1.5] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="pointer-events-none absolute -left-10 bottom-6 h-[420px] w-[420px]"
+              animate={{ rotate: [-0.4, 0.4, -0.4] }}
+              transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
               style={{
-                filter: "drop-shadow(0 0 30px rgba(186, 230, 253, 0.3))",
+                filter: "drop-shadow(0 20px 50px rgba(0,0,0,0.6)) drop-shadow(0 8px 20px rgba(0,0,0,0.4))",
               }}
             >
-              <svg
-                viewBox="0 0 200 200"
-                className="h-full w-full"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Outer Ring with Rim Lighting */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="82"
-                  stroke="url(#rimGradient)"
-                  strokeWidth="16"
-                  fill="rgba(15, 23, 42, 0.5)"
-                />
+              <svg viewBox="0 0 200 200" className="h-full w-full" fill="none">
+                <defs>
+                  {/* === WOOD RIM GRADIENTS === */}
+                  {/* Main wood body - rich dark tones */}
+                  <linearGradient id="woodBody" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#3D3428" />
+                    <stop offset="20%" stopColor="#2A2218" />
+                    <stop offset="40%" stopColor="#1E1A14" />
+                    <stop offset="60%" stopColor="#2A2420" />
+                    <stop offset="80%" stopColor="#1A1610" />
+                    <stop offset="100%" stopColor="#28231C" />
+                  </linearGradient>
 
-                {/* Rim Light - Top Highlight */}
+                  {/* Wood outer bevel - catches light */}
+                  <linearGradient id="woodOuterBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#4A4035" />
+                    <stop offset="50%" stopColor="#2A2218" />
+                    <stop offset="100%" stopColor="#1A1610" />
+                  </linearGradient>
+
+                  {/* Wood inner bevel - shadow side */}
+                  <linearGradient id="woodInnerBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#18140E" />
+                    <stop offset="50%" stopColor="#1A1610" />
+                    <stop offset="100%" stopColor="#2A2420" />
+                  </linearGradient>
+
+                  {/* High-gloss lacquer - primary reflection */}
+                  <linearGradient id="lacquerPrimary" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.5" />
+                    <stop offset="20%" stopColor="#FFFFFF" stopOpacity="0.25" />
+                    <stop offset="40%" stopColor="#FFFFFF" stopOpacity="0.1" />
+                    <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                  </linearGradient>
+
+                  {/* Sharp specular highlight */}
+                  <linearGradient id="specularSharp" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                    <stop offset="40%" stopColor="#FFFFFF" stopOpacity="0.8" />
+                    <stop offset="50%" stopColor="#FFFFFF" stopOpacity="1" />
+                    <stop offset="60%" stopColor="#FFFFFF" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                  </linearGradient>
+
+                  {/* === CHROME GRADIENTS === */}
+                  {/* Premium chrome - horizontal spoke */}
+                  <linearGradient id="chromeH" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#FAFAFA" />
+                    <stop offset="8%" stopColor="#E0E0E0" />
+                    <stop offset="20%" stopColor="#707070" />
+                    <stop offset="35%" stopColor="#C0C0C0" />
+                    <stop offset="50%" stopColor="#F5F5F5" />
+                    <stop offset="65%" stopColor="#B0B0B0" />
+                    <stop offset="80%" stopColor="#606060" />
+                    <stop offset="92%" stopColor="#D0D0D0" />
+                    <stop offset="100%" stopColor="#A0A0A0" />
+                  </linearGradient>
+
+                  {/* Premium chrome - vertical spoke */}
+                  <linearGradient id="chromeV" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#A0A0A0" />
+                    <stop offset="8%" stopColor="#D0D0D0" />
+                    <stop offset="20%" stopColor="#606060" />
+                    <stop offset="35%" stopColor="#B0B0B0" />
+                    <stop offset="50%" stopColor="#F5F5F5" />
+                    <stop offset="65%" stopColor="#C0C0C0" />
+                    <stop offset="80%" stopColor="#707070" />
+                    <stop offset="92%" stopColor="#E0E0E0" />
+                    <stop offset="100%" stopColor="#FAFAFA" />
+                  </linearGradient>
+
+                  {/* Chrome edge bevel */}
+                  <linearGradient id="chromeBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#FFFFFF" />
+                    <stop offset="50%" stopColor="#C0C0C0" />
+                    <stop offset="100%" stopColor="#808080" />
+                  </linearGradient>
+
+                  {/* === HUB GRADIENTS === */}
+                  {/* Polished hub plate */}
+                  <radialGradient id="hubPlate" cx="30%" cy="25%" r="80%">
+                    <stop offset="0%" stopColor="#F0F0F0" />
+                    <stop offset="20%" stopColor="#D8D8D8" />
+                    <stop offset="45%" stopColor="#B0B0B0" />
+                    <stop offset="70%" stopColor="#888888" />
+                    <stop offset="100%" stopColor="#606060" />
+                  </radialGradient>
+
+                  {/* Hub center - machined aluminum */}
+                  <radialGradient id="hubCenter" cx="40%" cy="35%" r="60%">
+                    <stop offset="0%" stopColor="#E8E8E8" />
+                    <stop offset="40%" stopColor="#C0C0C0" />
+                    <stop offset="100%" stopColor="#707070" />
+                  </radialGradient>
+
+                  {/* Rivet - polished dome */}
+                  <radialGradient id="rivetDome" cx="30%" cy="20%" r="70%">
+                    <stop offset="0%" stopColor="#FFFFFF" />
+                    <stop offset="25%" stopColor="#E8E8E8" />
+                    <stop offset="50%" stopColor="#B0B0B0" />
+                    <stop offset="80%" stopColor="#707070" />
+                    <stop offset="100%" stopColor="#505050" />
+                  </radialGradient>
+
+                  {/* Bolt head gradient */}
+                  <radialGradient id="boltHead" cx="35%" cy="30%" r="65%">
+                    <stop offset="0%" stopColor="#4A4A4A" />
+                    <stop offset="50%" stopColor="#2A2A2A" />
+                    <stop offset="100%" stopColor="#1A1A1A" />
+                  </radialGradient>
+
+                  {/* Wood grain filter */}
+                  <filter id="grainTexture" x="-5%" y="-5%" width="110%" height="110%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.03 0.003" numOctaves="4" result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" />
+                  </filter>
+                </defs>
+
+                {/* === OUTER RIM - Multi-layer 3D Wood === */}
+
+                {/* Deep shadow beneath wheel */}
+                <ellipse cx="100" cy="106" r="90" ry="88" fill="#000000" opacity="0.35" />
+
+                {/* Rim back face / depth */}
+                <circle cx="100" cy="100" r="93" stroke="#0A0806" strokeWidth="6" fill="none" />
+
+                {/* Rim outer bevel - light catching edge */}
+                <circle cx="100" cy="100" r="91" stroke="url(#woodOuterBevel)" strokeWidth="3" fill="none" />
+
+                {/* Main wood body - with grain texture */}
+                <circle cx="100" cy="100" r="87" stroke="url(#woodBody)" strokeWidth="14" fill="none" filter="url(#grainTexture)" />
+
+                {/* Rim inner bevel - shadowed edge */}
+                <circle cx="100" cy="100" r="78" stroke="url(#woodInnerBevel)" strokeWidth="3" fill="none" />
+
+                {/* Inner rim edge detail */}
+                <circle cx="100" cy="100" r="76" stroke="#0D0B08" strokeWidth="1" fill="none" />
+
+                {/* === LACQUER REFLECTIONS === */}
+
+                {/* Primary gloss arc - top */}
                 <path
-                  d="M 40 70 A 80 80 0 0 1 160 70"
-                  stroke="rgba(224, 242, 254, 0.9)"
-                  strokeWidth="4"
+                  d="M 18 80 A 88 88 0 0 1 182 80"
+                  stroke="url(#lacquerPrimary)"
+                  strokeWidth="12"
                   fill="none"
                   strokeLinecap="round"
                 />
 
-                {/* Inner Ring with Texture */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="70"
-                  stroke="rgba(148, 163, 184, 0.4)"
+                {/* Sharp specular highlight line */}
+                <path
+                  d="M 30 65 A 78 78 0 0 1 170 65"
+                  stroke="url(#specularSharp)"
                   strokeWidth="1.5"
                   fill="none"
-                  strokeDasharray="2 3"
+                  strokeLinecap="round"
                 />
 
-                {/* Center Hub with Layered Texture */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="28"
-                  fill="url(#hubGradient)"
-                  stroke="rgba(203, 213, 225, 0.6)"
-                  strokeWidth="2.5"
-                />
-
-                {/* Hub Rim Light */}
+                {/* Secondary reflection - side */}
                 <path
-                  d="M 75 95 A 25 25 0 0 1 125 95"
-                  stroke="rgba(241, 245, 249, 0.8)"
-                  strokeWidth="2"
+                  d="M 15 100 A 88 88 0 0 1 25 55"
+                  stroke="#FFFFFF"
+                  strokeWidth="3"
                   fill="none"
+                  opacity="0.15"
+                  strokeLinecap="round"
                 />
 
-                {/* Logo/Brand Circle */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="18"
-                  fill="rgba(30, 41, 59, 0.7)"
-                  stroke="rgba(148, 163, 184, 0.5)"
-                  strokeWidth="1"
-                />
-
-                {/* Three Spokes with Hard Edges and Highlights */}
-                {/* Top Spoke */}
-                <g>
-                  <path
-                    d="M 100 28 L 94 72 L 106 72 Z"
-                    fill="url(#spokeGradient)"
-                    stroke="rgba(71, 85, 105, 0.8)"
-                    strokeWidth="1.5"
-                  />
-                  {/* Rim light on spoke */}
-                  <path
-                    d="M 97 30 L 100 28 L 103 30"
-                    stroke="rgba(241, 245, 249, 0.9)"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-                </g>
-
-                {/* Bottom Left Spoke */}
-                <g>
-                  <path
-                    d="M 40 158 L 66 108 L 73 115 Z"
-                    fill="url(#spokeGradient)"
-                    stroke="rgba(71, 85, 105, 0.8)"
-                    strokeWidth="1.5"
-                  />
-                  <path
-                    d="M 42 155 L 45 152"
-                    stroke="rgba(226, 232, 240, 0.7)"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </g>
-
-                {/* Bottom Right Spoke */}
-                <g>
-                  <path
-                    d="M 160 158 L 134 108 L 127 115 Z"
-                    fill="url(#spokeGradient)"
-                    stroke="rgba(71, 85, 105, 0.8)"
-                    strokeWidth="1.5"
-                  />
-                  <path
-                    d="M 158 155 L 155 152"
-                    stroke="rgba(226, 232, 240, 0.7)"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </g>
-
-                {/* Grip Texture - Multiple Layers */}
-                <g opacity="0.6">
-                  <path
-                    d="M 88 22 Q 100 17 112 22"
-                    stroke="rgba(203, 213, 225, 0.5)"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                  <path
-                    d="M 86 26 Q 100 21 114 26"
-                    stroke="rgba(148, 163, 184, 0.4)"
-                    strokeWidth="1.5"
-                    fill="none"
-                  />
-                  <path
-                    d="M 85 30 Q 100 25 115 30"
-                    stroke="rgba(100, 116, 139, 0.3)"
-                    strokeWidth="1"
-                    fill="none"
-                  />
-                </g>
-
-                {/* Textured Detail Ring */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="92"
-                  stroke="rgba(226, 232, 240, 0.15)"
-                  strokeWidth="0.5"
+                {/* Bottom rim shadow for roundness */}
+                <path
+                  d="M 25 130 A 85 85 0 0 0 175 130"
+                  stroke="#000000"
+                  strokeWidth="4"
                   fill="none"
-                  strokeDasharray="1 4"
+                  opacity="0.2"
+                  strokeLinecap="round"
                 />
 
-                {/* Gradient Definitions */}
-                <defs>
-                  {/* Rim Gradient - Cool Analogous */}
-                  <linearGradient id="rimGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="rgba(186, 230, 253, 0.8)" />
-                    <stop offset="50%" stopColor="rgba(125, 211, 252, 0.6)" />
-                    <stop offset="100%" stopColor="rgba(71, 85, 105, 0.4)" />
-                  </linearGradient>
+                {/* === 18 CHROME RIVETS - 3D Domed === */}
+                <g>
+                  {/* Each rivet has shadow + dome + highlight */}
+                  {[0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340].map((angle, i) => {
+                    const rad = (angle * Math.PI) / 180;
+                    const r = 82;
+                    const cx = 100 + r * Math.sin(rad);
+                    const cy = 100 - r * Math.cos(rad);
+                    return (
+                      <g key={i}>
+                        <circle cx={cx + 0.3} cy={cy + 0.5} r="2.8" fill="#000000" opacity="0.4" />
+                        <circle cx={cx} cy={cy} r="2.5" fill="url(#rivetDome)" />
+                        <circle cx={cx - 0.5} cy={cy - 0.5} r="0.8" fill="#FFFFFF" opacity="0.6" />
+                      </g>
+                    );
+                  })}
+                </g>
 
-                  {/* Hub Gradient - Layered Dark */}
-                  <radialGradient id="hubGradient">
-                    <stop offset="0%" stopColor="rgba(51, 65, 85, 0.8)" />
-                    <stop offset="70%" stopColor="rgba(30, 41, 59, 0.9)" />
-                    <stop offset="100%" stopColor="rgba(15, 23, 42, 0.95)" />
-                  </radialGradient>
+                {/* === Y-SPOKES - Beveled Chrome with Depth === */}
 
-                  {/* Spoke Gradient - Metallic Feel */}
-                  <linearGradient id="spokeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="rgba(100, 116, 139, 0.7)" />
-                    <stop offset="50%" stopColor="rgba(148, 163, 184, 0.5)" />
-                    <stop offset="100%" stopColor="rgba(71, 85, 105, 0.6)" />
-                  </linearGradient>
-                </defs>
+                {/* LEFT SPOKE (9 o'clock) */}
+                <g>
+                  {/* Spoke shadow */}
+                  <path d="M 20 91 L 65 91 Q 72 100 65 109 L 20 109 Q 13 100 20 91" fill="#000000" opacity="0.3" transform="translate(1, 2)" />
+                  {/* Spoke back depth */}
+                  <path d="M 18 90 L 66 90 Q 74 100 66 110 L 18 110 Q 10 100 18 90" fill="#505050" />
+                  {/* Spoke main body */}
+                  <path d="M 20 92 L 64 92 Q 70 100 64 108 L 20 108 Q 14 100 20 92" fill="url(#chromeH)" />
+                  {/* Top bevel edge */}
+                  <path d="M 22 92 L 62 92" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+                  {/* Bottom shadow edge */}
+                  <path d="M 22 108 L 62 108" stroke="#404040" strokeWidth="1" strokeLinecap="round" opacity="0.8" />
+                  {/* Slotted cutout - recessed */}
+                  <rect x="28" y="96" width="28" height="8" rx="4" fill="#1A1A1A" />
+                  <rect x="29" y="97" width="26" height="6" rx="3" fill="#0A0A0A" />
+                  {/* Cutout inner highlight */}
+                  <path d="M 32 97.5 L 52 97.5" stroke="#303030" strokeWidth="0.5" strokeLinecap="round" />
+                </g>
+
+                {/* RIGHT SPOKE (3 o'clock) */}
+                <g>
+                  {/* Spoke shadow */}
+                  <path d="M 135 91 L 180 91 Q 187 100 180 109 L 135 109 Q 128 100 135 91" fill="#000000" opacity="0.3" transform="translate(1, 2)" />
+                  {/* Spoke back depth */}
+                  <path d="M 134 90 L 182 90 Q 190 100 182 110 L 134 110 Q 126 100 134 90" fill="#505050" />
+                  {/* Spoke main body */}
+                  <path d="M 136 92 L 180 92 Q 186 100 180 108 L 136 108 Q 130 100 136 92" fill="url(#chromeH)" />
+                  {/* Top bevel edge */}
+                  <path d="M 138 92 L 178 92" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+                  {/* Bottom shadow edge */}
+                  <path d="M 138 108 L 178 108" stroke="#404040" strokeWidth="1" strokeLinecap="round" opacity="0.8" />
+                  {/* Slotted cutout - recessed */}
+                  <rect x="144" y="96" width="28" height="8" rx="4" fill="#1A1A1A" />
+                  <rect x="145" y="97" width="26" height="6" rx="3" fill="#0A0A0A" />
+                  {/* Cutout inner highlight */}
+                  <path d="M 148 97.5 L 168 97.5" stroke="#303030" strokeWidth="0.5" strokeLinecap="round" />
+                </g>
+
+                {/* BOTTOM SPOKE (6 o'clock) */}
+                <g>
+                  {/* Spoke shadow */}
+                  <path d="M 91 135 L 91 180 Q 100 187 109 180 L 109 135 Q 100 128 91 135" fill="#000000" opacity="0.3" transform="translate(1, 2)" />
+                  {/* Spoke back depth */}
+                  <path d="M 90 134 L 90 182 Q 100 190 110 182 L 110 134 Q 100 126 90 134" fill="#505050" />
+                  {/* Spoke main body */}
+                  <path d="M 92 136 L 92 180 Q 100 186 108 180 L 108 136 Q 100 130 92 136" fill="url(#chromeV)" />
+                  {/* Left bevel edge */}
+                  <path d="M 92 138 L 92 178" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+                  {/* Right shadow edge */}
+                  <path d="M 108 138 L 108 178" stroke="#404040" strokeWidth="1" strokeLinecap="round" opacity="0.8" />
+                  {/* Slotted cutout - recessed */}
+                  <rect x="96" y="144" width="8" height="28" rx="4" fill="#1A1A1A" />
+                  <rect x="97" y="145" width="6" height="26" rx="3" fill="#0A0A0A" />
+                  {/* Cutout inner highlight */}
+                  <path d="M 97.5 148 L 97.5 168" stroke="#303030" strokeWidth="0.5" strokeLinecap="round" />
+                </g>
+
+                {/* === CENTRAL HUB - Machined Metal === */}
+
+                {/* Hub deep shadow */}
+                <circle cx="100" cy="104" r="34" fill="#000000" opacity="0.35" />
+
+                {/* Hub back plate */}
+                <circle cx="100" cy="100" r="34" fill="#4A4A4A" />
+
+                {/* Polished hub face */}
+                <circle cx="100" cy="100" r="32" fill="url(#hubPlate)" />
+
+                {/* Hub outer chamfer */}
+                <circle cx="100" cy="100" r="32" stroke="#808080" strokeWidth="2" fill="none" />
+                <circle cx="100" cy="100" r="31" stroke="#C0C0C0" strokeWidth="0.5" fill="none" />
+
+                {/* Six-bolt hexagonal pattern - 3D bolts */}
+                <g>
+                  {[0, 60, 120, 180, 240, 300].map((angle, i) => {
+                    const rad = (angle * Math.PI) / 180;
+                    const r = 22;
+                    const cx = 100 + r * Math.sin(rad);
+                    const cy = 100 - r * Math.cos(rad);
+                    return (
+                      <g key={i}>
+                        <circle cx={cx + 0.3} cy={cy + 0.5} r="3.5" fill="#000000" opacity="0.4" />
+                        <circle cx={cx} cy={cy} r="3.2" fill="url(#boltHead)" />
+                        <circle cx={cx} cy={cy} r="3.2" stroke="#3A3A3A" strokeWidth="0.5" fill="none" />
+                        {/* Hex socket detail */}
+                        <circle cx={cx} cy={cy} r="1.8" fill="#0A0A0A" />
+                      </g>
+                    );
+                  })}
+                </g>
+
+                {/* Center aperture ring */}
+                <circle cx="100" cy="100" r="14" fill="#1A1A1A" />
+                <circle cx="100" cy="100" r="14" stroke="#3A3A3A" strokeWidth="1.5" fill="none" />
+                <circle cx="100" cy="100" r="12.5" stroke="#0A0A0A" strokeWidth="0.5" fill="none" />
+
+                {/* "R" emblem - engraved chrome look */}
+                <circle cx="100" cy="100" r="11" fill="url(#hubCenter)" />
+                <text
+                  x="100"
+                  y="105"
+                  textAnchor="middle"
+                  fontSize="14"
+                  fontFamily="Georgia, serif"
+                  fontWeight="bold"
+                  fill="#2A2A2A"
+                >
+                  R
+                </text>
+                <text
+                  x="99.5"
+                  y="104.5"
+                  textAnchor="middle"
+                  fontSize="14"
+                  fontFamily="Georgia, serif"
+                  fontWeight="bold"
+                  fill="#E8E8E8"
+                >
+                  R
+                </text>
+
+                {/* Hub highlight reflection */}
+                <ellipse cx="88" cy="88" rx="16" ry="10" fill="#FFFFFF" opacity="0.12" />
+                <ellipse cx="90" cy="90" rx="8" ry="5" fill="#FFFFFF" opacity="0.08" />
               </svg>
             </motion.div>
 
-            <motion.div
-              className="absolute left-10 top-28 h-28 w-28 rounded-full border border-white/40 bg-white/10 shadow-[0_0_40px_rgba(255,255,255,0.15)]"
-              animate={{ y: [0, -6, 0], opacity: [0.8, 1, 0.8] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            />
 
-            <motion.div
-              className="absolute left-16 bottom-40 h-32 w-32 rounded-full border-2 border-white/50 bg-black/30"
-              animate={{ rotate: [-3, 3, -3] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="absolute inset-4 rounded-full border border-white/40" />
-              <div className="absolute inset-10 rounded-full border border-white/40" />
-            </motion.div>
-
-            <motion.div
-              className="absolute left-1/2 top-8 -translate-x-1/2 text-center"
-              animate={{ rotate: [-4, 4, -4] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="mx-auto h-10 w-px bg-white/60" />
-              <div className="mt-2 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/20 text-[10px] uppercase tracking-[0.2em] text-white">
-                Jellyfish
-              </div>
-            </motion.div>
-
+            {/* Central Touchscreen Display */}
             <div className="absolute inset-x-0 bottom-0 z-20">
-              <div className="mx-auto w-full max-w-5xl px-6 pb-10">
-                <div className="rounded-[36px] border border-white/30 bg-black/60 px-6 py-5 backdrop-blur-xl shadow-[0_0_60px_rgba(0,0,0,0.6)]">
-                  <div className="grid gap-6 md:grid-cols-[160px_1fr_160px]">
-                    <div className="flex flex-col gap-4 text-white/70">
-                      <p className="text-xs uppercase tracking-[0.4em]">
-                        Systems
-                      </p>
-                      <div className="space-y-2 text-sm">
-                        <p>Signal: Stable</p>
-                        <p>Mode: Creative</p>
-                        <p>Depth: 12.4m</p>
-                      </div>
-                    </div>
-
+              <div className="mx-auto w-full max-w-4xl px-6 pb-8">
+                {/* Display frame */}
+                <div className="overflow-hidden rounded-2xl border border-slate-700/50 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 shadow-[0_0_60px_rgba(0,0,0,0.7)]">
+                  {/* Main content area */}
+                  <div className="p-5">
                     <Dashboard projects={projects} />
-
-                    <div className="flex flex-col items-end justify-between text-white/70">
-                      <p className="text-xs uppercase tracking-[0.4em]">
-                        Cabin
-                      </p>
-                      {/* <div className="space-y-2 text-sm text-right">
-                        <p>Atmosphere: Calm</p>
-                        <p>Altitude: 8,200ft</p>
-                        <p>HUD: Active</p>
-                      </div> */}
-                    </div>
                   </div>
                 </div>
               </div>
