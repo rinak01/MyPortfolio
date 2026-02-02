@@ -11,6 +11,14 @@ const projects = [
     tags: ["GenUI", "Chain-of-Thought", "Agentic Systems"],
     image: "/antigravity.png",
     link: "#",
+    role: "Lead Product Designer",
+    team: "BMW Group Technology Office",
+    highlights: [
+      "Designed multimodal interaction patterns for AI-assisted coding",
+      "Created chain-of-thought visualization system for debugging",
+      "Shipped to 500+ internal developers with 4.8/5 satisfaction"
+    ],
+    details: "Extended project details and case study content goes here.",
   },
   {
     title: "CMU - SmaSH Lab",
@@ -19,6 +27,14 @@ const projects = [
     tags: ["Adaptive Decision-Making", "Multimodal Voice Interface", "Semantic Filtering"],
     image: "/bmw-genui.png",
     link: "#",
+    role: "Research Assistant",
+    team: "Carnegie Mellon University",
+    highlights: [
+      "Developed semantic filtering algorithms for ambient speech detection",
+      "Built multimodal voice interface prototypes for user studies",
+      "Published findings at CHI 2025 conference"
+    ],
+    details: "Extended project details and case study content goes here.",
   },
   {
     title: "Emma's Jellyfish",
@@ -27,6 +43,14 @@ const projects = [
     tags: ["Personal Project", "Personal Agent", "LLM"],
     image: "/smash-lab.png",
     link: "#",
+    role: "Creator & Designer",
+    team: "Personal Project",
+    highlights: [
+      "Built custom LLM-powered personal assistant from scratch",
+      "Designed conversational UI with context-aware responses",
+      "Integrated with daily workflows and productivity tools"
+    ],
+    details: "Extended project details and case study content goes here.",
   },
 ];
 
@@ -215,34 +239,82 @@ export default function Home() {
                 <h2 className="text-2xl font-semibold text-zinc-950">Selected Work</h2>
                 <p className="text-sm text-zinc-400">{projects.length} Projects</p>
               </div>
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-12">
                 {projects.map((project, index) => (
-                  <a key={project.title} href={project.link || "#"} className="group block cursor-pointer rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_0_40px_rgba(0,0,0,0.08)] hover:bg-zinc-50/50">
-                    <article className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
-                      <div className="flex-shrink-0">
-                        <span className="text-6xl font-light tracking-tight text-zinc-200 transition-colors duration-300 group-hover:text-zinc-300">{String(index + 1).padStart(2, "0")}</span>
-                      </div>
-                      <div className="flex-shrink-0 md:w-[307px]">
-                        <div className="overflow-hidden rounded-2xl bg-zinc-100 ring-1 ring-zinc-200/50 transition-all duration-500 group-hover:ring-zinc-300">
-                          <img src={project.image} alt={project.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <article key={project.title} className="flex flex-col gap-8">
+                    {/* Header: Number, Title, Year, Role, Team */}
+                    <div className="flex items-start gap-6">
+                      <span className="text-7xl font-light tracking-tight text-zinc-200">{String(index + 1).padStart(2, "0")}</span>
+                      <div className="flex flex-col gap-1">
+                        <h3 className="text-3xl font-semibold tracking-tight text-zinc-950">{project.title}</h3>
+                        <div className="flex items-center gap-3 text-sm text-zinc-500">
+                          <span>{project.year}</span>
+                          <span className="text-zinc-300">•</span>
+                          <span>{project.role}</span>
+                          <span className="text-zinc-300">•</span>
+                          <span>{project.team}</span>
                         </div>
                       </div>
-                      <div className="flex flex-1 flex-col gap-4">
+                    </div>
+
+                    {/* Two-column grid: Image + Details */}
+                    <div className="grid gap-8 md:grid-cols-[280px_1fr]">
+                      {/* Image (reduced 20%) */}
+                      <div className="flex-shrink-0">
+                        <div className="max-w-[280px] overflow-hidden rounded-2xl bg-zinc-100 ring-1 ring-zinc-200/50">
+                          <img src={project.image} alt={project.title} className="h-full w-full object-cover" />
+                        </div>
+                      </div>
+
+                      {/* Details column */}
+                      <div className="flex flex-col gap-6">
+                        {/* Overview */}
                         <div className="flex flex-col gap-2">
-                          <div className="flex items-center gap-3">
-                            <h3 className="text-3xl font-semibold tracking-tight text-zinc-950 transition-colors duration-300 group-hover:text-zinc-900">{project.title}</h3>
-                            <span className="text-sm font-medium text-zinc-400">{project.year}</span>
-                          </div>
+                          <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Overview</h4>
                           <p className="text-base leading-relaxed text-zinc-600">{project.desc}</p>
                         </div>
+
+                        {/* Key Highlights */}
+                        <div className="flex flex-col gap-2">
+                          <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Key Highlights</h4>
+                          <ul className="flex flex-col gap-1.5">
+                            {project.highlights.map((highlight, i) => (
+                              <li key={i} className="flex items-start gap-2 text-sm text-zinc-600">
+                                <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-300" />
+                                {highlight}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Tags */}
                         <div className="flex flex-wrap gap-2">
                           {project.tags.map((tag) => (
                             <span key={tag} className="rounded-md bg-zinc-50 px-3 py-1.5 text-xs font-medium text-zinc-700 ring-1 ring-inset ring-zinc-200/50">{tag}</span>
                           ))}
                         </div>
+
+                        {/* Project Details */}
+                        <div className="flex flex-col gap-2">
+                          <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Project Details</h4>
+                          <p className="text-sm leading-relaxed text-zinc-500">{project.details}</p>
+                        </div>
+
+                        {/* View Project Link */}
+                        <a href={project.link || "#"} className="group inline-flex items-center gap-2 text-sm font-medium text-zinc-900 transition-colors hover:text-zinc-600">
+                          View Project
+                          <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </a>
                       </div>
-                    </article>
-                  </a>
+                    </div>
+
+                    {/* Divider between projects */}
+                    {index < projects.length - 1 && (
+                      <div className="border-b border-zinc-200" />
+                    )}
+                  </article>
                 ))}
               </div>
             </section>
@@ -328,11 +400,10 @@ export default function Home() {
                     <stop offset="70%" stopColor="#FFFFFF" />
                     <stop offset="100%" stopColor="#FDF4FF" />
                   </radialGradient>
-                  <radialGradient id="highlightPeach" cx="60%" cy="30%" r="70%">
-                    <stop offset="0%" stopColor="#FFFFFF" />
-                    <stop offset="35%" stopColor="#FFFCFA" />
-                    <stop offset="70%" stopColor="#FFF9F5" />
-                    <stop offset="100%" stopColor="#FFF4ED" />
+                  <radialGradient id="highlightPeach" cx="65%" cy="25%" r="65%">
+                    <stop offset="0%" stopColor="#FFEDD5" />
+                    <stop offset="40%" stopColor="#FED7AA" />
+                    <stop offset="30%" stopColor="#FDBA74" />
                   </radialGradient>
                   <radialGradient id="highlightCreamy" cx="60%" cy="30%" r="70%">
                     <stop offset="0%" stopColor="#FFFFFF" />
@@ -448,7 +519,7 @@ export default function Home() {
                   <ellipse cx="780" cy="195" rx="68" ry="42" fill="url(#highlightPeach)" opacity="0.75" />
                   <ellipse cx="690" cy="195" rx="60" ry="38" fill="url(#highlightCreamy)" opacity="0.9" />
                   <ellipse cx="750" cy="185" rx="55" ry="36" fill="url(#highlightBright)" opacity="0.95" />
-                  <ellipse cx="620" cy="205" rx="65" ry="40" fill="url(#highlightBright)" opacity="0.1" />
+                  <ellipse cx="620" cy="205" rx="65" ry="40" fill="url(#highlightBright)" opacity="0.9" />
                   <ellipse cx="580" cy="200" rx="70" ry="42" fill="url(#highlightBright)" />
                   <ellipse cx="700" cy="170" rx="62" ry="38" fill="url(#highlightCreamy)" />
                   <ellipse cx="665" cy="178" rx="55" ry="35" fill="url(#highlightBright)" opacity="0.95" />
@@ -527,7 +598,24 @@ export default function Home() {
                   <ellipse cx="1100" cy="160" rx="24" ry="15" fill="#FFFBEB" opacity="0.9" />
                 </g>
 
-                </svg>
+                {/* ===== DISTANT SMALL CLOUDS (upper atmosphere) ===== */}
+                <g filter="url(#atmospheric)" opacity="0.2">
+                  <ellipse cx="200" cy="60" rx="60" ry="25" fill="url(#highlightCreamy)" />
+                  <ellipse cx="180" cy="55" rx="45" ry="20" fill="#FFFFFF" opacity="0.9" />
+                </g>
+                <g filter="url(#atmospheric)" opacity="0.2">
+                  <ellipse cx="1050" cy="45" rx="50" ry="22" fill="url(#highlightPeach)" opacity="0.8" />
+                  <ellipse cx="1040" cy="40" rx="38" ry="18" fill="#FFFFFF" opacity="0.85" />
+                </g>
+
+                {/* ===== LEFT SIDE ACCENT CLOUDS ===== */}
+                <g filter="url(#brushStroke)" opacity="0.8">
+                  <ellipse cx="150" cy="250" rx="100" ry="55" fill="url(#shadowLight)" />
+                  <ellipse cx="100" cy="240" rx="80" ry="45" fill="url(#highlightCreamy)" opacity="0.9" />
+                  <ellipse cx="180" cy="230" rx="70" ry="40" fill="url(#highlightBright)" opacity="0.85" />
+                  <ellipse cx="130" cy="220" rx="50" ry="30" fill="#FFFFFF" opacity="0.9" />
+                </g>
+              </svg>
             </div>
 
             {/* Dark Window Frame */}
