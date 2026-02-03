@@ -294,11 +294,11 @@ export default function Home() {
                           ))}
                         </div>
 
-                        {/* Project Details */}
+                        {/* Project Details
                         <div className="flex flex-col gap-2">
                           <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Project Details</h4>
                           <p className="text-sm leading-relaxed text-zinc-500">{project.details}</p>
-                        </div>
+                        </div> */}
 
                         {/* View Project Link */}
                         <a href={project.link || "#"} className="group inline-flex items-center gap-2 text-sm font-medium text-zinc-900 transition-colors hover:text-zinc-600">
