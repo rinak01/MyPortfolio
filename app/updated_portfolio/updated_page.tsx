@@ -81,10 +81,10 @@ export default function Portfolio() {
           {/* Header - Full Width */}
           <div className="flex items-start gap-[8px] mb-8">
             <div className="flex items-center gap-0">
-              <img src="/images/00/lock01.png" alt="Lock icon" className="w-[53px] h-[53px]" />
-              <span className="text-6xl font-light text-zinc-300">00</span>
+              <img src="/images/00/lock01.png" alt="Lock icon" className="w-[53px] h-[53px] -mt-[32px]" />
+              <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">00</span>
             </div>
-            <div>
+            <div className="-ml-[-1px]">
               <h3 className="text-[26px] font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
               <p className="text-[15px] text-zinc-500 mt-1">
                 2025 June - 2026 January &nbsp;·&nbsp; BMW Group Technology Office &nbsp;·&nbsp; UX Engineer Intern
