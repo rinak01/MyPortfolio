@@ -78,95 +78,92 @@ export default function Portfolio() {
 
         {/* Project 00 - BMW Adaptive Generative UI */}
         <article className="mb-24">
-          {/* Header */}
-          <div className="flex items-baseline gap-3 mb-6">
-            <span className="text-4xl font-light text-zinc-300">00</span>
+          {/* Header - Full Width */}
+          <div className="flex items-start gap-4 mb-8">
+            <div className="flex items-center gap-1">
+              <div className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center">
+                <svg className="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <span className="text-5xl font-light text-zinc-300">00</span>
+            </div>
             <div>
-              <h3 className="text-xl font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
-              <p className="text-xs text-zinc-500 mt-1">
-                2025 June - 2026 January · BMW Group Technology Office · UX Engineer Intern
+              <h3 className="text-2xl font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
+              <p className="text-sm text-zinc-500 mt-1">
+                2025 June - 2026 January &nbsp;·&nbsp; BMW Group Technology Office &nbsp;·&nbsp; UX Engineer Intern
               </p>
             </div>
           </div>
 
-          {/* Three Column Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Left Column - Hero + Capabilities */}
-            <div className="space-y-4">
-              {/* Hero Image */}
-              <div className="rounded-lg overflow-hidden">
-                <img
-                  src="/images/00/neueklasse.webp"
-                  alt="BMW Adaptive Generative UI - Car interior"
-                  className="w-full h-auto object-cover"
-                />
-              </div>
-
-              {/* Capabilities Diagram */}
-              <div>
-                <img
-                  src="/images/00/bmwinfograph.png"
-                  alt="System architecture diagram"
-                  className="w-full h-auto"
-                />
-                <p className="text-[10px] text-zinc-400 mt-2 tracking-wide">Capabilities</p>
-              </div>
+          {/* Top Row - Hero Image + Overview/Contributions/Impact */}
+          <div className="grid grid-cols-1 md:grid-cols-[40%_60%] gap-8 mb-8">
+            {/* Left - Hero Image */}
+            <div className="rounded-lg overflow-hidden">
+              <img
+                src="/images/00/neueklasse.webp"
+                alt="BMW Adaptive Generative UI - Car interior"
+                className="w-full h-auto object-cover"
+              />
             </div>
 
-            {/* Middle Column - Overview, Contributions, Impact */}
+            {/* Right - Overview, Key Contributions, Impact */}
             <div className="space-y-5">
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Overview</h4>
-                <p className="text-[11px] text-zinc-500 leading-relaxed">
-                  Developed an adaptive generative UI system for BMW vehicles that dynamically adjusts interface elements based on driver behavior, environmental conditions, and personal preferences.
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
+                <p className="text-[12px] text-zinc-500 leading-relaxed">
+                  • Developed an adaptive generative UI system for BMW vehicles that dynamically adjusts interface elements based on driver behavior, environmental conditions, and personal preferences.
                 </p>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Key Contributions</h4>
-                <ul className="text-[11px] text-zinc-500 leading-relaxed space-y-0.5">
-                  <li>• Led UX research with 50+ participants</li>
-                  <li>• Designed adaptive UI component library</li>
-                  <li>• Implemented real-time personalization engine</li>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Contributions</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
+                  <li>• Developed a robust React-based orchestration layer to synchronize real-time telemetry between asynchronous sub-agents and the end-user interface, ensuring seamless human-machine interaction.</li>
+                  <li>• Engineered a modular multi-agent architecture that delegates intensive rendering tasks to specialized sub-agents, eliminating synchronous execution stalls and ensuring high-fidelity, fluid interface responsiveness.</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-2">Impact</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="border border-zinc-200 rounded p-2 text-center">
-                    <p className="text-sm font-medium text-zinc-800">MVP</p>
-                    <p className="text-[9px] text-zinc-400">Delivered</p>
-                  </div>
-                  <div className="border border-zinc-200 rounded p-2 text-center">
-                    <p className="text-sm font-medium text-zinc-800">+32</p>
-                    <p className="text-[9px] text-zinc-400">Net Promoter Score</p>
-                  </div>
-                </div>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-0.5">
+                  <li>• UX Design</li>
+                  <li>• System Design</li>
+                  <li>• LLM</li>
+                </ul>
               </div>
             </div>
+          </div>
 
-            {/* Right Column - Diagrams */}
-            <div className="space-y-4">
-              {/* Adaptive Interface */}
-              <div className="border border-zinc-100 rounded-lg p-3 bg-white">
+          {/* Bottom Row - 2 Column Layout: bmwinfograph | layers+pipeline */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Left - Capabilities Diagram */}
+            <div>
+              <img
+                src="/images/00/bmwinfograph.png"
+                alt="Capabilities diagram"
+                className="w-[85%] h-auto"
+              />
+              <p className="text-[10px] text-zinc-400 mt-2">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
+            </div>
+
+            {/* Right - Layers (top) + Pipeline (bottom) */}
+            <div className="flex flex-col gap-4">
+              <div className="bg-zinc-50 rounded-lg p-4">
                 <img
-                  src="/images/00/Group 8.png"
-                  alt="Adaptive Interface Diagram"
-                  className="w-full h-auto"
+                  src="/images/00/layers.png"
+                  alt="Layers diagram"
+                  className="w-[85%] h-auto"
                 />
-                <p className="text-[9px] text-zinc-400 mt-2">Multi-Modal Categorization</p>
+                <p className="text-[10px] text-zinc-400 mt-2">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
               </div>
-
-              {/* Pepino Layers */}
-              <div className="border border-zinc-100 rounded-lg p-3 bg-white">
-                <p className="text-[10px] font-medium text-zinc-500 mb-2">Pepino</p>
+              <div className="bg-zinc-50 rounded-lg p-4">
                 <img
-                  src="/images/00/portfolio infograph (1).png"
-                  alt="Interface layers diagram"
-                  className="w-full h-auto"
+                  src="/images/00/pipeline.png"
+                  alt="Pipeline diagram"
+                  className="w-[85%] h-auto"
                 />
-                <p className="text-[9px] text-zinc-400 mt-2">Interface Design + Code</p>
+                <p className="text-[10px] text-zinc-400 mt-2">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
               </div>
             </div>
           </div>
@@ -465,14 +462,14 @@ export default function Portfolio() {
               </div>
 
               <div className="flex items-center justify-center gap-2">
-                <span className="text-[13px] tracking-[0.1em] text-zinc-700">LETS WORK TOGETHER</span>
+                <span className="text-[13px] tracking-[0.1em] text-zinc-700">LETS BUILD TOGETHER</span>
                 <a
                   href="https://www.linkedin.com/in/rina-kim-9a3864171/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="transition-transform hover:scale-110"
                 >
-                  <img src="/linkedin-icon.png" alt="LinkedIn" className="w-5 h-5" />
+                  <img src="/images/NiceToMeetYou/linkedin.png" alt="LinkedIn" className="w-5 h-5 -mt-[1px]" />
                 </a>
               </div>
             </div>
