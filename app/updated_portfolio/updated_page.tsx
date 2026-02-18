@@ -378,25 +378,18 @@ export default function Portfolio() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {/* Placeholder - Add prototype images to /images/prototypes/ folder */}
-          <div className="w-full h-48 rounded-lg bg-zinc-100 flex items-center justify-center">
-            <span className="text-xs text-zinc-400">Prototype 1</span>
-          </div>
-          <div className="w-full h-48 rounded-lg bg-zinc-100 flex items-center justify-center">
-            <span className="text-xs text-zinc-400">Prototype 2</span>
-          </div>
-          <div className="w-full h-48 rounded-lg bg-zinc-100 flex items-center justify-center">
-            <span className="text-xs text-zinc-400">Prototype 3</span>
-          </div>
-          <div className="w-full h-48 rounded-lg bg-zinc-100 flex items-center justify-center">
-            <span className="text-xs text-zinc-400">Prototype 4</span>
-          </div>
-          <div className="w-full h-48 rounded-lg bg-zinc-100 flex items-center justify-center">
-            <span className="text-xs text-zinc-400">Prototype 5</span>
-          </div>
-          <div className="w-full h-48 rounded-lg bg-zinc-100 flex items-center justify-center">
-            <span className="text-xs text-zinc-400">Prototype 6</span>
-          </div>
+          {/* Row 1 */}
+          <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/stopmotion 1.png" alt="Stop Motion 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          {/* Row 2 */}
+          <img src="/images/prototypes/flexvr 1.png" alt="FlexVR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/emmasjellyfish01 1.png" alt="Emma's Jellyfish" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/stopmotion02.png" alt="Stop Motion 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          {/* Row 3 */}
+          <img src="/images/prototypes/LeARn.png" alt="LeARn" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/portalreef 1.png" alt="Portal Reef" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/cmupopup 1.png" alt="CMU Popup" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
         </div>
       </section>
 
