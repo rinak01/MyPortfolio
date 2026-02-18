@@ -79,18 +79,14 @@ export default function Portfolio() {
         {/* Project 00 - BMW Adaptive Generative UI */}
         <article className="mb-24">
           {/* Header - Full Width */}
-          <div className="flex items-start gap-4 mb-8">
-            <div className="flex items-center gap-1">
-              <div className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center">
-                <svg className="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <span className="text-5xl font-light text-zinc-300">00</span>
+          <div className="flex items-start gap-[8px] mb-8">
+            <div className="flex items-center gap-0">
+              <img src="/images/00/lock01.png" alt="Lock icon" className="w-[53px] h-[53px]" />
+              <span className="text-6xl font-light text-zinc-300">00</span>
             </div>
             <div>
-              <h3 className="text-2xl font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
-              <p className="text-sm text-zinc-500 mt-1">
+              <h3 className="text-[26px] font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
+              <p className="text-[15px] text-zinc-500 mt-1">
                 2025 June - 2026 January &nbsp;·&nbsp; BMW Group Technology Office &nbsp;·&nbsp; UX Engineer Intern
               </p>
             </div>
@@ -138,7 +134,7 @@ export default function Portfolio() {
           {/* Bottom Row - 2 Column Layout: bmwinfograph | layers+pipeline */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left - Capabilities Diagram */}
-            <div>
+            <div className="mt-8">
               <img
                 src="/images/00/bmwinfograph.png"
                 alt="Capabilities diagram"
@@ -153,7 +149,7 @@ export default function Portfolio() {
                 <img
                   src="/images/00/layers.png"
                   alt="Layers diagram"
-                  className="w-[85%] h-auto"
+                  className="w-[70%] h-auto"
                 />
                 <p className="text-[10px] text-zinc-400 mt-2">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
               </div>
@@ -161,7 +157,7 @@ export default function Portfolio() {
                 <img
                   src="/images/00/pipeline.png"
                   alt="Pipeline diagram"
-                  className="w-[85%] h-auto"
+                  className="w-[75%] h-auto"
                 />
                 <p className="text-[10px] text-zinc-400 mt-2">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
               </div>
