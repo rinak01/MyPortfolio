@@ -455,9 +455,9 @@ export default function Portfolio() {
         <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
           {/* Left side - Contact Card + designworksgroup */}
           <div className="flex flex-col gap-5 items-center">
-            <div className="border border-zinc-200 rounded-lg p-5 flex flex-col justify-between h-[286px] w-[364px]">
+            <div className="border border-zinc-200 rounded-lg p-5 flex flex-col justify-between h-[286px] w-[400px]">
               <div className="text-center">
-                <p className="text-[13px] tracking-[0.2em] text-zinc-400 mb-1">PRODUCT DESIGNER</p>
+                <p className="text-[13px] tracking-[0.2em] text-zinc-500 mb-1">PRODUCT DESIGNER</p>
                 <h3 className="text-lg tracking-[0.15em] text-zinc-800 font-normal">RINA KIM</h3>
               </div>
 
@@ -484,7 +484,7 @@ export default function Portfolio() {
                 </a>
               </div>
             </div>
-            <img src="/images/NiceToMeetYou/designworksgroup.png" alt="DesignWorks group photo" className="w-[364px] h-[286px] object-cover rounded-lg" />
+            <img src="/images/NiceToMeetYou/designworksgroup.png" alt="DesignWorks group photo" className="w-[400px] h-[286px] object-cover rounded-lg" />
           </div>
 
           {/* Right side - 2 images on top, rh below */}
