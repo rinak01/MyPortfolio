@@ -19,24 +19,24 @@ export default function Portfolio() {
         <p className="text-lg text-zinc-400 font-light mb-6">
           UX/UI Design · Prototyping · Systems Thinking
         </p>
-        <p className="text-m text-zinc-600 leading-relaxed max-w-2xl mb-1">
+        <p className="text-lg text-zinc-600 leading-normal max-w-2xl mb-1">
           Masters in Human-Computer Interaction from <span className="font-medium text-zinc-900">Carnegie Mellon University</span>.
         </p>
-        <p className="text-m text-zinc-600 leading-relaxed max-w-2xl mb-6">
+        <p className="text-lg text-zinc-600 leading-normal max-w-2xl mb-6">
           Previously at <span className="font-medium text-zinc-900">BMW Group Technology Office</span>.
         </p>
-        <p className="text-s text-zinc-500 leading-relaxed max-w-2xl mb-8">
+        <p className="text-lg text-zinc-500 leading-normal max-w-3xl mb-12">
           Specializing in Automotive HMI, Interface Design, and Rapid Prototyping that bridge research and production.
         </p>
 
         {/* Navigation Links */}
-        <nav className="flex text-[16px]">
+        <nav className="flex text-[18px]">
           {/* Vertical line with dots */}
           <div className="flex flex-col items-center mr-3">
             <div className="w-[5px] h-[5px] rounded-full bg-zinc-300" />
-            <div className="w-[1px] flex-1 bg-zinc-300" style={{ minHeight: '26px' }} />
+            <div className="w-[1px] flex-1 bg-zinc-300" style={{ minHeight: '28px' }} />
             <div className="w-[5px] h-[5px] rounded-full bg-zinc-300" />
-            <div className="w-[1px] flex-1 bg-zinc-300" style={{ minHeight: '26px' }} />
+            <div className="w-[1px] flex-1 bg-zinc-300" style={{ minHeight: '28px' }} />
             <div className="w-[5px] h-[5px] rounded-full bg-zinc-300" />
           </div>
 
@@ -87,7 +87,7 @@ export default function Portfolio() {
             <div className="-ml-[-1px]">
               <h3 className="text-[26px] font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
               <p className="text-[15px] text-zinc-500 mt-1">
-                2025 June - 2026 January &nbsp;·&nbsp; BMW Group Technology Office &nbsp;·&nbsp; UX Engineer Intern
+                2025 June - 2026 January &nbsp;·&nbsp; <span className="font-semibold">BMW Group Technology Office</span> &nbsp;·&nbsp; UX Engineer Intern
               </p>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function Portfolio() {
             </div>
 
             {/* Right - Overview, Key Contributions, Impact */}
-            <div className="space-y-5">
+            <div className="space-y-11">
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
                 <p className="text-[12px] text-zinc-500 leading-relaxed">
@@ -174,7 +174,7 @@ export default function Portfolio() {
             <div>
               <h3 className="text-[26px] font-medium text-zinc-900">SmaSH Lab | Proactive Agent</h3>
               <p className="text-[15px] text-zinc-500 mt-1">
-                2024 September - 2025 August &nbsp;·&nbsp; Carnegie Mellon University SmaSH Lab &nbsp;·&nbsp; Research Assistant
+                2024 September - 2025 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University SmaSH Lab</span> &nbsp;·&nbsp; Research Assistant
               </p>
             </div>
           </div>
@@ -184,7 +184,7 @@ export default function Portfolio() {
             {/* Left - NLP Diagram + Pipeline */}
             <div className="space-y-4">
               <div>
-                <h4 className="text-sm font-medium text-zinc-700 mb-3">NLP & Semantic Analysis</h4>
+                {/* <h4 className="text-sm font-medium text-zinc-700 mb-3">NLP & Semantic Analysis</h4> */}
                 <div className="rounded-lg overflow-hidden">
                   <img
                     src="/images/01/NLP.png"
@@ -259,14 +259,14 @@ export default function Portfolio() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left - Screenshots */}
             <div className="space-y-4">
-              <div className="rounded-lg overflow-hidden border border-zinc-100">
+              <div className="rounded-lg overflow-hidden border border-zinc-100 w-[95%]">
                 <img
                   src="/images/02/trend_forecasting_dashboard 1.png"
                   alt="AI Trend Forecasting Plugin dashboard"
                   className="w-full h-auto"
                 />
               </div>
-              <div className="rounded-lg overflow-hidden border border-zinc-100">
+              <div className="rounded-lg overflow-hidden border border-zinc-100 w-[95%]">
                 <img
                   src="/images/02/SurefrontInterviews.png"
                   alt="Surefront Interviews"
@@ -437,7 +437,7 @@ export default function Portfolio() {
       {/* AR/VR Section */}
       <section id="arvr" className="mx-auto max-w-6xl px-8 pb-16">
         <div className="mb-12">
-          <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
+          <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-1.5">
             AR/VR
           </h2>
           <div className="w-full h-[1px] bg-zinc-300" />
