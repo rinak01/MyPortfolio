@@ -138,14 +138,14 @@ export default function Portfolio() {
               <img
                 src="/images/00/bmwinfograph.png"
                 alt="Capabilities diagram"
-                className="w-[85%] h-auto"
+                className="w-[83%] h-auto"
               />
               <p className="text-[10px] text-zinc-400 mt-2">• Layered Architecture Diagram</p>
             </div>
 
             {/* Right - Layers (top) + Pipeline (bottom) */}
-            <div className="flex flex-col gap-4">
-              <div className="bg-zinc-50 rounded-lg p-4">
+            <div className="flex flex-col gap-1">
+              <div className="rounded-lg p-4">
                 <img
                   src="/images/00/layers.png"
                   alt="Layers diagram"
@@ -153,7 +153,7 @@ export default function Portfolio() {
                 />
                 <p className="text-[10px] text-zinc-400 mt-2">• GenUI architecture illustrates a tiered synthesis pipeline that orchestrates contextual processing to deliver a real-time adoptive interface.</p>
               </div>
-              <div className="bg-zinc-50 rounded-lg p-4">
+              <div className="rounded-lg p-4">
                 <img
                   src="/images/00/pipeline.png"
                   alt="Pipeline diagram"
@@ -187,14 +187,14 @@ export default function Portfolio() {
                 {/* <h4 className="text-sm font-medium text-zinc-700 mb-3">NLP & Semantic Analysis</h4> */}
                 <div className="rounded-lg overflow-hidden">
                   <img
-                    src="/images/01/NLP.png"
+                    src="/images/01/NLP01.png"
                     alt="NLP and Semantic Analysis diagram"
-                    className="w-full h-auto"
+                    className="w-[90%] h-auto -mt-[80px]"
                   />
                 </div>
               </div>
 
-              <div className="border border-zinc-100 rounded-lg p-4 bg-white">
+              <div className="rounded-lg p-4 -mt-[40px]">
                 <img
                   src="/images/01/proactive agent pipeline.png"
                   alt="Proactive Agent Pipeline"
@@ -231,7 +231,7 @@ export default function Portfolio() {
               </div>
 
               {/* Chart */}
-              <div className="border border-zinc-100 rounded-lg p-4 bg-white">
+              <div className="rounded-lg p-4">
                 <img
                   src="/images/01/updatedGraph.png"
                   alt="Proactive Agent Response Accuracy"
@@ -248,9 +248,9 @@ export default function Portfolio() {
           <div className="flex items-start gap-[8px] mb-8">
             <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">02</span>
             <div>
-              <h3 className="text-[26px] font-medium text-zinc-900">AI Trend Forecasting Plugin</h3>
+              <h3 className="text-[26px] font-medium text-zinc-900">AI Trend Forecasting Tool</h3>
               <p className="text-[15px] text-zinc-500 mt-[-1px]">
-                2024 January - 2024 August &nbsp;·&nbsp; Carnegie Mellon University & Surefront &nbsp;·&nbsp; UX Researcher
+                2024 January - 2024 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University | Surefront</span> &nbsp;·&nbsp; UX Researcher & Developer
               </p>
             </div>
           </div>
@@ -266,7 +266,7 @@ export default function Portfolio() {
                   className="w-full h-auto"
                 />
               </div>
-              <div className="rounded-lg overflow-hidden border border-zinc-100 w-[95%]">
+              <div className="rounded-lg overflow-hidden w-[102%] -ml-[26px]">
                 <img
                   src="/images/02/SurefrontInterviews.png"
                   alt="Surefront Interviews"
@@ -276,29 +276,29 @@ export default function Portfolio() {
             </div>
 
             {/* Right - Overview & Details */}
-            <div className="space-y-5">
+            <div className="space-y-10">
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
                 <p className="text-[12px] text-zinc-500 leading-relaxed">
-                  • Designed and developed an AI-powered trend forecasting plugin that helps businesses predict market trends and consumer behavior patterns.
+                  • Built B2B tool designed to bridge the gap between high-level data analytics and creative execution. It leverages real-time data and AI to empower fashion professionals from designers to merchandisers to make informed, proactive decisions.
                 </p>
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Contributions</h4>
-                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
-                  <li>• Machine learning integration</li>
-                  <li>• Real-time data visualization</li>
-                  <li>• Predictive analytics dashboard</li>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Features</h4>
+                <ul className="text-[13px] text-zinc-500 leading-relaxed space-y-1">
+                  <li>• <span className="font-semibold">Dynamic Data Integration:</span> Built to process and visualize real-time growth metrics, search volumes, and month-over-month performance curves.</li>
+                  <li>• <span className="font-semibold">Agentic AI Implementation:</span> The Personal Fashion Assistant democratizes data. Instead of digging through three layers of menus to find "shoes in France," a user can simply type: "What footwear is trending in Paris right now?"</li>
+                  <li>• <span className="font-semibold">Advanced Analytics & Visualization:</span> Built to process and visualize real-time growth metrics, search volumes, and month-over-month performance curves.</li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
-                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
-                  <li>• Increased market trend prediction accuracy by 20%</li>
-                  <li>• Reduced consumer behavior prediction errors by 15%</li>
-                  <li>• Enhanced user experience with interactive dashboard</li>
+                <ul className="text-[13px] text-zinc-500 leading-relaxed space-y-1">
+                  <li>• <span className="font-semibold">75% Reduction in Research Latency:</span> By consolidating real-time Google Trends APIs and social media scraping into a single HMI, the time required to validate a trend aesthetic against hard search data was reduced from 4 hours of manual cross-referencing to less than 60 seconds of automated dashboard interaction.</li>
+                  <li>• <span className="font-semibold">90% Decrease in Interaction Cost:</span> The implementation of the "Agentic AI Co-pilot" replaced a multi-step filtering process (Average of 12 clicks per query) with a single natural language input, significantly lowering the cognitive load for non-technical stakeholders.</li>
+                  <li>• <span className="font-semibold">Trend Velocity Accuracy:</span> The "Month-over-Month" performance curves provide a 42.5% more granular view of trend momentum compared to traditional static quarterly reports.</li>
                 </ul>
               </div>
 
@@ -331,7 +331,7 @@ export default function Portfolio() {
             <div>
               <h3 className="text-[26px] font-medium text-zinc-900">Emma&apos;s Tree</h3>
               <p className="text-[15px] text-zinc-500 mt-1">
-                2023 June - 2024 June &nbsp;·&nbsp; Personal Project &nbsp;·&nbsp; Designer & Developer
+                2023 June - 2024 June &nbsp;·&nbsp; <span className="font-semibold">The June 19th Project, Personal Project</span> &nbsp;·&nbsp; Designer & Developer
               </p>
             </div>
           </div>
@@ -348,63 +348,56 @@ export default function Portfolio() {
             </div>
 
             {/* Right - Overview, Key Highlights, Tools */}
-            <div className="space-y-5">
+            <div className="space-y-10">
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
                 <p className="text-[12px] text-zinc-500 leading-relaxed">
-                  • A 3D printed art installation exploring the relationship between nature and technology through generative design.
+                  • I built this tree for my best friend, a med student who wanted greenery without the maintenance stress. Using biomimicry, the tree reacts to environmental changes just like a real tree, functioning as both interactive companion and a functional monitor that won't die.
                 </p>
               </div>
 
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Highlights</h4>
                 <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
-                  <li>• Generative algorithm design</li>
-                  <li>• Multi-material 3D printing</li>
-                  <li>• Exhibition at CMU Gallery</li>
+                  <li>• <span className="font-semibold">The "Bloom" Effect, Color Transformation:</span> Temperature Sensitive Filament</li>
+                  <li>• <span className="font-semibold">Moisture Sensing:</span> Moisture Sensor</li>
+                  <li>• <span className="font-semibold">Visual Feedback:</span> LED Indicators</li>
+                  <li>• <span className="font-semibold">Growth & Structure:</span> 3D Pen </li>
+                  <li>• <span className="font-semibold">Sustainbility:</span> Solar-powered Battery Bank</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Tools</h4>
-                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-0.5">
-                  <li>• Arduino Embedded Programming</li>
-                  <li>• Moisture Sensor</li>
-                  <li>• Temperature Sensor</li>
-                  <li>• Light Sensor</li>
-                  <li>• Tempera Sensitive Filament</li>
-                  <li>• 3D Pen</li>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Design Thinking</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1.5">
+                  <li>• I wanted to design using biomimicry to solve "care fatigue," so I built a synthetic plant that basically lives and reacts right along with Emma. Using temperature-sensitive filaments and environmental sensors, the tree acts as a responsive sensory anchor that mimics the energy of a real plant.</li>
+                  <li className="mt-3"> I used natural materials like real moss and a ceramic pot to keep the tech feeling grounded rather than clinical. Emma was a busy med student, so I wanted to give her those restorative nature vibes in a way that's actually durable and emotionally meaningful.</li>
+                  {/* <li>• Physical Build: Beyond the electronics, the project features organic aesthetics including a pot and real moss to make the tech look natural and feels grounded.</li>
+                  <li>• The "Bloom" Effect: When Emma interacts with the plant—either by placing it in a warm spot, touching it, or adding warm water—the flowers transition from their base color to a vibrant pink.</li>
+                  <li>• Interactive Personality: The project responds to its environment (light, heat, and moisture) just as a biological organism would.</li>
+                  <li>• Multi-Sensory Elements: While the project focused on visual and thermal responses, it fits into a larger body of work that explores presence through customized fragrances.</li>
+                  <li>• Durability: Building the plant "designed to never die," it removes the stress of maintenance while retaining the aesthetic benefits of greenery.</li> */}
                 </ul>
               </div>
             </div>
           </div>
 
           {/* Middle Row - Tree System Diagram */}
-          <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-8 mb-8">
-            <div>
-              <img
-                src="/images/03/treesystem.png"
-                alt="Tree system diagram - Photosynthesis, Flower Blooming, Water the Plant"
-                className="w-[80%] h-auto rounded-lg"
-              />
-            </div>
-            <div className="flex items-center">
-              <p className="text-[10px] text-zinc-400">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
-            </div>
+          <div className="flex justify-center mb-8">
+            <img
+              src="/images/03/treesystem.png"
+              alt="Tree system diagram - Photosynthesis, Flower Blooming, Water the Plant"
+              className="w-[70%] h-auto rounded-lg"
+            />
           </div>
 
           {/* Bottom Row - Temperature Change Diagram */}
-          <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-8">
-            <div>
-              <img
-                src="/images/03/tempchange.png"
-                alt="Filament temperature change diagram"
-                className="w-[80%] h-auto rounded-lg"
-              />
-            </div>
-            <div className="flex items-center">
-              <p className="text-[10px] text-zinc-400">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
-            </div>
+          <div className="flex justify-center">
+            <img
+              src="/images/03/tempchange.png"
+              alt="Filament temperature change diagram"
+              className="w-[60%] h-auto rounded-lg"
+            />
           </div>
         </article>
       </section>
@@ -462,7 +455,7 @@ export default function Portfolio() {
       <section className="mx-auto max-w-6xl px-8 pb-16">
         <div className="mb-12">
           <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
-            Nice to Meet You!
+            It's great to meet you! :)
           </h2>
           <div className="w-full h-[1px] bg-zinc-300" />
         </div>
