@@ -70,7 +70,7 @@ export default function Portfolio() {
       {/* Selected Works Section */}
       <section id="selected-works" className="mx-auto max-w-6xl px-10 pb-16">
         <div className="mb-12">
-          <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
+          <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-1.5">
             Selected Works
           </h2>
           <div className="w-full h-[1px] bg-zinc-300" />
@@ -114,16 +114,16 @@ export default function Portfolio() {
 
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Contributions</h4>
-                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
+                <ul className="text-[14px] text-zinc-500 leading-relaxed space-y-1">
                   <li>• Developed a robust React-based orchestration layer to synchronize real-time telemetry between asynchronous sub-agents and the end-user interface, ensuring seamless human-machine interaction.</li>
                   <li>• Engineered a modular multi-agent architecture that delegates intensive rendering tasks to specialized sub-agents, eliminating synchronous execution stalls and ensuring high-fidelity, fluid interface responsiveness.</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
-                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-0.5">
-                  <li>• UX Design</li>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-1">Topics Researched</h4>
+                <ul className="text-[14px] text-zinc-500 leading-relaxed space-y-0.5">
+                  <li>• Generative AI</li>
                   <li>• System Design</li>
                   <li>• LLM</li>
                 </ul>
@@ -140,7 +140,7 @@ export default function Portfolio() {
                 alt="Capabilities diagram"
                 className="w-[85%] h-auto"
               />
-              <p className="text-[10px] text-zinc-400 mt-2">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
+              <p className="text-[10px] text-zinc-400 mt-2">• Layered Architecture Diagram</p>
             </div>
 
             {/* Right - Layers (top) + Pipeline (bottom) */}
@@ -151,7 +151,7 @@ export default function Portfolio() {
                   alt="Layers diagram"
                   className="w-[70%] h-auto"
                 />
-                <p className="text-[10px] text-zinc-400 mt-2">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
+                <p className="text-[10px] text-zinc-400 mt-2">• GenUI architecture illustrates a tiered synthesis pipeline that orchestrates contextual processing to deliver a real-time adoptive interface.</p>
               </div>
               <div className="bg-zinc-50 rounded-lg p-4">
                 <img
@@ -159,7 +159,7 @@ export default function Portfolio() {
                   alt="Pipeline diagram"
                   className="w-[75%] h-auto"
                 />
-                <p className="text-[10px] text-zinc-400 mt-2">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
+                <p className="text-[10px] text-zinc-400 mt-2">• Synthesis pipeline that transitions from raw contextual processing to a fluid, high-fidelity adoptive interface.</p>
               </div>
             </div>
           </div>
@@ -331,36 +331,23 @@ export default function Portfolio() {
             <div>
               <h3 className="text-[26px] font-medium text-zinc-900">Emma&apos;s Tree</h3>
               <p className="text-[15px] text-zinc-500 mt-1">
-                2023 July - 2023 Oct &nbsp;·&nbsp; Capstone Project &nbsp;·&nbsp; Designer & Illustrator
+                2023 June - 2024 June &nbsp;·&nbsp; Personal Project &nbsp;·&nbsp; Designer & Developer
               </p>
             </div>
           </div>
 
-          {/* Two Column Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            {/* Left - Tree Image */}
-            <div className="space-y-4">
-              <div className="bg-zinc-50 rounded-lg p-6 flex items-center justify-center">
-                <img
-                  src="/images/03/likearealtree 1.png"
-                  alt="Emma's Tree - 3D printed tree sculpture"
-                  className="w-full max-w-xs h-auto"
-                />
-              </div>
-
-              {/* Filament Temperature + Process Images */}
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-zinc-900 text-white rounded-lg p-3 flex items-center justify-center min-h-[100px]">
-                  <p className="text-[8px] tracking-widest uppercase transform -rotate-90 whitespace-nowrap">
-                    Filament Temperature
-                  </p>
-                </div>
-                <img src="/images/03/12 1.png" alt="Process 1" className="w-full h-auto object-cover rounded-lg" />
-                <img src="/images/03/Group 13.png" alt="Process 2" className="w-full h-auto object-cover rounded-lg" />
-              </div>
+          {/* Top Row - Emma's Tree Image + Overview/Key Highlights/Tools */}
+          <div className="grid grid-cols-1 md:grid-cols-[45%_55%] gap-8 mb-8">
+            {/* Left - Emma's Tree Main Image */}
+            <div>
+              <img
+                src="/images/03/emmastree.png"
+                alt="Emma's Tree - 3D printed tree sculpture"
+                className="w-[80%] h-auto rounded-lg"
+              />
             </div>
 
-            {/* Right - Overview & Details */}
+            {/* Right - Overview, Key Highlights, Tools */}
             <div className="space-y-5">
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
@@ -370,7 +357,7 @@ export default function Portfolio() {
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Contributions</h4>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Highlights</h4>
                 <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
                   <li>• Generative algorithm design</li>
                   <li>• Multi-material 3D printing</li>
@@ -379,11 +366,44 @@ export default function Portfolio() {
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
-                <p className="text-[12px] text-zinc-500">
-                  • Rhino, Grasshopper, Prusa Slicer
-                </p>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Tools</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-0.5">
+                  <li>• Arduino Embedded Programming</li>
+                  <li>• Moisture Sensor</li>
+                  <li>• Temperature Sensor</li>
+                  <li>• Light Sensor</li>
+                  <li>• Tempera Sensitive Filament</li>
+                  <li>• 3D Pen</li>
+                </ul>
               </div>
+            </div>
+          </div>
+
+          {/* Middle Row - Tree System Diagram */}
+          <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-8 mb-8">
+            <div>
+              <img
+                src="/images/03/treesystem.png"
+                alt="Tree system diagram - Photosynthesis, Flower Blooming, Water the Plant"
+                className="w-[80%] h-auto rounded-lg"
+              />
+            </div>
+            <div className="flex items-center">
+              <p className="text-[10px] text-zinc-400">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
+            </div>
+          </div>
+
+          {/* Bottom Row - Temperature Change Diagram */}
+          <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-8">
+            <div>
+              <img
+                src="/images/03/tempchange.png"
+                alt="Filament temperature change diagram"
+                className="w-[80%] h-auto rounded-lg"
+              />
+            </div>
+            <div className="flex items-center">
+              <p className="text-[10px] text-zinc-400">• TEXT ASDFHERLVEKRJVNVSDFVRR</p>
             </div>
           </div>
         </article>
