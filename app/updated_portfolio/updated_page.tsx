@@ -13,24 +13,24 @@ export default function Portfolio() {
         <p className="mb-1 text-xs font-medium uppercase tracking-[0.2em] text-zinc-400">
           Product Designer
         </p>
-        <h1 className="text-4xl font-medium tracking-tight text-zinc-900 mb-1">
+        <h1 className="text-5xl font-medium tracking-tight text-zinc-900 mb-1">
           Rina Kim
         </h1>
         <p className="text-lg text-zinc-400 font-light mb-6">
           UX/UI Design · Prototyping · Systems Thinking
         </p>
-        <p className="text-sm text-zinc-600 leading-relaxed max-w-2xl mb-1">
+        <p className="text-m text-zinc-600 leading-relaxed max-w-2xl mb-1">
           Masters in Human-Computer Interaction from <span className="font-medium text-zinc-900">Carnegie Mellon University</span>.
         </p>
-        <p className="text-sm text-zinc-600 leading-relaxed max-w-2xl mb-6">
+        <p className="text-m text-zinc-600 leading-relaxed max-w-2xl mb-6">
           Previously at <span className="font-medium text-zinc-900">BMW Group Technology Office</span>.
         </p>
-        <p className="text-xs text-zinc-500 leading-relaxed max-w-2xl mb-8">
-          Specializing in generative interfaces, interface design, and rapid prototypes that bridge research and production.
+        <p className="text-s text-zinc-500 leading-relaxed max-w-2xl mb-8">
+          Specializing in Automotive HMI, Interface Design, and Rapid Prototyping that bridge research and production.
         </p>
 
         {/* Navigation Links */}
-        <nav className="flex text-sm">
+        <nav className="flex text-[16px]">
           {/* Vertical line with dots */}
           <div className="flex flex-col items-center mr-3">
             <div className="w-[5px] h-[5px] rounded-full bg-zinc-300" />
@@ -168,8 +168,9 @@ export default function Portfolio() {
         {/* Project 01 - SmaSH Lab | Proactive Agent */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex items-start gap-[8px] mb-8">
-            <span className="text-[55px] font-light text-zinc-300">01</span>
+          <div className="flex items-start gap-[15px] mb-8">
+            <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">01</span>
+
             <div>
               <h3 className="text-[26px] font-medium text-zinc-900">SmaSH Lab | Proactive Agent</h3>
               <p className="text-[15px] text-zinc-500 mt-1">
@@ -245,11 +246,11 @@ export default function Portfolio() {
         <article className="mb-24">
           {/* Header */}
           <div className="flex items-start gap-[8px] mb-8">
-            <span className="text-[55px] font-light text-zinc-300">02</span>
+            <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">02</span>
             <div>
               <h3 className="text-[26px] font-medium text-zinc-900">AI Trend Forecasting Plugin</h3>
-              <p className="text-[15px] text-zinc-500 mt-1">
-                2024 January - 2024 August &nbsp;·&nbsp; Carnegie Mellon University & AccuWeek &nbsp;·&nbsp; UX Researcher
+              <p className="text-[15px] text-zinc-500 mt-[-1px]">
+                2024 January - 2024 August &nbsp;·&nbsp; Carnegie Mellon University & Surefront &nbsp;·&nbsp; UX Researcher
               </p>
             </div>
           </div>
@@ -294,6 +295,15 @@ export default function Portfolio() {
 
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
+                  <li>• Increased market trend prediction accuracy by 20%</li>
+                  <li>• Reduced consumer behavior prediction errors by 15%</li>
+                  <li>• Enhanced user experience with interactive dashboard</li>
+                </ul>
+              </div>
+
+              {/* <div>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="border border-zinc-200 rounded p-2 text-center">
                     <p className="text-lg font-medium text-zinc-800">12</p>
@@ -308,7 +318,7 @@ export default function Portfolio() {
                     <p className="text-[9px] text-zinc-400">Models</p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </article>
@@ -317,7 +327,7 @@ export default function Portfolio() {
         <article className="mb-24">
           {/* Header */}
           <div className="flex items-start gap-[8px] mb-8">
-            <span className="text-[55px] font-light text-zinc-300">03</span>
+            <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">03</span>
             <div>
               <h3 className="text-[26px] font-medium text-zinc-900">Emma&apos;s Tree</h3>
               <p className="text-[15px] text-zinc-500 mt-1">
