@@ -9,7 +9,7 @@ export default function Portfolio() {
   return (
     <div className={`${inter.className} min-h-screen bg-white`}>
       {/* Header Section */}
-      <header className="mx-auto max-w-6xl px-8 pt-16 pb-12">
+      <header className="mx-auto max-w-6xl px-10 pt-19 pb-29">
         <p className="mb-1 text-xs font-medium uppercase tracking-[0.2em] text-zinc-400">
           Product Designer
         </p>
@@ -30,26 +30,50 @@ export default function Portfolio() {
         </p>
 
         {/* Navigation Links */}
-        <nav className="flex gap-6 text-sm">
-          <a href="#selected-works" className="text-zinc-500 hover:text-zinc-900 transition-colors">
-            → Selected Works
-          </a>
-          <a href="#prototypes" className="text-zinc-500 hover:text-zinc-900 transition-colors">
-            → Rapid Prototypes
-          </a>
-          <a href="#arvr" className="text-zinc-500 hover:text-zinc-900 transition-colors">
-            → AR/VR
-          </a>
+        <nav className="flex text-sm">
+          {/* Vertical line with dots */}
+          <div className="flex flex-col items-center mr-3">
+            <div className="w-[5px] h-[5px] rounded-full bg-zinc-300" />
+            <div className="w-[1px] flex-1 bg-zinc-300" style={{ minHeight: '26px' }} />
+            <div className="w-[5px] h-[5px] rounded-full bg-zinc-300" />
+            <div className="w-[1px] flex-1 bg-zinc-300" style={{ minHeight: '26px' }} />
+            <div className="w-[5px] h-[5px] rounded-full bg-zinc-300" />
+          </div>
+
+          {/* Text links */}
+          <div className="flex flex-col justify-between py-[px]">
+            <a
+              href="#selected-works"
+              onClick={(e) => { e.preventDefault(); document.getElementById('selected-works')?.scrollIntoView({ behavior: 'smooth' }); }}
+              className="text-zinc-400 hover:text-zinc-700 hover:font-medium transition-all cursor-pointer leading-none"
+            >
+              Selected Works
+            </a>
+            <a
+              href="#prototypes"
+              onClick={(e) => { e.preventDefault(); document.getElementById('prototypes')?.scrollIntoView({ behavior: 'smooth' }); }}
+              className="text-zinc-400 hover:text-zinc-700 hover:font-medium transition-all cursor-pointer leading-none"
+            >
+              Rapid Prototypes
+            </a>
+            <a
+              href="#arvr"
+              onClick={(e) => { e.preventDefault(); document.getElementById('arvr')?.scrollIntoView({ behavior: 'smooth' }); }}
+              className="text-zinc-400 hover:text-zinc-700 hover:font-medium transition-all cursor-pointer leading-none"
+            >
+              AR/VR
+            </a>
+          </div>
         </nav>
       </header>
 
       {/* Selected Works Section */}
-      <section id="selected-works" className="mx-auto max-w-6xl px-8 pb-16">
-        <div className="flex items-center gap-4 mb-12">
-          <h2 className="text-sm font-medium uppercase tracking-[0.15em] text-zinc-900">
+      <section id="selected-works" className="mx-auto max-w-6xl px-10 pb-16">
+        <div className="mb-12">
+          <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
             Selected Works
           </h2>
-          <div className="flex-1 h-[3px] bg-[#FDE992]" />
+          <div className="w-full h-[1px] bg-zinc-300" />
         </div>
 
         {/* Project 00 - BMW Adaptive Generative UI */}
@@ -409,6 +433,8 @@ export default function Portfolio() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* Featured: Library - spans 2 columns and 2 rows */}
+          <img src="/images/ARVR/library.png" alt="Library VR" className="w-full h-full object-cover rounded-lg bg-zinc-100 col-span-2 row-span-2 md:h-[400px]" />
           <img src="/images/ARVR/pianoroom 1.png" alt="Piano Room VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           <img src="/images/ARVR/pianoroom02 1.png" alt="Piano Room VR 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           <img src="/images/ARVR/studyhall 1.png" alt="Study Hall VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
@@ -416,7 +442,7 @@ export default function Portfolio() {
           <img src="/images/ARVR/trees01 1.png" alt="Trees VR 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           <img src="/images/ARVR/trees02 1.png" alt="Trees VR 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           <img src="/images/ARVR/flowers 1.png" alt="Flowers VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/Untitled design (10) 1.png" alt="VR Design" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/ARVR/RHcloud 1.png" alt="RH Cloud VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
         </div>
       </section>
 
@@ -426,44 +452,48 @@ export default function Portfolio() {
           NICE TO MEET YOU!
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Photo Grid */}
-          <div className="grid grid-cols-2 gap-2">
-            <img src="/images/NiceToMeetYou/designworksgroup.png" alt="DesignWorks group photo" className="w-full h-48 object-cover rounded-lg" />
-            <img src="/images/NiceToMeetYou/buildingcloud.png" alt="Building cloud" className="w-full h-48 object-cover rounded-lg" />
-            <img src="/images/NiceToMeetYou/buildingpeppersghost.png" alt="Building pepper's ghost" className="w-full h-48 object-cover rounded-lg" />
-            <img src="/images/NiceToMeetYou/rh.png" alt="Portrait" className="w-full h-48 object-cover rounded-lg" />
+        <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
+          {/* Left side - Contact Card + designworksgroup */}
+          <div className="flex flex-col gap-5 items-center">
+            <div className="border border-zinc-200 rounded-lg p-5 flex flex-col justify-between h-[286px] w-[364px]">
+              <div className="text-center">
+                <p className="text-[13px] tracking-[0.2em] text-zinc-400 mb-1">PRODUCT DESIGNER</p>
+                <h3 className="text-lg tracking-[0.15em] text-zinc-800 font-normal">RINA KIM</h3>
+              </div>
+
+              <div className="text-center">
+                <p className="text-[13px] tracking-[0.1em] text-zinc-500 mb-1">BY.RINAKIM@GMAIL.COM</p>
+                <a
+                  href="https://drive.google.com/file/d/1lGNm_Zh5L_niGyPaLJNQ7LzrP30lhi_t/view?usp=sharing"
+                  target="_blank"
+                  className="text-[13px] tracking-[0.1em] text-zinc-500 underline hover:text-zinc-900"
+                >
+                  RESUME
+                </a>
+              </div>
+
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-[13px] tracking-[0.1em] text-zinc-700">LETS WORK TOGETHER</span>
+                <a
+                  href="https://www.linkedin.com/in/rina-kim-9a3864171/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-110"
+                >
+                  <img src="/linkedin-icon.png" alt="LinkedIn" className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+            <img src="/images/NiceToMeetYou/designworksgroup.png" alt="DesignWorks group photo" className="w-[364px] h-[286px] object-cover rounded-lg" />
           </div>
 
-          {/* Contact Card */}
-          <div className="border border-zinc-200 rounded-lg p-6 flex flex-col justify-between min-h-[400px]">
-            <div className="text-center">
-              <p className="text-xs tracking-[0.2em] text-zinc-400 mb-1">PRODUCT DESIGNER</p>
-              <h3 className="text-xl tracking-[0.15em] text-zinc-800 font-normal">RINA KIM</h3>
+          {/* Right side - 2 images on top, rh below */}
+          <div className="flex flex-col gap-5 items-center">
+            <div className="flex gap-5 justify-center">
+              <img src="/images/NiceToMeetYou/buildingpeppersghost.png" alt="Building pepper's ghost" className="w-[182px] h-[286px] object-cover rounded-lg" />
+              <img src="/images/NiceToMeetYou/buildingcloud.png" alt="Building cloud" className="w-[182px] h-[286px] object-cover rounded-lg" />
             </div>
-
-            <div className="text-center">
-              <p className="text-xs tracking-[0.1em] text-zinc-500 mb-1">BY.RINAKIM@GMAIL.COM</p>
-              <a
-                href="https://drive.google.com/file/d/1lGNm_Zh5L_niGyPaLJNQ7LzrP30lhi_t/view?usp=sharing"
-                target="_blank"
-                className="text-xs tracking-[0.1em] text-zinc-500 underline hover:text-zinc-900"
-              >
-                RESUME
-              </a>
-            </div>
-
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-xs tracking-[0.1em] text-zinc-700">LETS WORK TOGETHER</span>
-              <a
-                href="https://www.linkedin.com/in/rina-kim-9a3864171/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-transform hover:scale-110"
-              >
-                <img src="/linkedin-icon.png" alt="LinkedIn" className="w-5 h-5" />
-              </a>
-            </div>
+            <img src="/images/NiceToMeetYou/rh.png" alt="Portrait" className="w-[374px] h-[286px] object-cover rounded-lg" />
           </div>
         </div>
       </section>
