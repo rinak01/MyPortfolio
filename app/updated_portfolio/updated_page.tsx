@@ -168,12 +168,12 @@ export default function Portfolio() {
         {/* Project 01 - SmaSH Lab | Proactive Agent */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex items-baseline gap-3 mb-6">
-            <span className="text-4xl font-light text-zinc-300">01</span>
+          <div className="flex items-start gap-[8px] mb-8">
+            <span className="text-[55px] font-light text-zinc-300">01</span>
             <div>
-              <h3 className="text-xl font-medium text-zinc-900">SmaSH Lab | Proactive Agent</h3>
-              <p className="text-xs text-zinc-500 mt-1">
-                2024 September - 2025 August · Carnegie Mellon University SmaSH Lab · Research Assistant
+              <h3 className="text-[26px] font-medium text-zinc-900">SmaSH Lab | Proactive Agent</h3>
+              <p className="text-[15px] text-zinc-500 mt-1">
+                2024 September - 2025 August &nbsp;·&nbsp; Carnegie Mellon University SmaSH Lab &nbsp;·&nbsp; Research Assistant
               </p>
             </div>
           </div>
@@ -205,15 +205,15 @@ export default function Portfolio() {
             {/* Right - Overview, Contributions, Capabilities, Chart */}
             <div className="space-y-5">
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Overview</h4>
-                <p className="text-[11px] text-zinc-500 leading-relaxed">
-                  Researched & built a semantic classification pipeline for adaptive multimodal systems that isolates relevant user intent from environmental noise and linguistic variations, achieving &gt;90% response accuracy.
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
+                <p className="text-[12px] text-zinc-500 leading-relaxed">
+                  • Researched & built a semantic classification pipeline for adaptive multimodal systems that isolates relevant user intent from environmental noise and linguistic variations, achieving &gt;90% response accuracy.
                 </p>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Key Contributions</h4>
-                <ul className="text-[11px] text-zinc-500 leading-relaxed space-y-0.5">
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Contributions</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
                   <li>• NLP pipeline development</li>
                   <li>• User intent prediction model</li>
                   <li>• Real-time response generation</li>
@@ -221,8 +221,8 @@ export default function Portfolio() {
               </div>
 
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Capabilities</h4>
-                <ul className="text-[11px] text-zinc-500 leading-relaxed space-y-0.5">
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-0.5">
                   <li>• UX Design</li>
                   <li>• System Design</li>
                   <li>• LLM</li>
@@ -244,12 +244,12 @@ export default function Portfolio() {
         {/* Project 02 - AI Trend Forecasting Plugin */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex items-baseline gap-3 mb-6">
-            <span className="text-4xl font-light text-zinc-300">02</span>
+          <div className="flex items-start gap-[8px] mb-8">
+            <span className="text-[55px] font-light text-zinc-300">02</span>
             <div>
-              <h3 className="text-xl font-medium text-zinc-900">AI Trend Forecasting Plugin</h3>
-              <p className="text-xs text-zinc-500 mt-1">
-                2024 January - 2024 August · Carnegie Mellon University & AccuWeek · UX Researcher
+              <h3 className="text-[26px] font-medium text-zinc-900">AI Trend Forecasting Plugin</h3>
+              <p className="text-[15px] text-zinc-500 mt-1">
+                2024 January - 2024 August &nbsp;·&nbsp; Carnegie Mellon University & AccuWeek &nbsp;·&nbsp; UX Researcher
               </p>
             </div>
           </div>
@@ -277,15 +277,15 @@ export default function Portfolio() {
             {/* Right - Overview & Details */}
             <div className="space-y-5">
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Overview</h4>
-                <p className="text-[11px] text-zinc-500 leading-relaxed">
-                  Designed and developed an AI-powered trend forecasting plugin that helps businesses predict market trends and consumer behavior patterns.
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
+                <p className="text-[12px] text-zinc-500 leading-relaxed">
+                  • Designed and developed an AI-powered trend forecasting plugin that helps businesses predict market trends and consumer behavior patterns.
                 </p>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Key Highlights</h4>
-                <ul className="text-[11px] text-zinc-500 leading-relaxed space-y-0.5">
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Contributions</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
                   <li>• Machine learning integration</li>
                   <li>• Real-time data visualization</li>
                   <li>• Predictive analytics dashboard</li>
@@ -293,7 +293,7 @@ export default function Portfolio() {
               </div>
 
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-2">Value</h4>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="border border-zinc-200 rounded p-2 text-center">
                     <p className="text-lg font-medium text-zinc-800">12</p>
@@ -316,12 +316,12 @@ export default function Portfolio() {
         {/* Project 03 - Emma's Tree */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex items-baseline gap-3 mb-6">
-            <span className="text-4xl font-light text-zinc-300">03</span>
+          <div className="flex items-start gap-[8px] mb-8">
+            <span className="text-[55px] font-light text-zinc-300">03</span>
             <div>
-              <h3 className="text-xl font-medium text-zinc-900">Emma&apos;s Tree</h3>
-              <p className="text-xs text-zinc-500 mt-1">
-                2023 July - 2023 Oct · Capstone Project · Designer & Illustrator
+              <h3 className="text-[26px] font-medium text-zinc-900">Emma&apos;s Tree</h3>
+              <p className="text-[15px] text-zinc-500 mt-1">
+                2023 July - 2023 Oct &nbsp;·&nbsp; Capstone Project &nbsp;·&nbsp; Designer & Illustrator
               </p>
             </div>
           </div>
@@ -353,15 +353,15 @@ export default function Portfolio() {
             {/* Right - Overview & Details */}
             <div className="space-y-5">
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Overview</h4>
-                <p className="text-[11px] text-zinc-500 leading-relaxed">
-                  A 3D printed art installation exploring the relationship between nature and technology through generative design.
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
+                <p className="text-[12px] text-zinc-500 leading-relaxed">
+                  • A 3D printed art installation exploring the relationship between nature and technology through generative design.
                 </p>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Key Highlights</h4>
-                <ul className="text-[11px] text-zinc-500 leading-relaxed space-y-0.5">
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Key Contributions</h4>
+                <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1">
                   <li>• Generative algorithm design</li>
                   <li>• Multi-material 3D printing</li>
                   <li>• Exhibition at CMU Gallery</li>
@@ -369,9 +369,9 @@ export default function Portfolio() {
               </div>
 
               <div>
-                <h4 className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-400 mb-1.5">Tools</h4>
-                <p className="text-[11px] text-zinc-500">
-                  Rhino, Grasshopper, Prusa Slicer
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
+                <p className="text-[12px] text-zinc-500">
+                  • Rhino, Grasshopper, Prusa Slicer
                 </p>
               </div>
             </div>
