@@ -388,24 +388,18 @@ export default function Portfolio() {
 
       {/* Prototypes Section */}
       <section id="prototypes" className="mx-auto max-w-6xl px-8 pb-16">
-        <div className="flex items-center gap-4 mb-8">
-          <h2 className="text-sm font-medium uppercase tracking-[0.15em] text-zinc-900">
+        <div className="mb-12">
+          <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
             Prototypes
           </h2>
-          <div className="flex-1 h-[3px] bg-[#FDE992]" />
-        </div>
-
-        <div className="flex gap-2 mb-6 text-xs text-zinc-400">
-          <span className="px-2 py-1 bg-zinc-100 rounded">→ SKILLS</span>
-          <span className="px-2 py-1 bg-zinc-100 rounded">→ BUILDS</span>
-          <span className="px-2 py-1 bg-zinc-100 rounded">→ SKILLS</span>
+          <div className="w-full h-[1px] bg-zinc-300" />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {/* Row 1 */}
           <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/stopmotion 1.png" alt="Stop Motion 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/stopmotion01.png" alt="Stop Motion 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           {/* Row 2 */}
           <img src="/images/prototypes/flexvr 1.png" alt="FlexVR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           <img src="/images/prototypes/emmasjellyfish01 1.png" alt="Emma's Jellyfish" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
@@ -419,18 +413,13 @@ export default function Portfolio() {
 
       {/* AR/VR Section */}
       <section id="arvr" className="mx-auto max-w-6xl px-8 pb-16">
-        <div className="flex items-center gap-4 mb-8">
-          <h2 className="text-sm font-medium uppercase tracking-[0.15em] text-zinc-900">
+        <div className="mb-12">
+          <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
             AR/VR
           </h2>
-          <div className="flex-1 h-[3px] bg-[#FDE992]" />
+          <div className="w-full h-[1px] bg-zinc-300" />
         </div>
 
-        <div className="flex gap-2 mb-6 text-xs text-zinc-400">
-          <span className="px-2 py-1 bg-zinc-100 rounded">→ UNITY</span>
-          <span className="px-2 py-1 bg-zinc-100 rounded">→ META SDK</span>
-          <span className="px-2 py-1 bg-zinc-100 rounded">→ BLENDER</span>
-        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {/* Featured: Library - spans 2 columns and 2 rows */}
@@ -448,14 +437,17 @@ export default function Portfolio() {
 
       {/* Nice to Meet You Section */}
       <section className="mx-auto max-w-6xl px-8 pb-16">
-        <h2 className="text-lg font-medium text-zinc-900 mb-8">
-          NICE TO MEET YOU!
-        </h2>
+        <div className="mb-12">
+          <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
+            Nice to Meet You!
+          </h2>
+          <div className="w-full h-[1px] bg-zinc-300" />
+        </div>
 
         <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
           {/* Left side - Contact Card + designworksgroup */}
           <div className="flex flex-col gap-5 items-center">
-            <div className="border border-zinc-200 rounded-lg p-5 flex flex-col justify-between h-[286px] w-[400px]">
+            <div className="border border-zinc-200 rounded-lg p-5 flex flex-col justify-between h-[257px] w-[400px]">
               <div className="text-center">
                 <p className="text-[13px] tracking-[0.2em] text-zinc-500 mb-1">PRODUCT DESIGNER</p>
                 <h3 className="text-lg tracking-[0.15em] text-zinc-800 font-normal">RINA KIM</h3>
@@ -490,8 +482,8 @@ export default function Portfolio() {
           {/* Right side - 2 images on top, rh below */}
           <div className="flex flex-col gap-5 items-center">
             <div className="flex gap-5 justify-center">
-              <img src="/images/NiceToMeetYou/buildingpeppersghost.png" alt="Building pepper's ghost" className="w-[182px] h-[286px] object-cover rounded-lg" />
-              <img src="/images/NiceToMeetYou/buildingcloud.png" alt="Building cloud" className="w-[182px] h-[286px] object-cover rounded-lg" />
+              <img src="/images/NiceToMeetYou/buildingpeppersghost.png" alt="Building pepper's ghost" className="w-[182px] h-[257px] object-cover rounded-lg" />
+              <img src="/images/NiceToMeetYou/buildingcloud.png" alt="Building cloud" className="w-[182px] h-[257px] object-cover rounded-lg" />
             </div>
             <img src="/images/NiceToMeetYou/rh.png" alt="Portrait" className="w-[374px] h-[286px] object-cover rounded-lg" />
           </div>
