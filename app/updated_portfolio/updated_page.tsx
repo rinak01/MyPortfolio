@@ -10,10 +10,10 @@ export default function Portfolio() {
     <div className={`${inter.className} min-h-screen bg-white`}>
       {/* Header Section */}
       <header className="mx-auto max-w-6xl px-10 pt-19 pb-29">
-        <p className="mb-1 text-xs font-medium uppercase tracking-[0.2em] text-zinc-400">
+        <p className="mb-1 text-[14px] font-medium uppercase tracking-[0.2em] text-zinc-400">
           Product Designer
         </p>
-        <h1 className="text-5xl font-medium tracking-tight text-zinc-900 mb-1">
+        <h1 className="text-5xl font-medium tracking-tight text-zinc-900 mb-1 -ml-[4px]">
           Rina Kim
         </h1>
         <p className="text-lg text-zinc-400 font-light mb-6">
