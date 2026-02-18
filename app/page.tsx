@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+type Mode = "Clean" | "Creative";
+
 const projects = [
   {
     title: "BMW Adoptive UI",
