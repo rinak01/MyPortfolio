@@ -9,9 +9,9 @@ const projects = [
     desc: "AI-powered agentic coding assistant with multimodal interface design for autonomous software development.",
     year: "2025 June - 2026 January",
     tags: ["GenUI", "Chain-of-Thought", "Agentic Systems"],
-    image: "/antigravity.png",
+    image: "/bmw_nueuklassa.png",
     link: "#",
-    role: "Lead Product Designer",
+    role: "UX Engineer Intern",
     team: "BMW Group Technology Office",
     highlights: [
       "Designed multimodal interaction patterns for AI-assisted coding",
@@ -21,11 +21,11 @@ const projects = [
     details: "Extended project details and case study content goes here.",
   },
   {
-    title: "CMU - SmaSH Lab",
+    title: "CMU - SmaSH Lab | Proactive Agent ",
     desc: "An AI agent that uses semantic filtering and NLP to intelligently distinguish between relevant user intent and ambient speech, ensuring a natural, non-intrusive voice interface experience.",
     year: "2024 September - 2025 August",
     tags: ["Adaptive Decision-Making", "Multimodal Voice Interface", "Semantic Filtering"],
-    image: "/bmw-genui.png",
+    image: "/smash-lab-hero.svg",
     link: "#",
     role: "Research Assistant",
     team: "Carnegie Mellon University",
@@ -54,7 +54,7 @@ const projects = [
   },
 ];
 
-type Mode = "Clean" | "Creative";
+// type Mode = "Clean" | "Creative";
 type Project = (typeof projects)[number];
 
 const useSkyGradient = () => {
@@ -183,7 +183,7 @@ export default function Home() {
               animate={{ x: mode === "Clean" ? 0 : 112 }}
               transition={{ type: "spring", stiffness: 220, damping: 22 }}
             />
-            {(["Clean", "Creative"] as Mode[]).map((option) => (
+            {/* {(["Clean", "Creative"] as Mode[]).map((option) => (
               <button
                 key={option}
                 type="button"
@@ -192,7 +192,7 @@ export default function Home() {
               >
                 <span className={mode === option ? "text-white" : "text-zinc-700"}>{option}</span>
               </button>
-            ))}
+            ))} */}
           </div>
         </div>
       </header>
