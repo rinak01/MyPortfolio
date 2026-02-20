@@ -248,9 +248,8 @@ export default function Portfolio() {
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
                 <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-0.5">
-                  <li>• UX Design</li>
-                  <li>• System Design</li>
-                  <li>• LLM</li>
+                  <li>• Through adaptive multimodal systems, this project was designed to isolate user intent despite linguistic variations or background interference both common failure points for standard voice assistants. The semantic classification pipeline effectively filters 'human signal' from 'environmental noise.'</li>
+
                 </ul>
               </div>
 
