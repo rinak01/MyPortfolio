@@ -13,9 +13,33 @@ export default function Portfolio() {
         <p className="mb-1 text-[14px] font-medium uppercase tracking-[0.2em] text-zinc-400">
           Product Designer
         </p>
-        <h1 className="text-5xl font-medium tracking-tight text-zinc-900 mb-1 -ml-[4px]">
-          Rina Kim
-        </h1>
+        <div className="flex items-center gap-3 mb-1">
+          <h1 className="text-5xl font-medium tracking-tight text-zinc-900 -ml-[4px]">
+            Rina Kim
+          </h1>
+          <a
+            href="https://drive.google.com/file/d/1uwSTUfGcV99N2g9vtSMDogdz0qf_LkVK/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-zinc-400 hover:text-zinc-900 transition-colors mt-[10px]"
+            title="Resume"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              {/* Document outline with folded corner */}
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M14 2v6h6" strokeLinecap="round" strokeLinejoin="round" />
+              {/* Profile photo box */}
+              <rect x="14" y="10" width="4" height="4" rx="0.5" strokeWidth={1.2} />
+              <circle cx="16" cy="11.5" r="0.8" fill="currentColor" stroke="none" />
+              <path d="M14.5 13.5c0-0.8 0.7-1.2 1.5-1.2s1.5 0.4 1.5 1.2" strokeWidth={1} />
+              {/* Text lines */}
+              <line x1="6" y1="10" x2="11" y2="10" strokeWidth={1.2} />
+              <line x1="6" y1="12.5" x2="11" y2="12.5" strokeWidth={1.2} />
+              <line x1="6" y1="15" x2="18" y2="15" strokeWidth={1.2} />
+              <line x1="6" y1="17.5" x2="18" y2="17.5" strokeWidth={1.2} />
+            </svg>
+          </a>
+        </div>
         <p className="text-lg text-zinc-400 font-light mb-6">
           UX/UI Design · Prototyping · Systems Thinking
         </p>
@@ -446,7 +470,7 @@ export default function Portfolio() {
             <img src="/images/prototypes/emmasjellyfish01 1.png" alt="Emma's Jellyfish" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
             <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
               <p className="text-white text-sm text-center font-medium">Emma&apos;s Jellyfish - Bioluminescent digital companion</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">May 2021</span>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">June 2025</span>
             </div>
           </div>
           <div className="relative group overflow-hidden rounded-lg">
@@ -493,15 +517,69 @@ export default function Portfolio() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {/* Featured: Library - spans 2 columns and 2 rows */}
-          <img src="/images/ARVR/library.png" alt="Library VR" className="w-full h-full object-cover rounded-lg bg-zinc-100 col-span-2 row-span-2 md:h-[400px]" />
-          <img src="/images/ARVR/pianoroom 1.png" alt="Piano Room VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/pianoroom02 1.png" alt="Piano Room VR 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/studyhall 1.png" alt="Study Hall VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/forest01 1.png" alt="Forest VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/trees01 1.png" alt="Trees VR 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/trees02 1.png" alt="Trees VR 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/flowers 1.png" alt="Flowers VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/RHcloud 1.png" alt="RH Cloud VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <div className="relative group overflow-hidden rounded-lg col-span-2 row-span-2">
+            <img src="/images/ARVR/library.png" alt="Library VR" className="w-full h-full object-cover bg-zinc-100 md:h-[400px] transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">360° Virtual Reality Reading Room</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Feb 2021</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/ARVR/pianoroom 1.png" alt="Piano Room VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">Piano Room - Interactive music space</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2023</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/ARVR/pianoroom02 1.png" alt="Piano Room VR 2" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">Boston Game Jam - Ambient lighting view</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2023</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/ARVR/studyhall 1.png" alt="Study Hall VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">3D Previsualization of MIT Walker Building </p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2024</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/ARVR/forest01 1.png" alt="Forest VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">Immersive VR Forest Experience</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jun 2022</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/ARVR/trees01 1.png" alt="Trees VR 1" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">AR Autumn Trees 01</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2021</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/ARVR/trees02 1.png" alt="Trees VR 2" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">AR Autumn Trees 02</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2021</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/ARVR/flowers 1.png" alt="Flowers VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">A Collection of 3D Modeled Cherry Blossoms</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Aug 2023</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/ARVR/RHcloud 1.png" alt="RH Cloud VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">RH Cloud - Atmospheric Sky Environment</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2024</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -555,7 +633,7 @@ export default function Portfolio() {
               <img src="/images/NiceToMeetYou/buildingpeppersghost.png" alt="Building pepper's ghost" className="w-[182px] h-[257px] object-cover rounded-lg" />
               <img src="/images/NiceToMeetYou/buildingcloud.png" alt="Building cloud" className="w-[182px] h-[257px] object-cover rounded-lg" />
             </div>
-            <img src="/images/NiceToMeetYou/rh.png" alt="Portrait" className="w-[374px] h-[286px] object-cover rounded-lg" />
+            <img src="/images/NiceToMeetYou/rh.png" alt="Portrait" className="w-[382px] h-[286px] object-cover rounded-lg" />
           </div>
         </div>
       </section>
