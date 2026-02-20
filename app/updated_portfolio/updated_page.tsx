@@ -413,17 +413,71 @@ export default function Portfolio() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {/* Row 1 */}
-          <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/stopmotion01.png" alt="Stop Motion 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">ResponsiveTale - Interactive storytelling prototype</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2022</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">Pepper&apos;s Ghost - Holographic display experiment</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2024</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/stopmotion01.png" alt="Stop Motion 1" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">Stop Motion - Handcrafted claymation of an inventor in a clockwork workshop.</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Oct 2024</span>
+            </div>
+          </div>
           {/* Row 2 */}
-          <img src="/images/prototypes/flexvr 1.png" alt="FlexVR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/emmasjellyfish01 1.png" alt="Emma's Jellyfish" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/stopmotion02.png" alt="Stop Motion 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/flexvr 1.png" alt="FlexVR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">FlexVR - Flexible VR interface prototype</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2024</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/emmasjellyfish01 1.png" alt="Emma's Jellyfish" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">Emma&apos;s Jellyfish - Bioluminescent digital companion</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">May 2021</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/stopmotion02.png" alt="Stop Motion 2" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">Stop Motion - Claymation of a mystic scholar in a miniature alchemical library.</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2022</span>
+            </div>
+          </div>
           {/* Row 3 */}
-          <img src="/images/prototypes/LeARn.png" alt="LeARn" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/portalreef 1.png" alt="Portal Reef" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/cmupopup 1.png" alt="CMU Popup" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/LeARn.png" alt="LeARn" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">LeARn - Augmented reality learning tool</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Apr 2022</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/portalreef 1.png" alt="Portal Reef" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">Portal Reef - Underwater VR experience</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Mar 2022</span>
+            </div>
+          </div>
+          <div className="relative group overflow-hidden rounded-lg">
+            <img src="/images/prototypes/cmupopup 1.png" alt="CMU Popup" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-sm text-center font-medium">CMU Popup - Scale model for a wine themed pop-up exhibition.</p>
+              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2024</span>
+            </div>
+          </div>
         </div>
       </section>
 
