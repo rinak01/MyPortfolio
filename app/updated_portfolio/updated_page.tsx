@@ -604,7 +604,7 @@ export default function Portfolio() {
               <div className="text-center">
                 <p className="text-[13px] tracking-[0.1em] text-zinc-500 mb-1">BY.RINAKIM@GMAIL.COM</p>
                 <a
-                  href="https://drive.google.com/file/d/1lGNm_Zh5L_niGyPaLJNQ7LzrP30lhi_t/view?usp=sharing"
+                  href="https://drive.google.com/file/d/1uwSTUfGcV99N2g9vtSMDogdz0qf_LkVK/view?usp=sharing"
                   target="_blank"
                   className="text-[13px] tracking-[0.1em] text-zinc-500 underline hover:text-zinc-900"
                 >
