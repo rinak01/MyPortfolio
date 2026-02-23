@@ -103,14 +103,14 @@ export default function Portfolio() {
         {/* Project 00 - BMW Adaptive Generative UI */}
         <article className="mb-24">
           {/* Header - Full Width */}
-          <div className="flex items-start gap-[8px] mb-8">
-            <div className="flex items-center gap-0">
-              <img src="/images/00/lock01.png" alt="Lock icon" className="w-[35px] md:w-[53px] h-[35px] md:h-[53px] -mt-[20px] md:-mt-[32px]" />
-              <span className="text-[36px] md:text-[55px] font-light text-zinc-300 -mt-[10px]">00</span>
+          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-[8px] mb-8">
+            <div className="flex items-center gap-0 shrink-0">
+              <img src="/images/00/lock01.png" alt="Lock icon" className="w-[28px] md:w-[53px] h-[28px] md:h-[53px] -mt-[5px] md:-mt-[32px]" />
+              <span className="text-[32px] md:text-[55px] font-light text-zinc-300">00</span>
             </div>
-            <div className="-ml-[-1px]">
+            <div>
               <h3 className="text-[18px] md:text-[26px] font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
-              <p className="text-[15px] text-zinc-500 mt-1">
+              <p className="text-[13px] md:text-[15px] text-zinc-500 mt-1">
                 2025 June - 2026 January &nbsp;·&nbsp; <span className="font-semibold">BMW Group Technology Office</span> &nbsp;·&nbsp; UX Engineer Intern
               </p>
             </div>
@@ -192,12 +192,11 @@ export default function Portfolio() {
         {/* Project 01 - SmaSH Lab | Proactive Agent */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex items-start gap-[15px] mb-8">
-            <span className="text-[36px] md:text-[55px] font-light text-zinc-300 -mt-[10px]">01</span>
-
+          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-[15px] mb-8">
+            <span className="text-[32px] md:text-[55px] font-light text-zinc-300 shrink-0">01</span>
             <div>
               <h3 className="text-[18px] md:text-[26px] font-medium text-zinc-900">SmaSH Lab | Proactive Agent</h3>
-              <p className="text-[15px] text-zinc-500 mt-1">
+              <p className="text-[13px] md:text-[15px] text-zinc-500 mt-1">
                 2024 September - 2025 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University SmaSH Lab</span> &nbsp;·&nbsp; Research Assistant
               </p>
             </div>
@@ -268,11 +267,11 @@ export default function Portfolio() {
         {/* Project 02 - AI Trend Forecasting Plugin */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex items-start gap-[8px] mb-8">
-            <span className="text-[36px] md:text-[55px] font-light text-zinc-300 -mt-[10px]">02</span>
+          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-[8px] mb-8">
+            <span className="text-[32px] md:text-[55px] font-light text-zinc-300 shrink-0">02</span>
             <div>
               <h3 className="text-[18px] md:text-[26px] font-medium text-zinc-900">AI Trend Forecasting Tool</h3>
-              <p className="text-[15px] text-zinc-500 mt-[-1px]">
+              <p className="text-[13px] md:text-[15px] text-zinc-500 mt-1">
                 2024 January - 2024 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University | Surefront</span> &nbsp;·&nbsp; UX Researcher & Developer
               </p>
             </div>
@@ -349,11 +348,11 @@ export default function Portfolio() {
         {/* Project 03 - Emma's Tree */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex items-start gap-[8px] mb-8">
-            <span className="text-[36px] md:text-[55px] font-light text-zinc-300 -mt-[10px]">03</span>
+          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-[8px] mb-8">
+            <span className="text-[32px] md:text-[55px] font-light text-zinc-300 shrink-0">03</span>
             <div>
               <h3 className="text-[18px] md:text-[26px] font-medium text-zinc-900">Emma&apos;s Tree</h3>
-              <p className="text-[15px] text-zinc-500 mt-1">
+              <p className="text-[13px] md:text-[15px] text-zinc-500 mt-1">
                 2023 June - 2024 June &nbsp;·&nbsp; <span className="font-semibold">The June 19th Project, Personal Project</span> &nbsp;·&nbsp; Designer & Developer
               </p>
             </div>
