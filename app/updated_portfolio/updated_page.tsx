@@ -9,37 +9,13 @@ export default function Portfolio() {
   return (
     <div className={`${inter.className} min-h-screen bg-white`}>
       {/* Header Section */}
-      <header className="mx-auto max-w-6xl px-5 md:px-10 pt-12 md:pt-19 pb-16 md:pb-29">
+      <header className="mx-auto max-w-6xl px-10 pt-19 pb-29">
         <p className="mb-1 text-[14px] font-medium uppercase tracking-[0.2em] text-zinc-400">
           Product Designer
         </p>
-        <div className="flex items-center gap-3 mb-1">
-          <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-zinc-900 -ml-[2px] md:-ml-[4px]">
-            Rina Kim
-          </h1>
-          <a
-            href="https://drive.google.com/file/d/1uwSTUfGcV99N2g9vtSMDogdz0qf_LkVK/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-400 hover:text-zinc-900 transition-colors mt-[10px]"
-            title="Resume"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-              {/* Document outline with folded corner */}
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M14 2v6h6" strokeLinecap="round" strokeLinejoin="round" />
-              {/* Profile photo box */}
-              <rect x="14" y="10" width="4" height="4" rx="0.5" strokeWidth={1.2} />
-              <circle cx="16" cy="11.5" r="0.8" fill="currentColor" stroke="none" />
-              <path d="M14.5 13.5c0-0.8 0.7-1.2 1.5-1.2s1.5 0.4 1.5 1.2" strokeWidth={1} />
-              {/* Text lines */}
-              <line x1="6" y1="10" x2="11" y2="10" strokeWidth={1.2} />
-              <line x1="6" y1="12.5" x2="11" y2="12.5" strokeWidth={1.2} />
-              <line x1="6" y1="15" x2="18" y2="15" strokeWidth={1.2} />
-              <line x1="6" y1="17.5" x2="18" y2="17.5" strokeWidth={1.2} />
-            </svg>
-          </a>
-        </div>
+        <h1 className="text-5xl font-medium tracking-tight text-zinc-900 mb-1 -ml-[4px]">
+          Rina Kim
+        </h1>
         <p className="text-lg text-zinc-400 font-light mb-6">
           UX/UI Design · Prototyping · Systems Thinking
         </p>
@@ -92,7 +68,7 @@ export default function Portfolio() {
       </header>
 
       {/* Selected Works Section */}
-      <section id="selected-works" className="mx-auto max-w-6xl px-5 md:px-10 pb-16">
+      <section id="selected-works" className="mx-auto max-w-6xl px-10 pb-16">
         <div className="mb-12">
           <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-1.5">
             Selected Works
@@ -103,14 +79,14 @@ export default function Portfolio() {
         {/* Project 00 - BMW Adaptive Generative UI */}
         <article className="mb-24">
           {/* Header - Full Width */}
-          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-[8px] mb-8">
-            <div className="flex items-center gap-0 shrink-0">
-              <img src="/images/00/lock01.png" alt="Lock icon" className="w-[28px] md:w-[53px] h-[28px] md:h-[53px] -mt-[5px] md:-mt-[32px]" />
-              <span className="text-[32px] md:text-[55px] font-light text-zinc-300">00</span>
+          <div className="flex items-start gap-[8px] mb-8">
+            <div className="flex items-center gap-0">
+              <img src="/images/00/lock01.png" alt="Lock icon" className="w-[53px] h-[53px] -mt-[32px]" />
+              <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">00</span>
             </div>
-            <div>
-              <h3 className="text-[18px] md:text-[26px] font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
-              <p className="text-[13px] md:text-[15px] text-zinc-500 mt-1">
+            <div className="-ml-[-1px]">
+              <h3 className="text-[26px] font-medium text-zinc-900">BMW Adaptive Generative UI</h3>
+              <p className="text-[15px] text-zinc-500 mt-1">
                 2025 June - 2026 January &nbsp;·&nbsp; <span className="font-semibold">BMW Group Technology Office</span> &nbsp;·&nbsp; UX Engineer Intern
               </p>
             </div>
@@ -192,11 +168,12 @@ export default function Portfolio() {
         {/* Project 01 - SmaSH Lab | Proactive Agent */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-[15px] mb-8">
-            <span className="text-[32px] md:text-[55px] font-light text-zinc-300 shrink-0">01</span>
+          <div className="flex items-start gap-[15px] mb-8">
+            <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">01</span>
+
             <div>
-              <h3 className="text-[18px] md:text-[26px] font-medium text-zinc-900">SmaSH Lab | Proactive Agent</h3>
-              <p className="text-[13px] md:text-[15px] text-zinc-500 mt-1">
+              <h3 className="text-[26px] font-medium text-zinc-900">SmaSH Lab | Proactive Agent</h3>
+              <p className="text-[15px] text-zinc-500 mt-1">
                 2024 September - 2025 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University SmaSH Lab</span> &nbsp;·&nbsp; Research Assistant
               </p>
             </div>
@@ -212,12 +189,12 @@ export default function Portfolio() {
                   <img
                     src="/images/01/NLP01.png"
                     alt="NLP and Semantic Analysis diagram"
-                    className="w-full md:w-[90%] h-auto md:-mt-[80px]"
+                    className="w-[90%] h-auto -mt-[80px]"
                   />
                 </div>
               </div>
 
-              <div className="rounded-lg p-4 md:-mt-[40px]">
+              <div className="rounded-lg p-4 -mt-[40px]">
                 <img
                   src="/images/01/proactive agent pipeline.png"
                   alt="Proactive Agent Pipeline"
@@ -247,8 +224,9 @@ export default function Portfolio() {
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
                 <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-0.5">
-                  <li>• Through adaptive multimodal systems, this project was designed to isolate user intent despite linguistic variations or background interference both common failure points for standard voice assistants. The semantic classification pipeline effectively filters 'human signal' from 'environmental noise.'</li>
-
+                  <li>• UX Design</li>
+                  <li>• System Design</li>
+                  <li>• LLM</li>
                 </ul>
               </div>
 
@@ -267,11 +245,11 @@ export default function Portfolio() {
         {/* Project 02 - AI Trend Forecasting Plugin */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-[8px] mb-8">
-            <span className="text-[32px] md:text-[55px] font-light text-zinc-300 shrink-0">02</span>
+          <div className="flex items-start gap-[8px] mb-8">
+            <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">02</span>
             <div>
-              <h3 className="text-[18px] md:text-[26px] font-medium text-zinc-900">AI Trend Forecasting Tool</h3>
-              <p className="text-[13px] md:text-[15px] text-zinc-500 mt-1">
+              <h3 className="text-[26px] font-medium text-zinc-900">AI Trend Forecasting Tool</h3>
+              <p className="text-[15px] text-zinc-500 mt-[-1px]">
                 2024 January - 2024 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University | Surefront</span> &nbsp;·&nbsp; UX Researcher & Developer
               </p>
             </div>
@@ -288,7 +266,7 @@ export default function Portfolio() {
                   className="w-full h-auto"
                 />
               </div>
-              <div className="rounded-lg overflow-hidden w-full md:w-[102%] md:-ml-[26px]">
+              <div className="rounded-lg overflow-hidden w-[102%] -ml-[26px]">
                 <img
                   src="/images/02/SurefrontInterviews.png"
                   alt="Surefront Interviews"
@@ -348,11 +326,11 @@ export default function Portfolio() {
         {/* Project 03 - Emma's Tree */}
         <article className="mb-24">
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-[8px] mb-8">
-            <span className="text-[32px] md:text-[55px] font-light text-zinc-300 shrink-0">03</span>
+          <div className="flex items-start gap-[8px] mb-8">
+            <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">03</span>
             <div>
-              <h3 className="text-[18px] md:text-[26px] font-medium text-zinc-900">Emma&apos;s Tree</h3>
-              <p className="text-[13px] md:text-[15px] text-zinc-500 mt-1">
+              <h3 className="text-[26px] font-medium text-zinc-900">Emma&apos;s Tree</h3>
+              <p className="text-[15px] text-zinc-500 mt-1">
                 2023 June - 2024 June &nbsp;·&nbsp; <span className="font-semibold">The June 19th Project, Personal Project</span> &nbsp;·&nbsp; Designer & Developer
               </p>
             </div>
@@ -365,7 +343,7 @@ export default function Portfolio() {
               <img
                 src="/images/03/emmastree.png"
                 alt="Emma's Tree - 3D printed tree sculpture"
-                className="w-full md:w-[80%] h-auto rounded-lg"
+                className="w-[80%] h-auto rounded-lg"
               />
             </div>
 
@@ -409,7 +387,7 @@ export default function Portfolio() {
             <img
               src="/images/03/treesystem.png"
               alt="Tree system diagram - Photosynthesis, Flower Blooming, Water the Plant"
-              className="w-full md:w-[70%] h-auto rounded-lg"
+              className="w-[70%] h-auto rounded-lg"
             />
           </div>
 
@@ -418,14 +396,14 @@ export default function Portfolio() {
             <img
               src="/images/03/tempchange.png"
               alt="Filament temperature change diagram"
-              className="w-full md:w-[60%] h-auto rounded-lg"
+              className="w-[60%] h-auto rounded-lg"
             />
           </div>
         </article>
       </section>
 
       {/* Prototypes Section */}
-      <section id="prototypes" className="mx-auto max-w-6xl px-5 md:px-8 pb-16">
+      <section id="prototypes" className="mx-auto max-w-6xl px-8 pb-16">
         <div className="mb-12">
           <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
             Prototypes
@@ -435,76 +413,22 @@ export default function Portfolio() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {/* Row 1 */}
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">ResponsiveTale - Interactive storytelling prototype</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2022</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">Pepper&apos;s Ghost - Holographic display experiment</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2024</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/stopmotion01.png" alt="Stop Motion 1" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">Stop Motion - Handcrafted claymation of an inventor in a clockwork workshop.</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Oct 2024</span>
-            </div>
-          </div>
+          <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/stopmotion01.png" alt="Stop Motion 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           {/* Row 2 */}
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/flexvr 1.png" alt="FlexVR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">FlexVR - Flexible VR interface prototype</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2024</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/emmasjellyfish01 1.png" alt="Emma's Jellyfish" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">Emma&apos;s Jellyfish - Bioluminescent digital companion</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">June 2025</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/stopmotion02.png" alt="Stop Motion 2" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">Stop Motion - Claymation of a mystic scholar in a miniature alchemical library.</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2022</span>
-            </div>
-          </div>
+          <img src="/images/prototypes/flexvr 1.png" alt="FlexVR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/emmasjellyfish01 1.png" alt="Emma's Jellyfish" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/stopmotion02.png" alt="Stop Motion 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
           {/* Row 3 */}
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/LeARn.png" alt="LeARn" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">LeARn - Augmented reality learning tool</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Apr 2022</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/portalreef 1.png" alt="Portal Reef" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">Portal Reef - Underwater VR experience</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Mar 2022</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/prototypes/cmupopup 1.png" alt="CMU Popup" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">CMU Popup - Scale model for a wine themed pop-up exhibition.</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2024</span>
-            </div>
-          </div>
+          <img src="/images/prototypes/LeARn.png" alt="LeARn" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/portalreef 1.png" alt="Portal Reef" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/prototypes/cmupopup 1.png" alt="CMU Popup" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
         </div>
       </section>
 
       {/* AR/VR Section */}
-      <section id="arvr" className="mx-auto max-w-6xl px-5 md:px-8 pb-16">
+      <section id="arvr" className="mx-auto max-w-6xl px-8 pb-16">
         <div className="mb-12">
           <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-1.5">
             AR/VR
@@ -515,74 +439,20 @@ export default function Portfolio() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {/* Featured: Library - spans 2 columns and 2 rows */}
-          <div className="relative group overflow-hidden rounded-lg col-span-2 row-span-2">
-            <img src="/images/ARVR/library.png" alt="Library VR" className="w-full h-full object-cover bg-zinc-100 md:h-[400px] transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">360° Virtual Reality Reading Room</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Feb 2021</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/ARVR/pianoroom 1.png" alt="Piano Room VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">Piano Room - Interactive music space</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2023</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/ARVR/pianoroom02 1.png" alt="Piano Room VR 2" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">Boston Game Jam - Ambient lighting view</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2023</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/ARVR/studyhall 1.png" alt="Study Hall VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">3D Previsualization of MIT Walker Building </p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2024</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/ARVR/forest01 1.png" alt="Forest VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">Immersive VR Forest Experience</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jun 2022</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/ARVR/trees01 1.png" alt="Trees VR 1" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">AR Autumn Trees 01</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2021</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/ARVR/trees02 1.png" alt="Trees VR 2" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">AR Autumn Trees 02</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Dec 2021</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/ARVR/flowers 1.png" alt="Flowers VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">A Collection of 3D Modeled Cherry Blossoms</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Aug 2023</span>
-            </div>
-          </div>
-          <div className="relative group overflow-hidden rounded-lg">
-            <img src="/images/ARVR/RHcloud 1.png" alt="RH Cloud VR" className="w-full h-48 object-cover bg-zinc-100 transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-              <p className="text-white text-sm text-center font-medium">RH Cloud - Atmospheric Sky Environment</p>
-              <span className="absolute bottom-[13px] right-3 text-white/70 text-xs font-light italic">Jan 2024</span>
-            </div>
-          </div>
+          <img src="/images/ARVR/library.png" alt="Library VR" className="w-full h-full object-cover rounded-lg bg-zinc-100 col-span-2 row-span-2 md:h-[400px]" />
+          <img src="/images/ARVR/pianoroom 1.png" alt="Piano Room VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/ARVR/pianoroom02 1.png" alt="Piano Room VR 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/ARVR/studyhall 1.png" alt="Study Hall VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/ARVR/forest01 1.png" alt="Forest VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/ARVR/trees01 1.png" alt="Trees VR 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/ARVR/trees02 1.png" alt="Trees VR 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/ARVR/flowers 1.png" alt="Flowers VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          <img src="/images/ARVR/RHcloud 1.png" alt="RH Cloud VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
         </div>
       </section>
 
       {/* Nice to Meet You Section */}
-      <section className="mx-auto max-w-6xl px-5 md:px-8 pb-16">
+      <section className="mx-auto max-w-6xl px-8 pb-16">
         <div className="mb-12">
           <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
             It's great to meet you! :)
@@ -593,7 +463,7 @@ export default function Portfolio() {
         <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
           {/* Left side - Contact Card + designworksgroup */}
           <div className="flex flex-col gap-5 items-center">
-            <div className="border border-zinc-200 rounded-lg p-5 flex flex-col justify-between h-[257px] w-full md:w-[400px]">
+            <div className="border border-zinc-200 rounded-lg p-5 flex flex-col justify-between h-[257px] w-[400px]">
               <div className="text-center">
                 <p className="text-[13px] tracking-[0.2em] text-zinc-500 mb-1">PRODUCT DESIGNER</p>
                 <h3 className="text-lg tracking-[0.15em] text-zinc-800 font-normal">RINA KIM</h3>
@@ -602,7 +472,7 @@ export default function Portfolio() {
               <div className="text-center">
                 <p className="text-[13px] tracking-[0.1em] text-zinc-500 mb-1">BY.RINAKIM@GMAIL.COM</p>
                 <a
-                  href="https://drive.google.com/file/d/1uwSTUfGcV99N2g9vtSMDogdz0qf_LkVK/view?usp=sharing"
+                  href="https://drive.google.com/file/d/1lGNm_Zh5L_niGyPaLJNQ7LzrP30lhi_t/view?usp=sharing"
                   target="_blank"
                   className="text-[13px] tracking-[0.1em] text-zinc-500 underline hover:text-zinc-900"
                 >
@@ -622,16 +492,16 @@ export default function Portfolio() {
                 </a>
               </div>
             </div>
-            <img src="/images/NiceToMeetYou/designworksgroup.png" alt="DesignWorks group photo" className="w-full md:w-[400px] h-auto md:h-[286px] object-cover rounded-lg" />
+            <img src="/images/NiceToMeetYou/designworksgroup.png" alt="DesignWorks group photo" className="w-[400px] h-[286px] object-cover rounded-lg" />
           </div>
 
           {/* Right side - 2 images on top, rh below */}
           <div className="flex flex-col gap-5 items-center">
             <div className="flex gap-5 justify-center">
-              <img src="/images/NiceToMeetYou/buildingpeppersghost.png" alt="Building pepper's ghost" className="w-[140px] md:w-[182px] h-[200px] md:h-[257px] object-cover rounded-lg" />
-              <img src="/images/NiceToMeetYou/buildingcloud.png" alt="Building cloud" className="w-[140px] md:w-[182px] h-[200px] md:h-[257px] object-cover rounded-lg" />
+              <img src="/images/NiceToMeetYou/buildingpeppersghost.png" alt="Building pepper's ghost" className="w-[182px] h-[257px] object-cover rounded-lg" />
+              <img src="/images/NiceToMeetYou/buildingcloud.png" alt="Building cloud" className="w-[182px] h-[257px] object-cover rounded-lg" />
             </div>
-            <img src="/images/NiceToMeetYou/rh.png" alt="Portrait" className="w-full md:w-[382px] h-auto md:h-[286px] object-cover rounded-lg" />
+            <img src="/images/NiceToMeetYou/rh.png" alt="Portrait" className="w-[374px] h-[286px] object-cover rounded-lg" />
           </div>
         </div>
       </section>
