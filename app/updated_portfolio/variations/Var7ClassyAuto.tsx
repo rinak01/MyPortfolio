@@ -25,7 +25,7 @@ const lineReveal = {
 
 // Label / section heading style
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-  <span className="block text-[11px] uppercase tracking-[0.22em] text-[#C9B49A] mb-2">
+  <span className="block text-[13px] uppercase tracking-[0.22em] text-[#C9B49A] mb-2.5">
     {children}
   </span>
 );
@@ -35,15 +35,15 @@ const Hairline = () => <div className="w-full h-[1px] bg-white/5 my-5" />;
 
 // ─── Scrollspy Nav ───
 const NAV_ITEMS = [
-  { id: "project-01", label: "BMW Adaptive UI" },
-  { id: "project-02", label: "CMU Proactive Agent" },
-  { id: "project-03", label: "AI Trend Forecasting" },
-  { id: "project-04", label: "Emma's Tree" },
+  { id: "project-00", label: "BMW Adaptive UI" },
+  { id: "project-01", label: "CMU Proactive Agent" },
+  { id: "project-02", label: "AI Trend Forecasting" },
+  { id: "project-03", label: "Emma's Tree" },
   { id: "project-meet", label: "Nice to Meet You" },
 ];
 
 function ScrollNav() {
-  const [active, setActive] = useState("project-01");
+  const [active, setActive] = useState("project-00");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -208,14 +208,14 @@ export default function Var7ClassyAuto() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="aspect-video bg-[#141414] rounded-sm p-6 flex items-center justify-center">
-                  <img src="/images/00/layers.png" alt="Layers diagram" className="w-full h-auto opacity-90" />
+                  <img src="/images/00/layers_whitetext.png" alt="Layers diagram" className="w-full h-auto opacity-90" />
                 </div>
                 <div className="aspect-video bg-[#141414] rounded-sm p-6 flex items-center justify-center">
                   <img src="/images/00/pipeline.png" alt="Pipeline diagram" className="w-full h-auto opacity-90" />
                 </div>
               </div>
               <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
-                <img src="/images/00/bmwinfograph.png" alt="BMW capabilities diagram" className="w-[75%] h-auto opacity-90" />
+                <img src="/images/00/bmwinfograph.png" alt="BMW capabilities diagram" className="w-[55%] h-auto opacity-90" />
               </div>
             </div>
 
@@ -541,32 +541,117 @@ export default function Var7ClassyAuto() {
           </div>
         </motion.article>
 
-        {/* ─── Visual Index ─── */}
+        {/* ─── Physical & Digital Prototypes ─── */}
         <section className="pt-20">
           <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
-            Spatial Environments &amp; Prototypes
+            Physical &amp; Digital Prototypes
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {/* Editorial Asymmetric Grid — 6-col base */}
+          <div className="grid grid-cols-6 gap-2">
+
+            {/* Row 1: wide hero + accent square */}
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-2 row-span-2 aspect-square bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/ARVR/library.png" alt="Library VR"
-                className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
+              className="col-span-4 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
+              <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale"
+                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
+              <div className="absolute bottom-0 left-0 right-0 px-5 py-4 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A]">Responsive Tale</span>
+              </div>
             </motion.div>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
+              className="col-span-2 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
+              <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost"
+                className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
+              <div className="absolute bottom-0 left-0 right-0 px-4 py-3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A]">Pepper's Ghost</span>
+              </div>
+            </motion.div>
+
+            {/* Row 2: three equal columns */}
             {[
-              { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale" },
-              { src: "/images/prototypes/peppersghost01.png", alt: "Pepper's Ghost" },
-              { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion" },
-              { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR" },
-              { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish" },
-              { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall" },
+              { src: "/images/prototypes/LeARn.png", alt: "LeARn", label: "LeARn" },
+              { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion", label: "Stop Motion" },
+              { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", label: "CMU Popup" },
             ].map((img, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-                className="aspect-square bg-[#141414] overflow-hidden rounded-sm group relative">
+                className="col-span-2 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
                 <img src={img.src} alt={img.alt}
-                  className="w-full h-full object-cover opacity-40 group-hover:opacity-100 transition-opacity duration-700"
-                  onError={(e) => { e.currentTarget.src = "/images/ARVR/forest01 1.png"; }} />
+                  className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
+                <div className="absolute bottom-0 left-0 right-0 px-4 py-3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A]">{img.label}</span>
+                </div>
               </motion.div>
             ))}
+
+            {/* Row 3: two halves */}
+            {[
+              { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR", label: "FlexVR" },
+              { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", label: "Emma's Jellyfish" },
+            ].map((img, i) => (
+              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
+                className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
+                <img src={img.src} alt={img.alt}
+                  className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
+                <div className="absolute bottom-0 left-0 right-0 px-4 py-3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A]">{img.label}</span>
+                </div>
+              </motion.div>
+            ))}
+
+            {/* Row 4: narrow + wide */}
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
+              className="col-span-2 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
+              <img src="/images/prototypes/portalreef 1.png" alt="Portal Reef"
+                className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
+              <div className="absolute bottom-0 left-0 right-0 px-4 py-3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A]">Portal Reef</span>
+              </div>
+            </motion.div>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
+              className="col-span-4 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
+              <img src="/images/prototypes/stopmotion02.png" alt="Stop Motion 02"
+                className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
+              <div className="absolute bottom-0 left-0 right-0 px-5 py-4 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A]">Stop Motion 02</span>
+              </div>
+            </motion.div>
+
+          </div>
+        </section>
+
+        <div className="w-full h-[1px] bg-white/5" />
+
+        {/* ─── Spatial Environments (ARVR) ─── */}
+        <section className="pt-4">
+          <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
+            Spatial Environments
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+
+            {/* Library — hero, spans 2 cols */}
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
+              className="col-span-2 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
+              <img src="/images/ARVR/library.png" alt="Library VR"
+                className="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
+            </motion.div>
+
+            {[
+              { src: "/images/ARVR/RHcloud 1.png", alt: "RH Cloud" },
+              { src: "/images/ARVR/flowers 1.png", alt: "Flowers" },
+              { src: "/images/ARVR/pianoroom 1.png", alt: "Piano Room" },
+              { src: "/images/ARVR/pianoroom02 1.png", alt: "Piano Room 02" },
+              { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall" },
+              { src: "/images/ARVR/trees01 1.png", alt: "Trees 01" },
+              { src: "/images/ARVR/trees02 1.png", alt: "Trees 02" },
+              { src: "/images/ARVR/forest01 1.png", alt: "Forest" },
+            ].map((img, i) => (
+              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
+                className="aspect-video bg-[#141414] overflow-hidden rounded-sm group relative">
+                <img src={img.src} alt={img.alt}
+                  className="w-full h-full object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
+              </motion.div>
+            ))}
+
           </div>
         </section>
 
