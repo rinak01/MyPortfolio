@@ -229,16 +229,20 @@ export default function Var7ClassyAuto() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
             {/* Left — imagery (reversed column) */}
-            <div className="lg:col-span-7 order-2 lg:order-1 space-y-4">
-              <div className="aspect-[21/9] overflow-hidden bg-[#141414] rounded-sm flex items-center justify-center">
+            <div className="lg:col-span-6 order-2 lg:order-1 space-y-4">
+              {/* Pipeline — near-square 1:1, full natural size */}
+              <div className="aspect-[1/1] overflow-hidden bg-[#141414] rounded-sm">
                 <img src="/images/01/proactive agent pipeline.png" alt="Proactive Agent Pipeline"
-                  className="w-full h-full object-cover mix-blend-screen opacity-70 invert hover:opacity-100 hover:scale-[1.02] transition-all duration-1000 ease-out" />
+                  className="w-full h-full object-contain object-center opacity-85 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out" />
               </div>
-              <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
+              {/* NLP diagram */}
+              {/* <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
                 <img src="/images/01/NLP01.png" alt="NLP Semantic Analysis" className="w-[85%] h-auto opacity-70 invert" />
-              </div>
+              </div> */}
+              {/* Graph — centered card, constrained width so it doesn't stretch */}
               <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
-                <img src="/images/01/updatedGraph.png" alt="Response Accuracy Graph" className="w-full h-auto opacity-80" />
+                <img src="/images/01/updatedGraph.png" alt="Response Accuracy Graph"
+                  className="w-[75%] h-auto opacity-90 hover:opacity-100 transition-opacity duration-500" />
               </div>
             </div>
 
@@ -326,10 +330,10 @@ export default function Var7ClassyAuto() {
 
         {/* ─── Project 02: AI Trend Forecasting ─── */}
         <motion.article id="project-03" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start justify-center">
 
             {/* Left — meta + content */}
-            <div className="lg:col-span-4 flex flex-col gap-8">
+            <div className="lg:col-span-6 flex flex-col gap-8">
               <div className="flex items-baseline gap-4">
                 <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>02</span>
                 <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">Surefront</span>
@@ -411,19 +415,17 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            {/* Right — imagery */}
-            <div className="lg:col-span-8 space-y-4">
-              <div className="grid grid-cols-5 gap-4 items-start">
-                {/* portrait: 692×951 ≈ 3:4 */}
-                <div className="col-span-2 aspect-[3/4] overflow-hidden bg-[#141414] rounded-sm">
-                  <img src="/images/02/trend_forecasting_dashboard 1.png" alt="Dashboard"
-                    className="w-full h-full object-cover object-top opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-1000 ease-out" />
-                </div>
-                {/* landscape: 481×312 ≈ 3:2 */}
-                <div className="col-span-3 aspect-[3/2] overflow-hidden bg-[#141414] rounded-sm">
-                  <img src="/images/02/SurefrontInterviews.png" alt="Surefront Interviews"
-                    className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500" />
-                </div>
+            {/* Right — imagery stacked vertically */}
+            <div className="lg:col-span-4 flex flex-col gap-3">
+              {/* Dashboard — full width, portrait 3:4 natural ratio */}
+              <div className="w-full aspect-[3/4] overflow-hidden bg-[#141414] rounded-sm">
+                <img src="/images/02/trend_forecasting_dashboard 1.png" alt="AI Trend Forecasting Dashboard"
+                  className="w-full h-full object-cover object-top opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out" />
+              </div>
+              {/* Surefront Interviews — full width, landscape 3:2 natural ratio */}
+              <div className="w-full aspect-[3/2] overflow-hidden bg-[#141414] rounded-sm">
+                <img src="/images/02/SurefrontInterviews.png" alt="Surefront Interviews"
+                  className="w-full h-full object-cover object-top opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out" />
               </div>
             </div>
 
