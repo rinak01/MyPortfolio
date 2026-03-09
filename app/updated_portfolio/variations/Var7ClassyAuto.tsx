@@ -571,25 +571,7 @@ export default function Var7ClassyAuto() {
               </div>
             </motion.div>
 
-            {/* Row 2: three equal columns */}
-            {[
-              { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education", label: "LeARn", desc: "Augmented reality learning environment for spatial comprehension" },
-              { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion", tag: "Physical · Animation", label: "Stop Motion", desc: "Frame-by-frame physical animation exploring material storytelling" },
-              { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", tag: "Installation", label: "CMU Popup", desc: "Pop-up exhibition experience designed for CMU campus" },
-            ].map((img, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-                className="col-span-2 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-                <img src={img.src} alt={img.alt}
-                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
-                  <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>{img.label}</span>
-                  <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">{img.desc}</span>
-                </div>
-              </motion.div>
-            ))}
-
-            {/* Row 3: two halves */}
+            {/* Row 2: two halves */}
             {[
               { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR", tag: "XR · Wearable", label: "FlexVR", desc: "Flexible VR interface that adapts to body movement" },
               { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", tag: "Interactive · Bio", label: "Emma's Jellyfish", desc: "Bioluminescent jellyfish environment responding to gesture" },
@@ -602,6 +584,24 @@ export default function Var7ClassyAuto() {
                   <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
                   <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>{img.label}</span>
                   <span className="text-[#A3A3A3] text-[12px] mt-1">{img.desc}</span>
+                </div>
+              </motion.div>
+            ))}
+
+            {/* Row 3: three equal columns */}
+            {[
+              { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education", label: "LeARn", desc: "Augmented reality learning environment for spatial comprehension" },
+              { src: "/images/prototypes/stopmotion02.png", alt: "Stop Motion 02", tag: "Physical · Animation", label: "Stop Motion 02", desc: "Second stop motion study with extended material and texture exploration" },
+              { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", tag: "Installation", label: "CMU Popup", desc: "Pop-up exhibition experience designed for CMU campus" },
+            ].map((img, i) => (
+              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
+                className="col-span-2 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
+                <img src={img.src} alt={img.alt}
+                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
+                  <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>{img.label}</span>
+                  <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">{img.desc}</span>
                 </div>
               </motion.div>
             ))}
@@ -619,12 +619,12 @@ export default function Var7ClassyAuto() {
             </motion.div>
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
               className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/prototypes/stopmotion02.png" alt="Stop Motion 02"
+              <img src="/images/prototypes/stopmotion01.png" alt="Stop Motion"
                 className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Physical · Animation</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Stop Motion 02</span>
-                <span className="text-[#A3A3A3] text-[12px] mt-1">Second chapter of material stop-motion animation series</span>
+                <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Stop Motion</span>
+                <span className="text-[#A3A3A3] text-[12px] mt-1">Frame-by-frame physical animation exploring material storytelling</span>
               </div>
             </motion.div>
 
@@ -643,7 +643,7 @@ export default function Var7ClassyAuto() {
 
             {/* Row 1: wide hero + accent */}
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
+              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
               <img src="/images/ARVR/library.png" alt="Library VR"
                 className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
@@ -653,38 +653,20 @@ export default function Var7ClassyAuto() {
               </div>
             </motion.div>
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
+              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
               <img src="/images/ARVR/RHcloud 1.png" alt="RH Cloud"
                 className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">VR · Atmospheric</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Responsive · Atmospheric</span>
                 <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>RH Cloud</span>
                 <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">Volumetric cloud environment exploring presence and scale</span>
               </div>
             </motion.div>
 
-            {/* Row 2: three equal columns */}
+            {/* Row 2: two halves */}
             {[
-              { src: "/images/ARVR/flowers 1.png", alt: "Flowers", tag: "VR · Nature", label: "Flowers", desc: "Botanical virtual space with reactive flora and ambient sound" },
-              { src: "/images/ARVR/pianoroom 1.png", alt: "Piano Room", tag: "VR · Acoustic", label: "Piano Room", desc: "Intimate virtual music room built around spatial audio" },
-              { src: "/images/ARVR/pianoroom02 1.png", alt: "Piano Room 02", tag: "VR · Acoustic", label: "Piano Room 02", desc: "Second iteration with updated lighting and material studies" },
-            ].map((img, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-                className="col-span-2 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
-                <img src={img.src} alt={img.alt}
-                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
-                  <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>{img.label}</span>
-                  <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">{img.desc}</span>
-                </div>
-              </motion.div>
-            ))}
-
-            {/* Row 3: two halves */}
-            {[
-              { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall", tag: "VR · Architecture", label: "Study Hall", desc: "Collaborative virtual study hall with adaptive ambient zones" },
-              { src: "/images/ARVR/trees01 1.png", alt: "Trees 01", tag: "VR · Nature", label: "Trees 01", desc: "Forest density study exploring depth and spatial perception" },
+              { src: "/images/ARVR/pianoroom02 1.png", alt: "Music Box Room", tag: "Virtual Reality · Acoustic", label: "Music Box Room", desc: "Second iteration with updated lighting and material studies" },
+              { src: "/images/ARVR/pianoroom 1.png", alt: "Piano Room", tag: "Virtual Reality · Acoustic", label: "Piano Room", desc: "Intimate virtual music room built around spatial audio" },
             ].map((img, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
                 className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
@@ -698,23 +680,41 @@ export default function Var7ClassyAuto() {
               </motion.div>
             ))}
 
+            {/* Row 3: three equal columns */}
+            {[
+              { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall", tag: "3D Model · Architecture", label: "Study Hall", desc: "Collaborative virtual study hall with adaptive ambient zones" },
+              { src: "/images/ARVR/trees01 1.png", alt: "Trees 01", tag: "Augmented Reality · Nature", label: "Trees 01", desc: "Forest density study exploring depth and spatial perception" },
+              { src: "/images/ARVR/flowers 1.png", alt: "Flowers", tag: "Augmented Reality · Nature", label: "Flowers", desc: "Botanical virtual space with reactive flora and ambient sound" },
+            ].map((img, i) => (
+              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
+                className="col-span-2 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
+                <img src={img.src} alt={img.alt}
+                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
+                  <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>{img.label}</span>
+                  <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">{img.desc}</span>
+                </div>
+              </motion.div>
+            ))}
+
             {/* Row 4: narrow + wide */}
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
+              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
               <img src="/images/ARVR/trees02 1.png" alt="Trees 02"
                 className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">VR · Nature</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Augmented Reality · Nature</span>
                 <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>Trees 02</span>
                 <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">Evolved canopy composition with dynamic light filtering</span>
               </div>
             </motion.div>
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
+              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
               <img src="/images/ARVR/forest01 1.png" alt="Forest"
                 className="w-full h-full object-cover scale-[1.3] grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.32]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">VR · Environment</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Virtual Reality · Environment</span>
                 <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Forest</span>
                 <span className="text-[#A3A3A3] text-[12px] mt-1">Full immersive forest environment with layered ambient depth</span>
               </div>
@@ -742,7 +742,7 @@ export default function Var7ClassyAuto() {
                   className="text-[#EAEAEA] hover:text-[#B39D82] transition-colors border-b border-white/20 hover:border-[#B39D82] pb-1 uppercase tracking-widest text-sm inline-block w-fit">
                   LinkedIn Profile
                 </a>
-                <a href="https://drive.google.com/file/d/1lGNm_Zh5L_niGyPaLJNQ7LzrP30lhi_t/view?usp=sharing" target="_blank"
+                <a href="https://drive.google.com/file/d/1qvhnhcxOM4LrbB0SHHimeBg26k-70Wv9/view?usp=sharing" target="_blank"
                   className="text-[#EAEAEA] hover:text-[#B39D82] transition-colors border-b border-white/20 hover:border-[#B39D82] pb-1 uppercase tracking-widest text-sm inline-block w-fit">
                   Resume
                 </a>
