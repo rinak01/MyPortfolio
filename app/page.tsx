@@ -1,1 +1,5 @@
-export { default } from "./updated_portfolio/updated_page";
+import { redirect } from "next/navigation";
+
+export default function RootPage() {
+    redirect("/updated_portfolio");
+}
