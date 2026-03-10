@@ -438,19 +438,15 @@ export default function Var7ClassyAuto() {
 
             {/* Left — imagery */}
             <div className="lg:col-span-7 order-2 lg:order-1 space-y-4">
-              <div className="flex gap-4">
-                <div className="w-2/3 aspect-[4/3] overflow-hidden bg-[#141414] rounded-sm">
-                  <img src="/images/03/emmastree.png" alt="Emma's Tree"
-                    className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-[1.02] transition-all duration-1000 ease-out" />
-                </div>
-                <div className="w-1/3 flex flex-col gap-4">
-                  <div className="flex-1 bg-[#141414] rounded-sm p-5 flex items-center justify-center">
-                    <img src="/images/03/treesystem.png" alt="Tree System" className="w-full h-auto opacity-90 invert" />
-                  </div>
-                  <div className="flex-1 bg-[#141414] rounded-sm p-5 flex items-center justify-center">
-                    <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-full h-auto opacity-90 invert" />
-                  </div>
-                </div>
+              <div className="aspect-[4/3] overflow-hidden bg-[#141414] rounded-sm">
+                <img src="/images/03/emmastree.png" alt="Emma's Tree"
+                  className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-[1.02] transition-all duration-1000 ease-out" />
+              </div>
+              <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
+                <img src="/images/03/treesystem.png" alt="Tree System" className="w-full h-auto opacity-90" />
+              </div>
+              <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
+                <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-[85%] h-auto opacity-90 mx-auto" />
               </div>
             </div>
 

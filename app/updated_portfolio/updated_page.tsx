@@ -323,14 +323,24 @@ export default function Portfolio() {
             </div>
           </div>
 
-          {/* Top Row - Emma's Tree Image + Overview/Key Highlights/Tools */}
+          {/* Top Row - Emma's Tree Images + Overview/Key Highlights/Tools */}
           <div className="grid grid-cols-1 md:grid-cols-[45%_55%] gap-8 mb-8">
-            {/* Left - Emma's Tree Main Image */}
-            <div>
+            {/* Left - Vertical Image Stack */}
+            <div className="space-y-4">
               <img
                 src="/images/03/emmastree.png"
                 alt="Emma's Tree - 3D printed tree sculpture"
-                className="w-[80%] h-auto rounded-lg"
+                className="w-full h-auto rounded-lg"
+              />
+              <img
+                src="/images/03/treesystem.png"
+                alt="Tree system diagram - Photosynthesis, Flower Blooming, Water the Plant"
+                className="w-full h-auto rounded-lg"
+              />
+              <img
+                src="/images/03/tempchange.png"
+                alt="Filament temperature change diagram"
+                className="w-[85%] h-auto rounded-lg mx-auto"
               />
             </div>
 
@@ -359,32 +369,9 @@ export default function Portfolio() {
                 <ul className="text-[12px] text-zinc-500 leading-relaxed space-y-1.5">
                   <li>• I wanted to design using biomimicry to solve "care fatigue," so I built a synthetic plant that basically lives and reacts right along with Emma. Using temperature-sensitive filaments and environmental sensors, the tree acts as a responsive sensory anchor that mimics the energy of a real plant.</li>
                   <li className="mt-3"> I used natural materials like real moss and a ceramic pot to keep the tech feeling grounded rather than clinical. Emma was a busy med student, so I wanted to give her those restorative nature vibes in a way that's actually durable and emotionally meaningful.</li>
-                  {/* <li>• Physical Build: Beyond the electronics, the project features organic aesthetics including a pot and real moss to make the tech look natural and feels grounded.</li>
-                  <li>• The "Bloom" Effect: When Emma interacts with the plant—either by placing it in a warm spot, touching it, or adding warm water—the flowers transition from their base color to a vibrant pink.</li>
-                  <li>• Interactive Personality: The project responds to its environment (light, heat, and moisture) just as a biological organism would.</li>
-                  <li>• Multi-Sensory Elements: While the project focused on visual and thermal responses, it fits into a larger body of work that explores presence through customized fragrances.</li>
-                  <li>• Durability: Building the plant "designed to never die," it removes the stress of maintenance while retaining the aesthetic benefits of greenery.</li> */}
                 </ul>
               </div>
             </div>
-          </div>
-
-          {/* Middle Row - Tree System Diagram */}
-          <div className="flex justify-center mb-8">
-            <img
-              src="/images/03/treesystem.png"
-              alt="Tree system diagram - Photosynthesis, Flower Blooming, Water the Plant"
-              className="w-[70%] h-auto rounded-lg"
-            />
-          </div>
-
-          {/* Bottom Row - Temperature Change Diagram */}
-          <div className="flex justify-center">
-            <img
-              src="/images/03/tempchange.png"
-              alt="Filament temperature change diagram"
-              className="w-[60%] h-auto rounded-lg"
-            />
           </div>
         </article>
       </section>
