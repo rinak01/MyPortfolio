@@ -131,36 +131,23 @@ export default function Portfolio() {
             </div>
           </div>
 
-          {/* Bottom Row - 2 Column Layout: bmwinfograph | layers+pipeline */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left - Capabilities Diagram */}
-            <div className="mt-8">
+          {/* Bottom Row - Layers + Pipeline */}
+          <div className="flex flex-col gap-1 mt-6">
+            <div className="rounded-lg p-4">
               <img
-                src="/images/00/bmwinfograph.png"
-                alt="Capabilities diagram"
-                className="w-[83%] h-auto"
+                src="/images/00/layers.png"
+                alt="Layers diagram"
+                className="w-[70%] h-auto"
               />
-              <p className="text-[10px] text-zinc-400 mt-2">• Layered Architecture Diagram</p>
+              <p className="text-[10px] text-zinc-400 mt-2">• GenUI architecture illustrates a tiered synthesis pipeline that orchestrates contextual processing to deliver a real-time adoptive interface.</p>
             </div>
-
-            {/* Right - Layers (top) + Pipeline (bottom) */}
-            <div className="flex flex-col gap-1">
-              <div className="rounded-lg p-4">
-                <img
-                  src="/images/00/layers.png"
-                  alt="Layers diagram"
-                  className="w-[70%] h-auto"
-                />
-                <p className="text-[10px] text-zinc-400 mt-2">• GenUI architecture illustrates a tiered synthesis pipeline that orchestrates contextual processing to deliver a real-time adoptive interface.</p>
-              </div>
-              <div className="rounded-lg p-4">
-                <img
-                  src="/images/00/pipeline.png"
-                  alt="Pipeline diagram"
-                  className="w-[75%] h-auto"
-                />
-                <p className="text-[10px] text-zinc-400 mt-2">• Synthesis pipeline that transitions from raw contextual processing to a fluid, high-fidelity adoptive interface.</p>
-              </div>
+            <div className="rounded-lg p-4">
+              <img
+                src="/images/00/pipeline.png"
+                alt="Pipeline diagram"
+                className="w-[75%] h-auto"
+              />
+              <p className="text-[10px] text-zinc-400 mt-2">• Synthesis pipeline that transitions from raw contextual processing to a fluid, high-fidelity adoptive interface.</p>
             </div>
           </div>
         </article>

@@ -214,10 +214,7 @@ export default function Var7ClassyAuto() {
                   <img src="/images/00/pipeline.png" alt="Pipeline diagram" className="w-full h-auto opacity-90" />
                 </div>
               </div>
-              <div className="aspect-[1/1] overflow-hidden bg-[#141414] rounded-sm">
-                <img src="/images/00/bmwinfograph.png" alt="BMW capabilities diagram"
-                  className="w-full h-full object-contain p-6 opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out" />
-              </div>
+
             </div>
 
           </div>
