@@ -189,7 +189,7 @@ export default function Var7ClassyAuto() {
                   <div>
                     <SectionLabel>Topics Researched</SectionLabel>
                     <div className="flex flex-wrap gap-2">
-                      {["Generative AI", "System Design", "LLM"].map(t => (
+                      {["Generative AI", "User Interface Design", "System Design", "LLM"].map(t => (
                         <span key={t} className="text-[11px] uppercase tracking-widest text-[#A3A3A3] border border-white/20 px-3 py-1 rounded-sm">
                           {t}
                         </span>
@@ -214,8 +214,9 @@ export default function Var7ClassyAuto() {
                   <img src="/images/00/pipeline.png" alt="Pipeline diagram" className="w-full h-auto opacity-90" />
                 </div>
               </div>
-              <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
-                <img src="/images/00/bmwinfograph.png" alt="BMW capabilities diagram" className="w-[55%] h-auto opacity-90" />
+              <div className="aspect-[1/1] overflow-hidden bg-[#141414] rounded-sm">
+                <img src="/images/00/bmwinfograph.png" alt="BMW capabilities diagram"
+                  className="w-full h-full object-contain p-6 opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out" />
               </div>
             </div>
 
