@@ -334,7 +334,7 @@ export default function Var7ClassyAuto() {
             <div className="lg:col-span-6 flex flex-col gap-8">
               <div className="flex items-baseline gap-4">
                 <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>02</span>
-                <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">Surefront</span>
+                <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">CMU & Surefront</span>
               </div>
 
               <div>
@@ -438,15 +438,15 @@ export default function Var7ClassyAuto() {
 
             {/* Left — imagery */}
             <div className="lg:col-span-7 order-2 lg:order-1 space-y-4">
-              <div className="aspect-[4/3] overflow-hidden bg-[#141414] rounded-sm">
+              <div className="w-[70%] mx-auto aspect-[3/4] overflow-hidden bg-[#141414] rounded-sm">
                 <img src="/images/03/emmastree.png" alt="Emma's Tree"
-                  className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-[1.02] transition-all duration-1000 ease-out" />
+                  className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-all duration-1000 ease-out" />
               </div>
               <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
-                <img src="/images/03/treesystem.png" alt="Tree System" className="w-full h-auto opacity-90" />
+                <img src="/images/03/treesystem.png" alt="Tree System" className="w-[90%] h-auto opacity-90 mx-auto" />
               </div>
               <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
-                <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-[85%] h-auto opacity-90 mx-auto" />
+                <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-[90%] h-auto opacity-90 mx-auto" />
               </div>
             </div>
 
@@ -454,7 +454,7 @@ export default function Var7ClassyAuto() {
             <div className="lg:col-span-5 order-1 lg:order-2 flex flex-col gap-8">
               <div className="flex items-baseline gap-4">
                 <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>03</span>
-                <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">Biomimicry</span>
+                <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">Biomimicry Hardware</span>
               </div>
 
               <div>
