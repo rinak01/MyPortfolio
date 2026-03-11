@@ -263,7 +263,7 @@ export default function Var7ClassyAuto() {
                   {/* Overview */}
                   <div>
                     <SectionLabel>Overview</SectionLabel>
-                    <p>
+                    <p className="text-[13px]">
                       Researched &amp; built a semantic classification pipeline for adaptive multimodal systems that isolates relevant user intent from environmental noise and linguistic variations, achieving &gt;90% response accuracy.
                     </p>
                   </div>
@@ -297,15 +297,15 @@ export default function Var7ClassyAuto() {
                     <ul className="space-y-3">
                       <li className="flex gap-3">
                         <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>UX Design</span>
+                        <span><span className="font-semibold text-[#EAEAEA]">Robust Semantic Orchestration:</span> Engineered a classification pipeline that bridges the gap between raw speech-to-text and actionable intent, handling the nuance of informal speech.</span>
                       </li>
                       <li className="flex gap-3">
                         <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>System Design</span>
+                        <span><span className="font-semibold text-[#EAEAEA]">Multimodal Scalability:</span> Created a modular framework for adaptive systems that can be integrated into various hardware environments, from smart homes to automotive HMIs.</span>
                       </li>
                       <li className="flex gap-3">
                         <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>LLM</span>
+                        <span><span className="font-semibold text-[#EAEAEA]">Real-time Decision Logic:</span> Developed the logic for "Agent Responds vs. Agent Ignores," a critical component for the next generation of "always-on" ambient computing.</span>
                       </li>
                     </ul>
                   </div>
@@ -315,7 +315,7 @@ export default function Var7ClassyAuto() {
                   {/* Performance metric */}
                   <div className="pt-2">
                     <SectionLabel>Performance Metric</SectionLabel>
-                    <span className={`${outfit.className} text-3xl text-[#EAEAEA]`}>&gt;90% Accuracy</span>
+                    <span className={`${outfit.className} text-2xl text-[#EAEAEA]`}>&gt;90% Accuracy</span>
                   </div>
                 </div>
               </div>
