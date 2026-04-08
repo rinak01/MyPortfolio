@@ -1,11 +1,167 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Outfit, DM_Sans } from "next/font/google";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["200", "300", "400", "500"] });
 const sans = DM_Sans({ subsets: ["latin"], weight: ["300", "400", "500"] });
+
+// ─── Filter System ────────────────────────────────────────────────────────────
+type Category =
+  | "Spatial Computing"
+  | "Physical Computing"
+  | "Multimodal Systems"
+  | "Rapid Prototyping"
+  | "Interface Design"
+  | "Tangible Environments";
+
+const ALL_CATEGORIES: Category[] = [
+  "Multimodal Systems",
+  "Spatial Computing",
+  "Physical Computing",
+  "Rapid Prototyping",
+  "Interface Design",
+  "Tangible Environments",
+];
+
+const CAT_STYLE: Record<Category, { dot: string; active: string; text: string }> = {
+  "Spatial Computing":    { dot: "#60a5fa", active: "rgba(59,130,246,0.18)",   text: "#93c5fd" },
+  "Physical Computing":   { dot: "#34d399", active: "rgba(16,185,129,0.18)",   text: "#6ee7b7" },
+  "Multimodal Systems":   { dot: "#fbbf24", active: "rgba(245,158,11,0.18)",   text: "#fde68a" },
+  "Rapid Prototyping":    { dot: "#f87171", active: "rgba(239,68,68,0.18)",    text: "#fca5a5" },
+  "Interface Design":     { dot: "#f472b6", active: "rgba(236,72,153,0.18)",   text: "#f9a8d4" },
+  "Tangible Environments":{ dot: "#d97706", active: "rgba(180,110,30,0.20)",   text: "#fcd34d" },
+};
+
+interface GridItem {
+  src: string;
+  alt: string;
+  tag: string;
+  label: string;
+  desc: string;
+  categories: Category[];
+  colSpan?: number;
+  aspectClass?: string;
+  scaleClass?: string;
+}
+
+const PROTOTYPE_ITEMS: GridItem[] = [
+  { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale",   tag: "Interactive · XR",       label: "Responsive Tale",    desc: "Adaptive storytelling interface reacting to reader behavior",         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems"] },
+  { src: "/images/prototypes/peppersghost01.png",   alt: "Pepper's Ghost",   tag: "Spatial · Illusion",    label: "Pepper's Ghost",    desc: "Holographic display using classic stage illusion technique",          colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/flexvr 1.png",         alt: "FlexVR",           tag: "XR · Wearable",         label: "FlexVR",            desc: "Flexible VR interface that adapts to body movement",                 colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
+  { src: "/images/prototypes/emmasjellyfish01 1.png",alt: "Emma's Jellyfish", tag: "Interactive · Bio",     label: "Emma's Jellyfish",  desc: "Bioluminescent jellyfish environment responding to gesture",         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping"] },
+  { src: "/images/prototypes/LeARn.png",            alt: "LeARn",            tag: "AR · Education",        label: "LeARn",             desc: "Augmented reality learning environment for spatial comprehension",   colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
+  { src: "/images/prototypes/stopmotion02.png",     alt: "Stop Motion 02",   tag: "Physical · Animation",  label: "Stop Motion 02",    desc: "Stop motion study with extended material and texture exploration",  colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Physical Computing", "Tangible Environments"] },
+  { src: "/images/prototypes/cmupopup 1.png",       alt: "CMU Popup",        tag: "Installation",          label: "CMU Popup",         desc: "Pop-up exhibition experience designed for CMU campus",              colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/portalreef 1.png",     alt: "Portal Reef",      tag: "XR · Environment",      label: "Portal Reef",       desc: "Immersive underwater portal experience in mixed reality",           colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping"] },
+  { src: "/images/prototypes/stopmotion01.png",     alt: "Stop Motion",      tag: "Physical · Animation",  label: "Stop Motion",       desc: "Frame-by-frame physical animation exploring material storytelling", colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Physical Computing", "Tangible Environments"] },
+];
+
+const ARVR_ITEMS: GridItem[] = [
+  { src: "/images/ARVR/library.png",        alt: "Library VR",      tag: "VR · Environment",           label: "Library",          desc: "Immersive virtual library space designed for focused study",                       colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
+  { src: "/images/ARVR/RHcloud 1.png",      alt: "RH Cloud",        tag: "Responsive · Atmospheric",   label: "RH Cloud",         desc: "Volumetric cloud environment exploring presence and scale",                        colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/ARVR/pianoroom02 1.png",  alt: "Music Box Room",  tag: "Virtual Reality · Acoustic", label: "Music Box Room",   desc: "Second iteration with updated lighting and material studies",                     colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/pianoroom 1.png",    alt: "Piano Room",      tag: "Virtual Reality · Acoustic", label: "Piano Room",       desc: "Intimate virtual music room built around spatial audio",                          colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/studyhall 1.png",    alt: "Study Hall",      tag: "3D Model · Architecture",    label: "Study Hall",       desc: "Collaborative virtual study hall with adaptive ambient zones",                    colSpan: 2, aspectClass: "aspect-[4/3]",  categories: ["Spatial Computing", "Interface Design"] },
+  { src: "/images/ARVR/trees01 1.png",      alt: "Trees 01",        tag: "Augmented Reality · Nature", label: "Trees 01",         desc: "Forest density study exploring depth and spatial perception",                     colSpan: 2, aspectClass: "aspect-[4/3]",  categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/flowers 1.png",      alt: "Flowers",         tag: "Augmented Reality · Nature", label: "Flowers",          desc: "Botanical virtual space with reactive flora and ambient sound",                   colSpan: 2, aspectClass: "aspect-[4/3]",  categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/trees02 1.png",      alt: "Trees 02",        tag: "Augmented Reality · Nature", label: "Trees 02",         desc: "Evolved canopy composition with dynamic light filtering",                         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/forest01 1.png",     alt: "Forest",          tag: "Virtual Reality · Environment",label: "Forest",          desc: "Full immersive forest environment with layered ambient depth",                    colSpan: 3, aspectClass: "aspect-[16/9]", scaleClass: "scale-[1.3] group-hover:scale-[1.32]", categories: ["Spatial Computing"] },
+];
+
+// ─── Static Tailwind col-span map (dynamic strings get purged) ───────────────
+const COL_SPAN_CLASS: Record<number, string> = {
+  2: "col-span-2",
+  3: "col-span-3",
+  4: "col-span-4",
+  6: "col-span-6",
+};
+
+// ─── FilterCategoryButton ────────────────────────────────────────────────────
+function FilterCategoryButton({
+  cat,
+  isActive,
+  onClick,
+}: {
+  cat: Category;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  const s = CAT_STYLE[cat];
+  return (
+    <button
+      onClick={onClick}
+      className="relative flex items-center gap-2 pl-3 pr-4 py-1.5 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap select-none"
+      style={isActive
+        ? { background: s.active, borderColor: s.dot, color: s.text, boxShadow: `0 0 12px ${s.dot}50` }
+        : { background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.15)", color: "#909090" }
+      }
+    >
+      <span className="w-2 h-2 rounded-full shrink-0" style={{ background: isActive ? s.dot : "#555" }} />
+      {cat}
+    </button>
+  );
+}
+
+// ─── FilteredThumb ────────────────────────────────────────────────────────────
+function FilteredThumb({
+  item,
+  activeFilter,
+  outfitClass,
+}: {
+  item: GridItem;
+  activeFilter: Category | null;
+  outfitClass: string;
+}) {
+  const isMatch = activeFilter === null || item.categories.includes(activeFilter);
+  const isDimmed = activeFilter !== null && !isMatch;
+  const noFilter = activeFilter === null;
+
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={slowFade}
+      className={`${COL_SPAN_CLASS[item.colSpan ?? 3]} ${item.aspectClass ?? "aspect-[16/9]"} bg-[#141414] overflow-hidden rounded-sm group relative`}
+      style={{
+        transition: "opacity 400ms ease, transform 400ms ease",
+        opacity: isDimmed ? 0.3 : 1,
+      }}
+    >
+      <img
+        src={item.src}
+        alt={item.alt}
+        className={`w-full h-full object-cover transition-all duration-700 ease-out ${item.scaleClass ?? ""}`}
+        style={{
+          filter: noFilter
+            ? "grayscale(100%) brightness(0.7)"
+            : isMatch
+            ? "grayscale(0%) brightness(1)"
+            : "grayscale(100%) brightness(0.5)",
+          transform: isMatch && !noFilter ? "scale(1.02)" : undefined,
+          transition: "filter 500ms ease, transform 500ms ease, opacity 500ms ease",
+        }}
+      />
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
+        <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{item.tag}</span>
+        <span className={`${outfitClass} text-[#EAEAEA] text-base font-light`}>{item.label}</span>
+        <span className="text-[#A3A3A3] text-[12px] mt-1">{item.desc}</span>
+        {/* Category pills */}
+        <div className="flex flex-wrap gap-1 mt-2">
+          {item.categories.map((c) => (
+            <span key={c} className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-sm"
+              style={{ color: CAT_STYLE[c].text }}>
+              {c}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 const slowFade = {
   hidden: { opacity: 0, filter: "blur(4px)" },
@@ -103,6 +259,8 @@ function ScrollNav() {
 
 export default function Var7ClassyAuto() {
   const [pinned, setPinned] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<Category | null>(null);
+  const filterBarRef = useRef<HTMLDivElement>(null);
   return (
     <div className={`${sans.className} min-h-screen bg-[#0C0C0C] text-[#A3A3A3] selection:bg-[#B39D82] selection:text-[#0C0C0C] font-light`}>
 
@@ -592,93 +750,50 @@ export default function Var7ClassyAuto() {
           </div>
         </motion.article>
 
+        {/* ─── Sticky Filter Bar ──────────────────────────────────────────── */}
+        <div
+          ref={filterBarRef}
+          className="sticky top-0 z-40 -mx-8 md:-mx-16 px-8 md:px-16 py-4 border-b border-white/5"
+          style={{ background: "rgba(12,12,12,0.92)", backdropFilter: "blur(14px)" }}
+        >
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Label */}
+            <span className="text-[12px] uppercase tracking-[0.2em] text-[#5a5a5a] shrink-0 mr-1">Filter</span>
+            {/* All pill */}
+            <button
+              onClick={() => setActiveFilter(null)}
+              className="flex items-center gap-2 pl-3 pr-4 py-1.5 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap"
+              style={activeFilter === null
+                ? { background: "rgba(255,255,255,0.14)", borderColor: "rgba(255,255,255,0.40)", color: "#EAEAEA" }
+                : { background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.12)", color: "#888" }
+              }
+            >
+              <span className="w-2 h-2 rounded-full bg-[#EAEAEA] shrink-0"
+                style={{ opacity: activeFilter === null ? 1 : 0.3 }} />
+              All
+            </button>
+            {/* Category pills */}
+            {ALL_CATEGORIES.map((cat) => (
+              <FilterCategoryButton
+                key={cat}
+                cat={cat}
+                isActive={activeFilter === cat}
+                onClick={() => setActiveFilter(activeFilter === cat ? null : cat)}
+              />
+            ))}
+          </div>
+
+        </div>
+
         {/* ─── Physical & Digital Prototypes ─── */}
-        <section className="pt-20">
+        <section className="pt-12">
           <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
             Physical &amp; Digital Prototypes
           </h2>
-          {/* Editorial Asymmetric Grid — 6-col base */}
           <div className="grid grid-cols-6 gap-2">
-
-            {/* Row 1: wide hero + accent square */}
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale"
-                className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Interactive · XR</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Responsive Tale</span>
-                <span className="text-[#A3A3A3] text-[12px] mt-1">Adaptive storytelling interface reacting to reader behavior</span>
-              </div>
-            </motion.div>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost"
-                className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-4">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Spatial · Illusion</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Pepper's Ghost</span>
-                <span className="text-[#A3A3A3] text-[12px] mt-1">Holographic display using classic stage illusion technique</span>
-              </div>
-            </motion.div>
-
-            {/* Row 2: two halves */}
-            {[
-              { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR", tag: "XR · Wearable", label: "FlexVR", desc: "Flexible VR interface that adapts to body movement" },
-              { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", tag: "Interactive · Bio", label: "Emma's Jellyfish", desc: "Bioluminescent jellyfish environment responding to gesture" },
-            ].map((img, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-                className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-                <img src={img.src} alt={img.alt}
-                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-4">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
-                  <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>{img.label}</span>
-                  <span className="text-[#A3A3A3] text-[12px] mt-1">{img.desc}</span>
-                </div>
-              </motion.div>
+            {PROTOTYPE_ITEMS.map((item) => (
+              <FilteredThumb key={item.alt} item={item} activeFilter={activeFilter} outfitClass={outfit.className} />
             ))}
-
-            {/* Row 3: three equal columns */}
-            {[
-              { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education", label: "LeARn", desc: "Augmented reality learning environment for spatial comprehension" },
-              { src: "/images/prototypes/stopmotion02.png", alt: "Stop Motion 02", tag: "Physical · Animation", label: "Stop Motion 02", desc: "Second stop motion study with extended material and texture exploration" },
-              { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", tag: "Installation", label: "CMU Popup", desc: "Pop-up exhibition experience designed for CMU campus" },
-            ].map((img, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-                className="col-span-2 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-                <img src={img.src} alt={img.alt}
-                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
-                  <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>{img.label}</span>
-                  <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">{img.desc}</span>
-                </div>
-              </motion.div>
-            ))}
-
-            {/* Row 4: narrow + wide */}
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/prototypes/portalreef 1.png" alt="Portal Reef"
-                className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-4">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">XR · Environment</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Portal Reef</span>
-                <span className="text-[#A3A3A3] text-[12px] mt-1">Immersive underwater portal experience in mixed reality</span>
-              </div>
-            </motion.div>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/prototypes/stopmotion01.png" alt="Stop Motion"
-                className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Physical · Animation</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Stop Motion</span>
-                <span className="text-[#A3A3A3] text-[12px] mt-1">Frame-by-frame physical animation exploring material storytelling</span>
-              </div>
-            </motion.div>
-
           </div>
         </section>
 
@@ -689,88 +804,10 @@ export default function Var7ClassyAuto() {
           <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
             Spatial Environments
           </h2>
-          {/* Editorial Asymmetric Grid — 6-col base */}
           <div className="grid grid-cols-6 gap-2">
-
-            {/* Row 1: wide hero + accent */}
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/ARVR/library.png" alt="Library VR"
-                className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">VR · Environment</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Library</span>
-                <span className="text-[#A3A3A3] text-[12px] mt-1">Immersive virtual library space designed for focused study</span>
-              </div>
-            </motion.div>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/ARVR/RHcloud 1.png" alt="RH Cloud"
-                className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Responsive · Atmospheric</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>RH Cloud</span>
-                <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">Volumetric cloud environment exploring presence and scale</span>
-              </div>
-            </motion.div>
-
-            {/* Row 2: two halves */}
-            {[
-              { src: "/images/ARVR/pianoroom02 1.png", alt: "Music Box Room", tag: "Virtual Reality · Acoustic", label: "Music Box Room", desc: "Second iteration with updated lighting and material studies" },
-              { src: "/images/ARVR/pianoroom 1.png", alt: "Piano Room", tag: "Virtual Reality · Acoustic", label: "Piano Room", desc: "Intimate virtual music room built around spatial audio" },
-            ].map((img, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-                className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-                <img src={img.src} alt={img.alt}
-                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-4">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
-                  <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>{img.label}</span>
-                  <span className="text-[#A3A3A3] text-[12px] mt-1">{img.desc}</span>
-                </div>
-              </motion.div>
+            {ARVR_ITEMS.map((item) => (
+              <FilteredThumb key={item.alt} item={item} activeFilter={activeFilter} outfitClass={outfit.className} />
             ))}
-
-            {/* Row 3: three equal columns */}
-            {[
-              { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall", tag: "3D Model · Architecture", label: "Study Hall", desc: "Collaborative virtual study hall with adaptive ambient zones" },
-              { src: "/images/ARVR/trees01 1.png", alt: "Trees 01", tag: "Augmented Reality · Nature", label: "Trees 01", desc: "Forest density study exploring depth and spatial perception" },
-              { src: "/images/ARVR/flowers 1.png", alt: "Flowers", tag: "Augmented Reality · Nature", label: "Flowers", desc: "Botanical virtual space with reactive flora and ambient sound" },
-            ].map((img, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-                className="col-span-2 aspect-[4/3] bg-[#141414] overflow-hidden rounded-sm group relative">
-                <img src={img.src} alt={img.alt}
-                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{img.tag}</span>
-                  <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>{img.label}</span>
-                  <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">{img.desc}</span>
-                </div>
-              </motion.div>
-            ))}
-
-            {/* Row 4: narrow + wide */}
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/ARVR/trees02 1.png" alt="Trees 02"
-                className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-4 py-3">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Augmented Reality · Nature</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-sm font-light`}>Trees 02</span>
-                <span className="text-[#A3A3A3] text-[11px] mt-1 leading-snug">Evolved canopy composition with dynamic light filtering</span>
-              </div>
-            </motion.div>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={slowFade}
-              className="col-span-3 aspect-[16/9] bg-[#141414] overflow-hidden rounded-sm group relative">
-              <img src="/images/ARVR/forest01 1.png" alt="Forest"
-                className="w-full h-full object-cover scale-[1.3] grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-[1.32]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">Virtual Reality · Environment</span>
-                <span className={`${outfit.className} text-[#EAEAEA] text-base font-light`}>Forest</span>
-                <span className="text-[#A3A3A3] text-[12px] mt-1">Full immersive forest environment with layered ambient depth</span>
-              </div>
-            </motion.div>
-
           </div>
         </section>
 

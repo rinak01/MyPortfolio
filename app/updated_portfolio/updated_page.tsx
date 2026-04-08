@@ -1,11 +1,181 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"], weight: ["300", "400", "500", "600"] });
 
+// ─── Category Types ───────────────────────────────────────────────────────────
+type Category =
+  //  | "Generative AI"
+  | "Spatial Computing"
+  | "Physical Computing"
+  | "Multimodal Systems"
+  | "Rapid Prototyping"
+  | "Interface Design";
+
+const ALL_CATEGORIES: Category[] = [
+  //"Generative AI",
+  "Spatial Computing",
+  "Physical Computing",
+  "Multimodal Systems",
+  "Rapid Prototyping",
+  "Interface Design",
+];
+
+// ─── Category accent colors ───────────────────────────────────────────────────
+const CATEGORY_COLORS: Record<Category, { bg: string; border: string; text: string; activeBg: string; activeText: string }> = {
+  "Generative AI": { bg: "rgba(139,92,246,0.06)", border: "rgba(139,92,246,0.35)", text: "#7c3aed", activeBg: "#7c3aed", activeText: "#fff" },
+  "Spatial Computing": { bg: "rgba(59,130,246,0.06)", border: "rgba(59,130,246,0.35)", text: "#2563eb", activeBg: "#2563eb", activeText: "#fff" },
+  "Physical Computing": { bg: "rgba(16,185,129,0.06)", border: "rgba(16,185,129,0.35)", text: "#059669", activeBg: "#059669", activeText: "#fff" },
+  "Multimodal Systems": { bg: "rgba(245,158,11,0.06)", border: "rgba(245,158,11,0.35)", text: "#d97706", activeBg: "#d97706", activeText: "#fff" },
+  "Rapid Prototyping": { bg: "rgba(239,68,68,0.06)", border: "rgba(239,68,68,0.35)", text: "#dc2626", activeBg: "#dc2626", activeText: "#fff" },
+  "Interface Design": { bg: "rgba(236,72,153,0.06)", border: "rgba(236,72,153,0.35)", text: "#db2777", activeBg: "#db2777", activeText: "#fff" },
+};
+
+// ─── Project Data ─────────────────────────────────────────────────────────────
+interface GridProject {
+  src: string;
+  alt: string;
+  categories: Category[];
+  className?: string;
+}
+
+const PROTOTYPE_PROJECTS: GridProject[] = [
+  { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale", categories: ["Interface Design", "Multimodal Systems"] },
+  { src: "/images/prototypes/peppersghost01.png", alt: "Pepper's Ghost", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion 1", categories: ["Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR", categories: ["Spatial Computing", "Interface Design"] },
+  { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"] },
+  { src: "/images/prototypes/stopmotion02.png", alt: "Stop Motion 2", categories: ["Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/LeARn.png", alt: "LeARn", categories: ["Spatial Computing", "Interface Design"] },
+  { src: "/images/prototypes/portalreef 1.png", alt: "Portal Reef", categories: ["Spatial Computing", "Rapid Prototyping", "Interface Design"] },
+  { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", categories: ["Interface Design", "Tangible Environments"] },
+];
+
+const ARVR_PROJECTS: GridProject[] = [
+  { src: "/images/ARVR/library.png", alt: "Library VR", categories: ["Spatial Computing"], className: "col-span-2 row-span-2 md:h-[400px]" },
+  { src: "/images/ARVR/pianoroom 1.png", alt: "Piano Room VR", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/pianoroom02 1.png", alt: "Piano Room VR 2", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall VR", categories: ["Spatial Computing", "Interface Design"] },
+  { src: "/images/ARVR/forest01 1.png", alt: "Forest VR", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/trees01 1.png", alt: "Trees VR 1", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/trees02 1.png", alt: "Trees VR 2", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/flowers 1.png", alt: "Flowers VR", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/RHcloud 1.png", alt: "RH Cloud VR", categories: ["Spatial Computing", "Rapid Prototyping"] },
+];
+
+// ─── Filter Button Component ──────────────────────────────────────────────────
+function FilterButton({
+  category,
+  isActive,
+  onClick,
+}: {
+  category: Category;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  const colors = CATEGORY_COLORS[category];
+  return (
+    <button
+      onClick={onClick}
+      style={
+        isActive
+          ? { backgroundColor: colors.activeBg, color: colors.activeText, borderColor: colors.activeBg }
+          : { backgroundColor: colors.bg, color: colors.text, borderColor: colors.border }
+      }
+      className="relative px-3.5 py-1.5 rounded-full border text-[11px] font-medium tracking-wide transition-all duration-300 cursor-pointer select-none whitespace-nowrap"
+    >
+      {category}
+      {isActive && (
+        <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-white border-2"
+          style={{ borderColor: colors.activeBg }} />
+      )}
+    </button>
+  );
+}
+
+// ─── Grid Thumbnail Component ─────────────────────────────────────────────────
+function GridThumb({
+  project,
+  activeFilter,
+  baseClass,
+}: {
+  project: GridProject;
+  activeFilter: Category | null;
+  baseClass: string;
+}) {
+  const isMatch = activeFilter === null || project.categories.includes(activeFilter);
+  const isDimmed = activeFilter !== null && !isMatch;
+
+  return (
+    <div
+      className={`relative overflow-hidden rounded-lg bg-zinc-100 ${project.className ?? ""} group`}
+      style={{ transition: "opacity 400ms cubic-bezier(0.4,0,0.2,1)" }}
+    >
+      <img
+        src={project.src}
+        alt={project.alt}
+        className={`${baseClass} transition-all duration-500 ease-in-out`}
+        style={{
+          filter: isMatch ? "grayscale(0%) brightness(1)" : "grayscale(100%) brightness(0.95)",
+          opacity: isDimmed ? 0.45 : 1,
+          transform: isMatch && activeFilter !== null ? "scale(1.02)" : "scale(1)",
+        }}
+      />
+      {/* Category pill overlay on hover */}
+      {isMatch && activeFilter !== null && (
+        <div className="absolute bottom-0 left-0 right-0 p-2 flex flex-wrap gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.5), transparent)" }}>
+          {project.categories.map((cat) => (
+            <span key={cat} className="text-[9px] font-medium text-white bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
+              {cat}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Filter Bar Component ─────────────────────────────────────────────────────
+function FilterBar({
+  activeFilter,
+  onFilterChange,
+}: {
+  activeFilter: Category | null;
+  onFilterChange: (cat: Category | null) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2 items-center mb-8">
+      {/* "All" pill */}
+      <button
+        onClick={() => onFilterChange(null)}
+        className={`px-3.5 py-1.5 rounded-full border text-[11px] font-medium tracking-wide transition-all duration-300 cursor-pointer whitespace-nowrap ${activeFilter === null
+          ? "bg-zinc-900 text-white border-zinc-900"
+          : "bg-zinc-50 text-zinc-500 border-zinc-200 hover:border-zinc-400 hover:text-zinc-700"
+          }`}
+      >
+        All
+      </button>
+
+      {ALL_CATEGORIES.map((cat) => (
+        <FilterButton
+          key={cat}
+          category={cat}
+          isActive={activeFilter === cat}
+          onClick={() => onFilterChange(activeFilter === cat ? null : cat)}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function Portfolio() {
+  const [activeFilter, setActiveFilter] = useState<Category | null>(null);
+
   return (
     <div className={`${inter.className} min-h-screen bg-white`}>
       {/* Header Section */}
@@ -195,7 +365,7 @@ export default function Portfolio() {
               <div>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Overview</h4>
                 <p className="text-[12px] text-zinc-500 leading-relaxed">
-                  • Researched & built a semantic classification pipeline for adaptive multimodal systems that isolates relevant user intent from environmental noise and linguistic variations, achieving &gt;90% response accuracy.
+                  • Researched &amp; built a semantic classification pipeline for adaptive multimodal systems that isolates relevant user intent from environmental noise and linguistic variations, achieving &gt;90% response accuracy.
                 </p>
               </div>
 
@@ -237,7 +407,7 @@ export default function Portfolio() {
             <div>
               <h3 className="text-[26px] font-medium text-zinc-900">AI Trend Forecasting Tool</h3>
               <p className="text-[15px] text-zinc-500 mt-[-1px]">
-                2024 January - 2024 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University | Surefront</span> &nbsp;·&nbsp; UX Researcher & Developer
+                2024 January - 2024 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University | Surefront</span> &nbsp;·&nbsp; UX Researcher &amp; Developer
               </p>
             </div>
           </div>
@@ -276,7 +446,7 @@ export default function Portfolio() {
                 <ul className="text-[13px] text-zinc-500 leading-relaxed space-y-1">
                   <li>• <span className="font-semibold">Dynamic Data Integration:</span> Built to process and visualize real-time growth metrics, search volumes, and month-over-month performance curves.</li>
                   <li>• <span className="font-semibold">Agentic AI Implementation:</span> The Personal Fashion Assistant democratizes data. Instead of digging through three layers of menus to find "shoes in France," a user can simply type: "What footwear is trending in Paris right now?"</li>
-                  <li>• <span className="font-semibold">Advanced Analytics & Visualization:</span> Built to process and visualize real-time growth metrics, search volumes, and month-over-month performance curves.</li>
+                  <li>• <span className="font-semibold">Advanced Analytics &amp; Visualization:</span> Built to process and visualize real-time growth metrics, search volumes, and month-over-month performance curves.</li>
                 </ul>
               </div>
 
@@ -288,24 +458,6 @@ export default function Portfolio() {
                   <li>• <span className="font-semibold">Trend Velocity Accuracy:</span> The "Month-over-Month" performance curves provide a 42.5% more granular view of trend momentum compared to traditional static quarterly reports.</li>
                 </ul>
               </div>
-
-              {/* <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-zinc-900 mb-2">Impact</h4>
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="border border-zinc-200 rounded p-2 text-center">
-                    <p className="text-lg font-medium text-zinc-800">12</p>
-                    <p className="text-[9px] text-zinc-400">Industries</p>
-                  </div>
-                  <div className="border border-zinc-200 rounded p-2 text-center">
-                    <p className="text-lg font-medium text-zinc-800">12</p>
-                    <p className="text-[9px] text-zinc-400">Data Sources</p>
-                  </div>
-                  <div className="border border-zinc-200 rounded p-2 text-center">
-                    <p className="text-lg font-medium text-zinc-800">7</p>
-                    <p className="text-[9px] text-zinc-400">Models</p>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </article>
@@ -318,7 +470,7 @@ export default function Portfolio() {
             <div>
               <h3 className="text-[26px] font-medium text-zinc-900">Emma&apos;s Tree</h3>
               <p className="text-[15px] text-zinc-500 mt-1">
-                2023 June - 2024 June &nbsp;·&nbsp; <span className="font-semibold">The June 19th Project, Personal Project</span> &nbsp;·&nbsp; Designer & Developer
+                2023 June - 2024 June &nbsp;·&nbsp; <span className="font-semibold">The June 19th Project, Personal Project</span> &nbsp;·&nbsp; Designer &amp; Developer
               </p>
             </div>
           </div>
@@ -359,7 +511,7 @@ export default function Portfolio() {
                   <li>• <span className="font-semibold">The "Bloom" Effect, Color Transformation:</span> Temperature Sensitive Filament</li>
                   <li>• <span className="font-semibold">Moisture Sensing:</span> Moisture Sensor</li>
                   <li>• <span className="font-semibold">Visual Feedback:</span> LED Indicators</li>
-                  <li>• <span className="font-semibold">Growth & Structure:</span> 3D Pen </li>
+                  <li>• <span className="font-semibold">Growth &amp; Structure:</span> 3D Pen </li>
                   <li>• <span className="font-semibold">Sustainbility:</span> Solar-powered Battery Bank</li>
                 </ul>
               </div>
@@ -376,9 +528,21 @@ export default function Portfolio() {
         </article>
       </section>
 
+      {/* ── FILTER BAR + GRIDS ───────────────────────────────────────── */}
+
+      {/* Sticky Filter Bar */}
+      <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-zinc-100 px-8 py-4 shadow-sm">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-zinc-400">Filter by</span>
+          </div>
+          <FilterBar activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+        </div>
+      </div>
+
       {/* Prototypes Section */}
-      <section id="prototypes" className="mx-auto max-w-6xl px-8 pb-16">
-        <div className="mb-12">
+      <section id="prototypes" className="mx-auto max-w-6xl px-8 pb-16 pt-10">
+        <div className="mb-8">
           <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-4">
             Prototypes
           </h2>
@@ -386,42 +550,35 @@ export default function Portfolio() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {/* Row 1 */}
-          <img src="/images/prototypes/ResponsiveTale 1.png" alt="ResponsiveTale" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/peppersghost01.png" alt="Pepper's Ghost" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/stopmotion01.png" alt="Stop Motion 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          {/* Row 2 */}
-          <img src="/images/prototypes/flexvr 1.png" alt="FlexVR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/emmasjellyfish01 1.png" alt="Emma's Jellyfish" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/stopmotion02.png" alt="Stop Motion 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          {/* Row 3 */}
-          <img src="/images/prototypes/LeARn.png" alt="LeARn" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/portalreef 1.png" alt="Portal Reef" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/prototypes/cmupopup 1.png" alt="CMU Popup" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          {PROTOTYPE_PROJECTS.map((project) => (
+            <GridThumb
+              key={project.alt}
+              project={project}
+              activeFilter={activeFilter}
+              baseClass="w-full h-48 object-cover"
+            />
+          ))}
         </div>
       </section>
 
       {/* AR/VR Section */}
       <section id="arvr" className="mx-auto max-w-6xl px-8 pb-16">
-        <div className="mb-12">
+        <div className="mb-8">
           <h2 className="text-lg font-semibold uppercase tracking-[0.1em] text-zinc-900 mb-1.5">
             AR/VR
           </h2>
           <div className="w-full h-[1px] bg-zinc-300" />
         </div>
 
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {/* Featured: Library - spans 2 columns and 2 rows */}
-          <img src="/images/ARVR/library.png" alt="Library VR" className="w-full h-full object-cover rounded-lg bg-zinc-100 col-span-2 row-span-2 md:h-[400px]" />
-          <img src="/images/ARVR/pianoroom 1.png" alt="Piano Room VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/pianoroom02 1.png" alt="Piano Room VR 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/studyhall 1.png" alt="Study Hall VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/forest01 1.png" alt="Forest VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/trees01 1.png" alt="Trees VR 1" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/trees02 1.png" alt="Trees VR 2" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/flowers 1.png" alt="Flowers VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
-          <img src="/images/ARVR/RHcloud 1.png" alt="RH Cloud VR" className="w-full h-48 object-cover rounded-lg bg-zinc-100" />
+          {ARVR_PROJECTS.map((project) => (
+            <GridThumb
+              key={project.alt}
+              project={project}
+              activeFilter={activeFilter}
+              baseClass="w-full h-48 object-cover"
+            />
+          ))}
         </div>
       </section>
 
