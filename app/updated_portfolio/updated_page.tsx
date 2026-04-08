@@ -27,12 +27,12 @@ const ALL_CATEGORIES: Category[] = [
 
 // ─── Category accent colors ───────────────────────────────────────────────────
 const CATEGORY_COLORS: Record<Category, { bg: string; border: string; text: string; activeBg: string; activeText: string }> = {
-  "Generative AI": { bg: "rgba(139,92,246,0.06)", border: "rgba(139,92,246,0.35)", text: "#7c3aed", activeBg: "#7c3aed", activeText: "#fff" },
   "Spatial Computing": { bg: "rgba(59,130,246,0.06)", border: "rgba(59,130,246,0.35)", text: "#2563eb", activeBg: "#2563eb", activeText: "#fff" },
   "Physical Computing": { bg: "rgba(16,185,129,0.06)", border: "rgba(16,185,129,0.35)", text: "#059669", activeBg: "#059669", activeText: "#fff" },
   "Multimodal Systems": { bg: "rgba(245,158,11,0.06)", border: "rgba(245,158,11,0.35)", text: "#d97706", activeBg: "#d97706", activeText: "#fff" },
   "Rapid Prototyping": { bg: "rgba(239,68,68,0.06)", border: "rgba(239,68,68,0.35)", text: "#dc2626", activeBg: "#dc2626", activeText: "#fff" },
   "Interface Design": { bg: "rgba(236,72,153,0.06)", border: "rgba(236,72,153,0.35)", text: "#db2777", activeBg: "#db2777", activeText: "#fff" },
+  "Tangible Environments": { bg: "rgba(217,119,6,0.06)", border: "rgba(217,119,6,0.35)", text: "#d97706", activeBg: "#d97706", activeText: "#fff" },
 };
 
 // ─── Project Data ─────────────────────────────────────────────────────────────
