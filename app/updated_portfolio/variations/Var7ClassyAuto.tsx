@@ -102,6 +102,7 @@ function ScrollNav() {
 }
 
 export default function Var7ClassyAuto() {
+  const [pinned, setPinned] = useState(false);
   return (
     <div className={`${sans.className} min-h-screen bg-[#0C0C0C] text-[#A3A3A3] selection:bg-[#B39D82] selection:text-[#0C0C0C] font-light`}>
 
@@ -246,9 +247,63 @@ export default function Var7ClassyAuto() {
 
             {/* Right — meta + content */}
             <div className="lg:col-span-5 order-1 lg:order-2 flex flex-col gap-8">
-              <div className="flex items-baseline gap-4">
-                <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>01</span>
+              <div className="flex items-center gap-4">
+                <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA] leading-none`}>01</span>
                 <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">CMU SmaSH Lab</span>
+
+                {/* Jellyfish button + aquarium panel (hover preview, click to pin) */}
+                <div className="relative group/jelly shrink-0">
+                  {/* The button */}
+                  <button
+                    onClick={() => setPinned(p => !p)}
+                    className={`w-12 h-12 rounded-full border flex items-center justify-center overflow-hidden transition-all duration-300 cursor-pointer
+                      group-hover/jelly:scale-110
+                      ${pinned
+                        ? 'border-[#38BDF8] shadow-[0_0_20px_rgba(56,189,248,0.5)]'
+                        : 'border-[#93C5FD]/60 hover:border-[#93C5FD] group-hover/jelly:shadow-[0_0_16px_rgba(147,197,253,0.45)]'
+                      }`}
+                    style={{ background: 'radial-gradient(circle at 40% 35%, #0a2a3a 0%, #041520 55%, #020d18 100%)' }}
+                    aria-label={pinned ? 'Unpin Aquarium' : 'Pin Aquarium'}
+                  >
+                    <img src="/images/kawaii_jellyfish.png" alt="Jellyfish" className="w-full h-full object-cover" />
+                  </button>
+
+                  {/* Aquarium panel: shows on hover OR when pinned */}
+                  <div
+                    className={`absolute left-14 top-1/2 -translate-y-1/2 z-50 w-[340px]
+                      transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]
+                      ${pinned
+                        ? 'opacity-100 translate-x-0 pointer-events-auto'
+                        : 'opacity-0 translate-x-2 pointer-events-none group-hover/jelly:opacity-100 group-hover/jelly:translate-x-0'
+                      }`}
+                  >
+                    <div className="relative rounded-[28px] border-2 border-[#38BDF8] bg-[#050d1a]/80 backdrop-blur-2xl shadow-[0_0_40px_rgba(56,189,248,0.15),inset_0_0_60px_rgba(0,20,50,0.6)] overflow-hidden">
+                      {/* Diorama image */}
+                      <div className="relative">
+                        <img
+                          src="/images/deep_sea_diorama.png"
+                          alt="Deep Sea Diorama"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#050d1a]/60 via-transparent to-[#050d1a]/20 pointer-events-none" />
+                      </div>
+
+                      {/* X close button — only visible when pinned */}
+                      {pinned && (
+                        <button
+                          onClick={e => { e.stopPropagation(); setPinned(false); }}
+                          className="absolute top-3 right-3 w-6 h-6 rounded-full bg-black/40 border border-white/20 flex items-center justify-center hover:bg-black/70 hover:border-white/50 transition-all duration-200"
+                          aria-label="Close"
+                        >
+                          <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                            <line x1="1" y1="1" x2="7" y2="7" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                            <line x1="7" y1="1" x2="1" y2="7" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div>
