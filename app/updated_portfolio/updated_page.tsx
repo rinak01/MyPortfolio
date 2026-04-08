@@ -46,10 +46,10 @@ interface GridProject {
 const PROTOTYPE_PROJECTS: GridProject[] = [
   { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale", categories: ["Interface Design", "Multimodal Systems"] },
   { src: "/images/prototypes/peppersghost01.png", alt: "Pepper's Ghost", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion 1", categories: ["Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion 01", categories: ["Tangible Environments"] },
   { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR", categories: ["Spatial Computing", "Interface Design"] },
   { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"] },
-  { src: "/images/prototypes/stopmotion02.png", alt: "Stop Motion 2", categories: ["Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/stopmotion02.png", alt: "Stop Motion 02", categories: ["Rapid Prototyping", "Tangible Environments"] },
   { src: "/images/prototypes/LeARn.png", alt: "LeARn", categories: ["Spatial Computing", "Interface Design"] },
   { src: "/images/prototypes/portalreef 1.png", alt: "Portal Reef", categories: ["Spatial Computing", "Rapid Prototyping", "Interface Design"] },
   { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", categories: ["Tangible Environments"] },
