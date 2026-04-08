@@ -13,7 +13,8 @@ type Category =
   | "Physical Computing"
   | "Multimodal Systems"
   | "Rapid Prototyping"
-  | "Interface Design";
+  | "Interface Design"
+  | "Tangible Environments";
 
 const ALL_CATEGORIES: Category[] = [
   //"Generative AI",
@@ -51,7 +52,7 @@ const PROTOTYPE_PROJECTS: GridProject[] = [
   { src: "/images/prototypes/stopmotion02.png", alt: "Stop Motion 2", categories: ["Rapid Prototyping", "Tangible Environments"] },
   { src: "/images/prototypes/LeARn.png", alt: "LeARn", categories: ["Spatial Computing", "Interface Design"] },
   { src: "/images/prototypes/portalreef 1.png", alt: "Portal Reef", categories: ["Spatial Computing", "Rapid Prototyping", "Interface Design"] },
-  { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", categories: ["Interface Design", "Tangible Environments"] },
+  { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", categories: ["Tangible Environments"] },
 ];
 
 const ARVR_PROJECTS: GridProject[] = [

@@ -18,10 +18,10 @@ type Category =
 
 const ALL_CATEGORIES: Category[] = [
   "Multimodal Systems",
+  "Interface Design",
   "Spatial Computing",
   "Physical Computing",
   "Rapid Prototyping",
-  "Interface Design",
   "Tangible Environments",
 ];
 
@@ -50,7 +50,7 @@ const PROTOTYPE_ITEMS: GridItem[] = [
   { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale",   tag: "Interactive · XR",       label: "Responsive Tale",    desc: "Adaptive storytelling interface reacting to reader behavior",         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems"] },
   { src: "/images/prototypes/peppersghost01.png",   alt: "Pepper's Ghost",   tag: "Spatial · Illusion",    label: "Pepper's Ghost",    desc: "Holographic display using classic stage illusion technique",          colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
   { src: "/images/prototypes/flexvr 1.png",         alt: "FlexVR",           tag: "XR · Wearable",         label: "FlexVR",            desc: "Flexible VR interface that adapts to body movement",                 colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
-  { src: "/images/prototypes/emmasjellyfish01 1.png",alt: "Emma's Jellyfish", tag: "Interactive · Bio",     label: "Emma's Jellyfish",  desc: "Bioluminescent jellyfish environment responding to gesture",         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping"] },
+  { src: "/images/prototypes/emmasjellyfish01 1.png",alt: "Emma's Jellyfish", tag: "Interactive · Bio",     label: "Emma's Jellyfish",  desc: "Bioluminescent jellyfish environment responding to gesture",         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design"] },
   { src: "/images/prototypes/LeARn.png",            alt: "LeARn",            tag: "AR · Education",        label: "LeARn",             desc: "Augmented reality learning environment for spatial comprehension",   colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
   { src: "/images/prototypes/stopmotion02.png",     alt: "Stop Motion 02",   tag: "Physical · Animation",  label: "Stop Motion 02",    desc: "Stop motion study with extended material and texture exploration",  colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Physical Computing", "Tangible Environments"] },
   { src: "/images/prototypes/cmupopup 1.png",       alt: "CMU Popup",        tag: "Installation",          label: "CMU Popup",         desc: "Pop-up exhibition experience designed for CMU campus",              colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Rapid Prototyping", "Tangible Environments"] },
