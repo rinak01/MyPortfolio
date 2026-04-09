@@ -191,6 +191,7 @@ const NAV_ITEMS = [
   { id: "project-01", label: "CMU Proactive Agent" },
   { id: "project-02", label: "AI Trend Forecasting" },
   { id: "project-03", label: "Emma's Tree" },
+  { id: "selected-projects", label: "Selected Projects" },
   { id: "project-meet", label: "Nice to Meet You" },
 ];
 
@@ -378,7 +379,7 @@ export default function Var7ClassyAuto() {
         <div className="w-full h-[1px] bg-white/5" />
 
         {/* ─── Project 01: SmaSH Lab | Proactive Agent ─── */}
-        <motion.article id="project-02" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
+        <motion.article id="project-01" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
             {/* Left — imagery (reversed column) */}
@@ -536,7 +537,7 @@ export default function Var7ClassyAuto() {
         <div className="w-full h-[1px] bg-white/5" />
 
         {/* ─── Project 02: AI Trend Forecasting ─── */}
-        <motion.article id="project-03" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
+        <motion.article id="project-02" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start justify-center">
 
             {/* Left — meta + content */}
@@ -642,7 +643,7 @@ export default function Var7ClassyAuto() {
         <div className="w-full h-[1px] bg-white/5" />
 
         {/* ─── Project 03: Emma's Tree ─── */}
-        <motion.article id="project-04" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
+        <motion.article id="project-03" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
             {/* Left — imagery */}
@@ -782,7 +783,7 @@ export default function Var7ClassyAuto() {
         </div>
 
         {/* ─── Selected Projects ─── */}
-        <section className="pt-12">
+        <section id="selected-projects" className="pt-12">
           <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
             Selected Projects
           </h2>
