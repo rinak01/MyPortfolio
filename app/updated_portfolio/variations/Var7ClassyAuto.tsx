@@ -65,7 +65,7 @@ const ALL_PROJECTS: GridItem[] = [
   { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall", tag: "3D Model · Architecture", label: "Study Hall", desc: "Collaborative virtual study hall with adaptive ambient zones", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
   { src: "/images/ARVR/trees01 1.png", alt: "Trees 01", tag: "Augmented Reality · Nature", label: "Trees 01", desc: "Forest density study exploring depth and spatial perception", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
   { src: "/images/ARVR/flowers 1.png", alt: "Flowers", tag: "Augmented Reality · Nature", label: "Flowers", desc: "Botanical virtual space with reactive flora and ambient sound", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/trees02 1.png", alt: "Trees 02", tag: "Augmented Reality · Nature", label: "Trees 02", desc: "Evolved canopy composition with dynamic light filtering", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/prototypes/june19th_fragrance.jpg", alt: "Forest Fragrance", tag: "Multimodal · Sensory", label: "Forest Fragrance", desc: "Multimodal sensory experience exploring fragrance interaction", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Multimodal Systems"] },
   { src: "/images/ARVR/forest01 1.png", alt: "Forest", tag: "Virtual Reality · Environment", label: "Forest", desc: "Full immersive forest environment with layered ambient depth", colSpan: 2, aspectClass: "aspect-[16/9]", scaleClass: "scale-[1.3] group-hover:scale-[1.32]", categories: ["Spatial Computing"] },
 ];
 
