@@ -47,15 +47,15 @@ interface GridItem {
 }
 
 const PROTOTYPE_ITEMS: GridItem[] = [
-  { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale",   tag: "Interactive · XR",       label: "Responsive Tale",    desc: "Adaptive storytelling interface reacting to reader behavior",         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems"] },
-  { src: "/images/prototypes/peppersghost01.png",   alt: "Pepper's Ghost",   tag: "Spatial · Illusion",    label: "Pepper's Ghost",    desc: "Holographic display using classic stage illusion technique",          colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/flexvr 1.png",         alt: "FlexVR",           tag: "XR · Wearable",         label: "FlexVR",            desc: "Flexible VR interface that adapts to body movement",                 colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
-  { src: "/images/prototypes/emmasjellyfish01 1.png",alt: "Emma's Jellyfish", tag: "Interactive · Bio",     label: "Emma's Jellyfish",  desc: "Bioluminescent jellyfish environment responding to gesture",         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design"] },
+  { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale",   tag: "Interactive · XR",       label: "Responsive Tale",    desc: "Adaptive storytelling interface reacting to reader behavior",         colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Physical Computing"] },
+  { src: "/images/prototypes/peppersghost01.png",   alt: "Pepper's Ghost",   tag: "Spatial · Illusion",    label: "Pepper's Ghost",    desc: "Holographic display using classic stage illusion technique",          colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/flexvr 1.png",         alt: "FlexVR",           tag: "XR · Wearable",         label: "FlexVR",            desc: "Flexible VR interface that adapts to body movement",                 colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Physical Computing"] },
+  { src: "/images/prototypes/emmasjellyfish01 1.png",alt: "Emma's Jellyfish", tag: "Interactive · Bio",     label: "Emma's Jellyfish",  desc: "Bioluminescent jellyfish environment responding to gesture",         colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"] },
   { src: "/images/prototypes/LeARn.png",            alt: "LeARn",            tag: "AR · Education",        label: "LeARn",             desc: "Augmented reality learning environment for spatial comprehension",   colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
-  { src: "/images/prototypes/stopmotion02.png",     alt: "Stop Motion 02",   tag: "Physical · Animation",  label: "Stop Motion 02",    desc: "Stop motion study with extended material and texture exploration",  colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Physical Computing", "Tangible Environments"] },
+  { src: "/images/prototypes/stopmotion02.png",     alt: "Stop Motion 02",   tag: "Physical · Animation",  label: "Stop Motion 02",    desc: "Stop motion study with extended material and texture exploration",  colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
   { src: "/images/prototypes/cmupopup 1.png",       alt: "CMU Popup",        tag: "Installation",          label: "CMU Popup",         desc: "Pop-up exhibition experience designed for CMU campus",              colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/portalreef 1.png",     alt: "Portal Reef",      tag: "XR · Environment",      label: "Portal Reef",       desc: "Immersive underwater portal experience in mixed reality",           colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping"] },
-  { src: "/images/prototypes/stopmotion01.png",     alt: "Stop Motion",      tag: "Physical · Animation",  label: "Stop Motion",       desc: "Frame-by-frame physical animation exploring material storytelling", colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Physical Computing", "Tangible Environments"] },
+  { src: "/images/prototypes/portalreef 1.png",     alt: "Portal Reef",      tag: "XR · Environment",      label: "Portal Reef",       desc: "Immersive underwater portal experience in mixed reality",           colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Physical Computing"] },
+  { src: "/images/prototypes/stopmotion01.png",     alt: "Stop Motion",      tag: "Physical · Animation",  label: "Stop Motion",       desc: "Frame-by-frame physical animation exploring material storytelling", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
 ];
 
 const ARVR_ITEMS: GridItem[] = [
@@ -114,9 +114,13 @@ function FilteredThumb({
   activeFilter: Category | null;
   outfitClass: string;
 }) {
-  const isMatch = activeFilter === null || item.categories.includes(activeFilter);
-  const isDimmed = activeFilter !== null && !isMatch;
-  const noFilter = activeFilter === null;
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Color logic:
+  // - Filter active → always full color (only matches are rendered)
+  // - No filter + hovering → full color
+  // - No filter + not hovering → grayscale
+  const inColor = activeFilter !== null || isHovered;
 
   return (
     <motion.div
@@ -125,24 +129,17 @@ function FilteredThumb({
       viewport={{ once: true }}
       variants={slowFade}
       className={`${COL_SPAN_CLASS[item.colSpan ?? 3]} ${item.aspectClass ?? "aspect-[16/9]"} bg-[#141414] overflow-hidden rounded-sm group relative`}
-      style={{
-        transition: "opacity 400ms ease, transform 400ms ease",
-        opacity: isDimmed ? 0.3 : 1,
-      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <img
+      <motion.img
         src={item.src}
         alt={item.alt}
-        className={`w-full h-full object-cover transition-all duration-700 ease-out ${item.scaleClass ?? ""}`}
-        style={{
-          filter: noFilter
-            ? "grayscale(100%) brightness(0.7)"
-            : isMatch
-            ? "grayscale(0%) brightness(1)"
-            : "grayscale(100%) brightness(0.5)",
-          transform: isMatch && !noFilter ? "scale(1.02)" : undefined,
-          transition: "filter 500ms ease, transform 500ms ease, opacity 500ms ease",
+        className={`w-full h-full object-cover ${item.scaleClass ?? ""}`}
+        animate={{
+          filter: inColor ? "grayscale(0%) brightness(1)" : "grayscale(100%) brightness(0.7)",
         }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
       />
       {/* Hover overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
@@ -791,7 +788,10 @@ export default function Var7ClassyAuto() {
             Physical &amp; Digital Prototypes
           </h2>
           <div className="grid grid-cols-6 gap-2">
-            {PROTOTYPE_ITEMS.map((item) => (
+            {(activeFilter === null
+              ? PROTOTYPE_ITEMS
+              : PROTOTYPE_ITEMS.filter(item => item.categories.includes(activeFilter))
+            ).map((item) => (
               <FilteredThumb key={item.alt} item={item} activeFilter={activeFilter} outfitClass={outfit.className} />
             ))}
           </div>
@@ -805,7 +805,10 @@ export default function Var7ClassyAuto() {
             Spatial Environments
           </h2>
           <div className="grid grid-cols-6 gap-2">
-            {ARVR_ITEMS.map((item) => (
+            {(activeFilter === null
+              ? ARVR_ITEMS
+              : ARVR_ITEMS.filter(item => item.categories.includes(activeFilter))
+            ).map((item) => (
               <FilteredThumb key={item.alt} item={item} activeFilter={activeFilter} outfitClass={outfit.className} />
             ))}
           </div>
