@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import Var7ClassyAuto from "./updated_portfolio/variations/Var7ClassyAuto";
 
 export default function RootPage() {
-    redirect("/updated_portfolio");
+  return <Var7ClassyAuto />;
 }
