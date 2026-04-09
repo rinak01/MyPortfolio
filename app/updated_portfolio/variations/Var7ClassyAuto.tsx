@@ -26,12 +26,12 @@ const ALL_CATEGORIES: Category[] = [
 ];
 
 const CAT_STYLE: Record<Category, { dot: string; active: string; text: string }> = {
-  "Spatial Computing":    { dot: "#60a5fa", active: "rgba(59,130,246,0.18)",   text: "#93c5fd" },
-  "Physical Computing":   { dot: "#34d399", active: "rgba(16,185,129,0.18)",   text: "#6ee7b7" },
-  "Multimodal Systems":   { dot: "#fbbf24", active: "rgba(245,158,11,0.18)",   text: "#fde68a" },
-  "Rapid Prototyping":    { dot: "#f87171", active: "rgba(239,68,68,0.18)",    text: "#fca5a5" },
-  "Interface Design":     { dot: "#f472b6", active: "rgba(236,72,153,0.18)",   text: "#f9a8d4" },
-  "Tangible Environments":{ dot: "#d97706", active: "rgba(180,110,30,0.20)",   text: "#fcd34d" },
+  "Spatial Computing": { dot: "#60a5fa", active: "rgba(59,130,246,0.18)", text: "#93c5fd" },
+  "Physical Computing": { dot: "#34d399", active: "rgba(16,185,129,0.18)", text: "#6ee7b7" },
+  "Multimodal Systems": { dot: "#fbbf24", active: "rgba(245,158,11,0.18)", text: "#fde68a" },
+  "Rapid Prototyping": { dot: "#f87171", active: "rgba(239,68,68,0.18)", text: "#fca5a5" },
+  "Interface Design": { dot: "#f472b6", active: "rgba(236,72,153,0.18)", text: "#f9a8d4" },
+  "Tangible Environments": { dot: "#d97706", active: "rgba(180,110,30,0.20)", text: "#fcd34d" },
 };
 
 interface GridItem {
@@ -46,28 +46,27 @@ interface GridItem {
   scaleClass?: string;
 }
 
-const PROTOTYPE_ITEMS: GridItem[] = [
-  { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale",   tag: "Interactive · XR",       label: "Responsive Tale",    desc: "Adaptive storytelling interface reacting to reader behavior",         colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Physical Computing"] },
-  { src: "/images/prototypes/peppersghost01.png",   alt: "Pepper's Ghost",   tag: "Spatial · Illusion",    label: "Pepper's Ghost",    desc: "Holographic display using classic stage illusion technique",          colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/flexvr 1.png",         alt: "FlexVR",           tag: "XR · Wearable",         label: "FlexVR",            desc: "Flexible VR interface that adapts to body movement",                 colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Physical Computing"] },
-  { src: "/images/prototypes/emmasjellyfish01 1.png",alt: "Emma's Jellyfish", tag: "Interactive · Bio",     label: "Emma's Jellyfish",  desc: "Bioluminescent jellyfish environment responding to gesture",         colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"] },
-  { src: "/images/prototypes/LeARn.png",            alt: "LeARn",            tag: "AR · Education",        label: "LeARn",             desc: "Augmented reality learning environment for spatial comprehension",   colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
-  { src: "/images/prototypes/stopmotion02.png",     alt: "Stop Motion 02",   tag: "Physical · Animation",  label: "Stop Motion 02",    desc: "Stop motion study with extended material and texture exploration",  colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/cmupopup 1.png",       alt: "CMU Popup",        tag: "Installation",          label: "CMU Popup",         desc: "Pop-up exhibition experience designed for CMU campus",              colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/portalreef 1.png",     alt: "Portal Reef",      tag: "XR · Environment",      label: "Portal Reef",       desc: "Immersive underwater portal experience in mixed reality",           colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Physical Computing"] },
-  { src: "/images/prototypes/stopmotion01.png",     alt: "Stop Motion",      tag: "Physical · Animation",  label: "Stop Motion",       desc: "Frame-by-frame physical animation exploring material storytelling", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
-];
-
-const ARVR_ITEMS: GridItem[] = [
-  { src: "/images/ARVR/library.png",        alt: "Library VR",      tag: "VR · Environment",           label: "Library",          desc: "Immersive virtual library space designed for focused study",                       colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design"] },
-  { src: "/images/ARVR/RHcloud 1.png",      alt: "RH Cloud",        tag: "Responsive · Atmospheric",   label: "RH Cloud",         desc: "Volumetric cloud environment exploring presence and scale",                        colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/ARVR/pianoroom02 1.png",  alt: "Music Box Room",  tag: "Virtual Reality · Acoustic", label: "Music Box Room",   desc: "Second iteration with updated lighting and material studies",                     colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/pianoroom 1.png",    alt: "Piano Room",      tag: "Virtual Reality · Acoustic", label: "Piano Room",       desc: "Intimate virtual music room built around spatial audio",                          colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/studyhall 1.png",    alt: "Study Hall",      tag: "3D Model · Architecture",    label: "Study Hall",       desc: "Collaborative virtual study hall with adaptive ambient zones",                    colSpan: 2, aspectClass: "aspect-[4/3]",  categories: ["Spatial Computing", "Interface Design"] },
-  { src: "/images/ARVR/trees01 1.png",      alt: "Trees 01",        tag: "Augmented Reality · Nature", label: "Trees 01",         desc: "Forest density study exploring depth and spatial perception",                     colSpan: 2, aspectClass: "aspect-[4/3]",  categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/flowers 1.png",      alt: "Flowers",         tag: "Augmented Reality · Nature", label: "Flowers",          desc: "Botanical virtual space with reactive flora and ambient sound",                   colSpan: 2, aspectClass: "aspect-[4/3]",  categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/trees02 1.png",      alt: "Trees 02",        tag: "Augmented Reality · Nature", label: "Trees 02",         desc: "Evolved canopy composition with dynamic light filtering",                         colSpan: 3, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/forest01 1.png",     alt: "Forest",          tag: "Virtual Reality · Environment",label: "Forest",          desc: "Full immersive forest environment with layered ambient depth",                    colSpan: 3, aspectClass: "aspect-[16/9]", scaleClass: "scale-[1.3] group-hover:scale-[1.32]", categories: ["Spatial Computing"] },
+const ALL_PROJECTS: GridItem[] = [
+  // Prototypes
+  { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale", tag: "Interactive · XR", label: "Responsive Tale", desc: "Adaptive storytelling interface reacting to reader behavior", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Physical Computing"] },
+  { src: "/images/prototypes/peppersghost01.png", alt: "Pepper's Ghost", tag: "Spatial · Illusion", label: "Pepper's Ghost", desc: "Holographic display using classic stage illusion technique", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR", tag: "XR · Wearable", label: "FlexVR", desc: "Flexible VR interface that adapts to body movement", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Physical Computing", "Rapid Prototyping"] },
+  { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", tag: "Interactive · Bio", label: "Emma's Jellyfish", desc: "Bioluminescent jellyfish environment responding to gesture", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"] },
+  { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education", label: "LeARn", desc: "Augmented reality learning environment for spatial comprehension", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Rapid Prototyping"] },
+  { src: "/images/prototypes/stopmotion02.png", alt: "Stop Motion 02", tag: "Physical · Animation", label: "Stop Motion 02", desc: "Stop motion study with extended material and texture exploration", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", tag: "Installation", label: "CMU Popup", desc: "Pop-up exhibition experience designed for CMU campus", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/portalreef 1.png", alt: "Portal Reef", tag: "XR · Environment", label: "Portal Reef", desc: "Immersive underwater portal experience in mixed reality", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Physical Computing", "Interface Design"] },
+  { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion", tag: "Physical · Animation", label: "Stop Motion", desc: "Frame-by-frame physical animation exploring material storytelling", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
+  // Spatial / ARVR
+  { src: "/images/ARVR/library.png", alt: "Library VR", tag: "VR · Environment", label: "Library", desc: "Immersive virtual library space designed for focused study", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/RHcloud 1.png", alt: "RH Cloud", tag: "Responsive · Atmospheric", label: "RH Cloud", desc: "Volumetric cloud environment exploring presence and scale", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/ARVR/pianoroom02 1.png", alt: "Music Box Room", tag: "Virtual Reality · Acoustic", label: "Music Box Room", desc: "Second iteration with updated lighting and material studies", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/pianoroom 1.png", alt: "Piano Room", tag: "Virtual Reality · Acoustic", label: "Piano Room", desc: "Intimate virtual music room built around spatial audio", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall", tag: "3D Model · Architecture", label: "Study Hall", desc: "Collaborative virtual study hall with adaptive ambient zones", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/trees01 1.png", alt: "Trees 01", tag: "Augmented Reality · Nature", label: "Trees 01", desc: "Forest density study exploring depth and spatial perception", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/flowers 1.png", alt: "Flowers", tag: "Augmented Reality · Nature", label: "Flowers", desc: "Botanical virtual space with reactive flora and ambient sound", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/trees02 1.png", alt: "Trees 02", tag: "Augmented Reality · Nature", label: "Trees 02", desc: "Evolved canopy composition with dynamic light filtering", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/forest01 1.png", alt: "Forest", tag: "Virtual Reality · Environment", label: "Forest", desc: "Full immersive forest environment with layered ambient depth", colSpan: 2, aspectClass: "aspect-[16/9]", scaleClass: "scale-[1.3] group-hover:scale-[1.32]", categories: ["Spatial Computing"] },
 ];
 
 // ─── Static Tailwind col-span map (dynamic strings get purged) ───────────────
@@ -782,32 +781,15 @@ export default function Var7ClassyAuto() {
 
         </div>
 
-        {/* ─── Physical & Digital Prototypes ─── */}
+        {/* ─── Selected Projects ─── */}
         <section className="pt-12">
           <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
-            Physical &amp; Digital Prototypes
+            Selected Projects
           </h2>
           <div className="grid grid-cols-6 gap-2">
             {(activeFilter === null
-              ? PROTOTYPE_ITEMS
-              : PROTOTYPE_ITEMS.filter(item => item.categories.includes(activeFilter))
-            ).map((item) => (
-              <FilteredThumb key={item.alt} item={item} activeFilter={activeFilter} outfitClass={outfit.className} />
-            ))}
-          </div>
-        </section>
-
-        <div className="w-full h-[1px] bg-white/5" />
-
-        {/* ─── Spatial Environments (ARVR) ─── */}
-        <section className="pt-4">
-          <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
-            Spatial Environments
-          </h2>
-          <div className="grid grid-cols-6 gap-2">
-            {(activeFilter === null
-              ? ARVR_ITEMS
-              : ARVR_ITEMS.filter(item => item.categories.includes(activeFilter))
+              ? ALL_PROJECTS
+              : ALL_PROJECTS.filter(item => item.categories.includes(activeFilter))
             ).map((item) => (
               <FilteredThumb key={item.alt} item={item} activeFilter={activeFilter} outfitClass={outfit.className} />
             ))}
