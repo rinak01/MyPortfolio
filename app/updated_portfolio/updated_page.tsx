@@ -396,19 +396,20 @@ export default function Portfolio() {
                   className="w-full h-auto"
                 />
               </div>
-            </div>
+            </div>/login
           </div>
         </article>
 
-        {/* Project 02 - AI Trend Forecasting Plugin */}
+        {/* Project 02 - Responsive Tale */}
         <article className="mb-24">
           {/* Header */}
           <div className="flex items-start gap-[8px] mb-8">
             <span className="text-[55px] font-light text-zinc-300 -mt-[10px]">02</span>
             <div>
-              <h3 className="text-[26px] font-medium text-zinc-900">AI Trend Forecasting Tool</h3>
+              <h3 className="text-[26px] font-medium text-zinc-900">Multimodal Augmented Reality Book</h3>
               <p className="text-[15px] text-zinc-500 mt-[-1px]">
-                2024 January - 2024 August &nbsp;·&nbsp; <span className="font-semibold">Carnegie Mellon University | Surefront</span> &nbsp;·&nbsp; UX Researcher &amp; Developer
+                2023 January &nbsp;·&nbsp; <span className="font-semibold">Winner of 2023 MIT Reality Hack, Hardware Hack Impact&nbsp;·&nbsp; Interaction Designer
+                </span>
               </p>
             </div>
           </div>
@@ -419,15 +420,15 @@ export default function Portfolio() {
             <div className="space-y-4">
               <div className="rounded-lg overflow-hidden border border-zinc-100 w-[95%]">
                 <img
-                  src="/images/02/trend_forecasting_dashboard 1.png"
-                  alt="AI Trend Forecasting Plugin dashboard"
+                  src="/images/02/RT_product01.jpg"
+                  alt="Multimodal Augmented Reality Book"
                   className="w-full h-auto"
                 />
               </div>
               <div className="rounded-lg overflow-hidden w-[102%] -ml-[26px]">
                 <img
-                  src="/images/02/SurefrontInterviews.png"
-                  alt="Surefront Interviews"
+                  src="/images/02/RT_product02.jpg"
+                  alt="Multimodal Augmented Reality Book02"
                   className="w-full h-auto"
                 />
               </div>
@@ -478,23 +479,49 @@ export default function Portfolio() {
 
           {/* Top Row - Emma's Tree Images + Overview/Key Highlights/Tools */}
           <div className="grid grid-cols-1 md:grid-cols-[45%_55%] gap-8 mb-8">
-            {/* Left - Vertical Image Stack */}
-            <div className="space-y-4">
-              <img
-                src="/images/03/emmastree.png"
-                alt="Emma's Tree - 3D printed tree sculpture"
-                className="w-full h-auto rounded-lg"
-              />
-              <img
-                src="/images/03/treesystem.png"
-                alt="Tree system diagram - Photosynthesis, Flower Blooming, Water the Plant"
-                className="w-full h-auto rounded-lg"
-              />
-              <img
-                src="/images/03/tempchange.png"
-                alt="Filament temperature change diagram"
-                className="w-[85%] h-auto rounded-lg mx-auto"
-              />
+            {/* Left - Visual Assets Gallery */}
+            <div className="flex flex-col gap-5">
+              {/* Main Hero Photo */}
+              <div className="rounded-xl overflow-hidden border border-zinc-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] bg-white ring-1 ring-black/5">
+                <img
+                  src="/images/03/emmastree.png"
+                  alt="Emma's Tree - 3D printed tree sculpture"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+
+              {/* Diagrams/Process Container */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Diagram 1: Tree System */}
+                <div className="flex flex-col border border-zinc-200 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] rounded-xl bg-white p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                    <span className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">System Architecture</span>
+                  </div>
+                  <div className="flex-1 flex items-center justify-center bg-[#FAFAFA] rounded-lg border border-zinc-100/60 p-2">
+                    <img
+                      src="/images/03/treesystem.png"
+                      alt="Tree system diagram - Photosynthesis, Flower Blooming, Water the Plant"
+                      className="w-full h-auto object-contain mix-blend-darken"
+                    />
+                  </div>
+                </div>
+
+                {/* Diagram 2: Temp Change */}
+                <div className="flex flex-col border border-zinc-200 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] rounded-xl bg-white p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                    <span className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">Thermal Response</span>
+                  </div>
+                  <div className="flex-1 flex items-center justify-center bg-[#FAFAFA] rounded-lg border border-zinc-100/60 p-5">
+                    <img
+                      src="/images/03/tempchange.png"
+                      alt="Filament temperature change diagram"
+                      className="w-[95%] h-auto object-contain mix-blend-darken"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Right - Overview, Key Highlights, Tools */}
