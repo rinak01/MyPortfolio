@@ -334,7 +334,7 @@ export default function Var7ClassyAuto() {
                       </li>
                       <li className="flex gap-3">
                         <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Co-authored a technical whitepaper on "Adaptive HMI" for automotive production, bridging the gap between experimental generative design and safety-critical dashboard implementation.</span>
+                        <span>Developed a proof-of-concept for Adaptive HMI in automotive production, connecting generative design exploration with safety-critical dashboard requirements.</span>
                       </li>
                     </ul>
                   </div>
