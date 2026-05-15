@@ -284,8 +284,6 @@ export default function Var7ClassyAuto() {
             </p>
           </div>
           <div className="text-right text-sm leading-relaxed text-[#A3A3A3]">
-            {/* <p>Carnegie Mellon University (HCI)</p>
-            <p>Prev. BMW Group Technology Office</p> */}
           </div>
         </motion.div>
         <motion.div initial="hidden" animate="visible" variants={lineReveal}
@@ -314,38 +312,39 @@ export default function Var7ClassyAuto() {
                 </p>
 
                 <div className="space-y-6 text-[15px] text-[#A3A3A3] leading-relaxed">
-                  {/* Overview */}
                   <div>
                     <SectionLabel>Overview</SectionLabel>
                     <p>
-                      Developed an adaptive generative UI system for BMW vehicles that dynamically adjusts interface elements based on driver behavior, environmental conditions, and personal preferences.
+                      Developed a context-aware UI framework that utilizes generative models to synthesize interface components in real-time. By analyzing driver telemetry, cabin state, and environmental context, the system provides proactive information hierarchy, minimizing cognitive load while enhancing vehicle interaction.
                     </p>
                   </div>
 
                   <Hairline />
 
-                  {/* Key Contributions */}
                   <div>
                     <SectionLabel>Key Contributions</SectionLabel>
                     <ul className="space-y-3">
                       <li className="flex gap-3">
                         <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Developed a robust React-based orchestration layer to synchronize real-time telemetry between asynchronous sub-agents and the end-user interface, ensuring seamless human-machine interaction.</span>
+                        <span>Designed and implemented a modular HMI architecture that decouples UI layout from underlying data streams, enabling seamless adaptation to varying driver contexts.</span>
                       </li>
                       <li className="flex gap-3">
                         <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Engineered a modular multi-agent architecture that delegates intensive rendering tasks to specialized sub-agents, eliminating synchronous execution stalls and ensuring high-fidelity, fluid interface responsiveness.</span>
+                        <span>Developed a React-based orchestration layer that synchronizes generative model outputs with high-fidelity vehicle displays, ensuring sub-50ms latency for interface transitions.</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span>Co-authored a technical whitepaper on "Adaptive HMI" for automotive production, bridging the gap between experimental generative design and safety-critical dashboard implementation.</span>
                       </li>
                     </ul>
                   </div>
 
                   <Hairline />
 
-                  {/* Topics Researched */}
                   <div>
-                    <SectionLabel>Topics Researched</SectionLabel>
+                    <SectionLabel>Technologies</SectionLabel>
                     <div className="flex flex-wrap gap-2">
-                      {["Generative AI", "User Interface Design", "System Design", "LLM"].map(t => (
+                      {["React", "Three.js", "Generative AI", "Automotive UI"].map(t => (
                         <span key={t} className="text-[11px] uppercase tracking-widest text-[#A3A3A3] border border-white/20 px-3 py-1 rounded-sm">
                           {t}
                         </span>
@@ -371,6 +370,302 @@ export default function Var7ClassyAuto() {
                 </div>
               </div>
 
+            </div>
+
+          </div>
+
+          {/* ── Expanded case-study content ── */}
+          <div className="mt-20 space-y-20">
+
+            {/* Project Brief */}
+            {/* <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              <div className="lg:col-span-4">
+                <SectionLabel>Project Brief</SectionLabel>
+                <div className="space-y-2 text-[13px] text-[#A3A3A3]">
+                  <p><span className="text-[#C9B49A]">Project</span> — Adaptive In-Vehicle AI Interface</p>
+                  <p><span className="text-[#C9B49A]">Timeline</span> — June – December 2025</p>
+                  <p><span className="text-[#C9B49A]">Role</span> — UX Research · Interaction Design · Prototyping</p>
+                  <p><span className="text-[#C9B49A]">Unit</span> — BMW Group · ZI-14 · Automotive HMI</p>
+                </div>
+              </div>
+              <div className="lg:col-span-8">
+                <p className="text-[15px] text-[#A3A3A3] leading-relaxed mb-5">
+                  In-vehicle interfaces are static. They present information uniformly regardless of who is driving, what conditions exist outside, or what cognitive demands the driver is already managing.
+                </p>
+                <div className="border-l-2 border-[#B39D82]/40 pl-5 py-1">
+                  <p className="text-[15px] text-[#EAEAEA] leading-relaxed italic">
+                    Design a generative UI system for the BMW X5 that dynamically composes its own interface in response to driver state, environment, and task context — reducing cognitive load while surfacing the right information at the right moment.
+                  </p>
+                </div>
+              </div>
+            </div> */}
+
+
+            <Hairline />
+
+            {/* Research & Design Timeline */}
+            {/* <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              <div className="lg:col-span-4">
+                <SectionLabel>Research &amp; Design Timeline</SectionLabel>
+                <p className="text-[13px] text-[#A3A3A3] leading-relaxed">
+                  Work ran across two parallel tracks: <span className="text-[#EAEAEA]">ORPHEO</span> (interaction design, generative UI architecture, high-fidelity prototyping) and <span className="text-[#EAEAEA]">ALPHA</span> (physiological sensor integration, research framework design, usability testing and data collection).
+                </p>
+              </div>
+              <div className="lg:col-span-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {[
+                    { month: "Jun", phase: "Onboarding & Discovery" },
+                    { month: "Jul", phase: "Ideation" },
+                    { month: "Aug", phase: "Concept Pitch + Sensors" },
+                    { month: "Sep", phase: "Research Framework" },
+                    { month: "Oct", phase: "Usability Testing + Iteration" },
+                    { month: "Nov", phase: "Refinement + Testing" },
+                    { month: "Dec", phase: "Final Design Delivery" },
+                  ].map(({ month, phase }) => (
+                    <div key={month} className="bg-[#141414] rounded-sm px-4 py-3 border border-white/5">
+                      <span className="block text-[11px] uppercase tracking-widest text-[#C9B49A] mb-1">{month}</span>
+                      <span className="text-[13px] text-[#A3A3A3]">{phase}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div> */}
+
+
+            <Hairline />
+
+            {/* Skills Applied */}
+            <div>
+              <SectionLabel>Skills Applied</SectionLabel>
+              <div className="overflow-hidden rounded-sm border border-white/8">
+                {[
+                  { area: "UX Research", detail: "Biometric data collection, scenario-based usability testing, iterative framework design, synthesis into interaction decisions" },
+                  { area: "Interaction Design", detail: "Generative UI architecture, context gating, glance-budget optimization, adaptive mode design, high-fidelity Figma prototyping" },
+                  { area: "Systems Thinking", detail: "Multi-agent orchestration design, cross-domain context modeling, real-time layout logic, sensor-to-UI decision mapping" },
+                  { area: "Cross-functional", detail: "Collaborated across engineering, research, and product; translated technical sensor outputs into UX requirements and design constraints" },
+                ].map(({ area, detail }, i) => (
+                  <div key={area} className={`grid grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
+                    <div className="col-span-3 p-4 border-r border-white/5">
+                      <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{area}</span>
+                    </div>
+                    <div className="col-span-9 p-4">
+                      <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{detail}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Hairline />
+
+            {/* Research Approach */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              <div className="lg:col-span-4">
+                <SectionLabel>Research Approach</SectionLabel>
+                <p className="text-[13px] text-[#A3A3A3] leading-relaxed">
+                  Grounded in two complementary methods: physiological measurement to capture what drivers cannot self-report, and structured usability testing to observe how they interact with dynamic interfaces.
+                </p>
+              </div>
+              <div className="lg:col-span-8 space-y-5">
+                <div className="bg-[#141414] rounded-sm p-6 border border-white/5">
+                  <p className="text-[12px] uppercase tracking-widest text-[#C9B49A] mb-3">Physiological Data Collection</p>
+                  <p className="text-[14px] text-[#A3A3A3] leading-relaxed mb-4">
+                    Integrated a multi-sensor pipeline — PSI, PPG, heart rate, and CRM measurements — to capture driver state data that feeds directly into the UI&apos;s context gating logic. Design decisions grounded in measurable cognitive and physiological signals rather than self-reported preference alone.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {["Biometric data capture", "CSV export pipeline", "CRM measurements", "PPG + HR monitoring"].map(m => (
+                      <span key={m} className="text-[10px] uppercase tracking-widest text-[#A3A3A3] border border-white/15 px-2 py-0.5 rounded-sm">{m}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-[#141414] rounded-sm p-6 border border-white/5">
+                  <p className="text-[12px] uppercase tracking-widest text-[#C9B49A] mb-3">Usability Testing Framework</p>
+                  <p className="text-[14px] text-[#A3A3A3] leading-relaxed mb-4">
+                    Designed a structured testing framework to evaluate how drivers interact with dynamically generated interfaces under varying scenario conditions. Testing ran Oct–Nov, with findings directly informing iteration on the isochrone GenUI concept and real-time layout logic.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {["Scenario-based task testing", "Observational sessions", "Iterative prototype refinement", "Data collection"].map(m => (
+                      <span key={m} className="text-[10px] uppercase tracking-widest text-[#A3A3A3] border border-white/15 px-2 py-0.5 rounded-sm">{m}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Hairline />
+
+            {/* Key Design Decisions */}
+            <div>
+              <SectionLabel>Key Design Decisions</SectionLabel>
+              <p className="text-[14px] text-[#A3A3A3] mb-8">Three principles shaped every design decision across the project.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { title: "Surface, don\u2019t bury", body: "Information the driver needs appears without navigation. The interface assembles itself around context \u2014 snowy roads, an incoming call, a known route \u2014 rather than waiting for the driver to request it." },
+                  { title: "Minimum viable glance", body: "Every screen evaluated against a glance budget. Safety-critical data chunked into scannable modules readable in under two seconds without sustained visual attention." },
+                  { title: "State over preference", body: "Driver state data \u2014 fatigue signals, cognitive load, speed \u2014 gates what is shown and how. Comfort controls auto-adjust. Map overlays appear and collapse based on current capacity, not just settings." },
+                  { title: "Context continuity", body: "The system maintains awareness across modes \u2014 navigation, comfort, media, vehicle health \u2014 orchestrating agents so decisions in one domain inform layout choices in another." },
+                ].map(({ title, body }) => (
+                  <div key={title} className="bg-[#141414] rounded-sm p-6 border border-white/5 flex flex-col gap-3">
+                    <span className="text-[#EAEAEA] text-[13px] font-medium">{title}</span>
+                    <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{body}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Hairline />
+
+            {/* Interaction Model */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              <div className="lg:col-span-4">
+                <SectionLabel>Interaction Model</SectionLabel>
+                <p className="text-[14px] text-[#A3A3A3] leading-relaxed">
+                  Rather than voice as a shortcut to a fixed menu, voice and sensor input become <span className="text-[#EAEAEA]">generators of new interface components</span>. The driver does not navigate \u2014 the interface responds.
+                </p>
+              </div>
+              <div className="lg:col-span-8">
+                <div className="bg-[#141414] rounded-sm p-6 border border-white/5 mb-5 font-mono text-[13px] text-[#A3A3A3] leading-loose">
+                  <p className="text-[#C9B49A]">Driver input (voice / sensor)</p>
+                  <p className="pl-4">\u2192 Intent parsing</p>
+                  <p className="pl-4">\u2192 UI generation</p>
+                  <p className="pl-4">\u2192 Layout orchestration</p>
+                  <p className="pl-4 text-[#EAEAEA]">\u2192 Rendered interface</p>
+                </div>
+                <div className="border-l-2 border-[#B39D82]/30 pl-5">
+                  <p className="text-[13px] text-[#A3A3A3] leading-relaxed italic">
+                    Example: the driver says &ldquo;Show me roads to avoid&rdquo; during a snowstorm. The system generates a contextual map overlay with icy patch markers, congestion warnings, and a black ice alert \u2014 assembled on demand, dismissed automatically when no longer relevant.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <Hairline />
+
+            {/* High-Fidelity Screens */}
+            <div>
+              <SectionLabel>High-Fidelity Screens</SectionLabel>
+              <p className="text-[14px] text-[#A3A3A3] mb-8 max-w-2xl">
+                All screens designed in Figma and validated against real driving scenarios. Primary test scenario: Kennedy Expressway, Chicago, 32\u00b0F \u2014 high information density, genuine safety stakes, proactive surfacing without driver-initiated navigation.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  { title: "Passenger Comfort Panel", body: "Consolidates passenger identity, dual-zone temperature, seat controls, tire pressure, and range into a single glanceable view. Eliminates multi-step navigation for common comfort adjustments." },
+                  { title: "Danger Zone Map Overlay", body: "Context-generated map layer with icy patch markers, congestion flags, steep incline warnings, and a black ice alert. Auto-surfaces on weather + road condition trigger. Dismissed when conditions clear." },
+                  { title: "Snow Readiness Module", body: "Proactively assembled safety summary: tire pressure status, brake wear, road focus mode confirmation, and heated steering state. Surfaces without being asked." },
+                  { title: "Climate Ring Display", body: "Dual-zone temperature displayed as ambient rings in the instrument cluster. Minimal visual footprint communicates state without diverting sustained attention from the road." },
+                ].map(({ title, body }) => (
+                  <div key={title} className="bg-[#141414] rounded-sm p-6 border border-white/5">
+                    <p className="text-[12px] uppercase tracking-widest text-[#C9B49A] mb-2">{title}</p>
+                    <p className="text-[13px] text-[#A3A3A3] leading-relaxed">{body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Hairline />
+
+            {/* Agent Architecture */}
+            <div>
+              <SectionLabel>Design System Architecture</SectionLabel>
+              <p className="text-[14px] text-[#A3A3A3] mb-6 max-w-2xl">
+                A five-domain agent architecture where each agent owns a discrete area of the driving experience. A central orchestrator determines priority and layout based on live context signals.
+              </p>
+              <div className="overflow-hidden rounded-sm border border-white/8">
+                {[
+                  { agent: "Navigation", detail: "Route and map layer \u2014 routine learning, live traffic, ETA, and proactive POI surfacing based on calendar and habitual patterns." },
+                  { agent: "Comfort", detail: "Climate, seat controls, and cabin environment \u2014 auto-adjusts based on passenger profiles and ambient conditions." },
+                  { agent: "Weather", detail: "Live precipitation radar, road condition prediction, ice and hydroplaning risk, fog detection \u2014 feeds directly into map overlay and alert design." },
+                  { agent: "Media", detail: "Playback, audio zone management, and context-aware suggestions \u2014 attenuates automatically when safety-relevant alerts surface." },
+                  { agent: "Vehicle Health", detail: "Continuous monitoring of tire pressure, oil level, brake fluid and pad wear. Triggers automatic video recording on impact detection. Feeds snow readiness and proactive maintenance surfaces." },
+                ].map(({ agent, detail }, i) => (
+                  <div key={agent} className={`grid grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
+                    <div className="col-span-3 p-4 border-r border-white/5">
+                      <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{agent}</span>
+                    </div>
+                    <div className="col-span-9 p-4">
+                      <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{detail}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {["Reachability", "Passenger", "Road Focus", "Entertainment", "Tutor"].map(mode => (
+                  <span key={mode} className="text-[10px] uppercase tracking-widest text-[#A3A3A3] border border-white/15 px-3 py-1 rounded-sm">{mode} Mode</span>
+                ))}
+              </div>
+            </div>
+
+            <Hairline />
+
+            {/* Industry Exposure */}
+            <div>
+              <SectionLabel>Industry Exposure</SectionLabel>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div className="bg-[#141414] rounded-sm p-6 border border-white/5 space-y-4">
+                  <div>
+                    <p className="text-[#EAEAEA] text-[14px] font-medium mb-0.5">Stanford HAI</p>
+                    <p className="text-[11px] uppercase tracking-widest text-[#C9B49A]">September 2025 · Human-Centered AI Symposium</p>
+                  </div>
+                  <ul className="space-y-2">
+                    {[
+                      "Agents are shifting from features within an interface to the interface layer itself \u2014 validating the GenUI orchestrator approach.",
+                      "Stanford Medicine\u2019s EHR integration showed AI can move fast in high-stakes, regulated environments \u2014 relevant to automotive safety constraints.",
+                      "Haptic and relational modalities are the next frontier for building user trust beyond text \u2014 directly applicable to low-glance HMI design.",
+                    ].map((item, i) => (
+                      <li key={i} className="flex gap-3 text-[13px] text-[#A3A3A3] leading-relaxed list-none">
+                        <span className="text-[#C9B49A] shrink-0 mt-0.5">\u2014</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-[#141414] rounded-sm p-6 border border-white/5 space-y-4">
+                  <div>
+                    <p className="text-[#EAEAEA] text-[14px] font-medium mb-0.5">Google DevFest SV</p>
+                    <p className="text-[11px] uppercase tracking-widest text-[#C9B49A]">November 2025 · Google Developer Groups</p>
+                  </div>
+                  <ul className="space-y-2">
+                    {[
+                      "The four-stage agent lifecycle (Models, Tools, Orchestration, Runtime) gave clearer language for structuring the orchestrator\u2019s decision logic in design documentation.",
+                      "Trajectory scoring and hallucination checks as evaluation metrics informed how I thought about testing GenUI consistency across scenarios.",
+                      "The shift from writing code to orchestrating agent \u2018brains\u2019 mirrors the shift from designing screens to designing decision systems.",
+                    ].map((item, i) => (
+                      <li key={i} className="flex gap-3 text-[13px] text-[#A3A3A3] leading-relaxed list-none">
+                        <span className="text-[#C9B49A] shrink-0 mt-0.5">\u2014</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <Hairline />
+
+            {/* IND / myPPMI Relevance */}
+            <div>
+              <SectionLabel>Why This Work Is Relevant to IND / myPPMI.org</SectionLabel>
+              <p className="text-[14px] text-[#A3A3A3] mb-6 max-w-2xl leading-relaxed">
+                Designing for drivers navigating complex, high-stakes environments and designing for Parkinson&apos;s research participants managing their own health data share the same fundamental challenge: <span className="text-[#EAEAEA]">surface what matters, reduce friction, and never assume a fixed user state.</span>
+              </p>
+              <div className="overflow-hidden rounded-sm border border-white/8">
+                {[
+                  { theme: "Adaptive accessibility", connection: "Designing UI that responds to driver state \u2014 fatigue, cognitive load, motor engagement \u2014 maps directly to designing for PPMI\u2019s participant base: older adults, those with motor symptoms, and users across widely varying digital literacy levels." },
+                  { theme: "Research-to-design synthesis", connection: "I built the research framework and used sensor data to drive interface decisions \u2014 not as a handoff but as a continuous loop. IND needs the same: qualitative and quantitative research translated into actionable design for myPPMI." },
+                  { theme: "Complex data, human interface", connection: "Translating multi-sensor physiological data into glanceable, non-clinical UI is the same problem as making Parkinson\u2019s biomarker data meaningful and accessible to participants who are not researchers." },
+                  { theme: "Global, inclusive design", connection: "Multi-modal, multi-context design for an international platform (50+ BMW markets) developed habits of localization and cultural flexibility directly applicable to PPMI\u2019s 50+ global clinical sites." },
+                  { theme: "Healthcare AI context", connection: "Stanford HAI exposure to AI integration in regulated clinical environments (Epic/EHR) provides relevant context for designing responsibly within IND\u2019s research and compliance constraints." },
+                ].map(({ theme, connection }, i) => (
+                  <div key={theme} className={`grid grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
+                    <div className="col-span-3 p-4 border-r border-white/5">
+                      <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{theme}</span>
+                    </div>
+                    <div className="col-span-9 p-4">
+                      <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{connection}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
