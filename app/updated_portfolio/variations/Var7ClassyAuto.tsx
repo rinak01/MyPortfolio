@@ -541,7 +541,7 @@ export default function Var7ClassyAuto() {
                           </div>
                         </div>
                         {/* Label */}
-                        <div>
+                        <div className="min-w-0">
                           <p className={`text-[13px] font-medium tracking-wide ${i === arr.length - 1 ? "text-[#C9B49A]" : "text-[#E5E5E5]"}`}>{label}</p>
                           <p className="text-[11px] text-[#555] tracking-wide mt-0.5">{sub}</p>
                         </div>
@@ -561,7 +561,7 @@ export default function Var7ClassyAuto() {
                 {/* Example callout */}
                 <div className="mt-8 border border-white/8 rounded-sm bg-[#111] p-4">
                   <p className="text-[10px] uppercase tracking-widest text-[#C9B49A] mb-2">Example</p>
-                  <p className="text-[12px] text-[#A3A3A3] leading-relaxed">
+                  <p className="text-[12px] text-[#A3A3A3] leading-relaxed break-words whitespace-normal">
                     Driver says <span className="text-[#E5E5E5]">"Show me roads to avoid"</span> during a snowstorm → system generates a contextual map overlay with icy patch markers, congestion warnings, and a black ice alert — assembled on demand, dismissed automatically when conditions clear.
                   </p>
                 </div>
@@ -572,18 +572,18 @@ export default function Var7ClassyAuto() {
             {/* High-Fidelity Screens */}
             <div>
               <SectionLabel>High-Fidelity Screens</SectionLabel>
-              <p className="text-[14px] text-[#A3A3A3] mb-8 max-w-2xl">
-                All screens designed in Figma and validated against real driving scenarios. Primary test scenario: Kennedy Expressway, Chicago, 32\u00b0F \u2014 high information density, genuine safety stakes, proactive surfacing without driver-initiated navigation.
+              <p className="text-[13px] text-[#A3A3A3] mb-8 max-w-2xl break-words whitespace-normal">
+                Designed in Figma, validated against one primary scenario — Kennedy Expressway, Chicago, 32°F. High information density, genuine safety stakes.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { title: "Passenger Comfort Panel", body: "Consolidates passenger identity, dual-zone temperature, seat controls, tire pressure, and range into a single glanceable view. Eliminates multi-step navigation for common comfort adjustments." },
-                  { title: "Danger Zone Map Overlay", body: "Context-generated map layer with icy patch markers, congestion flags, steep incline warnings, and a black ice alert. Auto-surfaces on weather + road condition trigger. Dismissed when conditions clear." },
-                  { title: "Snow Readiness Module", body: "Proactively assembled safety summary: tire pressure status, brake wear, road focus mode confirmation, and heated steering state. Surfaces without being asked." },
-                  { title: "Climate Ring Display", body: "Dual-zone temperature displayed as ambient rings in the instrument cluster. Minimal visual footprint communicates state without diverting sustained attention from the road." },
+                  { title: "Passenger Comfort Panel", body: "Identity, dual-zone temp, seat controls, tire pressure, and range — one glanceable view. No multi-step navigation." },
+                  { title: "Danger Zone Map Overlay", body: "Icy patch markers, congestion flags, and black ice alert. Auto-surfaces on weather trigger. Dismissed when conditions clear." },
+                  { title: "Snow Readiness Module", body: "Tire pressure, brake wear, road focus mode, heated steering — assembled proactively. Surfaces without being asked." },
+                  { title: "Climate Ring Display", body: "Dual-zone temp as ambient rings in the instrument cluster. Communicates state without pulling sustained attention from the road." },
                 ].map(({ title, body }) => (
                   <div key={title} className="bg-[#141414] rounded-sm p-6 border border-white/5">
-                    <p className="text-[12px] uppercase tracking-widest text-[#C9B49A] mb-2">{title}</p>
+                    <p className="text-[11px] uppercase tracking-widest text-[#C9B49A] mb-2">{title}</p>
                     <p className="text-[13px] text-[#A3A3A3] leading-relaxed">{body}</p>
                   </div>
                 ))}
@@ -595,7 +595,7 @@ export default function Var7ClassyAuto() {
             {/* Agent Architecture */}
             <div>
               <SectionLabel>Design System Architecture</SectionLabel>
-              <p className="text-[14px] text-[#A3A3A3] mb-6 max-w-2xl">
+              <p className="text-[14px] text-[#A3A3A3] mb-6 max-w-2xl break-words whitespace-normal">
                 A five-domain agent architecture where each agent owns a discrete area of the driving experience. A central orchestrator determines priority and layout based on live context signals.
               </p>
               <div className="overflow-hidden rounded-sm border border-white/8">
@@ -617,7 +617,7 @@ export default function Var7ClassyAuto() {
                 ))}
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
-                {["Reachability", "Passenger", "Road Focus", "Entertainment", "Tutor"].map(mode => (
+                {["Reachability", "Passenger", "Road Focus", "Entertainment", "Eco"].map(mode => (
                   <span key={mode} className="text-[10px] uppercase tracking-widest text-[#A3A3A3] border border-white/15 px-3 py-1 rounded-sm">{mode} Mode</span>
                 ))}
               </div>
@@ -626,7 +626,7 @@ export default function Var7ClassyAuto() {
             <Hairline />
 
             {/* Industry Exposure */}
-            <div>
+            {/* <div>
               <SectionLabel>Industry Exposure</SectionLabel>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 <div className="bg-[#141414] rounded-sm p-6 border border-white/5 space-y-4">
@@ -666,7 +666,7 @@ export default function Var7ClassyAuto() {
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <Hairline />
 
