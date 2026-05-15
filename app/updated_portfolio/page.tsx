@@ -1,1 +1,1 @@
-export { default } from "./updated_page";
+export { default } from "./variations/Var7ClassyAuto";
