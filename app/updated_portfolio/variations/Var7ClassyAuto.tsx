@@ -439,10 +439,10 @@ export default function Var7ClassyAuto() {
               <SectionLabel>Skills Applied</SectionLabel>
               <div className="overflow-hidden rounded-sm border border-white/8">
                 {[
-                  { area: "UX Research", detail: "Biometric data collection, scenario-based usability testing, iterative framework design, synthesis into interaction decisions" },
-                  { area: "Interaction Design", detail: "Generative UI architecture, context gating, glance-budget optimization, adaptive mode design, high-fidelity Figma prototyping" },
-                  { area: "Systems Thinking", detail: "Multi-agent orchestration design, cross-domain context modeling, real-time layout logic, sensor-to-UI decision mapping" },
-                  { area: "Cross-functional", detail: "Collaborated across engineering, research, and product; translated technical sensor outputs into UX requirements and design constraints" },
+                  { area: "UX Research", detail: "Interpreted biometric and behavioral signals through scenario-based testing to surface interaction principles for high-stakes, low-attention driving contexts" },
+                  { area: "Interaction Design", detail: "Designed a generative UI system with context-gated surfacing and glance-budget constraints, prototyped through adaptive driving modes in Figma" },
+                  { area: "Systems Thinking", detail: "Modeled multi-agent orchestration across sensor, context, and intent layers to map real-time inputs into legible, prioritized UI decisions" },
+                  { area: "Cross-functional", detail: "Translated raw sensor outputs and engineering constraints into shared design requirements, aligning research, product, and engineering on what the car should show and when" },
                 ].map(({ area, detail }, i) => (
                   <div key={area} className={`grid grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
                     <div className="col-span-3 p-4 border-r border-white/5">
@@ -516,29 +516,57 @@ export default function Var7ClassyAuto() {
             <Hairline />
 
             {/* Interaction Model */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-              <div className="lg:col-span-4">
-                <SectionLabel>Interaction Model</SectionLabel>
-                <p className="text-[14px] text-[#A3A3A3] leading-relaxed">
-                  Rather than voice as a shortcut to a fixed menu, voice and sensor input become <span className="text-[#EAEAEA]">generators of new interface components</span>. The driver does not navigate \u2014 the interface responds.
+            <div>
+              <SectionLabel>Interaction Model</SectionLabel>
+              <div className="rounded-sm border border-white/8 bg-[#141414] p-8">
+                <p className="text-[13px] text-[#A3A3A3] leading-relaxed mb-8 max-w-xl">
+                  Voice and sensor input become generators of new interface components. The driver does not navigate — the interface responds.
                 </p>
-              </div>
-              <div className="lg:col-span-8">
-                <div className="bg-[#141414] rounded-sm p-6 border border-white/5 mb-5 font-mono text-[13px] text-[#A3A3A3] leading-loose">
-                  <p className="text-[#C9B49A]">Driver input (voice / sensor)</p>
-                  <p className="pl-4">\u2192 Intent parsing</p>
-                  <p className="pl-4">\u2192 UI generation</p>
-                  <p className="pl-4">\u2192 Layout orchestration</p>
-                  <p className="pl-4 text-[#EAEAEA]">\u2192 Rendered interface</p>
+
+                {/* Flow */}
+                <div className="flex flex-col gap-0">
+                  {[
+                    { step: "01", label: "Driver Input", sub: "Voice · Sensor · Telemetry" },
+                    { step: "02", label: "Intent Parsing", sub: "NLP · Context classification" },
+                    { step: "03", label: "UI Generation", sub: "Component synthesis · Agent selection" },
+                    { step: "04", label: "Layout Orchestration", sub: "Priority scoring · Glance-budget check" },
+                    { step: "05", label: "Rendered Interface", sub: "Sub-50ms · Auto-dismissed when resolved" },
+                  ].map(({ step, label, sub }, i, arr) => (
+                    <div key={step} className="flex flex-col">
+                      <div className="flex items-center gap-5">
+                        {/* Step number + node */}
+                        <div className="flex flex-col items-center" style={{ width: 36 }}>
+                          <div className={`w-9 h-9 rounded-sm flex items-center justify-center border ${i === arr.length - 1 ? "border-[#C9B49A]/60 bg-[#C9B49A]/10" : "border-white/10 bg-[#1a1a1a]"}`}>
+                            <span className="text-[10px] tracking-widest text-[#C9B49A]">{step}</span>
+                          </div>
+                        </div>
+                        {/* Label */}
+                        <div>
+                          <p className={`text-[13px] font-medium tracking-wide ${i === arr.length - 1 ? "text-[#C9B49A]" : "text-[#E5E5E5]"}`}>{label}</p>
+                          <p className="text-[11px] text-[#555] tracking-wide mt-0.5">{sub}</p>
+                        </div>
+                      </div>
+                      {/* Connector */}
+                      {i < arr.length - 1 && (
+                        <div className="flex items-start gap-5">
+                          <div style={{ width: 36 }} className="flex justify-center">
+                            <div className="w-px h-6 bg-white/8" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                <div className="border-l-2 border-[#B39D82]/30 pl-5">
-                  <p className="text-[13px] text-[#A3A3A3] leading-relaxed italic">
-                    Example: the driver says &ldquo;Show me roads to avoid&rdquo; during a snowstorm. The system generates a contextual map overlay with icy patch markers, congestion warnings, and a black ice alert \u2014 assembled on demand, dismissed automatically when no longer relevant.
+
+                {/* Example callout */}
+                <div className="mt-8 border border-white/8 rounded-sm bg-[#111] p-4">
+                  <p className="text-[10px] uppercase tracking-widest text-[#C9B49A] mb-2">Example</p>
+                  <p className="text-[12px] text-[#A3A3A3] leading-relaxed">
+                    Driver says <span className="text-[#E5E5E5]">"Show me roads to avoid"</span> during a snowstorm → system generates a contextual map overlay with icy patch markers, congestion warnings, and a black ice alert — assembled on demand, dismissed automatically when conditions clear.
                   </p>
                 </div>
               </div>
             </div>
-
             <Hairline />
 
             {/* High-Fidelity Screens */}
