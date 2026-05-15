@@ -334,7 +334,7 @@ export default function Var7ClassyAuto() {
                       </li>
                       <li className="flex gap-3">
                         <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Developed a proof-of-concept for Adaptive HMI in automotive production, connecting generative design exploration with safety-critical dashboard requirements.</span>
+                        <span>Co-authored a technical whitepaper on "Adaptive HMI" for automotive production, bridging the gap between experimental generative design and safety-critical dashboard implementation.</span>
                       </li>
                     </ul>
                   </div>
@@ -643,7 +643,7 @@ export default function Var7ClassyAuto() {
             <Hairline />
 
             {/* IND / myPPMI Relevance */}
-            <div>
+            {/* <div>
               <SectionLabel>Why This Work Is Relevant to IND / myPPMI.org</SectionLabel>
               <p className="text-[14px] text-[#A3A3A3] mb-6 max-w-2xl leading-relaxed">
                 Designing for drivers navigating complex, high-stakes environments and designing for Parkinson&apos;s research participants managing their own health data share the same fundamental challenge: <span className="text-[#EAEAEA]">surface what matters, reduce friction, and never assume a fixed user state.</span>
@@ -666,7 +666,7 @@ export default function Var7ClassyAuto() {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
 
           </div>
         </motion.article>
