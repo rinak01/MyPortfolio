@@ -312,6 +312,22 @@ export default function Var7ClassyAuto() {
                 </p>
 
                 <div className="space-y-6 text-[15px] text-[#A3A3A3] leading-relaxed">
+                  {/* The Problem */}
+                  <div>
+                    <SectionLabel>The Problem</SectionLabel>
+                    <div className="bg-[#1A1A1A] rounded-sm p-6 border border-white/10">
+                      <p className="mb-3">
+                        In-vehicle interfaces are static. They show the same things the same way, forcing drivers to dig for information at the exact moments road conditions, fatigue, or hazards make digging dangerous.
+                      </p>
+                      <p>
+                        <span className="text-[#EAEAEA] font-medium">Design challenge:</span> Compose the interface itself from contex. Driver state, road conditions, route - instead of asking the driver to navigate to what they need.
+                      </p>
+                    </div>
+                  </div>
+
+                  <Hairline />
+
+                  {/* Overview */}
                   <div>
                     <SectionLabel>Overview</SectionLabel>
                     <p>
@@ -793,6 +809,21 @@ export default function Var7ClassyAuto() {
                 </p>
 
                 <div className="space-y-6 text-[15px] text-[#A3A3A3] leading-relaxed">
+                  {/* The Problem */}
+                  <div>
+                    <SectionLabel>The Problem</SectionLabel>
+                    <div className="bg-[#1A1A1A] rounded-sm p-6 border border-white/10">
+                      <p className="text-[13px] mb-3">
+                        Voice assistants react to whatever they hear. They transcribe filler, misread half-finished thoughts, and respond when nobody was talking to them — then stay silent at the moment a user actually needs help.
+                      </p>
+                      <p className="text-[13px]">
+                        <span className="text-[#EAEAEA] font-medium">Design challenge:</span> Classify intent from noisy, real-world speech so the agent acts only when the signal is clear.
+                      </p>
+                    </div>
+                  </div>
+
+                  <Hairline />
+
                   {/* Overview */}
                   <div>
                     <SectionLabel>Overview</SectionLabel>
