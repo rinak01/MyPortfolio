@@ -546,9 +546,9 @@ export default function Var7ClassyAuto() {
                     { step: "02", label: "Intent Parsing", sub: "NLP · Context classification" },
                     { step: "03", label: "UI Generation", sub: "Component synthesis · Agent selection" },
                     { step: "04", label: "Layout Orchestration", sub: "Priority scoring · Glance-budget check" },
-                    { step: "05", label: "Rendered Interface", sub: "Sub-50ms · Auto-dismissed when resolved" },
-                  ].map(({ step, label, sub }, i, arr) => (
-                    <div key={step} className="flex flex-col">
+                    { step: "05", label: "Rendered Interface", sub: "Sub-50ms · Auto-dismissed when resolved", hoverImage: "/images/00/BMW_Roadstoavoid.png" },
+                  ].map(({ step, label, sub, hoverImage }, i, arr) => (
+                    <div key={step} className={`flex flex-col relative ${hoverImage ? "group/step" : ""}`}>
                       <div className="flex items-center gap-5">
                         {/* Step number + node */}
                         <div className="flex flex-col items-center" style={{ width: 36 }}>
@@ -557,8 +557,15 @@ export default function Var7ClassyAuto() {
                           </div>
                         </div>
                         {/* Label */}
-                        <div className="min-w-0">
-                          <p className={`text-[13px] font-medium tracking-wide ${i === arr.length - 1 ? "text-[#C9B49A]" : "text-[#E5E5E5]"}`}>{label}</p>
+                        <div className={`min-w-0 ${hoverImage ? "cursor-default" : ""}`}>
+                          <p className={`text-[13px] font-medium tracking-wide ${i === arr.length - 1 ? "text-[#C9B49A]" : "text-[#E5E5E5]"}`}>
+                            {label}
+                            {hoverImage && (
+                              <span className="ml-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-sm bg-white/10 text-[9px] uppercase tracking-widest text-white/70">
+                                Hover Me
+                              </span>
+                            )}
+                          </p>
                           <p className="text-[11px] text-[#555] tracking-wide mt-0.5">{sub}</p>
                         </div>
                       </div>
@@ -567,6 +574,23 @@ export default function Var7ClassyAuto() {
                         <div className="flex items-start gap-5">
                           <div style={{ width: 36 }} className="flex justify-center">
                             <div className="w-px h-6 bg-white/8" />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Hover image panel */}
+                      {hoverImage && (
+                        <div
+                          className="absolute left-[280px] top-1/2 -translate-y-1/2 z-50 w-[300px] md:w-[400px]
+                            opacity-0 translate-x-4 pointer-events-none group-hover/step:opacity-100 group-hover/step:translate-x-0
+                            transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                        >
+                          <div className="relative rounded-md border border-white/10 bg-[#0C0C0C] shadow-[0_0_40px_rgba(0,0,0,0.8)] overflow-hidden p-1">
+                            <img
+                              src={hoverImage}
+                              alt={label}
+                              className="w-full h-auto object-cover rounded-sm"
+                            />
                           </div>
                         </div>
                       )}
