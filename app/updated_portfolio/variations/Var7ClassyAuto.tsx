@@ -1128,7 +1128,7 @@ export default function Var7ClassyAuto() {
         {/* ─── More Projects Header ─── */}
         <div className="pt-16 pb-12 text-center">
           <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[#EAEAEA]`}>
-            More cool things I built! ＿〆(。╹‿ ╹ 。)
+            More things I built! ＿〆(。╹‿ ╹ 。)
           </h2>
         </div>
 
