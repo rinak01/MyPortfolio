@@ -257,6 +257,35 @@ function ScrollNav() {
 export default function Var7ClassyAuto() {
   const [pinned, setPinned] = useState(false);
   const [activeFilter, setActiveFilter] = useState<Category | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [hearts, setHearts] = useState<{ id: number; x: number; y: number; scale: number; rotation: number; fill: string; outline: string }[]>([]);
+
+  const handleAddHearts = () => {
+    const newHearts = Array.from({ length: 5 }).map((_, i) => {
+      const fills = ["#facc15", "#fde047", "#fef08a", "#eab308", "#ca8a04"];
+      const outlines = ["#b45309", "#78350f", "#a16207", "#854d0e"];
+      
+      const randomFill = fills[Math.floor(Math.random() * fills.length)];
+      const randomOutline = outlines[Math.floor(Math.random() * outlines.length)];
+      
+      const randomX = (Math.random() - 0.5) * 240; 
+      const randomY = -40 - Math.random() * 80;
+      const randomScale = 0.6 + Math.random() * 0.6;
+      const randomRotation = (Math.random() - 0.5) * 40;
+      
+      return {
+        id: Date.now() + Math.random() + i,
+        x: randomX,
+        y: randomY,
+        scale: randomScale,
+        rotation: randomRotation,
+        fill: randomFill,
+        outline: randomOutline
+      };
+    });
+    setHearts((prev) => [...prev, ...newHearts]);
+  };
+
   const filterBarRef = useRef<HTMLDivElement>(null);
   return (
     <div className={`${sans.className} min-h-screen bg-[#0C0C0C] text-[#A3A3A3] selection:bg-[#B39D82] selection:text-[#0C0C0C] font-light`}>
@@ -1219,17 +1248,22 @@ export default function Var7ClassyAuto() {
 
               {/* Gmail Hover Area */}
               <div
-                className="absolute z-20 block group/gmail"
+                className="absolute z-20 block group/gmail cursor-pointer"
                 style={{ left: '26.5%', top: '15.5%', width: '10.5%', height: '10.5%' }}
+                onClick={() => {
+                  navigator.clipboard.writeText("by.rinakim@gmail.com");
+                  setCopiedEmail(true);
+                  setTimeout(() => setCopiedEmail(false), 2000);
+                }}
               >
                 {/* Distinctive hover outline */}
-                <div className="w-full h-full rounded-sm border-4 border-transparent group-hover/gmail:border-black/30 group-hover/gmail:bg-white/10 group-hover/gmail:scale-110 transition-all duration-300 cursor-pointer" />
+                <div className="w-full h-full rounded-sm border-4 border-transparent group-hover/gmail:border-black/30 group-hover/gmail:bg-white/10 group-hover/gmail:scale-110 transition-all duration-300" />
 
                 {/* Copy/Pasteable Tooltip */}
                 <div className="absolute left-full top-1/2 -translate-y-1/2 ml-6 pointer-events-none opacity-0 group-hover/gmail:opacity-100 group-hover/gmail:pointer-events-auto group-hover/gmail:translate-x-2 transition-all duration-300 z-50">
                   <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
-                    <p className="text-black text-[12px] font-bold whitespace-nowrap mb-2" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
-                      Click to copy!
+                    <p className={`${copiedEmail ? "text-green-500" : "text-black"} text-[12px] font-bold whitespace-nowrap mb-2`} style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                      {copiedEmail ? "Copied!" : "Click to copy!"}
                     </p>
                     <a href="mailto:by.rinakim@gmail.com" className="block text-gray-500 hover:text-black transition-colors select-all cursor-pointer font-bold"
                       style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", fontSize: "10px" }}
@@ -1237,14 +1271,8 @@ export default function Var7ClassyAuto() {
                         e.preventDefault();
                         e.stopPropagation();
                         navigator.clipboard.writeText("by.rinakim@gmail.com");
-                        const target = e.currentTarget;
-                        const original = target.innerText;
-                        target.innerText = "COPIED!";
-                        target.style.color = "#4ade80";
-                        setTimeout(() => {
-                          target.innerText = original;
-                          target.style.color = "";
-                        }, 2000);
+                        setCopiedEmail(true);
+                        setTimeout(() => setCopiedEmail(false), 2000);
                       }}>
                       by.rinakim@gmail.com
                     </a>
@@ -1375,12 +1403,91 @@ export default function Var7ClassyAuto() {
 
           {/* Small yellow pixelated heart at the bottom center */}
           <div className="relative z-10 mt-32 flex justify-center items-center pb-16">
+            
+            {/* Render heart bundle */}
+            {hearts.map((h) => (
+              <div
+                key={h.id}
+                className="absolute pointer-events-none"
+                style={{
+                  transform: `translate(${h.x}px, ${h.y}px) scale(${h.scale}) rotate(${h.rotation}deg)`,
+                  transition: "all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+                }}
+              >
+                <svg
+                  width="20"
+                  height="18"
+                  viewBox="0 0 11 9"
+                  style={{ imageRendering: 'pixelated' }}
+                  className="drop-shadow-[1px_2px_0px_rgba(0,0,0,0.5)]"
+                >
+                  <g fill={h.outline}>
+                    <rect x="2" y="0" width="1" height="1" />
+                    <rect x="8" y="0" width="1" height="1" />
+                    <rect x="1" y="1" width="1" height="1" />
+                    <rect x="3" y="1" width="1" height="1" />
+                    <rect x="7" y="1" width="1" height="1" />
+                    <rect x="9" y="1" width="1" height="1" />
+                    <rect x="0" y="2" width="1" height="1" />
+                    <rect x="4" y="2" width="1" height="1" />
+                    <rect x="6" y="2" width="1" height="1" />
+                    <rect x="10" y="2" width="1" height="1" />
+                    <rect x="0" y="3" width="1" height="1" />
+                    <rect x="5" y="3" width="1" height="1" />
+                    <rect x="10" y="3" width="1" height="1" />
+                    <rect x="1" y="4" width="1" height="1" />
+                    <rect x="9" y="4" width="1" height="1" />
+                    <rect x="2" y="5" width="1" height="1" />
+                    <rect x="8" y="5" width="1" height="1" />
+                    <rect x="3" y="6" width="1" height="1" />
+                    <rect x="7" y="6" width="1" height="1" />
+                    <rect x="4" y="7" width="1" height="1" />
+                    <rect x="6" y="7" width="1" height="1" />
+                    <rect x="5" y="8" width="1" height="1" />
+                  </g>
+                  <g fill={h.fill}>
+                    <rect x="2" y="1" width="1" height="1" />
+                    <rect x="8" y="1" width="1" height="1" />
+                    <rect x="1" y="2" width="1" height="1" />
+                    <rect x="2" y="2" width="1" height="1" />
+                    <rect x="3" y="2" width="1" height="1" />
+                    <rect x="7" y="2" width="1" height="1" />
+                    <rect x="9" y="2" width="1" height="1" />
+                    <rect x="1" y="3" width="1" height="1" />
+                    <rect x="2" y="3" width="1" height="1" />
+                    <rect x="3" y="3" width="1" height="1" />
+                    <rect x="4" y="3" width="1" height="1" />
+                    <rect x="4" y="4" width="1" height="1" />
+                    <rect x="5" y="4" width="1" height="1" />
+                    <rect x="6" y="4" width="1" height="1" />
+                    <rect x="5" y="5" width="1" height="1" />
+                    <rect x="6" y="5" width="1" height="1" />
+                    <rect x="7" y="5" width="1" height="1" />
+                    <rect x="4" y="6" width="1" height="1" />
+                    <rect x="5" y="6" width="1" height="1" />
+                    <rect x="6" y="6" width="1" height="1" />
+                    <rect x="5" y="7" width="1" height="1" />
+                  </g>
+                  <g fill="#ffffff">
+                    <rect x="8" y="2" width="1" height="1" />
+                    <rect x="7" y="3" width="1" height="1" />
+                    <rect x="8" y="3" width="1" height="1" />
+                    <rect x="9" y="3" width="1" height="1" />
+                    <rect x="2" y="4" width="1" height="1" />
+                    <rect x="8" y="4" width="1" height="1" />
+                    <rect x="3" y="5" width="1" height="1" />
+                  </g>
+                </svg>
+              </div>
+            ))}
+
             <svg
               width="32"
               height="28"
               viewBox="0 0 11 9"
               style={{ imageRendering: 'pixelated' }}
-              className="w-8 h-7 drop-shadow-[2px_3px_0px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:scale-125 cursor-pointer"
+              className="w-8 h-7 drop-shadow-[2px_3px_0px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:scale-125 cursor-pointer relative z-20"
+              onClick={handleAddHearts}
             >
               {/* Outline (#b45309) */}
               <g fill="#b45309">
