@@ -1062,21 +1062,15 @@ export default function Var7ClassyAuto() {
 
             {/* Left — imagery */}
             <div className="lg:col-span-7 order-2 lg:order-1 space-y-4">
-              <div className="w-[85%] mx-auto aspect-[4/5] overflow-hidden bg-[#141414] rounded-sm">
+              <div className="w-[70%] mx-auto aspect-[3/4] overflow-hidden bg-[#141414] rounded-sm">
                 <img src="/images/03/emmastree.png" alt="Emma's Tree"
-                  className="w-full h-full object-cover object-top opacity-85 hover:opacity-100 transition-all duration-700 ease-out" />
+                  className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-all duration-1000 ease-out" />
               </div>
-              
-              {/* Technical Diagrams Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#141414] rounded-sm p-6 flex flex-col items-center justify-center hover:bg-[#1c1c1c] transition-colors duration-300 group">
-                  <img src="/images/03/treesystem.png" alt="Tree System" className="w-full h-auto opacity-80 group-hover:opacity-100 transition-opacity duration-300 object-contain max-h-[160px]" />
-                  <span className="text-[10px] tracking-widest uppercase text-[#737373] mt-4 font-mono">Tree System</span>
-                </div>
-                <div className="bg-[#141414] rounded-sm p-6 flex flex-col items-center justify-center hover:bg-[#1c1c1c] transition-colors duration-300 group">
-                  <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-full h-auto opacity-80 group-hover:opacity-100 transition-opacity duration-300 object-contain max-h-[160px]" />
-                  <span className="text-[10px] tracking-widest uppercase text-[#737373] mt-4 font-mono">Temp Change</span>
-                </div>
+              <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
+                <img src="/images/03/treesystem.png" alt="Tree System" className="w-[90%] h-auto opacity-90 mx-auto" />
+              </div>
+              <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
+                <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-[90%] h-auto opacity-90 mx-auto" />
               </div>
             </div>
 
@@ -1096,6 +1090,21 @@ export default function Var7ClassyAuto() {
                 </p>
 
                 <div className="space-y-6 text-[15px] text-[#A3A3A3] leading-relaxed">
+                  {/* The Problem */}
+                  <div>
+                    <SectionLabel>The Problem</SectionLabel>
+                    <div className="bg-[#1A1A1A] rounded-sm p-6 border border-white/10">
+                      <p className="mb-3">
+                        My best friend Emma is a medical student who wanted a plant but knew she&apos;d kill it — not out of carelessness, but because 80-hour weeks leave no room for it. Existing alternatives are either lifeless decorations or still demand the attention she doesn&apos;t have, failing to capture what makes plants worth having in the first place.
+                      </p>
+                      <p>
+                        <span className="text-[#EAEAEA] font-medium">Design Challenge:</span> Design a plant for Emma that she can never kill — one that still reacts to sunlight, signals when it wants water, and changes with the seasons, so it feels alive without ever depending on her to keep it that way.
+                      </p>
+                    </div>
+                  </div>
+
+                  <Hairline />
+
                   {/* Overview */}
                   <div>
                     <SectionLabel>Overview</SectionLabel>
