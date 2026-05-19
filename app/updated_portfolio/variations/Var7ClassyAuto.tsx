@@ -258,20 +258,26 @@ export default function Var7ClassyAuto() {
   const [pinned, setPinned] = useState(false);
   const [activeFilter, setActiveFilter] = useState<Category | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [hearts, setHearts] = useState<{ id: number; x: number; y: number; scale: number; rotation: number; fill: string; outline: string }[]>([]);
+  const [hearts, setHearts] = useState<{ id: number; x: number; y: number; scale: number; rotation: number; fill: string; highlight: string; outline: string }[]>([]);
 
   const handleAddHearts = () => {
-    const newHearts = Array.from({ length: 5 }).map((_, i) => {
-      const fills = ["#facc15", "#fde047", "#fef08a", "#eab308", "#ca8a04"];
-      const outlines = ["#b45309", "#78350f", "#a16207", "#854d0e"];
+    const newHearts = Array.from({ length: 4 }).map((_, i) => {
+      // Warm yellow shades to coordinate beautifully with the rose bouquet
+      const baseYellows = ["#facc15", "#fde047", "#eab308", "#ca8a04", "#b45309"];
+      const highlights = ["#fef08a", "#fef9c3", "#fef08a", "#fde047", "#ca8a04"];
       
-      const randomFill = fills[Math.floor(Math.random() * fills.length)];
-      const randomOutline = outlines[Math.floor(Math.random() * outlines.length)];
+      const idx = Math.floor(Math.random() * baseYellows.length);
+      const randomFill = baseYellows[idx];
+      const randomHighlight = highlights[idx];
       
-      const randomX = (Math.random() - 0.5) * 240; 
-      const randomY = -40 - Math.random() * 80;
-      const randomScale = 0.6 + Math.random() * 0.6;
-      const randomRotation = (Math.random() - 0.5) * 40;
+      // Ring distribution so they spawn AROUND the main center heart, not on top of it!
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 30 + Math.random() * 55; // 30px to 85px away from center
+      const randomX = Math.cos(angle) * distance;
+      const randomY = Math.sin(angle) * distance - 8;
+      
+      const randomScale = 0.7 + Math.random() * 0.25; // 0.7 to 0.95 size (slightly smaller to look natural)
+      const randomRotation = (Math.random() - 0.5) * 40; // natural random tilt
       
       return {
         id: Date.now() + Math.random() + i,
@@ -280,7 +286,8 @@ export default function Var7ClassyAuto() {
         scale: randomScale,
         rotation: randomRotation,
         fill: randomFill,
-        outline: randomOutline
+        highlight: randomHighlight,
+        outline: "#b45309"
       };
     });
     setHearts((prev) => [...prev, ...newHearts]);
@@ -1404,24 +1411,25 @@ export default function Var7ClassyAuto() {
           {/* Small yellow pixelated heart at the bottom center */}
           <div className="relative z-10 mt-32 flex justify-center items-center pb-16">
             
-            {/* Render heart bundle */}
+            {/* Render heart bundle (behind the main clickable heart) */}
             {hearts.map((h) => (
               <div
                 key={h.id}
-                className="absolute pointer-events-none"
+                className="absolute pointer-events-none z-10"
                 style={{
                   transform: `translate(${h.x}px, ${h.y}px) scale(${h.scale}) rotate(${h.rotation}deg)`,
                   transition: "all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)"
                 }}
               >
                 <svg
-                  width="20"
-                  height="18"
+                  width="32"
+                  height="28"
                   viewBox="0 0 11 9"
                   style={{ imageRendering: 'pixelated' }}
-                  className="drop-shadow-[1px_2px_0px_rgba(0,0,0,0.5)]"
+                  className="drop-shadow-[2px_3px_0px_rgba(0,0,0,0.5)]"
                 >
-                  <g fill={h.outline}>
+                  {/* Outline (#b45309) */}
+                  <g fill="#b45309">
                     <rect x="2" y="0" width="1" height="1" />
                     <rect x="8" y="0" width="1" height="1" />
                     <rect x="1" y="1" width="1" height="1" />
@@ -1445,6 +1453,8 @@ export default function Var7ClassyAuto() {
                     <rect x="6" y="7" width="1" height="1" />
                     <rect x="5" y="8" width="1" height="1" />
                   </g>
+
+                  {/* Dynamic Yellow Shade Fill */}
                   <g fill={h.fill}>
                     <rect x="2" y="1" width="1" height="1" />
                     <rect x="8" y="1" width="1" height="1" />
@@ -1468,6 +1478,16 @@ export default function Var7ClassyAuto() {
                     <rect x="6" y="6" width="1" height="1" />
                     <rect x="5" y="7" width="1" height="1" />
                   </g>
+
+                  {/* Lighter Highlights */}
+                  <g fill={h.highlight}>
+                    <rect x="6" y="3" width="1" height="1" />
+                    <rect x="3" y="4" width="1" height="1" />
+                    <rect x="7" y="4" width="1" height="1" />
+                    <rect x="4" y="5" width="1" height="1" />
+                  </g>
+
+                  {/* White Sparkles/Reflections */}
                   <g fill="#ffffff">
                     <rect x="8" y="2" width="1" height="1" />
                     <rect x="7" y="3" width="1" height="1" />
