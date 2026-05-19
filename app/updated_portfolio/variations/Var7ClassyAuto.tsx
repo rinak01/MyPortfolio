@@ -272,9 +272,9 @@ export default function Var7ClassyAuto() {
       
       // Ring distribution so they spawn AROUND the main center heart, not on top of it!
       const angle = Math.random() * Math.PI * 2;
-      const distance = 30 + Math.random() * 55; // 30px to 85px away from center
+      const distance = 40 + Math.random() * 110; // 40px to 150px away from center for a wider, more natural scatter!
       const randomX = Math.cos(angle) * distance;
-      const randomY = Math.sin(angle) * distance - 8;
+      const randomY = Math.sin(angle) * distance - 15;
       
       const randomScale = 0.45 + Math.random() * 0.65; // scales dynamically from 0.45 (tiny) to 1.1 (slightly larger) for beautiful depth!
       const randomRotation = (Math.random() - 0.5) * 40; // natural random tilt
