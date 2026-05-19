@@ -265,20 +265,20 @@ export default function Var7ClassyAuto() {
       // Warm yellow shades to coordinate beautifully with the rose bouquet
       const baseYellows = ["#facc15", "#fde047", "#eab308", "#ca8a04", "#b45309"];
       const highlights = ["#fef08a", "#fef9c3", "#fef08a", "#fde047", "#ca8a04"];
-      
+
       const idx = Math.floor(Math.random() * baseYellows.length);
       const randomFill = baseYellows[idx];
       const randomHighlight = highlights[idx];
-      
+
       // Ring distribution so they spawn AROUND the main center heart, not on top of it!
       const angle = Math.random() * Math.PI * 2;
       const distance = 40 + Math.random() * 100; // 40px to 140px away from center
       const randomX = Math.cos(angle) * distance * 1.8; // stretched horizontally to the sides!
       const randomY = Math.sin(angle) * distance * 0.65 - 10; // flatter vertically to avoid overlapping headers/footers!
-      
+
       const randomScale = 0.45 + Math.random() * 0.65; // scales dynamically from 0.45 (tiny) to 1.1 (slightly larger) for beautiful depth!
       const randomRotation = (Math.random() - 0.5) * 40; // natural random tilt
-      
+
       return {
         id: Date.now() + Math.random() + i,
         x: randomX,
@@ -1062,15 +1062,21 @@ export default function Var7ClassyAuto() {
 
             {/* Left — imagery */}
             <div className="lg:col-span-7 order-2 lg:order-1 space-y-4">
-              <div className="w-[70%] mx-auto aspect-[3/4] overflow-hidden bg-[#141414] rounded-sm">
+              <div className="w-[85%] mx-auto aspect-[4/5] overflow-hidden bg-[#141414] rounded-sm">
                 <img src="/images/03/emmastree.png" alt="Emma's Tree"
-                  className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-all duration-1000 ease-out" />
+                  className="w-full h-full object-cover object-top opacity-85 hover:opacity-100 transition-all duration-700 ease-out" />
               </div>
-              <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
-                <img src="/images/03/treesystem.png" alt="Tree System" className="w-[90%] h-auto opacity-90 mx-auto" />
-              </div>
-              <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
-                <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-[90%] h-auto opacity-90 mx-auto" />
+              
+              {/* Technical Diagrams Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#141414] rounded-sm p-6 flex flex-col items-center justify-center hover:bg-[#1c1c1c] transition-colors duration-300 group">
+                  <img src="/images/03/treesystem.png" alt="Tree System" className="w-full h-auto opacity-80 group-hover:opacity-100 transition-opacity duration-300 object-contain max-h-[160px]" />
+                  <span className="text-[10px] tracking-widest uppercase text-[#737373] mt-4 font-mono">Tree System</span>
+                </div>
+                <div className="bg-[#141414] rounded-sm p-6 flex flex-col items-center justify-center hover:bg-[#1c1c1c] transition-colors duration-300 group">
+                  <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-full h-auto opacity-80 group-hover:opacity-100 transition-opacity duration-300 object-contain max-h-[160px]" />
+                  <span className="text-[10px] tracking-widest uppercase text-[#737373] mt-4 font-mono">Temp Change</span>
+                </div>
               </div>
             </div>
 
@@ -1410,7 +1416,7 @@ export default function Var7ClassyAuto() {
 
           {/* Small yellow pixelated heart at the bottom center */}
           <div className="relative z-10 mt-32 flex justify-center items-center pb-16">
-            
+
             {/* Render heart bundle (behind the main clickable heart) */}
             {hearts.map((h) => (
               <div
