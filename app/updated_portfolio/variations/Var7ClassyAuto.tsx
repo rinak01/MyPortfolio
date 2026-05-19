@@ -1182,49 +1182,278 @@ export default function Var7ClassyAuto() {
           </div>
         </section>
 
-        {/* ─── Contact Footer ─── */}
-        <footer id="project-meet" className="pt-32 pb-16">
-          <div className="bg-[#141414] rounded-sm p-12 md:p-24 flex flex-col md:flex-row justify-between items-center gap-12">
-            <div className="max-w-xl">
-              <h2 className={`${outfit.className} text-4xl text-[#EAEAEA] font-light mb-6`}>
-                It's Great To Meet You!
-              </h2>
-              <p className="text-[#A3A3A3] text-[15px] leading-relaxed mb-8">
-                Let's build something together.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-6">
-                <a href="mailto:by.rinakim@gmail.com"
-                  className="text-[#EAEAEA] hover:text-[#B39D82] transition-colors border-b border-white/20 hover:border-[#B39D82] pb-1 uppercase tracking-widest text-sm inline-block w-fit">
-                  by.rinakim@gmail.com
-                </a>
-                <a href="https://www.linkedin.com/in/rina-kim-9a3864171/" target="_blank"
-                  className="text-[#EAEAEA] hover:text-[#B39D82] transition-colors border-b border-white/20 hover:border-[#B39D82] pb-1 uppercase tracking-widest text-sm inline-block w-fit">
-                  LinkedIn Profile
-                </a>
-                <a href="https://drive.google.com/file/d/1qvhnhcxOM4LrbB0SHHimeBg26k-70Wv9/view?usp=sharing" target="_blank"
-                  className="text-[#EAEAEA] hover:text-[#B39D82] transition-colors border-b border-white/20 hover:border-[#B39D82] pb-1 uppercase tracking-widest text-sm inline-block w-fit">
-                  Resume
-                </a>
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-2 w-[552px] shrink-0">
-              {/* Row 1: portrait (1 col) + landscape rh.png (2 cols) */}
-              <div className="overflow-hidden rounded-sm row-span-1 aspect-[2/3]">
-                <img src="/images/NiceToMeetYou/buildingpeppersghost.png" alt="Building Pepper's Ghost" className="w-full h-full object-cover grayscale hover:grayscale-0 opacity-80 hover:opacity-100 transition-all duration-500" />
-              </div>
-              <div className="col-span-2 overflow-hidden rounded-sm aspect-[3/2]">
-                <img src="/images/NiceToMeetYou/rh.png" alt="Rina Kim" className="w-full h-full object-cover grayscale hover:grayscale-0 opacity-80 hover:opacity-100 transition-all duration-500" />
-              </div>
-              {/* Row 2: landscape designworksgroup (2 cols) + portrait (1 col) */}
-              <div className="col-span-2 overflow-hidden rounded-sm aspect-[3/2]">
-                <img src="/images/NiceToMeetYou/designworksgroup.png" alt="BMW DesignWorks Group" className="w-full h-full object-cover grayscale hover:grayscale-0 opacity-80 hover:opacity-100 transition-all duration-500" />
-              </div>
-              <div className="overflow-hidden rounded-sm aspect-[2/3]">
-                <img src="/images/NiceToMeetYou/buildingcloud.png" alt="Building Cloud" className="w-full h-full object-cover grayscale hover:grayscale-0 opacity-80 hover:opacity-100 transition-all duration-500" />
-              </div>
-            </div>
+        {/* ─── About Me & Footer Transition ─── */}
+        <section id="about-me" className="-mx-8 md:-mx-16 relative pt-48 pb-32 overflow-hidden flex flex-col items-center">
+
+          {/* Font Import for Pixel Text */}
+          <style dangerouslySetInnerHTML={{ __html: "@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');" }} />
+
+          {/* Black Background */}
+          <div className="absolute inset-0 z-0 pointer-events-none bg-[#0C0C0C]" />
+
+          {/* Pixel Stars Overlay
+          <div
+            className="absolute inset-0 z-0 pointer-events-none"
+            style={{
+              background: `url("data:image/svg+xml,%3Csvg width='240' height='240' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 30h1v1h-1zM110 200h1v1h-1zM10 100h1v1h-1z' fill='%23ffffff' fill-opacity='0.3'/%3E%3Cpath d='M140 60h2v2h-2zM80 150h2v2h-2zM210 180h2v2h-2z' fill='%23ffffff' fill-opacity='0.5'/%3E%3Cpath d='M170 110h3v3h-3z' fill='%23ffffff' fill-opacity='0.8'/%3E%3C/svg%3E")`,
+              backgroundSize: "240px 240px",
+              imageRendering: "pixelated"
+            }}
+          /> */}
+
+          {/* About Me Title */}
+          <div className="relative z-10 w-full max-w-[1600px] px-8 md:px-10 flex flex-col items-center justify-center pt-24 pb-32">
+            <h2 className="text-2xl md:text-4xl text-white tracking-widest drop-shadow-[4px_4px_0_rgba(0,0,0,0.4)]" style={{ fontFamily: "'Press Start 2P', cursive", imageRendering: "pixelated" }}>
+              About Me
+            </h2>
           </div>
-        </footer >
+
+          {/* ─── Contact Footer ─── */}
+          <footer id="project-meet" className="relative z-10 w-full max-w-[1600px] px-8 md:px-16 flex justify-center">
+            <div className="relative w-full max-w-3xl mx-auto group">
+              <img
+                src="/images/NiceToMeetYou/myboard.png"
+                alt="My Contact Board"
+                className="w-full h-auto object-contain rounded-sm shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+              />
+
+              {/* Gmail Hover Area */}
+              <div
+                className="absolute z-20 block group/gmail"
+                style={{ left: '26.5%', top: '15.5%', width: '10.5%', height: '10.5%' }}
+              >
+                {/* Distinctive hover outline */}
+                <div className="w-full h-full rounded-sm border-4 border-transparent group-hover/gmail:border-black/30 group-hover/gmail:bg-white/10 group-hover/gmail:scale-110 transition-all duration-300 cursor-pointer" />
+
+                {/* Copy/Pasteable Tooltip */}
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-6 pointer-events-none opacity-0 group-hover/gmail:opacity-100 group-hover/gmail:pointer-events-auto group-hover/gmail:translate-x-2 transition-all duration-300 z-50">
+                  <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                    <p className="text-black text-[12px] font-bold whitespace-nowrap mb-2" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                      Click to copy!
+                    </p>
+                    <a href="mailto:by.rinakim@gmail.com" className="block text-gray-500 hover:text-black transition-colors select-all cursor-pointer font-bold"
+                      style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", fontSize: "10px" }}
+                      onClick={e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigator.clipboard.writeText("by.rinakim@gmail.com");
+                        const target = e.currentTarget;
+                        const original = target.innerText;
+                        target.innerText = "COPIED!";
+                        target.style.color = "#4ade80";
+                        setTimeout(() => {
+                          target.innerText = original;
+                          target.style.color = "";
+                        }, 2000);
+                      }}>
+                      by.rinakim@gmail.com
+                    </a>
+
+                    {/* Bubble tail left */}
+                    <div className="absolute -left-[16px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[16px] border-r-black" />
+                    <div className="absolute -left-[10px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[16px] border-r-white" />
+                  </div>
+                </div>
+              </div>
+
+              {/* LinkedIn Link */}
+              <a
+                href="https://www.linkedin.com/in/rina-kim-9a3864171/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute z-10 block group/linkedin"
+                style={{ left: '26.5%', top: '28.5%', width: '10.5%', height: '10.5%' }}
+                aria-label="LinkedIn Profile"
+              >
+                <div className="w-full h-full rounded-sm border-4 border-transparent group-hover/linkedin:border-black/30 group-hover/linkedin:bg-white/10 group-hover/linkedin:scale-110 transition-all duration-300 cursor-pointer" />
+                {/* Tooltip */}
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-6 pointer-events-none opacity-0 group-hover/linkedin:opacity-100 group-hover/linkedin:translate-x-2 transition-all duration-300 z-50">
+                  <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                    <p className="text-black text-[12px] font-bold whitespace-nowrap" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                      Connect with me!
+                    </p>
+
+                    {/* Bubble tail left */}
+                    <div className="absolute -left-[16px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[16px] border-r-black" />
+                    <div className="absolute -left-[10px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[16px] border-r-white" />
+                  </div>
+                </div>
+              </a>
+
+              {/* Nana Polaroid Hover */}
+              <div
+                className="absolute z-10 block cursor-pointer group/nana"
+                style={{ left: '38%', top: '35%', width: '14.5%', height: '25%' }}
+              >
+                <div className="w-full h-full rounded-sm group-hover/nana:bg-white/10 transition-colors duration-300" />
+                {/* Pop-out image */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[240px] sm:w-[320px] pointer-events-none opacity-0 group-hover/nana:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
+                  <div className="relative rounded-sm border-[6px] border-[#F2F0E6] bg-[#F2F0E6] shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden p-1 pb-12 transform -rotate-2">
+                    <img src="/images/NiceToMeetYou/nana01.jpg" alt="Nana" className="w-full h-auto object-cover border border-black/10" />
+                    <p className="absolute bottom-3 left-0 w-full text-center text-[#333] font-medium text-lg" style={{ fontFamily: "'Marker Felt', 'Comic Sans MS', cursive" }}>Nana</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Cortada Polaroid Hover */}
+              <div
+                className="absolute z-10 block cursor-pointer group/cortada"
+                style={{ left: '50.5%', top: '16.5%', width: '15.5%', height: '24%' }}
+              >
+                <div className="w-full h-full rounded-sm group-hover/cortada:bg-white/10 transition-colors duration-300" />
+                {/* Pop-out image */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[240px] sm:w-[320px] pointer-events-none opacity-0 group-hover/cortada:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
+                  <div className="relative rounded-sm border-[6px] border-[#F2F0E6] bg-[#F2F0E6] shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden p-1 pb-12 transform rotate-2">
+                    <img src="/images/NiceToMeetYou/cortada01.JPEG" alt="Cortada" className="w-full h-auto object-cover border border-black/10" />
+                    <p className="absolute bottom-3 left-0 w-full text-center text-[#333] font-medium text-lg" style={{ fontFamily: "'Marker Felt', 'Comic Sans MS', cursive" }}>Cortada</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pennant Hover */}
+              <div
+                className="absolute z-10 block group/pennant"
+                style={{ left: '68%', top: '9%', width: '28%', height: '18%' }}
+              >
+                <div className="w-full h-full rounded-sm group-hover/pennant:bg-white/5 transition-colors duration-300 cursor-help" />
+
+                {/* Pixelated thought bubble */}
+                <div className="absolute bottom-[90%] left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none opacity-0 group-hover/pennant:opacity-100 group-hover/pennant:-translate-y-3 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+                  <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                    <p className="text-black text-[12px] font-bold whitespace-nowrap text-center" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                      CMU MHCI &apos;25!
+                    </p>
+                    {/* Bubble tail */}
+                    <div className="absolute -bottom-[16px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-black" />
+                    <div className="absolute -bottom-[8px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-white" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Bouquet Hover */}
+              <div
+                className="absolute z-10 block group/bouquet"
+                style={{ left: '16%', top: '32%', width: '22%', height: '48%' }}
+              >
+                <div className="w-full h-full rounded-sm group-hover/bouquet:bg-white/5 transition-colors duration-300 cursor-help" />
+
+                {/* Pixelated thought bubble floating to the left */}
+                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-6 pointer-events-none opacity-0 group-hover/bouquet:opacity-100 group-hover/bouquet:-translate-x-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-50">
+                  <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                    <p className="text-[#b45309] text-[14px] font-bold whitespace-nowrap text-center" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", fontSize: "14px", lineHeight: "1.5" }}>
+                      &lt;3
+                    </p>
+                    {/* Bubble tail right */}
+                    <div className="absolute -right-[16px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[16px] border-l-black" />
+                    <div className="absolute -right-[10px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[16px] border-l-white" />
+                  </div>
+                </div>
+              </div>
+
+              {/* 3D Printer Hover */}
+              <div
+                className="absolute z-10 block group/printer"
+                style={{ left: '57%', top: '48%', width: '38%', height: '45%' }}
+              >
+                <div className="w-full h-full rounded-sm group-hover/printer:bg-white/5 transition-colors duration-300 cursor-help" />
+
+                {/* Pixelated thought bubble */}
+                <div className="absolute bottom-[90%] left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none opacity-0 group-hover/printer:opacity-100 group-hover/printer:-translate-y-3 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+                  <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                    <p className="text-black text-[14px] font-bold whitespace-nowrap" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", fontSize: "12px", lineHeight: "1.5" }}>
+                      Currently printing<br />a cat toy 🐾
+                    </p>
+                    {/* Bubble tail */}
+                    <div className="absolute -bottom-[16px] right-12 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-black" />
+                    <div className="absolute -bottom-[8px] right-12 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-white" />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </footer>
+
+          {/* Small yellow pixelated heart at the bottom center */}
+          <div className="relative z-10 mt-32 flex justify-center items-center pb-16">
+            <svg
+              width="32"
+              height="28"
+              viewBox="0 0 11 9"
+              style={{ imageRendering: 'pixelated' }}
+              className="w-8 h-7 drop-shadow-[2px_3px_0px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:scale-125 cursor-pointer"
+            >
+              {/* Outline (#b45309) */}
+              <g fill="#b45309">
+                <rect x="2" y="0" width="1" height="1" />
+                <rect x="8" y="0" width="1" height="1" />
+                <rect x="1" y="1" width="1" height="1" />
+                <rect x="3" y="1" width="1" height="1" />
+                <rect x="7" y="1" width="1" height="1" />
+                <rect x="9" y="1" width="1" height="1" />
+                <rect x="0" y="2" width="1" height="1" />
+                <rect x="4" y="2" width="1" height="1" />
+                <rect x="6" y="2" width="1" height="1" />
+                <rect x="10" y="2" width="1" height="1" />
+                <rect x="0" y="3" width="1" height="1" />
+                <rect x="5" y="3" width="1" height="1" />
+                <rect x="10" y="3" width="1" height="1" />
+                <rect x="1" y="4" width="1" height="1" />
+                <rect x="9" y="4" width="1" height="1" />
+                <rect x="2" y="5" width="1" height="1" />
+                <rect x="8" y="5" width="1" height="1" />
+                <rect x="3" y="6" width="1" height="1" />
+                <rect x="7" y="6" width="1" height="1" />
+                <rect x="4" y="7" width="1" height="1" />
+                <rect x="6" y="7" width="1" height="1" />
+                <rect x="5" y="8" width="1" height="1" />
+              </g>
+
+              {/* Standard Fill (#facc15 - Vibrant Golden Yellow) */}
+              <g fill="#facc15">
+                <rect x="2" y="1" width="1" height="1" />
+                <rect x="8" y="1" width="1" height="1" />
+                <rect x="1" y="2" width="1" height="1" />
+                <rect x="2" y="2" width="1" height="1" />
+                <rect x="3" y="2" width="1" height="1" />
+                <rect x="7" y="2" width="1" height="1" />
+                <rect x="9" y="2" width="1" height="1" />
+                <rect x="1" y="3" width="1" height="1" />
+                <rect x="2" y="3" width="1" height="1" />
+                <rect x="3" y="3" width="1" height="1" />
+                <rect x="4" y="3" width="1" height="1" />
+                <rect x="4" y="4" width="1" height="1" />
+                <rect x="5" y="4" width="1" height="1" />
+                <rect x="6" y="4" width="1" height="1" />
+                <rect x="5" y="5" width="1" height="1" />
+                <rect x="6" y="5" width="1" height="1" />
+                <rect x="7" y="5" width="1" height="1" />
+                <rect x="4" y="6" width="1" height="1" />
+                <rect x="5" y="6" width="1" height="1" />
+                <rect x="6" y="6" width="1" height="1" />
+                <rect x="5" y="7" width="1" height="1" />
+              </g>
+
+              {/* Light Highlights (#fef08a - Pastel Shading) */}
+              <g fill="#fef08a">
+                <rect x="6" y="3" width="1" height="1" />
+                <rect x="3" y="4" width="1" height="1" />
+                <rect x="7" y="4" width="1" height="1" />
+                <rect x="4" y="5" width="1" height="1" />
+              </g>
+
+              {/* White Sparkle/Reflection Highlights (#ffffff) */}
+              <g fill="#ffffff">
+                <rect x="8" y="2" width="1" height="1" />
+                <rect x="7" y="3" width="1" height="1" />
+                <rect x="8" y="3" width="1" height="1" />
+                <rect x="9" y="3" width="1" height="1" />
+                <rect x="2" y="4" width="1" height="1" />
+                <rect x="8" y="4" width="1" height="1" />
+                <rect x="3" y="5" width="1" height="1" />
+              </g>
+            </svg>
+          </div>
+        </section>
 
       </main >
     </div >
