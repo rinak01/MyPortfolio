@@ -1095,10 +1095,10 @@ export default function Var7ClassyAuto() {
                     <SectionLabel>The Problem</SectionLabel>
                     <div className="bg-[#1A1A1A] rounded-sm p-6 border border-white/10">
                       <p className="mb-3">
-                        My best friend Emma is a medical student who wanted a plant but knew she&apos;d kill it — not out of carelessness, but because 80-hour weeks leave no room for it. Existing alternatives are either lifeless decorations or still demand the attention she doesn&apos;t have, failing to capture what makes plants worth having in the first place.
+                        My best friend Emma is a medical student who wanted a plant but knew she&apos;d kill it, not out of carelessness, but because 80-hour weeks leave no room for it. Existing alternatives are either lifeless decorations or still demand the attention she doesn&apos;t have, failing to capture what makes plants worth having in the first place.
                       </p>
                       <p>
-                        <span className="text-[#EAEAEA] font-medium">Design Challenge:</span> Design a plant for Emma that she can never kill — one that still reacts to sunlight, signals when it wants water, and changes with the seasons, so it feels alive without ever depending on her to keep it that way.
+                        <span className="text-[#EAEAEA] font-medium">Design Challenge:</span> Design a plant for Emma that she can never kill. Still reacting to sunlight, signaling when it wants water, and changing with the seasons, so it feels alive without ever depending on her to keep it that way.
                       </p>
                     </div>
                   </div>
