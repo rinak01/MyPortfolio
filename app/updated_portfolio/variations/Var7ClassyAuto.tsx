@@ -141,15 +141,24 @@ function FilteredThumb({
         transition={{ duration: 0.5, ease: "easeOut" }}
       />
       {/* Hover overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end px-5 py-4">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-[#C9B49A] mb-1">{item.tag}</span>
-        <span className={`${outfitClass} text-[#EAEAEA] text-base font-light`}>{item.label}</span>
-        <span className="text-[#A3A3A3] text-[12px] mt-1">{item.desc}</span>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/80 to-black/20 backdrop-blur-[6px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end px-5 py-5">
+        <span className="text-[10px] uppercase tracking-[0.2em] text-[#E8D4BE] mb-1 font-semibold" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}>
+          {item.tag}
+        </span>
+        <span className={`${outfitClass} text-white text-base font-medium mb-1`} style={{ textShadow: "0 2px 4px rgba(0,0,0,0.9)" }}>
+          {item.label}
+        </span>
+        <span className="text-[#E5E5E5] text-[12.5px] leading-relaxed font-normal mb-2.5" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}>
+          {item.desc}
+        </span>
         {/* Category pills */}
-        <div className="flex flex-wrap gap-1 mt-2">
+        <div className="flex flex-wrap gap-1 mt-1">
           {item.categories.map((c) => (
-            <span key={c} className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-sm"
-              style={{ color: CAT_STYLE[c].text }}>
+            <span
+              key={c}
+              className="text-[9px] font-semibold px-2.5 py-0.5 rounded-full bg-black/60 border border-white/15 backdrop-blur-md"
+              style={{ color: CAT_STYLE[c].text, textShadow: "0 1px 2px rgba(0,0,0,0.9)" }}
+            >
               {c}
             </span>
           ))}
@@ -307,9 +316,20 @@ export default function Var7ClassyAuto() {
         <motion.div initial="hidden" animate="visible" variants={slowFade}
           className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div>
-            <h1 className={`${outfit.className} text-5xl md:text-7xl font-light text-[#EAEAEA] tracking-tight mb-6`}>
-              Rina Kim
-            </h1>
+            <div className="flex items-baseline gap-6 mb-6 flex-wrap sm:flex-nowrap">
+              <h1 className={`${outfit.className} text-5xl md:text-7xl font-light text-[#EAEAEA] tracking-tight`}>
+                Rina Kim
+              </h1>
+              <a
+                href="/images/Rina%20Kim%20Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-sm text-[9px] font-semibold uppercase tracking-[0.15em] border transition-all duration-300 cursor-pointer relative -translate-y-[9px]
+                  bg-[#1C1A17] text-[#A3A3A3] border-[#B39D82]/40 shadow-[0_4px_12px_rgba(0,0,0,0.5)] hover:bg-[#B39D82] hover:text-[#0C0C0C] hover:border-[#B39D82] hover:shadow-[0_0_15px_rgba(179,157,130,0.35)] shrink-0"
+              >
+                <span className="pl-[0.15em] text-center">Resume</span>
+              </a>
+            </div>
             <p className="text-sm tracking-[0.15em] uppercase text-[#737373] mb-2">
               <span className="font-semibold text-[#A3A3A3]">Product Designer</span> — UX/UI Design · Prototyping · Systems Thinking
             </p>
