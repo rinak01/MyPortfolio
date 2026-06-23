@@ -321,7 +321,7 @@ export default function Var7ClassyAuto() {
                 Rina Kim
               </h1>
               <a
-                href="/images/Rina%20Kim%20Resume.pdf"
+                href="/images/Resume_RinaKim.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-sm text-[9px] font-semibold uppercase tracking-[0.15em] border transition-all duration-300 cursor-pointer relative -translate-y-[9px]
