@@ -383,33 +383,7 @@ export default function Var7ClassyAuto() {
 
                   <Hairline />
 
-                  {/* Overview */}
-                  <div>
-                    <SectionLabel>Overview</SectionLabel>
-                    <p>
-                      Developed a context-aware UI framework that utilizes generative models to synthesize interface components in real-time. By analyzing driver telemetry, cabin state, and environmental context, the system provides proactive information hierarchy, minimizing cognitive load while enhancing vehicle interaction.
-                    </p>
-                  </div>
-
-                  <Hairline />
-
-                  <div>
-                    <SectionLabel>Key Contributions</SectionLabel>
-                    <ul className="space-y-3">
-                      <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Designed and implemented a modular HMI architecture that decouples UI layout from underlying data streams, enabling seamless adaptation to varying driver contexts.</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Developed a React-based orchestration layer that synchronizes generative model outputs with high-fidelity vehicle displays, ensuring sub-50ms latency for interface transitions.</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Prototyped an Adaptive HMI concept for automotive production, translating experimental generative design into a safety-critical dashboard implementation.</span>
-                      </li>
-                    </ul>
-                  </div>
+                  {/* Overview moved to full-width row below */}
 
                   <Hairline />
 
@@ -441,7 +415,181 @@ export default function Var7ClassyAuto() {
                   <img src="/images/00/pipeline.png" alt="Pipeline diagram" className="w-full h-auto opacity-90" />
                 </div>
               </div>
+            </div>
 
+            {/* Overview + Agent → Capabilities diagram (full width) */}
+            <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-4">
+              {/* Overview text */}
+              <div className="lg:col-span-5 text-[15px] text-[#A3A3A3] leading-relaxed">
+                <SectionLabel>Overview</SectionLabel>
+                <p>
+                  Developed a context-aware UI framework that utilizes generative models to synthesize interface components in real-time. By analyzing driver telemetry, cabin state, and environmental context, the system provides proactive information hierarchy, minimizing cognitive load while enhancing vehicle interaction.
+                </p>
+              </div>
+
+              {/* Agent → Capabilities mapping */}
+              <div className="lg:col-span-7">
+                <div className="bg-[#111] rounded-md border border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.55)] p-5 md:p-6">
+                  <div className="grid grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 items-stretch">
+                    {/* Agent column */}
+                    <div className="flex flex-col gap-2.5">
+                      <div className="flex items-center justify-center text-center py-2 rounded bg-[#1A1A1A] border border-[#C9B49A]/40 min-h-[36px]">
+                        <span className="text-[11px] md:text-[13px] font-medium tracking-wider text-[#EAEAEA]">Agent</span>
+                      </div>
+                      {[
+                        "Models: Plans and decides",
+                        "Tools: Acts and integrates",
+                        "Orchestration: Manages memory, tools, and errors",
+                        "Runtime: Executes",
+                      ].map((label, i) => (
+                        <div key={label} className="flex-1 flex items-center px-3 py-2.5 rounded bg-[#161616] border border-white/[0.06]">
+                          <span className="text-[#C9B49A] text-[10px] md:text-[11px] font-semibold mr-2 shrink-0">{i + 1}.</span>
+                          <span className="text-[10px] md:text-[11.5px] text-[#B0B0B0] leading-[1.35]">{label}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Arrow */}
+                    <div className="flex items-center justify-center">
+                      <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
+                        <path d="M0 9 H22 M17 3 L23 9 L17 15" stroke="#C9B49A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+
+                    {/* Capabilities column */}
+                    <div className="flex flex-col gap-2.5">
+                      <div className="flex items-center justify-center text-center py-2 rounded bg-[#1A1A1A] border border-[#C9B49A]/40 min-h-[36px]">
+                        <span className="text-[11px] md:text-[13px] font-medium tracking-wider text-[#EAEAEA]">Capabilities</span>
+                      </div>
+                      {[
+                        "Conversation Analytics",
+                        "Data Exploration",
+                        "Reasoning",
+                        "Dynamic Tool Selection",
+                        "Data Governance",
+                      ].map(cap => (
+                        <div key={cap} className="flex-1 flex items-center justify-center text-center px-3 py-2.5 rounded bg-[#161616] border border-white/[0.06]">
+                          <span className="text-[10px] md:text-[11.5px] text-[#B0B0B0] leading-[1.35]">{cap}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Divider spanning full width */}
+            <div className="lg:col-span-12 my-2">
+              <Hairline />
+            </div>
+
+            {/* Key Contributions & Agent Architecture Diagram */}
+            <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              <div className="lg:col-span-5 space-y-4 text-[15px] text-[#A3A3A3] leading-relaxed">
+                <SectionLabel>Key Contributions</SectionLabel>
+                <ul className="space-y-4">
+                  <li className="flex gap-3">
+                    <span className="text-[#C9B49A] shrink-0">—</span>
+                    <span>Designed and implemented a modular HMI architecture that decouples UI layout from underlying data streams, enabling seamless adaptation to varying driver contexts.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-[#C9B49A] shrink-0">—</span>
+                    <span>Developed a React-based orchestration layer that synchronizes generative model outputs with high-fidelity vehicle displays, ensuring sub-50ms latency for interface transitions.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-[#C9B49A] shrink-0">—</span>
+                    <span>Prototyped an Adaptive HMI concept for automotive production, translating experimental generative design into a safety-critical dashboard implementation.</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="lg:col-span-7">
+                {/* ── Inline Agent Architecture Diagram ── */}
+                <div className="bg-[#111] rounded-md p-5 md:p-7 border border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.55)]">
+                  {/* ── Main Agent ── */}
+                  <div className="flex justify-center mb-3">
+                    <div className="px-8 py-2.5 rounded-full border border-[#C9B49A]/40 bg-[#1A1A1A]">
+                      <span className={`${outfit.className} text-[13px] md:text-[14px] font-medium tracking-wide text-[#EAEAEA]`}>Main Agent</span>
+                    </div>
+                  </div>
+
+                  {/* ── Connector lines (SVG) ── */}
+                  <svg viewBox="0 0 500 36" className="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+                    {/* Vertical stem */}
+                    <line x1="250" y1="0" x2="250" y2="12" stroke="#C9B49A" strokeWidth="0.8" strokeDasharray="3 2" opacity="0.5" />
+                    {/* Horizontal rail */}
+                    <line x1="50" y1="12" x2="450" y2="12" stroke="#C9B49A" strokeWidth="0.8" opacity="0.35" />
+                    {/* 5 vertical drops */}
+                    {[50, 150, 250, 350, 450].map(x => (
+                      <line key={x} x1={x} y1="12" x2={x} y2="36" stroke="#C9B49A" strokeWidth="0.8" opacity="0.35" />
+                    ))}
+                  </svg>
+
+                  {/* ── Agent cards grid ── */}
+                  <div className="grid grid-cols-5 gap-2 md:gap-3">
+                    {[
+                      {
+                        agent: "Agent A",
+                        domain: "Navigation",
+                        mode: "Reachability",
+                        items: ["Navigation Mapping", "Route Itinerary Preview", "Adaptive Route Analytics", "Live Traffic", "Arrival Metrics"],
+                      },
+                      {
+                        agent: "Agent B",
+                        domain: "Comfort",
+                        mode: "Passenger",
+                        items: ["Thermal Cabin Comfort", "Visibility Optimization", "Thermodynamic Seating", "Spa Mode"],
+                      },
+                      {
+                        agent: "Agent C",
+                        domain: "Weather",
+                        mode: "Road Focus",
+                        items: ["Microclimate & Destination Outlook", "En-Route Environmental Timeline", "Active Weather Advisories", "Predictive Road Analytics"],
+                      },
+                      {
+                        agent: "Agent D",
+                        domain: "Media",
+                        mode: "Entertainment",
+                        items: ["Playback Control", "Music Queue", "Audio Engineering", "Source Switching", "Multizone Audio", "Podcast Audiobook Control"],
+                      },
+                      {
+                        agent: "Agent E",
+                        domain: "Vehicle Shadow",
+                        mode: "Vehicle Health",
+                        items: ["Tire Pressure Analytics", "Engine Oil Level Metrics", "Incident Telemetry Recorder", "Hydraulic Brake Fluid Integrity", "Kinetic Brake Pad Wear Analytics"],
+                      },
+                    ].map(({ agent, domain, mode, items }) => (
+                      <div key={agent} className="flex flex-col gap-2">
+                        {/* Agent header — fixed min-height so single & double-line labels align */}
+                        <div className="flex flex-col items-center justify-center text-center px-1 py-1.5 rounded border border-[#C9B49A]/30 bg-[#1A1A1A] min-h-[44px]">
+                          <span className="block text-[8px] md:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
+                            {agent}
+                          </span>
+                          <span className="block text-[8px] md:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
+                            {domain}
+                          </span>
+                        </div>
+
+                        {/* Capability list — flex-1 stretches all cards to equal height */}
+                        <div className="flex-1 rounded bg-[#161616] border border-white/[0.04] px-2.5 py-2.5">
+                          <ul className="space-y-[4px]">
+                            {items.map(item => (
+                              <li key={item} className="flex gap-1.5 items-start">
+                                <span className="text-[#C9B49A] text-[6px] md:text-[7px] mt-[4px] shrink-0">•</span>
+                                <span className="text-[7px] md:text-[8.5px] text-[#B0B0B0] leading-[1.35]">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Mode badge — fixed min-height so single & double-line labels align */}
+                        <div className="flex items-center justify-center text-center px-1 rounded bg-[#1A1A1A] border border-[#C9B49A]/20 min-h-[26px]">
+                          <span className="text-[7px] md:text-[9px] font-semibold uppercase tracking-[0.12em] text-[#C9B49A] leading-[1.2]">{mode} Mode</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -528,39 +676,74 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            <Hairline />
+            {/* Research Approach — hidden */}
+            <div className="hidden">
+              <SectionLabel>Research Approach</SectionLabel>
+              <p className="text-[14px] text-[#A3A3A3] leading-relaxed max-w-2xl mb-8">
+                Grounded in two complementary methods: physiological measurement to capture what drivers cannot self-report, and structured usability testing to observe how they interact with dynamic interfaces.
+              </p>
 
-            {/* Research Approach */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-              <div className="lg:col-span-4">
-                <SectionLabel>Research Approach</SectionLabel>
-                <p className="text-[13px] text-[#A3A3A3] leading-relaxed">
-                  Grounded in two complementary methods: physiological measurement to capture what drivers cannot self-report, and structured usability testing to observe how they interact with dynamic interfaces.
-                </p>
-              </div>
-              <div className="lg:col-span-8 space-y-5">
-                <div className="bg-[#141414] rounded-sm p-6 border border-white/5">
-                  <p className="text-[12px] uppercase tracking-widest text-[#C9B49A] mb-3">Physiological Data Collection</p>
-                  <p className="text-[14px] text-[#A3A3A3] leading-relaxed mb-4">
-                    Integrated a multi-sensor pipeline — PSI, PPG, heart rate, and CRM measurements — to capture driver state data that feeds directly into the UI&apos;s context gating logic. Design decisions grounded in measurable cognitive and physiological signals rather than self-reported preference alone.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Biometric data capture", "CSV export pipeline", "CRM measurements", "PPG + HR monitoring"].map(m => (
-                      <span key={m} className="text-[10px] uppercase tracking-widest text-[#A3A3A3] border border-white/15 px-2 py-0.5 rounded-sm">{m}</span>
-                    ))}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                {[
+                  {
+                    title: "Physiological Data Collection",
+                    body: "Integrated a multi-sensor pipeline to capture driver state data that feeds directly into the UI's context gating logic. Design decisions grounded in measurable cognitive and physiological signals rather than self-reported preference alone.",
+                    meta: [
+                      { label: "Method", value: "Multi-sensor capture" },
+                      { label: "Instruments", value: "PSI · PPG · HR · CRM" },
+                      { label: "Output", value: "CSV pipeline → context gating" },
+                    ],
+                    icon: (
+                      // Waveform / pulse — biometric capture
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                        <path d="M2 12h3l2-6 3 12 3-9 2 5 2-2h5" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    title: "Usability Testing Framework",
+                    body: "Designed a structured testing framework to evaluate how drivers interact with dynamically generated interfaces under varying scenario conditions. Findings directly informed iteration on the isochrone GenUI concept and real-time layout logic.",
+                    meta: [
+                      { label: "Method", value: "Scenario-based task testing" },
+                      { label: "Window", value: "Oct – Nov 2025" },
+                      { label: "Output", value: "GenUI iteration · layout logic" },
+                    ],
+                    icon: (
+                      // Clipboard checklist — structured testing
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                        <rect x="5" y="4" width="14" height="17" rx="1.5" />
+                        <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" />
+                        <path d="M8.5 11l1.5 1.5L13 9.5" />
+                        <path d="M8.5 16l1.5 1.5L13 14.5" />
+                      </svg>
+                    ),
+                  },
+                ].map(({ title, body, meta, icon }) => (
+                  <div key={title} className="bg-[#141414] rounded-sm border border-white/5 p-6 flex flex-col gap-5">
+                    {/* Header — icon + title */}
+                    <div className="flex items-center gap-3">
+                      <span className="w-9 h-9 rounded-sm flex items-center justify-center border border-[#C9B49A]/30 bg-[#1A1A1A] text-[#C9B49A] shrink-0">
+                        {icon}
+                      </span>
+                      <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{title}</span>
+                    </div>
+
+                    {/* Body */}
+                    <p className="text-[14px] text-[#A3A3A3] leading-relaxed">
+                      {body}
+                    </p>
+
+                    {/* Methods strip */}
+                    <div className="border-t border-white/5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-3">
+                      {meta.map(({ label, value }) => (
+                        <div key={label} className="flex flex-col gap-1 min-w-0">
+                          <span className="text-[9px] uppercase tracking-[0.2em] text-[#737373]">{label}</span>
+                          <span className="text-[12px] text-[#EAEAEA] leading-snug break-words">{value}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <div className="bg-[#141414] rounded-sm p-6 border border-white/5">
-                  <p className="text-[12px] uppercase tracking-widest text-[#C9B49A] mb-3">Usability Testing Framework</p>
-                  <p className="text-[14px] text-[#A3A3A3] leading-relaxed mb-4">
-                    Designed a structured testing framework to evaluate how drivers interact with dynamically generated interfaces under varying scenario conditions. Testing ran Oct–Nov, with findings directly informing iteration on the isochrone GenUI concept and real-time layout logic.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Scenario-based task testing", "Observational sessions", "Iterative prototype refinement", "Data collection"].map(m => (
-                      <span key={m} className="text-[10px] uppercase tracking-widest text-[#A3A3A3] border border-white/15 px-2 py-0.5 rounded-sm">{m}</span>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -572,12 +755,60 @@ export default function Var7ClassyAuto() {
               <p className="text-[14px] text-[#A3A3A3] mb-8">Three principles shaped every design decision across the project.</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
-                  { title: "Surface, don\u2019t bury", body: "Information the driver needs appears without navigation. The interface assembles itself around context \u2014 snowy roads, an incoming call, a known route \u2014 rather than waiting for the driver to request it." },
-                  { title: "Minimum viable glance", body: "Every screen evaluated against a glance budget. Safety-critical data chunked into scannable modules readable in under two seconds without sustained visual attention." },
-                  { title: "State over preference", body: "Driver state data \u2014 fatigue signals, cognitive load, speed \u2014 gates what is shown and how. Comfort controls auto-adjust. Map overlays appear and collapse based on current capacity, not just settings." },
-                  { title: "Context continuity", body: "The system maintains awareness across modes \u2014 navigation, comfort, media, vehicle health \u2014 orchestrating agents so decisions in one domain inform layout choices in another." },
-                ].map(({ title, body }) => (
+                  {
+                    title: "Surface, don\u2019t bury",
+                    body: "Information the driver needs appears without navigation. The interface assembles itself around context \u2014 snowy roads, an incoming call, a known route \u2014 rather than waiting for the driver to request it.",
+                    icon: (
+                      // Eye \u2014 visibility / surface
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    title: "Minimum viable glance",
+                    body: "Every screen evaluated against a glance budget. Safety-critical data chunked into scannable modules readable in under two seconds without sustained visual attention.",
+                    icon: (
+                      // Stopwatch \u2014 glance budget
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                        <circle cx="12" cy="14" r="7" />
+                        <path d="M12 10v4l2 2" />
+                        <path d="M9 3h6" />
+                        <path d="M12 3v3" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    title: "State over preference",
+                    body: "Driver state data \u2014 fatigue signals, cognitive load, speed \u2014 gates what is shown and how. Comfort controls auto-adjust. Map overlays appear and collapse based on current capacity, not just settings.",
+                    icon: (
+                      // Pulse line \u2014 biometric / state
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                        <path d="M3 12h4l2-5 3 10 2-7 2 4 2-2h3" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    title: "Context continuity",
+                    body: "The system maintains awareness across modes \u2014 navigation, comfort, media, vehicle health \u2014 orchestrating agents so decisions in one domain inform layout choices in another.",
+                    icon: (
+                      // Connected nodes \u2014 orchestration / network
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                        <circle cx="5" cy="6" r="2" />
+                        <circle cx="19" cy="6" r="2" />
+                        <circle cx="12" cy="18" r="2" />
+                        <path d="M6.5 7.3 10.7 16.7" />
+                        <path d="M17.5 7.3 13.3 16.7" />
+                        <path d="M7 6h10" />
+                      </svg>
+                    ),
+                  },
+                ].map(({ title, body, icon }) => (
                   <div key={title} className="bg-[#141414] rounded-sm p-6 border border-white/5 flex flex-col gap-3">
+                    <span className="w-9 h-9 rounded-sm flex items-center justify-center border border-[#C9B49A]/30 bg-[#1A1A1A] text-[#C9B49A]">
+                      {icon}
+                    </span>
                     <span className="text-[#EAEAEA] text-[13px] font-medium">{title}</span>
                     <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{body}</span>
                   </div>
@@ -688,39 +919,6 @@ export default function Var7ClassyAuto() {
 
             <Hairline />
 
-            {/* Agent Architecture */}
-            <div>
-              <SectionLabel>Design System Architecture</SectionLabel>
-              <p className="text-[14px] text-[#A3A3A3] mb-6 max-w-2xl break-words whitespace-normal">
-                A five-domain agent architecture where each agent owns a discrete area of the driving experience. A central orchestrator determines priority and layout based on live context signals.
-              </p>
-              <div className="overflow-hidden rounded-sm border border-white/8">
-                {[
-                  { agent: "Navigation", detail: "Route and map layer \u2014 routine learning, live traffic, ETA, and proactive POI surfacing based on calendar and habitual patterns." },
-                  { agent: "Comfort", detail: "Climate, seat controls, and cabin environment \u2014 auto-adjusts based on passenger profiles and ambient conditions." },
-                  { agent: "Weather", detail: "Live precipitation radar, road condition prediction, ice and hydroplaning risk, fog detection \u2014 feeds directly into map overlay and alert design." },
-                  { agent: "Media", detail: "Playback, audio zone management, and context-aware suggestions \u2014 attenuates automatically when safety-relevant alerts surface." },
-                  { agent: "Vehicle Health", detail: "Continuous monitoring of tire pressure, oil level, brake fluid and pad wear. Triggers automatic video recording on impact detection. Feeds snow readiness and proactive maintenance surfaces." },
-                ].map(({ agent, detail }, i) => (
-                  <div key={agent} className={`grid grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
-                    <div className="col-span-3 p-4 border-r border-white/5">
-                      <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{agent}</span>
-                    </div>
-                    <div className="col-span-9 p-4">
-                      <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{detail}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {["Reachability", "Passenger", "Road Focus", "Entertainment", "Eco"].map(mode => (
-                  <span key={mode} className="text-[10px] uppercase tracking-widest text-[#A3A3A3] border border-white/15 px-3 py-1 rounded-sm">{mode} Mode</span>
-                ))}
-              </div>
-            </div>
-
-            <Hairline />
-
             {/* Industry Exposure */}
             {/* <div>
               <SectionLabel>Industry Exposure</SectionLabel>
@@ -803,19 +1001,305 @@ export default function Var7ClassyAuto() {
 
             {/* Left — imagery (reversed column) */}
             <div className="lg:col-span-6 order-2 lg:order-1 space-y-4">
-              {/* Pipeline — near-square 1:1, full natural size */}
-              <div className="aspect-[1/1] overflow-hidden bg-[#141414] rounded-sm">
-                <img src="/images/01/proactive agent pipeline.png" alt="Proactive Agent Pipeline"
-                  className="w-full h-full object-contain object-center opacity-85 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out" />
+              {/* ── Inline Speech-Flow Chart (translucent navy panel) ── */}
+              <div
+                className="rounded-md border border-[#60A5FA]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md"
+                style={{ background: "rgba(11, 28, 48, 0.55)" }}
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="text-[10px] uppercase tracking-[0.24em] text-[#7DD3FC] font-semibold">Speech Pipeline</span>
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-slate-400">Real-time</span>
+                </div>
+
+                {/* Sample utterance caption */}
+                <p className="text-[11px] md:text-[12px] text-slate-400 italic mb-5 leading-snug">
+                  Sample input: <span className="text-slate-200 not-italic">&ldquo;hey um, can you turn up the… volume thing?&rdquo;</span>
+                </p>
+
+                {/* Flow chart SVG */}
+                <svg
+                  viewBox="0 0 1000 1140"
+                  className="w-full h-auto block"
+                  preserveAspectRatio="xMidYMid meet"
+                  style={{ fontFamily: "inherit" }}
+                >
+                  <defs>
+                    {/* Arrow marker */}
+                    <marker id="pa-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M0,1 L9,5 L0,9 Z" fill="#60A5FA" />
+                    </marker>
+                    {/* Soft drop shadow for boxes */}
+                    <filter id="pa-shadow" x="-5%" y="-5%" width="110%" height="120%">
+                      <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#0F172A" floodOpacity="0.10" />
+                    </filter>
+                  </defs>
+
+                  {/* ── 1. User Input Speech — pill ── */}
+                  <g filter="url(#pa-shadow)">
+                    <rect x="40" y="14" width="560" height="100" rx="50" fill="white" stroke="#60A5FA" strokeWidth="3" />
+                  </g>
+                  <text x="320" y="64" textAnchor="middle" dominantBaseline="central"
+                    fontSize="26" fontWeight="700" fill="#0F172A">User Input Speech</text>
+
+                  {/* Dashed connector with open dots (source link) */}
+                  <circle cx="320" cy="124" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+                  <line x1="320" y1="132" x2="320" y2="184" stroke="#60A5FA" strokeWidth="2" strokeDasharray="6 6" />
+                  <circle cx="320" cy="192" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+
+                  {/* ── 2. Audio Dataset — large rounded rect with list ── */}
+                  <g filter="url(#pa-shadow)">
+                    <rect x="40" y="200" width="560" height="320" rx="22" fill="white" stroke="#60A5FA" strokeWidth="3" />
+                  </g>
+                  <text x="90" y="246" fontSize="26" fontWeight="700" fill="#0F172A">Audio Dataset</text>
+                  {[
+                    "Prompt Relevant Speech File",
+                    "Prompt Irrelevant Speech Files",
+                    "Formal Speech Files",
+                    "Informal Speech Files",
+                    "Background Noise Speech Files",
+                  ].map((item, i) => {
+                    const y = 308 + i * 38;
+                    return (
+                      <g key={item}>
+                        <circle cx="130" cy={y - 5} r="3.5" fill="#0F172A" />
+                        <text x="150" y={y} fontSize="18" fill="#1E293B">{item}</text>
+                      </g>
+                    );
+                  })}
+
+                  {/* Connector ↓ to Speech To Text */}
+                  <circle cx="320" cy="528" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+                  <line x1="320" y1="536" x2="320" y2="588" stroke="#60A5FA" strokeWidth="2.5" markerEnd="url(#pa-arrow)" />
+
+                  {/* ── 3. Speech To Text — rounded rect ── */}
+                  <g filter="url(#pa-shadow)">
+                    <rect x="40" y="598" width="560" height="140" rx="22" fill="white" stroke="#60A5FA" strokeWidth="3" />
+                  </g>
+                  <text x="320" y="650" textAnchor="middle" dominantBaseline="central"
+                    fontSize="26" fontWeight="700" fill="#0F172A">Speech To Text</text>
+                  <text x="320" y="694" textAnchor="middle" dominantBaseline="central"
+                    fontSize="22" fontWeight="700" fill="#0F172A">NLP + Semantic Analysis</text>
+
+                  {/* Side annotation: Labeled Audio Dataset */}
+                  <line x1="600" y1="668" x2="668" y2="668" stroke="#60A5FA" strokeWidth="2" strokeDasharray="5 5" />
+                  <rect x="668" y="618" width="3" height="100" fill="#60A5FA" />
+                  <g filter="url(#pa-shadow)">
+                    <rect x="680" y="610" width="290" height="116" rx="6" fill="#EFF6FF" stroke="#60A5FA" strokeWidth="1.8" />
+                  </g>
+                  <text x="700" y="646" fontSize="16" fontWeight="700" fill="#0F172A">Labeled Audio Dataset:</text>
+                  <text x="700" y="676" fontSize="15" fill="#1E293B">For validating semantic</text>
+                  <text x="700" y="696" fontSize="15" fill="#1E293B">recognition</text>
+
+                  {/* Connector ↓ to Classification */}
+                  <circle cx="320" cy="746" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+                  <line x1="320" y1="754" x2="320" y2="794" stroke="#60A5FA" strokeWidth="2.5" markerEnd="url(#pa-arrow)" />
+
+                  {/* ── 4. Classification — diamond ── */}
+                  <g filter="url(#pa-shadow)">
+                    <polygon points="320,800 530,920 320,1040 110,920"
+                      fill="white" stroke="#60A5FA" strokeWidth="3" strokeLinejoin="round" />
+                  </g>
+                  <text x="320" y="900" textAnchor="middle" dominantBaseline="central"
+                    fontSize="24" fontWeight="700" fill="#0F172A">Classification</text>
+                  {/* Sub-question with bullet */}
+                  <circle cx="208" cy="938" r="3.5" fill="#0F172A" />
+                  <text x="222" y="942" fontSize="17" fill="#1E293B">Are semantics relevant</text>
+                  <text x="222" y="966" fontSize="17" fill="#1E293B">to the system?</text>
+
+                  {/* Side annotation: Evaluation notes */}
+                  <line x1="530" y1="920" x2="668" y2="920" stroke="#60A5FA" strokeWidth="2" strokeDasharray="5 5" />
+                  <rect x="668" y="830" width="3" height="180" fill="#60A5FA" />
+                  <g filter="url(#pa-shadow)">
+                    <rect x="680" y="820" width="290" height="200" rx="6" fill="#EFF6FF" stroke="#60A5FA" strokeWidth="1.8" />
+                  </g>
+                  {/* Annotation text — two bullet entries */}
+                  <text x="700" y="858" fontSize="14" fill="#3B82F6" fontWeight="700">▸</text>
+                  <text x="718" y="858" fontSize="14" fill="#1E293B">In evaluation, loop through all</text>
+                  <text x="718" y="878" fontSize="14" fill="#1E293B">audio files/dataset to calculate</text>
+                  <text x="718" y="898" fontSize="14" fill="#1E293B">accuracy</text>
+                  <text x="700" y="938" fontSize="14" fill="#3B82F6" fontWeight="700">▸</text>
+                  <text x="718" y="938" fontSize="14" fill="#1E293B">the evaluation process involves</text>
+                  <text x="718" y="958" fontSize="14" fill="#1E293B">systematically looping through all</text>
+                  <text x="718" y="978" fontSize="14" fill="#1E293B">audio files to calculate model</text>
+                  <text x="718" y="998" fontSize="14" fill="#1E293B">accuracy.</text>
+
+                  {/* Branch connector — open dot at diamond bottom */}
+                  <circle cx="320" cy="1046" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+
+                  {/* YES branch — left, with rounded turn */}
+                  <path d="M 320 1054 L 320 1066 Q 320 1078 308 1078 L 152 1078 Q 140 1078 140 1090 L 140 1108"
+                    stroke="#60A5FA" strokeWidth="2.5" fill="none" markerEnd="url(#pa-arrow)" strokeLinejoin="round" strokeLinecap="round" />
+
+                  {/* NO branch — right, with rounded turn */}
+                  <path d="M 320 1054 L 320 1066 Q 320 1078 332 1078 L 488 1078 Q 500 1078 500 1090 L 500 1108"
+                    stroke="#60A5FA" strokeWidth="2.5" fill="none" markerEnd="url(#pa-arrow)" strokeLinejoin="round" strokeLinecap="round" />
+
+                  {/* Check badge — YES */}
+                  <g filter="url(#pa-shadow)">
+                    <circle cx="140" cy="1098" r="18" fill="#60A5FA" stroke="white" strokeWidth="2" />
+                  </g>
+                  <path d="M 131 1098 L 138 1105 L 150 1092" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+
+                  {/* X badge — NO */}
+                  <g filter="url(#pa-shadow)">
+                    <circle cx="500" cy="1098" r="18" fill="#60A5FA" stroke="white" strokeWidth="2" />
+                  </g>
+                  <path d="M 491 1089 L 509 1107 M 509 1089 L 491 1107" stroke="white" strokeWidth="2.6" strokeLinecap="round" fill="none" />
+                </svg>
+
+                {/* Output row — Agent Responds | Agent Ignores */}
+                <div className="grid grid-cols-2 gap-4 -mt-2">
+                  <div className="rounded-2xl border-[3px] border-[#60A5FA] bg-white shadow-[0_4px_14px_rgba(15,23,42,0.10)] py-4 px-4 text-center">
+                    <span className="text-[15px] md:text-[17px] font-bold text-slate-900 tracking-tight">Agent Responds</span>
+                  </div>
+                  <div className="rounded-2xl border-[3px] border-[#60A5FA] bg-white shadow-[0_4px_14px_rgba(15,23,42,0.10)] py-4 px-4 text-center">
+                    <span className="text-[15px] md:text-[17px] font-bold text-slate-900 tracking-tight">Agent Ignores</span>
+                  </div>
+                </div>
+
+                {/* Footer metric */}
+                <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
+                  <span className="text-[9px] uppercase tracking-[0.22em] text-slate-400">Classification Accuracy</span>
+                  <span className={`${outfit.className} text-[16px] text-white font-light`}>&gt;90<span className="text-[#7DD3FC]">%</span></span>
+                </div>
               </div>
               {/* NLP diagram */}
               {/* <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
                 <img src="/images/01/NLP01.png" alt="NLP Semantic Analysis" className="w-[85%] h-auto opacity-70 invert" />
               </div> */}
-              {/* Graph — centered card, constrained width so it doesn't stretch */}
-              <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
-                <img src="/images/01/updatedGraph.png" alt="Response Accuracy Graph"
-                  className="w-[75%] h-auto opacity-90 hover:opacity-100 transition-opacity duration-500" />
+              {/* ── Response Accuracy — Formal vs Informal Comparison ── */}
+              <div
+                className="rounded-md border border-[#60A5FA]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md"
+                style={{ background: "rgba(11, 28, 48, 0.55)" }}
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="text-[10px] uppercase tracking-[0.24em] text-[#7DD3FC] font-semibold">Response Accuracy</span>
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-slate-400">Formal vs Informal</span>
+                </div>
+
+                {/* Caption */}
+                <p className="text-[11px] md:text-[12px] text-slate-400 italic mb-5 leading-snug">
+                  Classification accuracy across speech conditions, split by speaking style.
+                </p>
+
+                {/* Legend */}
+                <div className="flex items-center gap-5 mb-6 pb-4 border-b border-white/10">
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-sm" style={{ background: "linear-gradient(90deg,#38BDF8,#7DD3FC)", boxShadow: "0 0 8px rgba(56,189,248,0.5)" }} />
+                    <span className="text-[10.5px] uppercase tracking-[0.18em] text-slate-200 font-medium">Formal</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-sm border border-[#7DD3FC]/60" style={{ background: "rgba(125,211,252,0.15)" }} />
+                    <span className="text-[10.5px] uppercase tracking-[0.18em] text-slate-200 font-medium">Informal</span>
+                  </div>
+                </div>
+
+                {/* Vertical double-bar chart */}
+                {(() => {
+                  const data = [
+                    { condition: "Prompt Relevant", formal: 96, informal: 93 },
+                    { condition: "Prompt Irrelevant", formal: 94, informal: 90 },
+                    { condition: "Background Noise", formal: 89, informal: 84 },
+                  ];
+                  return (
+                    <div>
+                      {/* Chart area */}
+                      <div className="relative pt-6" style={{ height: 280 }}>
+                        {/* Y-axis labels */}
+                        <div className="absolute left-0 top-6 bottom-7 w-7 flex flex-col justify-between items-end text-[9px] text-slate-500 tracking-wide">
+                          <span>100</span>
+                          <span>75</span>
+                          <span>50</span>
+                          <span>25</span>
+                          <span>0</span>
+                        </div>
+
+                        {/* Plot area */}
+                        <div className="absolute left-9 right-2 top-6 bottom-7">
+                          {/* Horizontal gridlines */}
+                          {[0, 25, 50, 75, 100].map(v => (
+                            <div
+                              key={v}
+                              className="absolute left-0 right-0 h-px bg-white/[0.06]"
+                              style={{ bottom: `${v}%` }}
+                            />
+                          ))}
+
+                          {/* Bar groups */}
+                          <div className="absolute inset-0 flex items-end justify-around">
+                            {data.map(({ condition, formal, informal }, i) => (
+                              <div key={condition} className="relative flex items-end gap-1.5 h-full">
+                                {/* Formal bar column */}
+                                <div className="relative h-full w-9 md:w-11">
+                                  {/* Value label */}
+                                  <span
+                                    className={`${outfit.className} absolute left-1/2 -translate-x-1/2 text-[10.5px] md:text-[11.5px] text-white font-light whitespace-nowrap`}
+                                    style={{ bottom: `calc(${formal}% + 4px)` }}
+                                  >
+                                    {formal}<span className="text-[#7DD3FC] text-[8.5px]">%</span>
+                                  </span>
+                                  {/* Bar */}
+                                  <motion.div
+                                    initial={{ height: 0 }}
+                                    whileInView={{ height: `${formal}%` }}
+                                    viewport={{ once: true, margin: "-10%" }}
+                                    transition={{ duration: 1.2, delay: i * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+                                    className="absolute bottom-0 left-0 right-0 rounded-t-md"
+                                    style={{
+                                      background: "linear-gradient(180deg, #7DD3FC 0%, #38BDF8 100%)",
+                                      boxShadow: "0 0 12px rgba(56,189,248,0.4)",
+                                    }}
+                                  />
+                                </div>
+
+                                {/* Informal bar column */}
+                                <div className="relative h-full w-9 md:w-11">
+                                  <span
+                                    className={`${outfit.className} absolute left-1/2 -translate-x-1/2 text-[10.5px] md:text-[11.5px] text-slate-200 font-light whitespace-nowrap`}
+                                    style={{ bottom: `calc(${informal}% + 4px)` }}
+                                  >
+                                    {informal}<span className="text-[#7DD3FC] text-[8.5px]">%</span>
+                                  </span>
+                                  <motion.div
+                                    initial={{ height: 0 }}
+                                    whileInView={{ height: `${informal}%` }}
+                                    viewport={{ once: true, margin: "-10%" }}
+                                    transition={{ duration: 1.2, delay: i * 0.15 + 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                                    className="absolute bottom-0 left-0 right-0 rounded-t-md border border-b-0 border-[#7DD3FC]/60"
+                                    style={{
+                                      background: "rgba(125,211,252,0.16)",
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* X-axis labels */}
+                      <div className="ml-9 mr-2 mt-2 flex justify-around items-start">
+                        {data.map(({ condition }) => (
+                          <div key={condition} className="flex flex-col items-center text-center max-w-[110px]">
+                            <span className="text-[10.5px] md:text-[11.5px] text-slate-200 font-medium tracking-wide leading-tight">
+                              {condition}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Footer metric */}
+                <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                  <span className="text-[9px] uppercase tracking-[0.22em] text-slate-400">Overall Mean Accuracy</span>
+                  <span className={`${outfit.className} text-[20px] text-white font-light`}>
+                    &gt;90<span className="text-[#7DD3FC]">%</span>
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -1057,17 +1541,34 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            {/* Right — imagery stacked vertically */}
-            <div className="lg:col-span-4 flex flex-col gap-3">
-              {/* Dashboard — full width, portrait 3:4 natural ratio */}
-              <div className="w-full aspect-[3/4] overflow-hidden bg-[#141414] rounded-sm">
-                <img src="/images/02/trend_forecasting_dashboard 1.png" alt="AI Trend Forecasting Dashboard"
-                  className="w-full h-full object-cover object-top opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out" />
+            {/* Right — imagery stacked vertically, framed in semi-transparent panels (enlarged ~30%, grows rightward) */}
+            <div className="lg:col-span-4 flex flex-col gap-4 lg:scale-[1.30] lg:origin-top-left lg:ml-4">
+              {/* Dashboard — framed, image scales within panel */}
+              <div
+                className="w-full rounded-md border border-[#C9B49A]/15 p-4 md:p-5 backdrop-blur-md shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
+                style={{ background: "rgba(20, 18, 14, 0.42)" }}
+              >
+                <div className="w-full aspect-[3/4] overflow-hidden rounded-sm bg-black/20">
+                  <img
+                    src="/images/02/trend_forecasting_dashboard 1.png"
+                    alt="AI Trend Forecasting Dashboard"
+                    className="w-full h-full object-contain object-center opacity-95 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out"
+                  />
+                </div>
               </div>
-              {/* Surefront Interviews — full width, landscape 3:2 natural ratio */}
-              <div className="w-full aspect-[3/2] overflow-hidden bg-[#141414] rounded-sm">
-                <img src="/images/02/SurefrontInterviews.png" alt="Surefront Interviews"
-                  className="w-full h-full object-cover object-top opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out" />
+
+              {/* Surefront Interviews — framed, image scales within panel */}
+              <div
+                className="w-full rounded-md border border-[#C9B49A]/15 p-4 md:p-5 backdrop-blur-md shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
+                style={{ background: "rgba(20, 18, 14, 0.42)" }}
+              >
+                <div className="w-full aspect-[3/2] overflow-hidden rounded-sm bg-black/20">
+                  <img
+                    src="/images/02/SurefrontInterviews.png"
+                    alt="Surefront Interviews"
+                    className="w-full h-full object-contain object-center opacity-95 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out"
+                  />
+                </div>
               </div>
             </div>
 
@@ -1109,7 +1610,7 @@ export default function Var7ClassyAuto() {
                   2023 Jun – 2024 Jun &nbsp;·&nbsp; Designer &amp; Developer
                 </p>
 
-                <div className="space-y-6 text-[15px] text-[#A3A3A3] leading-relaxed">
+                <div className="space-y-12 text-[15px] text-[#A3A3A3] leading-relaxed">
                   {/* The Problem */}
                   <div>
                     <SectionLabel>The Problem</SectionLabel>
@@ -1436,6 +1937,26 @@ export default function Var7ClassyAuto() {
                     {/* Bubble tail */}
                     <div className="absolute -bottom-[16px] right-12 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-black" />
                     <div className="absolute -bottom-[8px] right-12 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-white" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Iced Coffee Hover — "Strawberry Latte" */}
+              <div
+                className="absolute z-20 block group/coffee"
+                style={{ left: '5%', top: '64%', width: '13%', height: '33%' }}
+              >
+                <div className="w-full h-full rounded-sm group-hover/coffee:bg-white/5 transition-colors duration-300 cursor-help" />
+
+                {/* Pixelated thought bubble */}
+                <div className="absolute bottom-[90%] left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none opacity-0 group-hover/coffee:opacity-100 group-hover/coffee:-translate-y-3 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+                  <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                    <p className="text-[#b45309] text-[12px] font-bold whitespace-nowrap text-center" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                      Strawberry Latte
+                    </p>
+                    {/* Bubble tail */}
+                    <div className="absolute -bottom-[16px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-black" />
+                    <div className="absolute -bottom-[8px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-white" />
                   </div>
                 </div>
               </div>
