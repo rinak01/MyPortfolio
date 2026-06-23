@@ -988,8 +988,6 @@ export default function Var7ClassyAuto() {
           </div>
         </motion.article>
 
-        <div className="w-full h-[1px] bg-white/5" />
-
         {/* ─── Project 01: SmaSH Lab | Proactive Agent ─── */}
         <motion.article id="project-01" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
