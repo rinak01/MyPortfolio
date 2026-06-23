@@ -418,7 +418,7 @@ export default function Var7ClassyAuto() {
             </div>
 
             {/* Overview + Agent → Capabilities diagram (full width) */}
-            <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-4">
+            <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-16">
               {/* Overview text */}
               <div className="lg:col-span-5 text-[15px] text-[#A3A3A3] leading-relaxed">
                 <SectionLabel>Overview</SectionLabel>
@@ -478,27 +478,22 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            {/* Divider spanning full width */}
-            <div className="lg:col-span-12 my-2">
-              <Hairline />
-            </div>
-
             {/* Key Contributions & Agent Architecture Diagram */}
             <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              <div className="lg:col-span-5 space-y-4 text-[15px] text-[#A3A3A3] leading-relaxed">
+              <div className="lg:col-span-5 space-y-3 text-[13.5px] text-[#A3A3A3] leading-relaxed">
                 <SectionLabel>Key Contributions</SectionLabel>
-                <ul className="space-y-4">
-                  <li className="flex gap-3">
+                <ul className="space-y-2.5">
+                  <li className="flex gap-2.5">
                     <span className="text-[#C9B49A] shrink-0">—</span>
-                    <span>Designed and implemented a modular HMI architecture that decouples UI layout from underlying data streams, enabling seamless adaptation to varying driver contexts.</span>
+                    <span>Modular HMI architecture decoupling UI layout from data streams, enabling seamless adaptation to driver context.</span>
                   </li>
-                  <li className="flex gap-3">
+                  <li className="flex gap-2.5">
                     <span className="text-[#C9B49A] shrink-0">—</span>
-                    <span>Developed a React-based orchestration layer that synchronizes generative model outputs with high-fidelity vehicle displays, ensuring sub-50ms latency for interface transitions.</span>
+                    <span>React-based orchestration layer synchronizing generative model outputs with vehicle displays at sub-50ms latency.</span>
                   </li>
-                  <li className="flex gap-3">
+                  <li className="flex gap-2.5">
                     <span className="text-[#C9B49A] shrink-0">—</span>
-                    <span>Prototyped an Adaptive HMI concept for automotive production, translating experimental generative design into a safety-critical dashboard implementation.</span>
+                    <span>Adaptive HMI prototype translating experimental generative design into safety-critical dashboard implementation.</span>
                   </li>
                 </ul>
               </div>
