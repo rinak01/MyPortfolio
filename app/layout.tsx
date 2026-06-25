@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rina Kim — Product Designer",
+  title: "Rina Kim · Product Designer",
   description: "Portfolio of Rina Kim, Product Designer specializing in Automotive HMI, Interface Design, and Prototyping.",
 };
 
