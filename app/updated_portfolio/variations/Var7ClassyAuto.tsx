@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Outfit, DM_Sans } from "next/font/google";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["200", "300", "400", "500"] });
@@ -14,7 +14,8 @@ type Category =
   | "Multimodal Systems"
   | "Rapid Prototyping"
   | "Interface Design"
-  | "Tangible Environments";
+  | "Tangible Environments"
+  | "MIT Reality Hack";
 
 const ALL_CATEGORIES: Category[] = [
   "Multimodal Systems",
@@ -23,6 +24,7 @@ const ALL_CATEGORIES: Category[] = [
   "Physical Computing",
   "Rapid Prototyping",
   "Tangible Environments",
+  "MIT Reality Hack",
 ];
 
 const CAT_STYLE: Record<Category, { dot: string; active: string; text: string }> = {
@@ -32,6 +34,7 @@ const CAT_STYLE: Record<Category, { dot: string; active: string; text: string }>
   "Rapid Prototyping": { dot: "#f87171", active: "rgba(239,68,68,0.18)", text: "#fca5a5" },
   "Interface Design": { dot: "#f472b6", active: "rgba(236,72,153,0.18)", text: "#f9a8d4" },
   "Tangible Environments": { dot: "#d97706", active: "rgba(180,110,30,0.20)", text: "#fcd34d" },
+  "MIT Reality Hack": { dot: "#a78bfa", active: "rgba(139,92,246,0.18)", text: "#c4b5fd" },
 };
 
 interface GridItem {
@@ -44,29 +47,112 @@ interface GridItem {
   colSpan?: number;
   aspectClass?: string;
   scaleClass?: string;
+  // Modal-only fields (optional). Render only when provided.
+  year?: string;             // e.g. "2024", "Spring 2023"
+  context?: string;          // e.g. "CMU coursework", "Personal", "BMW internship"
+  tools?: string[];          // e.g. ["Unity", "Figma", "Arduino"]
+  notes?: string;            // Longer paragraph: process, outcome, what you'd change
+  designThinking?: string;   // Design rationale, principles, decisions
+  links?: { label: string; href: string }[]; // e.g. demo, repo, paper
+  // Optional video shown at the top of the modal's image column.
+  // Accepts a full YouTube URL (youtu.be or youtube.com); embed URL is derived automatically.
+  video?: { url: string; caption?: string };
+  // Process images shown by scrolling the modal's image column.
+  // If omitted, the modal falls back to a single image from `src`.
+  // First entry = hero/final shot, subsequent entries = build/process shots.
+  images?: { src: string; caption?: string }[];
+}
+
+// Extract a YouTube video ID from any common URL shape (youtu.be / watch?v= / embed)
+function getYouTubeId(url: string): string | null {
+  const patterns = [
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
 }
 
 const ALL_PROJECTS: GridItem[] = [
   // Prototypes
-  { src: "/images/prototypes/ResponsiveTale 1.png", alt: "ResponsiveTale", tag: "Interactive · XR", label: "Responsive Tale", desc: "Adaptive storytelling interface reacting to reader behavior", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Physical Computing"] },
-  { src: "/images/prototypes/peppersghost01.png", alt: "Pepper's Ghost", tag: "Spatial · Illusion", label: "Pepper's Ghost", desc: "Holographic display using classic stage illusion technique", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR", tag: "XR · Wearable", label: "FlexVR", desc: "Flexible VR interface that adapts to body movement", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Physical Computing", "Rapid Prototyping"] },
-  { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", tag: "Interactive · Bio", label: "Emma's Jellyfish", desc: "Bioluminescent jellyfish environment responding to gesture", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"] },
-  { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education", label: "LeARn", desc: "Augmented reality learning environment for spatial comprehension", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Rapid Prototyping"] },
-  { src: "/images/prototypes/stopmotion02.png", alt: "Stop Motion 02", tag: "Physical · Animation", label: "Stop Motion 02", desc: "Stop motion study with extended material and texture exploration", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/cmupopup 1.png", alt: "CMU Popup", tag: "Installation", label: "CMU Popup", desc: "Pop-up exhibition experience designed for CMU campus", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/prototypes/portalreef 1.png", alt: "Portal Reef", tag: "XR · Environment", label: "Portal Reef", desc: "Immersive underwater portal experience in mixed reality", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Physical Computing", "Interface Design"] },
-  { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion", tag: "Physical · Animation", label: "Stop Motion", desc: "Frame-by-frame physical animation exploring material storytelling", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"] },
+  { src: "/images/prototypes/ResponsiveTale/ResponsiveTale 1.png", alt: "ResponsiveTale", tag: "Interactive · XR", label: "Responsive Tale", desc: "Adaptive storytelling interface reacting to reader behavior", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Physical Computing"], year: "2024", context: "CMU MHCI coursework", tools: ["Unity", "Figma", "Arduino"], notes: "A spatial story where pacing and visual treatment adapt to the reader's gaze and posture. Eye-tracking signals shifted the typography weight and ambient sound to match attention level, slowing down when readers paused on a passage, accelerating when they skimmed.", designThinking: "Started from the observation that reading is an active, embodied process: eye movement, posture, and breath all telegraph engagement. The prototype treats those signals as design input rather than passive data: when the reader pauses, the system slows, holds the page, and dims peripheral light.\n\nA deliberate trade-off was favoring inferential cues over explicit settings: readers shouldn't have to manage their own pacing for a story to feel responsive.", images: [
+    { src: "/images/prototypes/ResponsiveTale/ResponsiveTale 1.png", caption: "The book held open, an instrumented surface that drives a spatial story in VR." },
+    { src: "/images/prototypes/ResponsiveTale/RT_product02.jpg", caption: "Internal architecture: battery, ESP32, and sensor array routed across the spine." },
+    { src: "/images/prototypes/ResponsiveTale/RT_product03.jpg", caption: "VR controllers dock into the book frame. Physical and virtual reading collapse into one object." },
+    { src: "/images/prototypes/ResponsiveTale/unnamed.jpg", caption: "In use: the reader holds the book while the story unfolds in VR around them." },
+  ] },
+  { src: "/images/prototypes/BMWDesignworks/BMW-Designworks-hero.jpg", alt: "BMW Designworks", tag: "BMW Group · Internship", label: "BMW Designworks", desc: "Interaction Design internship at BMW Group's design subsidiary, investigating how designers can work with and incorporate AI tools into their process", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Rapid Prototyping"], year: "2024", context: "BMW Designworks · Santa Monica, CA", tools: ["Figma", "Internal Tools"], notes: "Interaction Design internship at BMW Designworks, BMW Group's design subsidiary. The primary brief was to investigate the user experience surrounding how designers work with, and incorporate, AI tools into their process. The role involved partnering with multiple departments to brainstorm how rapidly developing technology shifts the perception of complexity in software development, and how to mitigate that complexity for the benefit of the end user.", designThinking: "Rather than treating AI as a feature to be bolted into a design tool, the brief asked the harder question: what do designers themselves need from AI? Where should it be visible, where should it disappear, and where should it refuse to act on the designer's behalf?\n\nCross-functional sessions surfaced the underlying concern: every new capability adds perceived complexity for users downstream. The investigation centered on how to absorb that complexity inside the tool, so the surfaces designers ship out to end users feel simpler, not more crowded.", images: [
+    { src: "/images/prototypes/BMWDesignworks/BMW-Designworks-hero.jpg", caption: "BMW Designworks studio entrance, Newbury Park, California." },
+    { src: "/images/prototypes/BMWDesignworks/unnamed.png", caption: "Inside the studio: an M1 race car staged in the presentation room." },
+    { src: "/images/prototypes/BMWDesignworks/designworksteam.jpg", caption: "Team photo with the Designworks studio after a project review." },
+    { src: "/images/prototypes/BMWDesignworks/interns.jpg", caption: "Off-hours with the intern cohort, Santa Monica Pier." },
+  ] },
+  { src: "/images/prototypes/Together/stopmotion02.png", alt: "Together", tag: "Themed Experience · Sculptural Narrative", label: "Together", desc: "A handcrafted stop-motion vignette imagined as a moment inside a themed attraction, where guests pass from cold solitude into shared warmth", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments", "Multimodal Systems"], year: "2019", context: "Carnegie Mellon · Guest Experience in Theme Parks", tools: ["Polymer clay", "Hand-knotted yarn", "DSLR", "Chroma key"], notes: "A guest-experience concept developed as a stop-motion short for a CMU course on theme park design. Two small characters move from a snowy exterior into a candlelit apothecary lined with books, bottles, and music. Built as a tabletop maquette of a scene a guest could one day walk through, with the camera staging shot-by-shot what the eye should find on entry, mid-journey, and arrival.", designThinking: "The course brief was about staging emotional arrivals: guests don't remember individual props, they remember how a sequence of moments made them feel. The piece is structured around a single temperature change, cold to warm, with no dialogue and no overt event. The 'plot' is the threshold itself.\n\nMaterial choice did the rest of the work. Yarn trees, hand-twisted hair, and ground-up flake snow were chosen so that whoever made it could be felt inside it, the same way the best themed environments hide their craft in plain sight.", video: { url: "https://youtu.be/xhVKbuqAVjY", caption: "The full stop-motion short: cold solitude resolving into shared warmth." }, links: [{ label: "Watch Film", href: "https://youtu.be/xhVKbuqAVjY?si=juypLgVGXBM1c-cw" }], images: [
+    { src: "/images/prototypes/Together/stopmotion02.png", caption: "Interior: the figure absorbed in sheet music among practical candlelight." },
+    { src: "/images/prototypes/Together/20190210_055418.JPG", caption: "Apothecary corner: leather-bound books, corked bottles, a cameo, the warm interior the cold story moves toward." },
+    { src: "/images/prototypes/Together/L1050899.JPG", caption: "Two characters in falling snow, hair built from twisted thread, captured from above." },
+    { src: "/images/prototypes/Together/L1060096.JPG", caption: "Detail: floral dress and teal stockings half-buried in real, ground-up snow." },
+  ] },
+  { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/peppersghost01.png", alt: "Ember", tag: "Installation · Spatial Illusion", label: "Ember | The Pepper's Ghost Installation", desc: "A character that lives in a 100-year-old fireplace, reacting to passersby through Pepper's Ghost", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Spatial Computing", "Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "Reality Hack 24 · MIT Media Lab", tools: ["Pepper's Ghost optics", "Procreate", "After Effects", "Projector", "Acrylic"], notes: "An animated fire character named Ember inhabits a long-disused fireplace in CMU's Walker Hall, surfaced through a Pepper's Ghost optical setup. Ember reacts to passersby with shifting moods (heart-eyes, frustration, sleep, delight), giving the empty hearth a small living presence without altering a single brick of the historic mantel.", designThinking: "Began with a site, not a tech: the fireplaces in Walker Hall sit unused for fire-code reasons, but they're the emotional center of every room they occupy. The brief became how do you give a heritage object a second life without invasive intervention.\n\nPepper's Ghost let us add an animated layer on top of the existing space rather than retrofit anything into it. Treating Ember as a character with emotional states (rather than a flame loop) was the decision that turned the install from a tech demo into something people lingered with.", images: [
+    { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/peppersghost01.png", caption: "Ember lit inside the historic Walker Hall fireplace, reflected through angled glass." },
+    { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/walker fireplace.jpg", caption: "The site: a 100-year-old stone fireplace, sealed for fire code, waiting to be reactivated." },
+    { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/RH24_Ember_Circular.jpg", caption: "Design exploration: circular forms feeding into the flame character's silhouette." },
+    { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/RH24_Pepper's_Ghost_Ember_Reacts.jpg", caption: "Interaction states: Ember reacts differently to ambient input (warmth, hearts, anger, sleep)." },
+    { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/RH24_Ember_Rectangular.jpg", caption: "Rectangular variant of the burning logs, refining how the body would be read at distance." },
+  ] },
+  { src: "/images/prototypes/MIT Reality Hack 2024/day1_02.jpg", alt: "MIT Reality Hack 2024", tag: "Spatial Design · Visual Identity", label: "MIT Reality Hack 2024 | Spatial Design", desc: "Spatial design and illustrated banners for a week-long, 500-person hackathon at MIT", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Interface Design", "Tangible Environments", "Rapid Prototyping"], year: "2024", context: "MIT Reality Hack 2024 · MIT Media Lab", tools: ["Procreate", "Photoshop", "Large-format print", "Site planning"], notes: "The constraint set the brief: aesthetic that elevates the space, but never gets in the way of 500+ hackers building for a full week. The work covered venue planning, visual identity, and banner illustration, deciding where atmosphere belongs and where it should quietly disappear so participants stay in flow.", designThinking: "Mapped the venue by attention budget before drawing anything. Hand-annotated plans came first, marking AR mural placement, up-lighting, and decor positions against existing architecture. High-transit zones got minimal treatment so participants weren't slowed by visual noise; the most considered work went into rest areas, transitions, and arrival moments where a banner could become a small breath between sessions.\n\nThe illustration concept (MIT campus framed through enchanted gothic windows) was chosen for dual-distance behavior. Up close, the carved arch reads as warmth and craft. At a glance across a long room, the carved frame recedes and the building behind becomes a landmark, wayfinding without signage.", images: [
+    { src: "/images/prototypes/MIT Reality Hack 2024/day1_02.jpg", caption: "Day 1, install in Walker Hall: the daylight and night-time Stata banners hung between the columns where the team had planned them." },
+    { src: "/images/prototypes/MIT Reality Hack 2024/day1_01.jpg", caption: "Wide view of the main hall during Day 1, banners visible across multiple bays as hackers move between sponsor booths." },
+    { src: "/images/prototypes/MIT Reality Hack 2024/RH24_Walker_Hacking_Space.jpg", caption: "Venue planning sketch: mapping AR murals, up-lighting, and decor placement across MIT's Walker Hall before any illustration began." },
+    { src: "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_02.JPG", caption: "Hero banner: Killian Court at sunset framed through an ornate carved arch, sized for the main gathering space." },
+    { src: "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_04_Final.JPG", caption: "Stata Center reimagined as a daylight reverie, scaled for transit corridors." },
+    { src: "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_01.JPG", caption: "Night-time variant for low-light zones, fireflies and a starlit sky as the rest moment." },
+  ] },
+  { src: "/images/ARVR/library.png", alt: "Immersive Library", tag: "VR · Environment", label: "Immersive Library", desc: "An immersive virtual library designed for focused, single-occupant deep work", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"], year: "2024", context: "CMU 3D environments", tools: ["Unity", "Maya", "Substance Painter"], notes: "A virtual reading room designed for solo deep work. Lighting and shelf scale were tuned so the space felt sized to a single occupant, not a crowd. A quiet counterweight to the usual maximalist VR environment.", video: { url: "https://youtu.be/je2r3acZWLg", caption: "Walkthrough of the immersive library, lit and scaled for one." }, links: [{ label: "Watch Walkthrough", href: "https://youtu.be/je2r3acZWLg?si=1ukq9WEP7v_z4TiF" }] },
+  { src: "/images/prototypes/flexvr 1.png", alt: "FlexVR Wellness", tag: "Hackathon · XR Wellness", label: "FlexVR Wellness", desc: "A 24-hour hardware hack reimagining VR as a wellness, not stimulation, surface", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Physical Computing", "Rapid Prototyping", "Multimodal Systems"], year: "2024", context: "Hardware Hack: Creative Inputs/Outputs", tools: ["Unity", "Arduino", "3D printing", "Biofeedback sensors", "Fabric"], notes: "A 24-hour hardware hackathon prototype that reframed VR away from intensity (combat, exploration) and toward calm: breath-driven pacing, posture-sensitive ambient light, and tactile soft controls. Built end-to-end with a small team in a single weekend.", designThinking: "Most VR pitches itself on intensity. We started from the opposite question: what would VR look like if it were tuned for nervous-system regulation instead of dopamine?\n\nThe hardware constraint forced honesty. With only 24 hours, every input/output had to earn its place. We landed on three: breath as the master clock, posture as the volume knob, and soft tactile controls instead of triggers, all serving a single goal of lowering, not raising, arousal.", video: { url: "https://youtu.be/7zpdAQw5Y1k", caption: "Demo of FlexVR Wellness from the Hardware Hack showcase." }, links: [{ label: "Watch Demo", href: "https://youtu.be/7zpdAQw5Y1k?si=b45U6UR1hrWtO3bM" }], images: [
+    { src: "/images/prototypes/FlexVR Wellness/HardwareCreativeInputOutput.png", caption: "Final presentation: FlexVR Wellness pitched at the Hardware Hack showcase." },
+    { src: "/images/prototypes/FlexVR Wellness/building.jpg", caption: "Mid-hack: prototyping the breath-sensor pipeline alongside the team." },
+    { src: "/images/prototypes/FlexVR Wellness/building02.jpg", caption: "Build station at 2am: 3D-printed enclosures, soldering, and the soft-controller mockup." },
+    { src: "/images/prototypes/FlexVR Wellness/testing1.jpg", caption: "Showcase floor: a teammate wears the EMS sleeve and soft controller while the team documents the demo." },
+    { src: "/images/prototypes/FlexVR Wellness/hardware.jpg", caption: "Inside the build: a Neuralaxy NeuroBio sensor board housed in a custom 3D-printed enclosure, status LEDs lit." },
+    { src: "/images/prototypes/FlexVR Wellness/redbull tower 2.JPG", caption: "The All-Nighter Tower." },
+  ] },
+  { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", tag: "Interactive · Bio", label: "Emma's Jellyfish", desc: "Bioluminescent jellyfish environment responding to gesture", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"], year: "2023", context: "Companion piece to Emma's Tree", tools: ["Arduino", "Leap Motion", "LED strips", "Processing"], notes: "A tabletop bioluminescent jellyfish whose tentacles glow and drift in response to hand proximity. Built as a calming sensory anchor for the same med-student friend the Emma's Tree project was made for." },
+  { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education · Hackathon", label: "LeARn", desc: "An AR learning app that brings interactivity and joy back into elementary school subjects, tracking student progress across Art, Math, and Music", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Rapid Prototyping"], year: "April 2022", context: "Venture In Metaverse Hackathon · Harvard", tools: ["Unity", "C#", "Procreate"], notes: "LeARn is an augmented reality application built to help educators and parents teach with more interactivity, longer attention spans, and more enjoyment for elementary school students. The app tracks each student's progress through Art, Math, and Music, with planned expansion into Physics Circuits and Language. Designed to live alongside the traditional classroom rather than replace it.", designThinking: "Started from the question every K-12 teacher asks: how do you hold attention when worksheets are competing with phones? AR lets the same lesson live on the desk in front of a student, making the rotation, manipulation, and exploration of a concept the lesson itself rather than the textbook page.\n\nThe progress-tracking layer was the design move that took the idea from gimmick to tool: educators see what each student has spent time with, and the app calibrates difficulty without surfacing it to the child.", video: { url: "https://youtu.be/Dkjj-q0xRaE", caption: "Demo reel from Venture In Metaverse at Harvard, April 2022." }, links: [{ label: "Watch Demo", href: "https://youtu.be/Dkjj-q0xRaE?si=UeQRA4jqXGIMeJXA" }] },
+  { src: "/images/prototypes/CMUPopUp/cmupopup 1.png", alt: "CMU Popup", tag: "Spatial Design · Physical Model", label: "CMU Popup", desc: "A pop-up book scale model of a Tuscan wine bar concept", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "CMU spatial design studio", tools: ["Pop-up book construction", "Printed textures", "3D-printed terrain", "Sculpted moss", "Tabletop modeling"], notes: "A foldable, book-style scale model of a Tuscan-inspired wine bar concept. The piece reads as flat from the side and unfolds into a multi-room interior with vineyards, stone garden, and seating, used as a stand-alone presentation artifact rather than a digital render.", designThinking: "Wanted a presentation format that could be carried into any review, no laptop, no projector. The pop-up form gave the design two states: a quiet closed book that invites curiosity, and an opened diorama that lets stakeholders read the spatial logic at a glance.\n\nWorking at a tabletop scale also forced material honesty: every brick texture, table, and tree had to earn its place because there was no room to hide weak detail.", images: [
+    { src: "/images/prototypes/CMUPopUp/cmupopup 1.png", caption: "Hero view: the wine bar concept opened to full diorama." },
+    { src: "/images/prototypes/CMUPopUp/IMG_6532.jpg", caption: "Aerial of the unfolded model showing the indoor/outdoor flow between rooms." },
+    { src: "/images/prototypes/CMUPopUp/IMG_6534 2.jpg", caption: "Mid-fold view: the pop-up book structure that supports the standing scene." },
+    { src: "/images/prototypes/CMUPopUp/IMG_6540.jpg", caption: "Detail: stone seating, sculpted moss, and tree placement in the garden zone." },
+    { src: "/images/prototypes/CMUPopUp/IMG_6542.jpg", caption: "Wine wall reveal: rendered bottle shelving as the room's back-of-house anchor." },
+    { src: "/images/prototypes/CMUPopUp/IMG_6543.jpg", caption: "Close-up of the garden bench and surrounding planting." },
+  ] },
+  { src: "/images/prototypes/portalreef 1.png", alt: "Portal Reef", tag: "XR · Environment", label: "Portal Reef", desc: "Immersive underwater portal experience in mixed reality", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Physical Computing", "Interface Design"], year: "2024", context: "CMU MHCI coursework", tools: ["Unity", "Quill", "Maya", "Quest 3"], notes: "A passthrough MR experience where a virtual underwater portal opens in the user's real living room. Coral and fish drift across the threshold, exploring how MR can blend a fantasy environment into mundane spaces." },
+  { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion", tag: "Physical · Animation", label: "Stop Motion", desc: "Frame-by-frame physical animation exploring material storytelling", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"], year: "2023", context: "CMU rapid prototyping", tools: ["Dragonframe", "DSLR", "Mixed materials"], notes: "First stop-motion study, focused on the rhythm and patience of frame-by-frame work. Forced a slower making process: every 12 frames bought less than a second of motion." },
   // Spatial / ARVR
-  { src: "/images/ARVR/library.png", alt: "Library VR", tag: "VR · Environment", label: "Library", desc: "Immersive virtual library space designed for focused study", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/RHcloud 1.png", alt: "RH Cloud", tag: "Responsive · Atmospheric", label: "RH Cloud", desc: "Volumetric cloud environment exploring presence and scale", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping", "Tangible Environments"] },
-  { src: "/images/ARVR/pianoroom02 1.png", alt: "Music Box Room", tag: "Virtual Reality · Acoustic", label: "Music Box Room", desc: "Second iteration with updated lighting and material studies", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/pianoroom 1.png", alt: "Piano Room", tag: "Virtual Reality · Acoustic", label: "Piano Room", desc: "Intimate virtual music room built around spatial audio", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall", tag: "3D Model · Architecture", label: "Study Hall", desc: "Collaborative virtual study hall with adaptive ambient zones", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/trees01 1.png", alt: "Trees 01", tag: "Augmented Reality · Nature", label: "Trees 01", desc: "Forest density study exploring depth and spatial perception", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/ARVR/flowers 1.png", alt: "Flowers", tag: "Augmented Reality · Nature", label: "Flowers", desc: "Botanical virtual space with reactive flora and ambient sound", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"] },
-  { src: "/images/prototypes/june19th_fragrance.jpg", alt: "Forest Fragrance", tag: "Multimodal · Sensory", label: "Forest Fragrance", desc: "Multimodal sensory experience exploring fragrance interaction", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Multimodal Systems"] },
-  { src: "/images/ARVR/forest01 1.png", alt: "Forest", tag: "Virtual Reality · Environment", label: "Forest", desc: "Full immersive forest environment with layered ambient depth", colSpan: 2, aspectClass: "aspect-[16/9]", scaleClass: "scale-[1.3] group-hover:scale-[1.32]", categories: ["Spatial Computing"] },
+  { src: "/images/ARVR/RHcloud 1.png", alt: "RH Cloud", tag: "Responsive · Atmospheric", label: "RH Cloud", desc: "Volumetric cloud environment exploring presence and scale", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Spatial Computing", "Rapid Prototyping", "Tangible Environments"], year: "2024", context: "Personal exploration", tools: ["LED lights", "Cotton", "Craft tools"], notes: "Real-time volumetric clouds rendered at room scale, exploring how vapor and weather can become a spatial interface element. The user's movement subtly displaced the cloud volume, hinting at presence without a literal avatar.", images: [
+    { src: "/images/ARVR/RHcloud 1.png", caption: "Volumetric cloud environment exploring presence and scale." },
+    { src: "/images/prototypes/RH24_Day1_Venue_Atmosphere.jpg", caption: "Day 1 at MIT Reality Hack: a team works directly beneath one of the cotton clouds, the blue underlight diffusing across the work surface." },
+  ] },
+  { src: "/images/prototypes/PressfToPlay/Screen Shot 2019-11-03 at 3.16.53 PM.PNG", alt: "Press F To Play", tag: "3D Environment · Interactive Narrative", label: "Press F To Play", desc: "A moody, low-poly first-person environment exploring atmospheric storytelling through space", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Rapid Prototyping"], year: "2019", context: "Early 3D environment exploration", tools: ["Unity", "Maya", "Low-poly modeling", "Practical lighting"], notes: "A walk-and-look interactive scene where the player explores a green-lit, gothic-inflected interior: stone halls, a balance scale, a grand piano upstairs, a grandfather clock with a watching eye. The only prompt the player ever sees is the title itself, leaving everything else to atmosphere.", designThinking: "Set the constraint early: no NPCs, no dialogue, no objectives. The room had to do the work.\n\nLighting carried the tone. Cool green ambient against single warm pools of practical light meant the player's eye was always pulled to where the next moment of interest lived, navigation through atmosphere rather than UI. The piece is less a game and more a study in how an interior can suggest a story without ever telling one.", images: [
+    { src: "/images/prototypes/PressfToPlay/Screen Shot 2019-11-03 at 3.16.53 PM.PNG", caption: "The title prompt in situ, beside a grandfather clock with a watching green eye." },
+    { src: "/images/prototypes/PressfToPlay/Screen Shot 2019-11-03 at 3.27.11 PM 2.PNG", caption: "Main hall reframe: stairs, balance scale, and cobblestone underfoot. The space was built to be wandered." },
+    { src: "/images/prototypes/PressfToPlay/PressfToPlay02.png", caption: "Upstairs interior: piano and twin lamps. Whatever happens here is left to the player to imagine." },
+  ] },
+  { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall", tag: "3D Model · Architecture", label: "Study Hall", desc: "Collaborative virtual study hall with adaptive ambient zones", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"], year: "2024", context: "CMU 3D environments", tools: ["Maya", "Unity", "Substance Painter"], notes: "A multi-user study hall with zones tuned for different work modes: silent reading at one end, collaborative writing at the other. Ambient audio and lighting shifted as users crossed thresholds, without explicit mode switches." },
+  { src: "/images/prototypes/Forest Frangrance/june19th_fragrance.jpg", alt: "Forest Fragrance", tag: "Multimodal · Sensory Design", label: "Forest Fragrance", desc: "A hand-blended pine fragrance paired with a self-built VR forest, designing scent as an equal channel to sight and sound", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Multimodal Systems"], year: "2024", context: "VR forest experience · June 19, 2024 project", tools: ["Perfumery workshop", "Essential oils", "Unity", "Maya"], notes: "A multimodal forest experience pairing an immersive VR environment, built from the ground up in Unity, with a custom pine fragrance composed by hand at a perfumery workshop. The user journey was designed in layers: scent enters first, then ambient sound, then rain, then exploration. The room smelled of pine, damp earth, and faint resin while the headset rendered a forest meant to be wandered, not solved.", designThinking: "Sight and sound are well-mapped in VR; smell is usually treated like a parlor trick. The brief was to design the scent first, with the same care normally given to a soundtrack or shader, then let the visuals support what the nose already knew.\n\nThe user journey added a second decision: the experience stacks senses rather than presenting them all at once. The visitor enters quietly, sprays the fragrance themselves to begin, and only then do rain, ambient audio, and motion layer in. By the time they reach the hidden garden, a new scent is the only signal that they've crossed into a different part of the world. The design rule throughout was the same: never tell the visitor what to feel, give them the layers and let it happen.", images: [
+    { src: "/images/prototypes/Forest Frangrance/june19th_fragrance.jpg", caption: "The hand-blended pine fragrance composed at the perfumery workshop, staged before the experience begins." },
+    { src: "/images/prototypes/Forest Frangrance/frangrancemaking.png", caption: "At the perfumery workshop: composing the pine note by hand, sampling vial by vial." },
+    { src: "/images/prototypes/Forest Frangrance/user journey.jpg", caption: "User journey map: scent, sound, and visual layered across the visitor's path from arrival to hidden garden." },
+    { src: "/images/prototypes/Forest Frangrance/unityforest.png", caption: "The Unity forest at dusk: layered foliage and silhouetted treeline against a colored sky." },
+    { src: "/images/prototypes/Forest Frangrance/forestlantern.png", caption: "Inside the canopy: a single lantern as the only warm point of light, drawing the visitor deeper in." },
+  ] },
+  { src: "/images/ARVR/flowers 1.png", alt: "Flowers", tag: "3D Modeling · Texture Study", label: "Flowers", desc: "A botanical 3D study built to practice modeling and hand-painted texture mapping from petal to stem", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping"], year: "2024", context: "Personal study · 3D modeling and texture mapping practice", tools: ["Maya", "Procreate", "Unity"], notes: "A small botanical scene built as a deliberate technical exercise. Each flower, leaf, and stem was modeled by hand in Maya, UV-unwrapped, then painted petal-by-petal in Procreate so every texture map was hand-made rather than generated. The goal was less to ship an experience and more to internalize the modeling-to-texture pipeline at a craft level." },
+  { src: "/images/ARVR/trees01 1.png", alt: "Trees 01", tag: "Augmented Reality · Nature", label: "Trees 01", desc: "Forest density study exploring depth and spatial perception", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"], year: "2024", context: "Personal exploration", tools: ["Spark AR", "Maya"], notes: "A density and parallax study: how many tree instances are needed before AR foliage reads as 'forest' rather than 'set dressing'. Found the threshold sat around 40 unique silhouettes within view distance." },
 ];
 
 // ─── Static Tailwind col-span map (dynamic strings get purged) ───────────────
@@ -108,10 +194,12 @@ function FilteredThumb({
   item,
   activeFilter,
   outfitClass,
+  onOpen,
 }: {
   item: GridItem;
   activeFilter: Category | null;
   outfitClass: string;
+  onOpen: (item: GridItem) => void;
 }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -127,7 +215,8 @@ function FilteredThumb({
       whileInView="visible"
       viewport={{ once: true }}
       variants={slowFade}
-      className={`${COL_SPAN_CLASS[item.colSpan ?? 3]} ${item.aspectClass ?? "aspect-[16/9]"} bg-[#141414] overflow-hidden rounded-sm group relative`}
+      onClick={() => onOpen(item)}
+      className={`${COL_SPAN_CLASS[item.colSpan ?? 3]} ${item.aspectClass ?? "aspect-[16/9]"} bg-[#141414] overflow-hidden rounded-sm group relative cursor-pointer`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -164,6 +253,292 @@ function FilteredThumb({
           ))}
         </div>
       </div>
+    </motion.div>
+  );
+}
+
+// ─── ProjectModal, opens when a selected-projects thumb is clicked ─────────
+function ProjectModal({
+  item,
+  outfitClass,
+  onClose,
+  onPrev,
+  onNext,
+  hasPrev,
+  hasNext,
+}: {
+  item: GridItem;
+  outfitClass: string;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  hasPrev: boolean;
+  hasNext: boolean;
+}) {
+  // Build image list, use `images` if provided, else fall back to single `src`
+  const images = item.images && item.images.length > 0
+    ? item.images
+    : [{ src: item.src, caption: undefined as string | undefined }];
+
+  // Reset scroll on project change
+  const panelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (panelRef.current) panelRef.current.scrollTop = 0;
+  }, [item.alt]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft" && hasPrev) onPrev();
+      if (e.key === "ArrowRight" && hasNext) onNext();
+    };
+    window.addEventListener("keydown", handleKey);
+    // Lock body scroll while open
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose, onPrev, onNext, hasPrev, hasNext]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10"
+      onClick={onClose}
+    >
+      {/* Frosted-blur backdrop */}
+      <div
+        className="absolute inset-0 bg-black/75"
+        style={{ backdropFilter: "blur(18px) saturate(120%)", WebkitBackdropFilter: "blur(18px) saturate(120%)" }}
+      />
+
+      {/* Modal content, whole panel scrolls as one unit */}
+      <motion.div
+        ref={panelRef}
+        initial={{ scale: 0.96, opacity: 0, y: 12 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.96, opacity: 0, y: 12 }}
+        transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+        className="relative z-10 w-full max-w-5xl max-h-[88vh] overflow-y-auto rounded-md bg-[#0E0E0E] border border-white/8 shadow-[0_20px_80px_rgba(0,0,0,0.7)]"
+        style={{ scrollbarWidth: "thin" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex flex-col md:flex-row md:items-start">
+
+          {/* Image column, magazine spread: hero shot + editorial grid */}
+          <div className="w-full md:w-3/5 bg-[#0A0A0A] flex flex-col">
+            {/* Optional video, sits above the hero shot when present */}
+            {item.video && getYouTubeId(item.video.url) && (
+              <figure className="flex flex-col bg-black">
+                <div className="relative w-full aspect-video">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${getYouTubeId(item.video.url)}`}
+                    title={`${item.label} demo video`}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+                {item.video.caption && (
+                  <figcaption className="px-5 md:px-7 py-4">
+                    <div className="h-px w-8 bg-[#C9B49A]/50 mb-2.5" />
+                    <p className="text-[11px] md:text-[12.5px] text-[#B0B0B0] italic leading-snug">
+                      {item.video.caption}
+                    </p>
+                  </figcaption>
+                )}
+              </figure>
+            )}
+
+            {/* Hero, feature shot, full bleed */}
+            <figure className="flex flex-col">
+              <div className="relative w-full bg-black">
+                <img
+                  src={images[0].src}
+                  alt={images[0].caption || item.alt}
+                  className={`w-full h-auto block ${item.scaleClass ?? ""}`}
+                />
+              </div>
+              {images[0].caption && (
+                <figcaption className="px-5 md:px-7 py-4">
+                  <div className="h-px w-8 bg-[#C9B49A]/50 mb-2.5" />
+                  <p className="text-[11px] md:text-[12.5px] text-[#B0B0B0] italic leading-snug">
+                    {images[0].caption}
+                  </p>
+                </figcaption>
+              )}
+            </figure>
+
+            {/* Editorial stack: single column, natural aspect ratios for full legibility */}
+            {images.length > 1 && (
+              <div className="flex flex-col gap-y-7 px-3 md:px-4 pt-3 pb-5 md:pb-6">
+                {images.slice(1).map((img, i) => (
+                  <figure key={`${img.src}-${i}`} className="flex flex-col">
+                    <div className="relative w-full bg-black overflow-hidden">
+                      <img
+                        src={img.src}
+                        alt={img.caption || `${item.label}`}
+                        className="w-full h-auto block"
+                      />
+                    </div>
+                    {img.caption && (
+                      <figcaption className="pt-3 px-1">
+                        <div className="h-px w-8 bg-[#C9B49A]/45 mb-2" />
+                        <p className="text-[11px] md:text-[12px] text-[#A3A3A3] italic leading-snug">
+                          {img.caption}
+                        </p>
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Details column, sticky to top of scroll panel on desktop */}
+          <div className="w-full md:w-2/5 p-6 md:p-8 flex flex-col gap-4 bg-gradient-to-b from-[#101010] to-[#0A0A0A] md:sticky md:top-0 md:self-start md:max-h-[88vh] md:overflow-y-auto"
+            style={{ scrollbarWidth: "thin" }}
+          >
+          {/* Tag + Year header row */}
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="text-[10px] uppercase tracking-[0.22em] text-[#C9B49A] font-semibold">
+              {item.tag}
+            </span>
+            {item.year && (
+              <span className="text-[10px] uppercase tracking-[0.18em] text-[#737373] font-medium shrink-0">
+                {item.year}
+              </span>
+            )}
+          </div>
+
+          {/* Title */}
+          <h3 className={`${outfitClass} text-2xl md:text-3xl font-light text-[#EAEAEA] leading-tight`}>
+            {item.label}
+          </h3>
+
+          {/* Short description */}
+          <p className="text-[14px] text-[#A3A3A3] leading-relaxed">
+            {item.desc}
+          </p>
+
+          {/* Category pills */}
+          <div className="flex flex-wrap gap-1.5">
+            {item.categories.map((c) => (
+              <span
+                key={c}
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/15"
+                style={{ color: CAT_STYLE[c].text }}
+              >
+                {c}
+              </span>
+            ))}
+          </div>
+
+          {/* Optional sections, render only if data present */}
+          {(item.context || (item.tools && item.tools.length > 0)) && (
+            <div className="pt-4 mt-2 border-t border-white/8 grid grid-cols-2 gap-x-4 gap-y-4">
+              {item.context && (
+                <div>
+                  <span className="block text-[9px] uppercase tracking-[0.2em] text-[#737373] mb-1.5">Context</span>
+                  <span className="text-[12.5px] text-[#EAEAEA] leading-snug">{item.context}</span>
+                </div>
+              )}
+              {item.tools && item.tools.length > 0 && (
+                <div>
+                  <span className="block text-[9px] uppercase tracking-[0.2em] text-[#737373] mb-1.5">Tools</span>
+                  <div className="flex flex-wrap gap-1">
+                    {item.tools.map(t => (
+                      <span key={t} className="text-[10.5px] text-[#EAEAEA] border border-white/15 px-2 py-0.5 rounded-sm">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Notes / process paragraph */}
+          {item.notes && (
+            <div className="pt-4 mt-1 border-t border-white/8">
+              <span className="block text-[9px] uppercase tracking-[0.2em] text-[#737373] mb-2">Notes</span>
+              <p className="text-[13px] text-[#A3A3A3] leading-relaxed">{item.notes}</p>
+            </div>
+          )}
+
+          {/* Design Thinking, rationale / approach / principles */}
+          {item.designThinking && (
+            <div className="pt-4 mt-1 border-t border-white/8">
+              <span className="block text-[9px] uppercase tracking-[0.2em] text-[#C9B49A] mb-2">Design Thinking</span>
+              <p className="text-[13px] text-[#A3A3A3] leading-relaxed whitespace-pre-line">{item.designThinking}</p>
+            </div>
+          )}
+
+          {/* External links */}
+          {item.links && item.links.length > 0 && (
+            <div className="pt-4 mt-1 border-t border-white/8 flex flex-wrap gap-2">
+              {item.links.map(link => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-[#EAEAEA] border border-[#C9B49A]/40 hover:border-[#C9B49A] hover:bg-[#C9B49A]/10 px-3 py-1.5 rounded-sm transition-all duration-200"
+                >
+                  {link.label}
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M7 17 17 7" />
+                    <path d="M7 7h10v10" />
+                  </svg>
+                </a>
+              ))}
+            </div>
+          )}
+          </div>
+        </div>
+
+      </motion.div>
+
+      {/* Close button, floats on backdrop above the panel so it doesn't overlap content */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        aria-label="Close"
+        className="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center transition-all duration-200 backdrop-blur-md cursor-pointer"
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+          <line x1="3" y1="3" x2="11" y2="11" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="11" y1="3" x2="3" y2="11" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      </button>
+
+      {/* Prev / Next arrows, outside the panel, floating against backdrop */}
+      {hasPrev && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          aria-label="Previous project"
+          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 items-center justify-center transition-all duration-200 backdrop-blur-md cursor-pointer"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </button>
+      )}
+      {hasNext && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          aria-label="Next project"
+          className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 items-center justify-center transition-all duration-200 backdrop-blur-md cursor-pointer"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      )}
     </motion.div>
   );
 }
@@ -208,23 +583,31 @@ function ScrollNav() {
   const [active, setActive] = useState("project-00");
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      { threshold: 0.25, rootMargin: "-10% 0px -60% 0px" }
-    );
-    NAV_ITEMS.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
+    // Scroll-based active detection: find the last section whose top
+    // has passed the activation line (~30% from the top of the viewport).
+    const updateActive = () => {
+      const activationLine = window.innerHeight * 0.3;
+      let current = NAV_ITEMS[0].id;
+      for (const { id } of NAV_ITEMS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= activationLine) current = id;
+      }
+      setActive(current);
+    };
+
+    updateActive();
+    window.addEventListener("scroll", updateActive, { passive: true });
+    window.addEventListener("resize", updateActive);
+    return () => {
+      window.removeEventListener("scroll", updateActive);
+      window.removeEventListener("resize", updateActive);
+    };
   }, []);
 
   return (
-    <nav className="fixed left-5 top-[320px] z-50 hidden lg:flex flex-col items-center gap-0">
+    <nav className="fixed right-5 top-[320px] z-50 hidden lg:flex flex-col items-center gap-0">
       {NAV_ITEMS.map(({ id, label }, i) => (
         <div key={id} className="flex flex-col items-center">
           {/* Dot + tooltip row */}
@@ -236,17 +619,17 @@ function ScrollNav() {
             }}
             className="relative flex items-center group/dot py-1"
           >
-            {/* Dot */}
+            {/* Dot, active state has a silver metallic glow */}
             <div
               className={`w-[7px] h-[7px] rounded-full transition-all duration-300 ${active === id
-                ? "bg-[#EAEAEA] scale-125 shadow-[0_0_6px_rgba(234,234,234,0.4)]"
+                ? "bg-[#E5E7EB] scale-150 shadow-[0_0_8px_rgba(229,231,235,0.95),0_0_18px_rgba(192,192,192,0.6),0_0_30px_rgba(148,163,184,0.35)]"
                 : "bg-[#444] group-hover/dot:bg-[#888]"
                 }`}
             />
-            {/* Tooltip label — appears to the right on hover */}
+            {/* Tooltip label, appears to the left on hover (nav lives on right) */}
             <span
-              className="absolute left-5 whitespace-nowrap text-[11px] tracking-wide pointer-events-none
-                opacity-0 group-hover/dot:opacity-100 -translate-x-1 group-hover/dot:translate-x-0
+              className="absolute right-5 whitespace-nowrap text-[11px] tracking-wide pointer-events-none
+                opacity-0 group-hover/dot:opacity-100 translate-x-1 group-hover/dot:translate-x-0
                 transition-all duration-200 px-2 py-1 rounded-sm bg-[#1A1A1A] border border-white/10
                 text-[#EAEAEA]"
             >
@@ -263,11 +646,66 @@ function ScrollNav() {
   );
 }
 
+// ─── Back-to-Top Button (clean modern circular button) ─────────────────────
+function BackToTopButton() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setVisible(window.scrollY > window.innerHeight * 0.6);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <motion.button
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      initial={false}
+      animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 12 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50
+        w-11 h-11 rounded-full flex items-center justify-center
+        bg-white/95 hover:bg-white border border-black/5
+        shadow-[0_4px_16px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_22px_rgba(0,0,0,0.35)]
+        hover:-translate-y-0.5 active:translate-y-0
+        transition-all duration-300 backdrop-blur-sm cursor-pointer
+        ${visible ? "" : "pointer-events-none"}`}
+      aria-label="Back to top"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#0F172A"
+        strokeWidth="2.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden
+      >
+        <path d="M12 19V5" />
+        <path d="m5 12 7-7 7 7" />
+      </svg>
+    </motion.button>
+  );
+}
+
 export default function Var7ClassyAuto() {
   const [pinned, setPinned] = useState(false);
   const [activeFilter, setActiveFilter] = useState<Category | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [hearts, setHearts] = useState<{ id: number; x: number; y: number; scale: number; rotation: number; fill: string; highlight: string; outline: string }[]>([]);
+  const [selectedProject, setSelectedProject] = useState<GridItem | null>(null);
+
+  // Filtered list mirrors what's rendered in the grid, used for modal prev/next
+  const filteredProjects = activeFilter === null
+    ? ALL_PROJECTS
+    : ALL_PROJECTS.filter(item => item.categories.includes(activeFilter));
+  const selectedIndex = selectedProject
+    ? filteredProjects.findIndex(p => p.alt === selectedProject.alt)
+    : -1;
 
   const handleAddHearts = () => {
     const newHearts = Array.from({ length: 4 }).map((_, i) => {
@@ -307,6 +745,7 @@ export default function Var7ClassyAuto() {
     <div className={`${sans.className} min-h-screen bg-[#0C0C0C] text-[#A3A3A3] selection:bg-[#B39D82] selection:text-[#0C0C0C] font-light`}>
 
       <ScrollNav />
+      <BackToTopButton />
 
       {/* Subtle material texture overlay */}
       <div className="fixed inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
@@ -331,7 +770,18 @@ export default function Var7ClassyAuto() {
               </a>
             </div>
             <p className="text-sm tracking-[0.15em] uppercase text-[#737373] mb-2">
-              <span className="font-semibold text-[#A3A3A3]">Product Designer</span> — UX/UI Design · Prototyping · Systems Thinking
+              <span className="font-semibold text-[#A3A3A3]">Product Designer</span>, UX/UI Design ·{" "}
+              <button
+                type="button"
+                onClick={() => document.getElementById("selected-projects")?.scrollIntoView({ behavior: "smooth" })}
+                aria-label="Jump to Selected Projects"
+                className="relative inline cursor-pointer uppercase tracking-[0.15em] transition-all duration-500 ease-out
+                  hover:text-[#EAEAEA]
+                  hover:[text-shadow:0_0_8px_rgba(234,234,234,0.45),0_0_18px_rgba(201,180,154,0.25)]"
+              >
+                Prototyping
+              </button>
+              {" "}· Systems Thinking
             </p>
             <p className="text-[15px] text-[#A3A3A3] leading-relaxed max-w-xl mt-6">
               Masters in Human-Computer Interaction from <span className="text-[#EAEAEA] font-medium">Carnegie Mellon University</span>.
@@ -352,7 +802,7 @@ export default function Var7ClassyAuto() {
         <motion.article id="project-00" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade} className="group">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-            {/* Left — meta + content */}
+            {/* Left, meta + content */}
             <div className="lg:col-span-4 flex flex-col gap-8">
               <div className="flex items-baseline gap-4">
                 <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>00</span>
@@ -401,7 +851,7 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            {/* Right — imagery */}
+            {/* Right, imagery */}
             <div className="lg:col-span-8 space-y-4">
               <div className="aspect-[21/9] overflow-hidden bg-[#141414] rounded-sm">
                 <img src="/images/00/neueklasse.webp" alt="BMW Interface"
@@ -484,15 +934,15 @@ export default function Var7ClassyAuto() {
                 <SectionLabel>Key Contributions</SectionLabel>
                 <ul className="space-y-2.5">
                   <li className="flex gap-2.5">
-                    <span className="text-[#C9B49A] shrink-0">—</span>
+                    <span className="text-[#C9B49A] shrink-0">·</span>
                     <span>Modular HMI architecture decoupling UI layout from data streams, enabling seamless adaptation to driver context.</span>
                   </li>
                   <li className="flex gap-2.5">
-                    <span className="text-[#C9B49A] shrink-0">—</span>
+                    <span className="text-[#C9B49A] shrink-0">·</span>
                     <span>React-based orchestration layer synchronizing generative model outputs with vehicle displays at sub-50ms latency.</span>
                   </li>
                   <li className="flex gap-2.5">
-                    <span className="text-[#C9B49A] shrink-0">—</span>
+                    <span className="text-[#C9B49A] shrink-0">·</span>
                     <span>Adaptive HMI prototype translating experimental generative design into safety-critical dashboard implementation.</span>
                   </li>
                 </ul>
@@ -554,7 +1004,7 @@ export default function Var7ClassyAuto() {
                       },
                     ].map(({ agent, domain, mode, items }) => (
                       <div key={agent} className="flex flex-col gap-2">
-                        {/* Agent header — fixed min-height so single & double-line labels align */}
+                        {/* Agent header, fixed min-height so single & double-line labels align */}
                         <div className="flex flex-col items-center justify-center text-center px-1 py-1.5 rounded border border-[#C9B49A]/30 bg-[#1A1A1A] min-h-[44px]">
                           <span className="block text-[8px] md:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
                             {agent}
@@ -564,7 +1014,7 @@ export default function Var7ClassyAuto() {
                           </span>
                         </div>
 
-                        {/* Capability list — flex-1 stretches all cards to equal height */}
+                        {/* Capability list, flex-1 stretches all cards to equal height */}
                         <div className="flex-1 rounded bg-[#161616] border border-white/[0.04] px-2.5 py-2.5">
                           <ul className="space-y-[4px]">
                             {items.map(item => (
@@ -576,7 +1026,7 @@ export default function Var7ClassyAuto() {
                           </ul>
                         </div>
 
-                        {/* Mode badge — fixed min-height so single & double-line labels align */}
+                        {/* Mode badge, fixed min-height so single & double-line labels align */}
                         <div className="flex items-center justify-center text-center px-1 rounded bg-[#1A1A1A] border border-[#C9B49A]/20 min-h-[26px]">
                           <span className="text-[7px] md:text-[9px] font-semibold uppercase tracking-[0.12em] text-[#C9B49A] leading-[1.2]">{mode} Mode</span>
                         </div>
@@ -597,10 +1047,10 @@ export default function Var7ClassyAuto() {
               <div className="lg:col-span-4">
                 <SectionLabel>Project Brief</SectionLabel>
                 <div className="space-y-2 text-[13px] text-[#A3A3A3]">
-                  <p><span className="text-[#C9B49A]">Project</span> — Adaptive In-Vehicle AI Interface</p>
-                  <p><span className="text-[#C9B49A]">Timeline</span> — June – December 2025</p>
-                  <p><span className="text-[#C9B49A]">Role</span> — UX Research · Interaction Design · Prototyping</p>
-                  <p><span className="text-[#C9B49A]">Unit</span> — BMW Group · ZI-14 · Automotive HMI</p>
+                  <p><span className="text-[#C9B49A]">Project</span>, Adaptive In-Vehicle AI Interface</p>
+                  <p><span className="text-[#C9B49A]">Timeline</span>, June – December 2025</p>
+                  <p><span className="text-[#C9B49A]">Role</span>, UX Research · Interaction Design · Prototyping</p>
+                  <p><span className="text-[#C9B49A]">Unit</span>, BMW Group · ZI-14 · Automotive HMI</p>
                 </div>
               </div>
               <div className="lg:col-span-8">
@@ -609,7 +1059,7 @@ export default function Var7ClassyAuto() {
                 </p>
                 <div className="border-l-2 border-[#B39D82]/40 pl-5 py-1">
                   <p className="text-[15px] text-[#EAEAEA] leading-relaxed italic">
-                    Design a generative UI system for the BMW X5 that dynamically composes its own interface in response to driver state, environment, and task context — reducing cognitive load while surfacing the right information at the right moment.
+                    Design a generative UI system for the BMW X5 that dynamically composes its own interface in response to driver state, environment, and task context, reducing cognitive load while surfacing the right information at the right moment.
                   </p>
                 </div>
               </div>
@@ -671,7 +1121,7 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            {/* Research Approach — hidden */}
+            {/* Research Approach, hidden */}
             <div className="hidden">
               <SectionLabel>Research Approach</SectionLabel>
               <p className="text-[14px] text-[#A3A3A3] leading-relaxed max-w-2xl mb-8">
@@ -689,7 +1139,7 @@ export default function Var7ClassyAuto() {
                       { label: "Output", value: "CSV pipeline → context gating" },
                     ],
                     icon: (
-                      // Waveform / pulse — biometric capture
+                      // Waveform / pulse, biometric capture
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
                         <path d="M2 12h3l2-6 3 12 3-9 2 5 2-2h5" />
                       </svg>
@@ -704,7 +1154,7 @@ export default function Var7ClassyAuto() {
                       { label: "Output", value: "GenUI iteration · layout logic" },
                     ],
                     icon: (
-                      // Clipboard checklist — structured testing
+                      // Clipboard checklist, structured testing
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
                         <rect x="5" y="4" width="14" height="17" rx="1.5" />
                         <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" />
@@ -715,7 +1165,7 @@ export default function Var7ClassyAuto() {
                   },
                 ].map(({ title, body, meta, icon }) => (
                   <div key={title} className="bg-[#141414] rounded-sm border border-white/5 p-6 flex flex-col gap-5">
-                    {/* Header — icon + title */}
+                    {/* Header, icon + title */}
                     <div className="flex items-center gap-3">
                       <span className="w-9 h-9 rounded-sm flex items-center justify-center border border-[#C9B49A]/30 bg-[#1A1A1A] text-[#C9B49A] shrink-0">
                         {icon}
@@ -818,7 +1268,7 @@ export default function Var7ClassyAuto() {
               <SectionLabel>Interaction Model</SectionLabel>
               <div className="rounded-sm border border-white/8 bg-[#141414] p-8">
                 <p className="text-[13px] text-[#A3A3A3] leading-relaxed mb-8 max-w-xl">
-                  Voice and sensor input become generators of new interface components. The driver does not navigate — the interface responds.
+                  Voice and sensor input become generators of new interface components. The driver does not navigate, the interface responds.
                 </p>
 
                 {/* Flow */}
@@ -884,7 +1334,7 @@ export default function Var7ClassyAuto() {
                 <div className="mt-8 border border-white/8 rounded-sm bg-[#111] p-4">
                   <p className="text-[10px] uppercase tracking-widest text-[#C9B49A] mb-2">Example</p>
                   <p className="text-[12px] text-[#A3A3A3] leading-relaxed break-words whitespace-normal">
-                    Driver says <span className="text-[#E5E5E5]">"Show me roads to avoid"</span> during a snowstorm → system generates a contextual map overlay with icy patch markers, congestion warnings, and a black ice alert — assembled on demand, dismissed automatically when conditions clear.
+                    Driver says <span className="text-[#E5E5E5]">"Show me roads to avoid"</span> during a snowstorm → system generates a contextual map overlay with icy patch markers, congestion warnings, and a black ice alert, assembled on demand, dismissed automatically when conditions clear.
                   </p>
                 </div>
               </div>
@@ -895,13 +1345,13 @@ export default function Var7ClassyAuto() {
             <div>
               <SectionLabel>High-Fidelity Screens</SectionLabel>
               <p className="text-[13px] text-[#A3A3A3] mb-8 max-w-2xl break-words whitespace-normal">
-                Designed in Figma, validated against one primary scenario — Kennedy Expressway, Chicago, 32°F. High information density, genuine safety stakes.
+                Designed in Figma, validated against one primary scenario, Kennedy Expressway, Chicago, 32°F. High information density, genuine safety stakes.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { title: "Passenger Comfort Panel", body: "Identity, dual-zone temp, seat controls, tire pressure, and range — one glanceable view. No multi-step navigation." },
+                  { title: "Passenger Comfort Panel", body: "Identity, dual-zone temp, seat controls, tire pressure, and range, one glanceable view. No multi-step navigation." },
                   { title: "Danger Zone Map Overlay", body: "Icy patch markers, congestion flags, and black ice alert. Auto-surfaces on weather trigger. Dismissed when conditions clear." },
-                  { title: "Snow Readiness Module", body: "Tire pressure, brake wear, road focus mode, heated steering — assembled proactively. Surfaces without being asked." },
+                  { title: "Snow Readiness Module", body: "Tire pressure, brake wear, road focus mode, heated steering, assembled proactively. Surfaces without being asked." },
                   { title: "Climate Ring Display", body: "Dual-zone temp as ambient rings in the instrument cluster. Communicates state without pulling sustained attention from the road." },
                 ].map(({ title, body }) => (
                   <div key={title} className="bg-[#141414] rounded-sm p-6 border border-white/5">
@@ -992,7 +1442,7 @@ export default function Var7ClassyAuto() {
         <motion.article id="project-01" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-            {/* Left — imagery (reversed column) */}
+            {/* Left, imagery (reversed column) */}
             <div className="lg:col-span-6 order-2 lg:order-1 space-y-4">
               {/* ── Inline Speech-Flow Chart (translucent navy panel) ── */}
               <div
@@ -1028,7 +1478,7 @@ export default function Var7ClassyAuto() {
                     </filter>
                   </defs>
 
-                  {/* ── 1. User Input Speech — pill ── */}
+                  {/* ── 1. User Input Speech, pill ── */}
                   <g filter="url(#pa-shadow)">
                     <rect x="40" y="14" width="560" height="100" rx="50" fill="white" stroke="#60A5FA" strokeWidth="3" />
                   </g>
@@ -1040,7 +1490,7 @@ export default function Var7ClassyAuto() {
                   <line x1="320" y1="132" x2="320" y2="184" stroke="#60A5FA" strokeWidth="2" strokeDasharray="6 6" />
                   <circle cx="320" cy="192" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
 
-                  {/* ── 2. Audio Dataset — large rounded rect with list ── */}
+                  {/* ── 2. Audio Dataset, large rounded rect with list ── */}
                   <g filter="url(#pa-shadow)">
                     <rect x="40" y="200" width="560" height="320" rx="22" fill="white" stroke="#60A5FA" strokeWidth="3" />
                   </g>
@@ -1065,7 +1515,7 @@ export default function Var7ClassyAuto() {
                   <circle cx="320" cy="528" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
                   <line x1="320" y1="536" x2="320" y2="588" stroke="#60A5FA" strokeWidth="2.5" markerEnd="url(#pa-arrow)" />
 
-                  {/* ── 3. Speech To Text — rounded rect ── */}
+                  {/* ── 3. Speech To Text, rounded rect ── */}
                   <g filter="url(#pa-shadow)">
                     <rect x="40" y="598" width="560" height="140" rx="22" fill="white" stroke="#60A5FA" strokeWidth="3" />
                   </g>
@@ -1088,7 +1538,7 @@ export default function Var7ClassyAuto() {
                   <circle cx="320" cy="746" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
                   <line x1="320" y1="754" x2="320" y2="794" stroke="#60A5FA" strokeWidth="2.5" markerEnd="url(#pa-arrow)" />
 
-                  {/* ── 4. Classification — diamond ── */}
+                  {/* ── 4. Classification, diamond ── */}
                   <g filter="url(#pa-shadow)">
                     <polygon points="320,800 530,920 320,1040 110,920"
                       fill="white" stroke="#60A5FA" strokeWidth="3" strokeLinejoin="round" />
@@ -1106,7 +1556,7 @@ export default function Var7ClassyAuto() {
                   <g filter="url(#pa-shadow)">
                     <rect x="680" y="820" width="290" height="200" rx="6" fill="#EFF6FF" stroke="#60A5FA" strokeWidth="1.8" />
                   </g>
-                  {/* Annotation text — two bullet entries */}
+                  {/* Annotation text, two bullet entries */}
                   <text x="700" y="858" fontSize="14" fill="#3B82F6" fontWeight="700">▸</text>
                   <text x="718" y="858" fontSize="14" fill="#1E293B">In evaluation, loop through all</text>
                   <text x="718" y="878" fontSize="14" fill="#1E293B">audio files/dataset to calculate</text>
@@ -1117,31 +1567,31 @@ export default function Var7ClassyAuto() {
                   <text x="718" y="978" fontSize="14" fill="#1E293B">audio files to calculate model</text>
                   <text x="718" y="998" fontSize="14" fill="#1E293B">accuracy.</text>
 
-                  {/* Branch connector — open dot at diamond bottom */}
+                  {/* Branch connector, open dot at diamond bottom */}
                   <circle cx="320" cy="1046" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
 
-                  {/* YES branch — left, with rounded turn */}
+                  {/* YES branch, left, with rounded turn */}
                   <path d="M 320 1054 L 320 1066 Q 320 1078 308 1078 L 152 1078 Q 140 1078 140 1090 L 140 1108"
                     stroke="#60A5FA" strokeWidth="2.5" fill="none" markerEnd="url(#pa-arrow)" strokeLinejoin="round" strokeLinecap="round" />
 
-                  {/* NO branch — right, with rounded turn */}
+                  {/* NO branch, right, with rounded turn */}
                   <path d="M 320 1054 L 320 1066 Q 320 1078 332 1078 L 488 1078 Q 500 1078 500 1090 L 500 1108"
                     stroke="#60A5FA" strokeWidth="2.5" fill="none" markerEnd="url(#pa-arrow)" strokeLinejoin="round" strokeLinecap="round" />
 
-                  {/* Check badge — YES */}
+                  {/* Check badge, YES */}
                   <g filter="url(#pa-shadow)">
                     <circle cx="140" cy="1098" r="18" fill="#60A5FA" stroke="white" strokeWidth="2" />
                   </g>
                   <path d="M 131 1098 L 138 1105 L 150 1092" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
 
-                  {/* X badge — NO */}
+                  {/* X badge, NO */}
                   <g filter="url(#pa-shadow)">
                     <circle cx="500" cy="1098" r="18" fill="#60A5FA" stroke="white" strokeWidth="2" />
                   </g>
                   <path d="M 491 1089 L 509 1107 M 509 1089 L 491 1107" stroke="white" strokeWidth="2.6" strokeLinecap="round" fill="none" />
                 </svg>
 
-                {/* Output row — Agent Responds | Agent Ignores */}
+                {/* Output row, Agent Responds | Agent Ignores */}
                 <div className="grid grid-cols-2 gap-4 -mt-2">
                   <div className="rounded-2xl border-[3px] border-[#60A5FA] bg-white shadow-[0_4px_14px_rgba(15,23,42,0.10)] py-4 px-4 text-center">
                     <span className="text-[15px] md:text-[17px] font-bold text-slate-900 tracking-tight">Agent Responds</span>
@@ -1161,7 +1611,7 @@ export default function Var7ClassyAuto() {
               {/* <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
                 <img src="/images/01/NLP01.png" alt="NLP Semantic Analysis" className="w-[85%] h-auto opacity-70 invert" />
               </div> */}
-              {/* ── Response Accuracy — Formal vs Informal Comparison ── */}
+              {/* ── Response Accuracy, Formal vs Informal Comparison ── */}
               <div
                 className="rounded-md border border-[#60A5FA]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md"
                 style={{ background: "rgba(11, 28, 48, 0.55)" }}
@@ -1296,7 +1746,7 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            {/* Right — meta + content */}
+            {/* Right, meta + content */}
             <div className="lg:col-span-5 order-1 lg:order-2 flex flex-col gap-8">
               <div className="flex items-center gap-4">
                 <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA] leading-none`}>01</span>
@@ -1339,7 +1789,7 @@ export default function Var7ClassyAuto() {
                         <div className="absolute inset-0 bg-gradient-to-t from-[#050d1a]/60 via-transparent to-[#050d1a]/20 pointer-events-none" />
                       </div>
 
-                      {/* X close button — only visible when pinned */}
+                      {/* X close button, only visible when pinned */}
                       {pinned && (
                         <button
                           onClick={e => { e.stopPropagation(); setPinned(false); }}
@@ -1371,7 +1821,7 @@ export default function Var7ClassyAuto() {
                     <SectionLabel>The Problem</SectionLabel>
                     <div className="bg-[#1A1A1A] rounded-sm p-6 border border-white/10">
                       <p className="text-[13px] mb-3">
-                        Voice assistants react to whatever they hear. They transcribe filler, misread half-finished thoughts, and respond when nobody was talking to them — then stay silent at the moment a user actually needs help.
+                        Voice assistants react to whatever they hear. They transcribe filler, misread half-finished thoughts, and respond when nobody was talking to them, then stay silent at the moment a user actually needs help.
                       </p>
                       <p className="text-[13px]">
                         <span className="text-[#EAEAEA] font-medium">Design challenge:</span> Classify intent from noisy, real-world speech so the agent acts only when the signal is clear.
@@ -1396,15 +1846,15 @@ export default function Var7ClassyAuto() {
                     <SectionLabel>Key Contributions</SectionLabel>
                     <ul className="space-y-3">
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span>NLP pipeline development</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span>User intent prediction model</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span>Real-time response generation</span>
                       </li>
                     </ul>
@@ -1417,15 +1867,15 @@ export default function Var7ClassyAuto() {
                     <SectionLabel>Impact</SectionLabel>
                     <ul className="space-y-3">
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="font-semibold text-[#EAEAEA]">Robust Semantic Orchestration:</span> Engineered a classification pipeline that bridges the gap between raw speech-to-text and actionable intent, handling the nuance of informal speech.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="font-semibold text-[#EAEAEA]">Multimodal Scalability:</span> Created a modular framework for adaptive systems that can be integrated into various hardware environments, from smart homes to automotive HMIs.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="font-semibold text-[#EAEAEA]">Real-time Decision Logic:</span> Developed the logic for "Agent Responds vs. Agent Ignores," a critical component for the next generation of "always-on" ambient computing.</span>
                       </li>
                     </ul>
@@ -1451,7 +1901,7 @@ export default function Var7ClassyAuto() {
         <motion.article id="project-02" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start justify-center">
 
-            {/* Left — meta + content */}
+            {/* Left, meta + content */}
             <div className="lg:col-span-6 flex flex-col gap-8">
               <div className="flex items-baseline gap-4">
                 <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>02</span>
@@ -1471,7 +1921,7 @@ export default function Var7ClassyAuto() {
                   <div>
                     <SectionLabel>Overview</SectionLabel>
                     <p>
-                      Built a B2B tool designed to bridge the gap between high-level data analytics and creative execution. It leverages real-time data and AI to empower fashion professionals — from designers to merchandisers — to make informed, proactive decisions.
+                      Built a B2B tool designed to bridge the gap between high-level data analytics and creative execution. It leverages real-time data and AI to empower fashion professionals, from designers to merchandisers, to make informed, proactive decisions.
                     </p>
                   </div>
 
@@ -1482,15 +1932,15 @@ export default function Var7ClassyAuto() {
                     <SectionLabel>Key Features</SectionLabel>
                     <ul className="space-y-4">
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">Dynamic Data Integration:</span> Built to process and visualize real-time growth metrics, search volumes, and month-over-month performance curves.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span><span className="text-[#EAEAEA]">Agentic AI Implementation:</span> The Personal Fashion Assistant democratizes data — instead of navigating three layers of menus, a user can simply ask: "What footwear is trending in Paris right now?"</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
+                        <span><span className="text-[#EAEAEA]">Agentic AI Implementation:</span> The Personal Fashion Assistant democratizes data, instead of navigating three layers of menus, a user can simply ask: "What footwear is trending in Paris right now?"</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">Advanced Analytics &amp; Visualization:</span> Real-time growth metrics, search volumes, and month-over-month performance curves.</span>
                       </li>
                     </ul>
@@ -1503,15 +1953,15 @@ export default function Var7ClassyAuto() {
                     <SectionLabel>Impact</SectionLabel>
                     <ul className="space-y-5">
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span><span className="text-[#EAEAEA]">75% Reduction in Research Latency:</span> Consolidating real-time APIs into a single HMI — reducing validation time from 4 hours of manual cross-referencing to &lt;60 seconds.</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
+                        <span><span className="text-[#EAEAEA]">75% Reduction in Research Latency:</span> Consolidating real-time APIs into a single HMI, reducing validation time from 4 hours of manual cross-referencing to &lt;60 seconds.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">90% Decrease in Interaction Cost:</span> Replaced a 12-click multi-step filtering process with a single natural language input, significantly lowering cognitive load for non-technical stakeholders.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">Trend Velocity Accuracy:</span> Month-over-month performance curves provide a 42.5% more granular view of trend momentum vs. traditional static quarterly reports.</span>
                       </li>
                     </ul>
@@ -1534,9 +1984,9 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            {/* Right — imagery stacked vertically, framed in semi-transparent panels (enlarged ~30%, grows rightward) */}
+            {/* Right, imagery stacked vertically, framed in semi-transparent panels (enlarged ~30%, grows rightward) */}
             <div className="lg:col-span-4 flex flex-col gap-4 lg:scale-[1.30] lg:origin-top-left lg:ml-4">
-              {/* Dashboard — framed, image scales within panel */}
+              {/* Dashboard, framed, image scales within panel */}
               <div
                 className="w-full rounded-md border border-[#C9B49A]/15 p-4 md:p-5 backdrop-blur-md shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
                 style={{ background: "rgba(20, 18, 14, 0.42)" }}
@@ -1550,7 +2000,7 @@ export default function Var7ClassyAuto() {
                 </div>
               </div>
 
-              {/* Surefront Interviews — framed, image scales within panel */}
+              {/* Surefront Interviews, framed, image scales within panel */}
               <div
                 className="w-full rounded-md border border-[#C9B49A]/15 p-4 md:p-5 backdrop-blur-md shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
                 style={{ background: "rgba(20, 18, 14, 0.42)" }}
@@ -1574,7 +2024,7 @@ export default function Var7ClassyAuto() {
         <motion.article id="project-03" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-            {/* Left — imagery */}
+            {/* Left, imagery */}
             <div className="lg:col-span-7 order-2 lg:order-1 space-y-4">
               <div className="w-[70%] mx-auto aspect-[3/4] overflow-hidden bg-[#141414] rounded-sm">
                 <img src="/images/03/emmastree.png" alt="Emma's Tree"
@@ -1588,7 +2038,7 @@ export default function Var7ClassyAuto() {
               </div>
             </div>
 
-            {/* Right — meta + content */}
+            {/* Right, meta + content */}
             <div className="lg:col-span-5 order-1 lg:order-2 flex flex-col gap-8">
               <div className="flex items-baseline gap-4">
                 <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>03</span>
@@ -1623,7 +2073,7 @@ export default function Var7ClassyAuto() {
                   <div>
                     <SectionLabel>Overview</SectionLabel>
                     <p>
-                      Built this tree for a med student who wanted greenery without maintenance stress. Using biomimicry, the tree reacts to environmental changes just like a real organism — a functional, stress-free monitor designed to never die.
+                      Built this tree for a med student who wanted greenery without maintenance stress. Using biomimicry, the tree reacts to environmental changes just like a real organism, a functional, stress-free monitor designed to never die.
                     </p>
                   </div>
 
@@ -1634,23 +2084,23 @@ export default function Var7ClassyAuto() {
                     <SectionLabel>Key Highlights</SectionLabel>
                     <ul className="space-y-3">
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">The "Bloom" Effect:</span> Temperature Sensitive Filament enables color transformation on touch or warmth.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">Moisture Sensing:</span> Moisture Sensor signals watering cues organically.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">Visual Feedback:</span> LED Indicators communicate environmental state at a glance.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">Growth &amp; Structure:</span> 3D Pen for organic branching forms.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
                         <span><span className="text-[#EAEAEA]">Sustainability:</span> Solar-powered Battery Bank.</span>
                       </li>
                     </ul>
@@ -1663,12 +2113,12 @@ export default function Var7ClassyAuto() {
                     <SectionLabel>Design Thinking</SectionLabel>
                     <ul className="space-y-4">
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Designed using biomimicry to solve "care fatigue" — a synthetic plant that lives and reacts right along with Emma. Temperature-sensitive filaments and environmental sensors make it a responsive sensory anchor that mimics the energy of a real plant.</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
+                        <span>Designed using biomimicry to solve "care fatigue", a synthetic plant that lives and reacts right along with Emma. Temperature-sensitive filaments and environmental sensors make it a responsive sensory anchor that mimics the energy of a real plant.</span>
                       </li>
                       <li className="flex gap-3">
-                        <span className="text-[#C9B49A] shrink-0">—</span>
-                        <span>Natural materials — real moss, a ceramic pot — keep the technology grounded rather than clinical, delivering restorative nature vibes that are durable and emotionally meaningful.</span>
+                        <span className="text-[#C9B49A] shrink-0">·</span>
+                        <span>Natural materials, real moss, a ceramic pot, keep the technology grounded rather than clinical, delivering restorative nature vibes that are durable and emotionally meaningful.</span>
                       </li>
                     </ul>
                   </div>
@@ -1738,11 +2188,14 @@ export default function Var7ClassyAuto() {
             Selected Projects
           </h2>
           <div className="grid grid-cols-6 gap-2">
-            {(activeFilter === null
-              ? ALL_PROJECTS
-              : ALL_PROJECTS.filter(item => item.categories.includes(activeFilter))
-            ).map((item) => (
-              <FilteredThumb key={item.alt} item={item} activeFilter={activeFilter} outfitClass={outfit.className} />
+            {filteredProjects.map((item) => (
+              <FilteredThumb
+                key={item.alt}
+                item={item}
+                activeFilter={activeFilter}
+                outfitClass={outfit.className}
+                onOpen={setSelectedProject}
+              />
             ))}
           </div>
         </section>
@@ -1934,7 +2387,7 @@ export default function Var7ClassyAuto() {
                 </div>
               </div>
 
-              {/* Iced Coffee Hover — "Strawberry Latte" */}
+              {/* Iced Coffee Hover, "Strawberry Latte" */}
               <div
                 className="absolute z-20 block group/coffee"
                 style={{ left: '5%', top: '64%', width: '13%', height: '33%' }}
@@ -2132,6 +2585,26 @@ export default function Var7ClassyAuto() {
         </section>
 
       </main >
+
+      {/* Selected Projects modal, opens on thumbnail click */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectModal
+            key={selectedProject.alt}
+            item={selectedProject}
+            outfitClass={outfit.className}
+            onClose={() => setSelectedProject(null)}
+            onPrev={() => {
+              if (selectedIndex > 0) setSelectedProject(filteredProjects[selectedIndex - 1]);
+            }}
+            onNext={() => {
+              if (selectedIndex < filteredProjects.length - 1) setSelectedProject(filteredProjects[selectedIndex + 1]);
+            }}
+            hasPrev={selectedIndex > 0}
+            hasNext={selectedIndex < filteredProjects.length - 1}
+          />
+        )}
+      </AnimatePresence>
     </div >
   );
 }
