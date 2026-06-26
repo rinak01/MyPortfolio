@@ -19,8 +19,38 @@
   }
 }
 
+/* mobile fix: smooth in-page hash scroll across all devices */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  /* mobile fix: prevent any rogue horizontal scroll (overflow-x only, vertical scroll preserved) */
+  overflow-x: hidden;
+  /* mobile fix: avoid iOS auto-magnify of small text on input focus / orientation change */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* mobile fix: remove 300ms tap delay on interactive elements while keeping native gestures */
+button,
+a,
+[role="button"],
+[onclick] {
+  touch-action: manipulation;
+}
+
+/* mobile fix: reduce framer-motion / CSS transitions for users who request it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
