@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { Outfit, DM_Sans } from "next/font/google";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["200", "300", "400", "500"] });
@@ -125,13 +125,10 @@ const ALL_PROJECTS: GridItem[] = [
   ] },
   { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", tag: "Interactive · Bio", label: "Emma's Jellyfish", desc: "Bioluminescent jellyfish environment responding to gesture", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"], year: "2023", context: "Companion piece to Emma's Tree", tools: ["Arduino", "Leap Motion", "LED strips", "Processing"], notes: "A tabletop bioluminescent jellyfish whose tentacles glow and drift in response to hand proximity. Built as a calming sensory anchor for the same med-student friend the Emma's Tree project was made for." },
   { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education · Hackathon", label: "LeARn", desc: "An AR learning app that brings interactivity and joy back into elementary school subjects, tracking student progress across Art, Math, and Music", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Rapid Prototyping"], year: "April 2022", context: "Venture In Metaverse Hackathon · Harvard", tools: ["Unity", "C#", "Procreate"], notes: "LeARn is an augmented reality application built to help educators and parents teach with more interactivity, longer attention spans, and more enjoyment for elementary school students. The app tracks each student's progress through Art, Math, and Music, with planned expansion into Physics Circuits and Language. Designed to live alongside the traditional classroom rather than replace it.", designThinking: "Started from the question every K-12 teacher asks: how do you hold attention when worksheets are competing with phones? AR lets the same lesson live on the desk in front of a student, making the rotation, manipulation, and exploration of a concept the lesson itself rather than the textbook page.\n\nThe progress-tracking layer was the design move that took the idea from gimmick to tool: educators see what each student has spent time with, and the app calibrates difficulty without surfacing it to the child.", video: { url: "https://youtu.be/Dkjj-q0xRaE", caption: "Demo reel from Venture In Metaverse at Harvard, April 2022." }, links: [{ label: "Watch Demo", href: "https://youtu.be/Dkjj-q0xRaE?si=UeQRA4jqXGIMeJXA" }] },
-  { src: "/images/prototypes/CMUPopUp/cmupopup 1.png", alt: "CMU Popup", tag: "Spatial Design · Physical Model", label: "CMU Popup", desc: "A pop-up book scale model of a Tuscan wine bar concept", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "CMU spatial design studio", tools: ["Pop-up book construction", "Printed textures", "3D-printed terrain", "Sculpted moss", "Tabletop modeling"], notes: "A foldable, book-style scale model of a Tuscan-inspired wine bar concept. The piece reads as flat from the side and unfolds into a multi-room interior with vineyards, stone garden, and seating, used as a stand-alone presentation artifact rather than a digital render.", designThinking: "Wanted a presentation format that could be carried into any review, no laptop, no projector. The pop-up form gave the design two states: a quiet closed book that invites curiosity, and an opened diorama that lets stakeholders read the spatial logic at a glance.\n\nWorking at a tabletop scale also forced material honesty: every brick texture, table, and tree had to earn its place because there was no room to hide weak detail.", images: [
+  { src: "/images/prototypes/CMUPopUp/cmupopup 1.png", alt: "CMU Popup", tag: "Spatial Design · Guest Experience", label: "CMU Popup", desc: "A pop-up book scale model of a Tuscan-themed wine bar guest experience", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "Carnegie Mellon · Guest Experience in Theme Parks · Fall 2024", tools: ["Pop-up book construction", "Printed textures", "3D-printed terrain", "Sculpted moss", "Tabletop modeling"], notes: "A foldable, book-style scale model of a Tuscan-themed wine bar guest experience, developed for CMU's Guest Experience in Theme Parks studio. The piece reads as flat from the side and unfolds into a multi-room interior with vineyards, stone garden, and seating, used as a stand-alone presentation artifact rather than a digital render.", designThinking: "Wanted a presentation format that could be carried into any review, no laptop, no projector. The pop-up form gave the design two states: a quiet closed book that invites curiosity, and an opened diorama that lets stakeholders read the spatial logic of a guest's path at a glance.\n\nWorking at a tabletop scale also forced material honesty: every brick texture, table, and tree had to earn its place because there was no room to hide weak detail.", images: [
     { src: "/images/prototypes/CMUPopUp/cmupopup 1.png", caption: "Hero view: the wine bar concept opened to full diorama." },
-    { src: "/images/prototypes/CMUPopUp/IMG_6532.jpg", caption: "Aerial of the unfolded model showing the indoor/outdoor flow between rooms." },
     { src: "/images/prototypes/CMUPopUp/IMG_6534 2.jpg", caption: "Mid-fold view: the pop-up book structure that supports the standing scene." },
     { src: "/images/prototypes/CMUPopUp/IMG_6540.jpg", caption: "Detail: stone seating, sculpted moss, and tree placement in the garden zone." },
-    { src: "/images/prototypes/CMUPopUp/IMG_6542.jpg", caption: "Wine wall reveal: rendered bottle shelving as the room's back-of-house anchor." },
-    { src: "/images/prototypes/CMUPopUp/IMG_6543.jpg", caption: "Close-up of the garden bench and surrounding planting." },
   ] },
   { src: "/images/prototypes/Portal Reef/portalreef 1.png", alt: "Portal Reef", tag: "Mixed Reality · EEG · Conservation", label: "Portal Reef", desc: "A multimodal MR coral reef built to raise awareness of coral bleaching, with Neuos EEG measuring delight as the cause of the damage", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Spatial Computing", "Multimodal Systems", "Physical Computing", "Interface Design", "Rapid Prototyping"], year: "2022", context: "MIT Reality Hack 2022 · Semi-Finalist", tools: ["Hololens 2", "Arctop Neuos Headband", "Arctop SDK", "Unity", "C#", "Blender", "GitHub"], notes: "A multimodal Mixed Reality coral reef built during MIT Reality Hack 2022 (semi-finalist) to raise awareness of coral destruction. The user explores a vivid reef through a Hololens 2 passthrough environment; when they reach out and touch a coral, the coral turns grey and dies on contact, making the cause of bleaching legible as a behaviour rather than a statistic.\n\nAn Arctop Neuos EEG headband recorded the user's enjoyment in real time while they interacted, capturing the uncomfortable insight at the heart of the brief: people destroy what they love because they love it.", designThinking: "The team's hypothesis was that conservation messaging fails when it relies on guilt or distance. We treated wonder as the entry point and let the consequence land as the user enjoyed it most. Touching a beautiful coral and watching it die in the same instant collapses the emotional gap between visitor and impact.\n\nLayering the Neuos EEG signal on top of the interaction added a second axis. Recording enjoyment exactly when destruction occurs gave us a data artefact that names the contradiction without us having to write it on a wall.", images: [
     { src: "/images/prototypes/Portal Reef/portalreef 1.png", caption: "Inside the experience: an Anacropora coral information panel surfaces as the user approaches, narrating the species before they reach to touch." },
@@ -164,11 +161,12 @@ const ALL_PROJECTS: GridItem[] = [
 ];
 
 // ─── Static Tailwind col-span map (dynamic strings get purged) ───────────────
+// mobile fix: col-span only applies at lg; on mobile each item takes 1 column of grid-cols-2
 const COL_SPAN_CLASS: Record<number, string> = {
-  2: "col-span-2",
-  3: "col-span-3",
-  4: "col-span-4",
-  6: "col-span-6",
+  2: "lg:col-span-2",
+  3: "lg:col-span-3",
+  4: "lg:col-span-4",
+  6: "lg:col-span-6",
 };
 
 // ─── FilterCategoryButton ────────────────────────────────────────────────────
@@ -182,10 +180,11 @@ function FilterCategoryButton({
   onClick: () => void;
 }) {
   const s = CAT_STYLE[cat];
+  // mobile fix: tap target ≥40px on phones via py-2.5 + min-h-[40px]; desktop tightness preserved at lg:
   return (
     <button
       onClick={onClick}
-      className="relative flex items-center gap-2 pl-3 pr-4 py-1.5 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap select-none"
+      className="relative flex items-center gap-2 pl-3 pr-4 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap select-none"
       style={isActive
         ? { background: s.active, borderColor: s.dot, color: s.text, boxShadow: `0 0 12px ${s.dot}50` }
         : { background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.15)", color: "#909090" }
@@ -224,42 +223,57 @@ function FilteredThumb({
       viewport={{ once: true }}
       variants={slowFade}
       onClick={() => onOpen(item)}
-      className={`${COL_SPAN_CLASS[item.colSpan ?? 3]} ${item.aspectClass ?? "aspect-[16/9]"} bg-[#141414] overflow-hidden rounded-sm group relative cursor-pointer`}
+      className={`${COL_SPAN_CLASS[item.colSpan ?? 3]} group cursor-pointer flex flex-col`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <motion.img
-        src={item.src}
-        alt={item.alt}
-        className={`w-full h-full object-cover ${item.scaleClass ?? ""}`}
-        animate={{
-          filter: inColor ? "grayscale(0%) brightness(1)" : "grayscale(100%) brightness(0.7)",
-        }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      />
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/80 to-black/20 backdrop-blur-[6px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end px-5 py-5">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-[#E8D4BE] mb-1 font-semibold" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}>
-          {item.tag}
-        </span>
-        <span className={`${outfitClass} text-white text-base font-medium mb-1`} style={{ textShadow: "0 2px 4px rgba(0,0,0,0.9)" }}>
-          {item.label}
-        </span>
-        <span className="text-[#E5E5E5] text-[12.5px] leading-relaxed font-normal mb-2.5" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}>
-          {item.desc}
-        </span>
-        {/* Category pills */}
-        <div className="flex flex-wrap gap-1 mt-1">
-          {item.categories.map((c) => (
-            <span
-              key={c}
-              className="text-[9px] font-semibold px-2.5 py-0.5 rounded-full bg-black/60 border border-white/15 backdrop-blur-md"
-              style={{ color: CAT_STYLE[c].text, textShadow: "0 1px 2px rgba(0,0,0,0.9)" }}
-            >
-              {c}
-            </span>
-          ))}
+      {/* Image well: aspect-ratio container holds the picture + (desktop-only) hover overlay */}
+      <div className={`${item.aspectClass ?? "aspect-[16/9]"} bg-[#141414] overflow-hidden rounded-sm relative`}>
+        <motion.img
+          loading="lazy"
+          decoding="async"
+          src={item.src}
+          alt={item.alt}
+          className={`w-full h-full object-cover ${item.scaleClass ?? ""}`}
+          animate={{
+            filter: inColor ? "grayscale(0%) brightness(1)" : "grayscale(100%) brightness(0.7)",
+          }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        />
+        {/* Hover overlay — desktop only (lg+). On phones the caption strip below the image carries metadata. */}
+        <div className="hidden lg:flex absolute inset-0 bg-gradient-to-t from-black/95 via-black/80 to-black/20 backdrop-blur-[6px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex-col justify-end px-5 py-5">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#E8D4BE] mb-1 font-semibold" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}>
+            {item.tag}
+          </span>
+          <span className={`${outfitClass} text-white text-base font-medium mb-1 leading-tight`} style={{ textShadow: "0 2px 4px rgba(0,0,0,0.9)" }}>
+            {item.label}
+          </span>
+          <span className="text-[#E5E5E5] text-[12.5px] leading-relaxed font-normal mb-2.5" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}>
+            {item.desc}
+          </span>
+          {/* Category pills (desktop modal-substitute) */}
+          <div className="flex flex-wrap gap-1 mt-1">
+            {item.categories.map((c) => (
+              <span
+                key={c}
+                className="text-[9px] font-semibold px-2.5 py-0.5 rounded-full bg-black/60 border border-white/15 backdrop-blur-md"
+                style={{ color: CAT_STYLE[c].text, textShadow: "0 1px 2px rgba(0,0,0,0.9)" }}
+              >
+                {c}
+              </span>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* Caption strip — phones/tablets only. Editorial two-line block: tag (small uppercase) then title. */}
+      <div className="lg:hidden pt-2 pb-1 px-0.5">
+        <p className="text-[9.5px] uppercase tracking-[0.2em] text-[#737373] font-semibold leading-none mb-1.5 truncate">
+          {item.tag}
+        </p>
+        <p className={`${outfitClass} text-[13px] text-[#EAEAEA] font-medium leading-snug line-clamp-2`}>
+          {item.label}
+        </p>
       </div>
     </motion.div>
   );
@@ -750,6 +764,8 @@ export default function Var7ClassyAuto() {
 
   const filterBarRef = useRef<HTMLDivElement>(null);
   return (
+    /* mobile fix: MotionConfig reducedMotion="user" makes every motion.* respect prefers-reduced-motion */
+    <MotionConfig reducedMotion="user">
     <div className={`${sans.className} min-h-screen bg-[#0C0C0C] text-[#A3A3A3] selection:bg-[#B39D82] selection:text-[#0C0C0C] font-light`}>
 
       <ScrollNav />
@@ -759,7 +775,8 @@ export default function Var7ClassyAuto() {
       <div className="fixed inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
 
       {/* ─── Header ─── */}
-      <header className="px-8 md:px-16 pt-24 pb-16 max-w-[1600px] mx-auto">
+      {/* mobile fix: tighter horizontal + top padding on phones */}
+      <header className="px-5 sm:px-8 md:px-16 pt-16 sm:pt-20 md:pt-24 pb-10 sm:pb-12 md:pb-16 max-w-[1600px] mx-auto">
         <motion.div initial="hidden" animate="visible" variants={slowFade}
           className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div>
@@ -767,11 +784,12 @@ export default function Var7ClassyAuto() {
               <h1 className={`${outfit.className} text-5xl md:text-7xl font-light text-[#EAEAEA] tracking-tight`}>
                 Rina Kim
               </h1>
+              {/* mobile fix: bigger tap target (≥40px tall via py-2.5 + min-h on phones) and slightly larger label */}
               <a
                 href="/images/Resume_RinaKim.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-sm text-[9px] font-semibold uppercase tracking-[0.15em] border transition-all duration-300 cursor-pointer relative -translate-y-[9px]
+                className="inline-flex items-center justify-center px-4 lg:px-3.5 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-sm text-[10px] lg:text-[9px] font-semibold uppercase tracking-[0.15em] border transition-all duration-300 cursor-pointer relative -translate-y-0 lg:-translate-y-[9px]
                   bg-[#1C1A17] text-[#A3A3A3] border-[#B39D82]/40 shadow-[0_4px_12px_rgba(0,0,0,0.5)] hover:bg-[#B39D82] hover:text-[#0C0C0C] hover:border-[#B39D82] hover:shadow-[0_0_15px_rgba(179,157,130,0.35)] shrink-0"
               >
                 <span className="pl-[0.15em] text-center">Resume</span>
@@ -804,7 +822,8 @@ export default function Var7ClassyAuto() {
           className="w-full h-[1px] bg-gradient-to-r from-[#B39D82]/40 via-[#B39D82]/10 to-transparent" />
       </header>
 
-      <main className="max-w-[1600px] mx-auto px-8 md:px-16 pb-32 space-y-40">
+      {/* mobile fix: reduce side padding + section spacing on phones (was 32px/160px, now 20px/64px) */}
+      <main className="max-w-[1600px] mx-auto px-5 sm:px-8 md:px-16 pb-16 sm:pb-24 md:pb-32 space-y-16 sm:space-y-24 md:space-y-40">
 
         {/* ─── Project 00: BMW Adaptive Generative UI ─── */}
         <motion.article id="project-00" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade} className="group">
@@ -862,15 +881,15 @@ export default function Var7ClassyAuto() {
             {/* Right, imagery */}
             <div className="lg:col-span-8 space-y-4">
               <div className="aspect-[21/9] overflow-hidden bg-[#141414] rounded-sm">
-                <img src="/images/00/neueklasse.webp" alt="BMW Interface"
+                <img loading="lazy" decoding="async" src="/images/00/neueklasse.webp" alt="BMW Interface"
                   className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-[1.02] transition-all duration-1000 ease-out" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="aspect-video bg-[#141414] rounded-sm p-6 flex items-center justify-center">
-                  <img src="/images/00/layers_whitetext.png" alt="Layers diagram" className="w-full h-auto opacity-90" />
+                  <img loading="lazy" decoding="async" src="/images/00/layers_whitetext.png" alt="Layers diagram" className="w-full h-auto opacity-90" />
                 </div>
                 <div className="aspect-video bg-[#141414] rounded-sm p-6 flex items-center justify-center">
-                  <img src="/images/00/pipeline.png" alt="Pipeline diagram" className="w-full h-auto opacity-90" />
+                  <img loading="lazy" decoding="async" src="/images/00/pipeline.png" alt="Pipeline diagram" className="w-full h-auto opacity-90" />
                 </div>
               </div>
             </div>
@@ -978,7 +997,8 @@ export default function Var7ClassyAuto() {
                   </svg>
 
                   {/* ── Agent cards grid ── */}
-                  <div className="grid grid-cols-5 gap-2 md:gap-3">
+                  {/* mobile fix: 2 cols on phones, 3 on small tablets, 5 on desktop so text stays legible */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
                     {[
                       {
                         agent: "Agent A",
@@ -1014,10 +1034,11 @@ export default function Var7ClassyAuto() {
                       <div key={agent} className="flex flex-col gap-2">
                         {/* Agent header, fixed min-height so single & double-line labels align */}
                         <div className="flex flex-col items-center justify-center text-center px-1 py-1.5 rounded border border-[#C9B49A]/30 bg-[#1A1A1A] min-h-[44px]">
-                          <span className="block text-[8px] md:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
+                          {/* mobile fix: 11px when cards are 2-up on phone; tighten to 10px at desktop's 5-up density */}
+                          <span className="block text-[11px] lg:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
                             {agent}
                           </span>
-                          <span className="block text-[8px] md:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
+                          <span className="block text-[11px] lg:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
                             {domain}
                           </span>
                         </div>
@@ -1027,16 +1048,19 @@ export default function Var7ClassyAuto() {
                           <ul className="space-y-[4px]">
                             {items.map(item => (
                               <li key={item} className="flex gap-1.5 items-start">
-                                <span className="text-[#C9B49A] text-[6px] md:text-[7px] mt-[4px] shrink-0">•</span>
-                                <span className="text-[7px] md:text-[8.5px] text-[#B0B0B0] leading-[1.35]">{item}</span>
+                                {/* mobile fix: bullet readable on phones (was 6px) */}
+                                <span className="text-[#C9B49A] text-[9px] lg:text-[7px] mt-[4px] shrink-0">•</span>
+                                {/* mobile fix: body 11px on phones (was 7px → illegible) */}
+                                <span className="text-[11px] lg:text-[8.5px] text-[#B0B0B0] leading-[1.35]">{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
 
                         {/* Mode badge, fixed min-height so single & double-line labels align */}
-                        <div className="flex items-center justify-center text-center px-1 rounded bg-[#1A1A1A] border border-[#C9B49A]/20 min-h-[26px]">
-                          <span className="text-[7px] md:text-[9px] font-semibold uppercase tracking-[0.12em] text-[#C9B49A] leading-[1.2]">{mode} Mode</span>
+                        <div className="flex items-center justify-center text-center px-1 py-1 rounded bg-[#1A1A1A] border border-[#C9B49A]/20 min-h-[26px]">
+                          {/* mobile fix: legible mode label on phones */}
+                          <span className="text-[10px] lg:text-[9px] font-semibold uppercase tracking-[0.12em] text-[#C9B49A] leading-[1.2]">{mode} Mode</span>
                         </div>
                       </div>
                     ))}
@@ -1116,13 +1140,14 @@ export default function Var7ClassyAuto() {
                   { area: "Interaction Design", detail: "Designed a generative UI system with context-gated surfacing and glance-budget constraints, prototyped through adaptive driving modes in Figma" },
                   { area: "Systems Thinking", detail: "Modeled multi-agent orchestration across sensor, context, and intent layers to map real-time inputs into legible, prioritized UI decisions" },
                   { area: "Cross-functional", detail: "Translated raw sensor outputs and engineering constraints into shared design requirements, aligning research, product, and engineering on what the car should show and when" },
+                  /* mobile fix: stack the area label above the detail on phones; restore 3/9 row at md+ */
                 ].map(({ area, detail }, i) => (
-                  <div key={area} className={`grid grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
-                    <div className="col-span-3 p-4 border-r border-white/5">
+                  <div key={area} className={`grid grid-cols-1 md:grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
+                    <div className="md:col-span-3 px-4 pt-4 pb-1 md:py-4 md:border-r border-white/5">
                       <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{area}</span>
                     </div>
-                    <div className="col-span-9 p-4">
-                      <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{detail}</span>
+                    <div className="md:col-span-9 px-4 pb-4 pt-1 md:py-4">
+                      <span className="text-[14px] md:text-[13px] text-[#A3A3A3] leading-relaxed">{detail}</span>
                     </div>
                   </div>
                 ))}
@@ -1319,9 +1344,10 @@ export default function Var7ClassyAuto() {
                       )}
 
                       {/* Hover image panel */}
+                      {/* mobile fix: hidden on phones/tablets (hover-only affordance + would overflow viewport); shown at md+ */}
                       {hoverImage && (
                         <div
-                          className="absolute left-[280px] top-1/2 -translate-y-1/2 z-50 w-[300px] md:w-[400px]
+                          className="hidden md:block absolute left-[280px] top-1/2 -translate-y-1/2 z-50 w-[300px] md:w-[400px]
                             opacity-0 translate-x-4 pointer-events-none group-hover/step:opacity-100 group-hover/step:translate-x-0
                             transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
                         >
@@ -1617,7 +1643,7 @@ export default function Var7ClassyAuto() {
               </div>
               {/* NLP diagram */}
               {/* <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
-                <img src="/images/01/NLP01.png" alt="NLP Semantic Analysis" className="w-[85%] h-auto opacity-70 invert" />
+                <img loading="lazy" decoding="async" src="/images/01/NLP01.png" alt="NLP Semantic Analysis" className="w-[85%] h-auto opacity-70 invert" />
               </div> */}
               {/* ── Response Accuracy, Formal vs Informal Comparison ── */}
               <div
@@ -1774,12 +1800,13 @@ export default function Var7ClassyAuto() {
                     style={{ background: 'radial-gradient(circle at 40% 35%, #0a2a3a 0%, #041520 55%, #020d18 100%)' }}
                     aria-label={pinned ? 'Unpin Aquarium' : 'Pin Aquarium'}
                   >
-                    <img src="/images/kawaii_jellyfish.png" alt="Jellyfish" className="w-full h-full object-cover" />
+                    <img loading="lazy" decoding="async" src="/images/kawaii_jellyfish.png" alt="Jellyfish" className="w-full h-full object-cover" />
                   </button>
 
                   {/* Aquarium panel: shows on hover OR when pinned */}
+                  {/* mobile fix: cap width to viewport (was fixed 340px); also clamp via max-w so it never overflows */}
                   <div
-                    className={`absolute left-14 top-1/2 -translate-y-1/2 z-50 w-[340px]
+                    className={`absolute left-14 top-1/2 -translate-y-1/2 z-50 w-[min(340px,calc(100vw-5rem))]
                       transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]
                       ${pinned
                         ? 'opacity-100 translate-x-0 pointer-events-auto'
@@ -1790,6 +1817,8 @@ export default function Var7ClassyAuto() {
                       {/* Diorama image */}
                       <div className="relative">
                         <img
+                          loading="lazy"
+                          decoding="async"
                           src="/images/deep_sea_diorama.png"
                           alt="Deep Sea Diorama"
                           className="w-full h-full object-cover"
@@ -2001,6 +2030,8 @@ export default function Var7ClassyAuto() {
               >
                 <div className="w-full aspect-[3/4] overflow-hidden rounded-sm bg-black/20">
                   <img
+                    loading="lazy"
+                    decoding="async"
                     src="/images/02/trend_forecasting_dashboard 1.png"
                     alt="AI Trend Forecasting Dashboard"
                     className="w-full h-full object-contain object-center opacity-95 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out"
@@ -2015,6 +2046,8 @@ export default function Var7ClassyAuto() {
               >
                 <div className="w-full aspect-[3/2] overflow-hidden rounded-sm bg-black/20">
                   <img
+                    loading="lazy"
+                    decoding="async"
                     src="/images/02/SurefrontInterviews.png"
                     alt="Surefront Interviews"
                     className="w-full h-full object-contain object-center opacity-95 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out"
@@ -2035,14 +2068,14 @@ export default function Var7ClassyAuto() {
             {/* Left, imagery */}
             <div className="lg:col-span-7 order-2 lg:order-1 space-y-4">
               <div className="w-[70%] mx-auto aspect-[3/4] overflow-hidden bg-[#141414] rounded-sm">
-                <img src="/images/03/emmastree.png" alt="Emma's Tree"
+                <img loading="lazy" decoding="async" src="/images/03/emmastree.png" alt="Emma's Tree"
                   className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-all duration-1000 ease-out" />
               </div>
               <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
-                <img src="/images/03/treesystem.png" alt="Tree System" className="w-[90%] h-auto opacity-90 mx-auto" />
+                <img loading="lazy" decoding="async" src="/images/03/treesystem.png" alt="Tree System" className="w-[90%] h-auto opacity-90 mx-auto" />
               </div>
               <div className="bg-[#141414] rounded-sm p-10 flex items-center justify-center">
-                <img src="/images/03/tempchange.png" alt="Temperature Change" className="w-[90%] h-auto opacity-90 mx-auto" />
+                <img loading="lazy" decoding="async" src="/images/03/tempchange.png" alt="Temperature Change" className="w-[90%] h-auto opacity-90 mx-auto" />
               </div>
             </div>
 
@@ -2151,7 +2184,9 @@ export default function Var7ClassyAuto() {
         {/* ─── More Projects Header ─── */}
         <div className="pt-16 pb-12 text-center">
           <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[#EAEAEA]`}>
-            More things I built! ＿〆(。╹‿ ╹ 。)
+            More things I built!{" "}
+            {/* mobile fix: drop the kaomoji to its own line on phones so neither piece breaks awkwardly; inline on md+ */}
+            <span className="block md:inline">＿〆(。╹‿ ╹ 。)</span>
           </h2>
         </div>
 
@@ -2165,9 +2200,10 @@ export default function Var7ClassyAuto() {
             {/* Label */}
             <span className="text-[12px] uppercase tracking-[0.2em] text-[#5a5a5a] shrink-0 mr-1">Filter</span>
             {/* All pill */}
+            {/* mobile fix: All-pill tap target matches category pills (≥40px on phones) */}
             <button
               onClick={() => setActiveFilter(null)}
-              className="flex items-center gap-2 pl-3 pr-4 py-1.5 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-2 pl-3 pr-4 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap"
               style={activeFilter === null
                 ? { background: "rgba(255,255,255,0.14)", borderColor: "rgba(255,255,255,0.40)", color: "#EAEAEA" }
                 : { background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.12)", color: "#888" }
@@ -2195,7 +2231,8 @@ export default function Var7ClassyAuto() {
           <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
             Selected Projects
           </h2>
-          <div className="grid grid-cols-6 gap-2">
+          {/* mobile fix: stack 2 thumbs per row on phones, 4 on small tablets, 6 on desktop */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
             {filteredProjects.map((item) => (
               <FilteredThumb
                 key={item.alt}
@@ -2209,7 +2246,8 @@ export default function Var7ClassyAuto() {
         </section>
 
         {/* ─── About Me & Footer Transition ─── */}
-        <section id="about-me" className="-mx-8 md:-mx-16 relative pt-48 pb-32 overflow-hidden flex flex-col items-center">
+        {/* mobile fix: section negative margin matches main padding; vertical padding scales down on phones */}
+        <section id="about-me" className="-mx-5 sm:-mx-8 md:-mx-16 relative pt-20 sm:pt-32 md:pt-48 pb-16 sm:pb-24 md:pb-32 overflow-hidden flex flex-col items-center">
 
           {/* Font Import for Pixel Text */}
           <style dangerouslySetInnerHTML={{ __html: "@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');" }} />
@@ -2228,16 +2266,21 @@ export default function Var7ClassyAuto() {
           /> */}
 
           {/* About Me Title */}
-          <div className="relative z-10 w-full max-w-[1600px] px-8 md:px-10 flex flex-col items-center justify-center pt-24 pb-32">
-            <h2 className="text-2xl md:text-4xl text-white tracking-widest drop-shadow-[4px_4px_0_rgba(0,0,0,0.4)]" style={{ fontFamily: "'Press Start 2P', cursive", imageRendering: "pixelated" }}>
+          {/* mobile fix: tighten container padding and inner gap on phones */}
+          <div className="relative z-10 w-full max-w-[1600px] px-5 sm:px-8 md:px-10 flex flex-col items-center justify-center pt-12 sm:pt-20 md:pt-24 pb-16 sm:pb-24 md:pb-32">
+            {/* mobile fix: smaller pixel headline so the 320px viewport doesn't push it off the title baseline */}
+            <h2 className="text-xl sm:text-2xl md:text-4xl text-white tracking-widest drop-shadow-[4px_4px_0_rgba(0,0,0,0.4)]" style={{ fontFamily: "'Press Start 2P', cursive", imageRendering: "pixelated" }}>
               About Me
             </h2>
           </div>
 
           {/* ─── Contact Footer ─── */}
-          <footer id="project-meet" className="relative z-10 w-full max-w-[1600px] px-8 md:px-16 flex justify-center">
+          {/* mobile fix: tighter side padding so the contact board image fills more of the phone screen */}
+          <footer id="project-meet" className="relative z-10 w-full max-w-[1600px] px-4 sm:px-8 md:px-16 flex justify-center">
             <div className="relative w-full max-w-3xl mx-auto group">
               <img
+                loading="lazy"
+                decoding="async"
                 src="/images/NiceToMeetYou/myboard.png"
                 alt="My Contact Board"
                 className="w-full h-auto object-contain rounded-sm shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
@@ -2314,7 +2357,7 @@ export default function Var7ClassyAuto() {
                 {/* Pop-out image */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[240px] sm:w-[320px] pointer-events-none opacity-0 group-hover/nana:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
                   <div className="relative rounded-sm border-[6px] border-[#F2F0E6] bg-[#F2F0E6] shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden p-1 pb-12 transform -rotate-2">
-                    <img src="/images/NiceToMeetYou/nana01.jpg" alt="Nana" className="w-full h-auto object-cover border border-black/10" />
+                    <img loading="lazy" decoding="async" src="/images/NiceToMeetYou/nana01.jpg" alt="Nana" className="w-full h-auto object-cover border border-black/10" />
                     <p className="absolute bottom-3 left-0 w-full text-center text-[#333] font-medium text-lg" style={{ fontFamily: "'Marker Felt', 'Comic Sans MS', cursive" }}>Nana</p>
                   </div>
                 </div>
@@ -2329,7 +2372,7 @@ export default function Var7ClassyAuto() {
                 {/* Pop-out image */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[240px] sm:w-[320px] pointer-events-none opacity-0 group-hover/cortada:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
                   <div className="relative rounded-sm border-[6px] border-[#F2F0E6] bg-[#F2F0E6] shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden p-1 pb-12 transform rotate-2">
-                    <img src="/images/NiceToMeetYou/cortada01.JPEG" alt="Cortada" className="w-full h-auto object-cover border border-black/10" />
+                    <img loading="lazy" decoding="async" src="/images/NiceToMeetYou/cortada01.JPEG" alt="Cortada" className="w-full h-auto object-cover border border-black/10" />
                     <p className="absolute bottom-3 left-0 w-full text-center text-[#333] font-medium text-lg" style={{ fontFamily: "'Marker Felt', 'Comic Sans MS', cursive" }}>Cortada</p>
                   </div>
                 </div>
@@ -2614,5 +2657,6 @@ export default function Var7ClassyAuto() {
         )}
       </AnimatePresence>
     </div >
+    </MotionConfig>
   );
 }
