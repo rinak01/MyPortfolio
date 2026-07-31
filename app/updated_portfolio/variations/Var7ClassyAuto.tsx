@@ -60,6 +60,9 @@ interface GridItem {
   // Optional video shown at the top of the modal's image column.
   // Accepts a full YouTube URL (youtu.be or youtube.com); embed URL is derived automatically.
   video?: { url: string; caption?: string };
+  // Optional interactive demo shown at the top of the modal's image column via iframe.
+  // Use for self-contained HTML pages served from /public.
+  demo?: { url: string; caption?: string; height?: string; aspect?: string };
   // Process images shown by scrolling the modal's image column.
   // If omitted, the modal falls back to a single image from `src`.
   // First entry = hero/final shot, subsequent entries = build/process shots.
@@ -99,6 +102,10 @@ const ALL_PROJECTS: GridItem[] = [
     { src: "/images/prototypes/Together/20190210_055418.JPG", caption: "Apothecary corner: leather-bound books, corked bottles, a cameo, the warm interior the cold story moves toward." },
     { src: "/images/prototypes/Together/L1050899.JPG", caption: "Two characters in falling snow, hair built from twisted thread, captured from above." },
     { src: "/images/prototypes/Together/L1060096.JPG", caption: "Detail: floral dress and teal stockings half-buried in real, ground-up snow." },
+  ] },
+  { src: "/images/prototypes/Najeon Moon/iridescent_moon.jpg", alt: "Najeon Moon", tag: "Art Direction · Design System · Interactive", label: "나전 달 · Najeon Moon", desc: "A day/night toggle inspired by 나전칠기 (Korean mother-of-pearl lacquerware): the same object becomes two states", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Tangible Environments"], year: "2026", context: "Studio Master Sheet · No. 002 · MMXXVI", tools: ["Procreate", "Design tokens", "HTML/CSS/JS", "SVG", "Reduced-motion fallback"], notes: "A small ceremony held in an object. The interaction is a single event: the moon turns the room to night, and back. One shell shows two poses (Day: pearl weave, left / Night: void lacquer, right), driven by a 14-token master palette split into two ramps with one shared seam of Signal Gold. Four tenets guide every decision: Material not motif · Slow then still · Gold is the seam · One moon.", designThinking: "MASTER COLOR PALETTE & LUMINANCE LAW — 14 tokens, 2 palettes, 1 seam. Void Lacquer holds the field at 60% on night; Pearl Core keeps whites ≤1% so brightness stays a signal, not a texture. Signal Gold rims labels and interactive edges. Alarm Emerald is reserved for errors only. The luminance law is a contract: no token crosses the seam except Signal Gold.\n\nCOMPOSITION & ENVIRONMENT — Two scenes, one geometry. Night: Void Field · Pearl Right Shore · Foreshore Scatter. Day: Sun Left Shore · Cloud Upper Right · Iridescent Horizon. Environment rules keep both poses on the same underlying grid so the transition reads as a state change, not a redraw.\n\nSHARED GEOMETRY — Every element that appears in one scene has a mirrored counterpart in the other along the same axis, so the eye recognises the object across the toggle. The system is reversible and persistent: 2 states, 1 event, four motion movements (Anticipation 예감 · Traversal 건너감 · Confirmation 확인 · Residue 여운) fitting inside 1.50s total, with a reduced-motion fallback that skips the traversal and cuts straight to the confirmation.\n\nNajunchilgi (나전칠기) is the Korean craft of inlaying paper-thin abalone and mother-of-pearl into black urushi lacquer. Its surface is the design system's north star: cool ink black with a colour-shifting shell embedded in it, held together by hairline gold seams. The interface treats the shell as the light source, not decoration.", demo: { url: "/demos/najeon-moon/index.html", caption: "Interactive demo: tap the scene to toggle Night ⇄ Day. The moon rises, the palette flips across the seam, and the room turns.", height: "520px" }, links: [{ label: "Expanded ocean scene", href: "/demos/najeon-moon/ocean.html" }, { label: "Master sheet (PDF)", href: "/images/prototypes/Najeon Moon/najunchilgi_Design.pdf" }], images: [
+    { src: "/images/prototypes/Najeon Moon/iridescent_moon.jpg", caption: "Hero: iridescent moon rising over a night ocean of scattered pearl tesserae." },
+    { src: "/images/prototypes/Najeon Moon/nightmode_moon.png", caption: "Nacre study: the moon disc as a single najunchilgi inlay, edged with the Signal Gold seam." },
   ] },
   { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/peppersghost01.png", alt: "Ember", tag: "Installation · Spatial Illusion", label: "Ember | The Pepper's Ghost Installation", desc: "A character that lives in a 100-year-old fireplace, reacting to passersby through Pepper's Ghost", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Spatial Computing", "Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "Reality Hack 24 · MIT Media Lab", tools: ["Pepper's Ghost optics", "Procreate", "After Effects", "Projector", "Acrylic"], notes: "An animated fire character named Ember inhabits a long-disused fireplace in CMU's Walker Hall, surfaced through a Pepper's Ghost optical setup. Ember reacts to passersby with shifting moods (heart-eyes, frustration, sleep, delight), giving the empty hearth a small living presence without altering a single brick of the historic mantel.", designThinking: "Began with a site, not a tech: the fireplaces in Walker Hall sit unused for fire-code reasons, but they're the emotional center of every room they occupy. The brief became how do you give a heritage object a second life without invasive intervention.\n\nPepper's Ghost let us add an animated layer on top of the existing space rather than retrofit anything into it. Treating Ember as a character with emotional states (rather than a flame loop) was the decision that turned the install from a tech demo into something people lingered with.", images: [
     { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/peppersghost01.png", caption: "Ember lit inside the historic Walker Hall fireplace, reflected through angled glass." },
@@ -385,6 +392,32 @@ function ProjectModal({
                     <div className="h-px w-8 bg-[#C9B49A]/50 mb-2.5" />
                     <p className="text-[11px] md:text-[12.5px] text-[#B0B0B0] italic leading-snug">
                       {item.video.caption}
+                    </p>
+                  </figcaption>
+                )}
+              </figure>
+            )}
+
+            {/* Optional interactive demo iframe, sits above hero shot when present */}
+            {item.demo && (
+              <figure className="flex flex-col bg-black">
+                <div
+                  className="relative w-full bg-black"
+                  style={{ height: item.demo.height ?? undefined, aspectRatio: item.demo.aspect ?? (item.demo.height ? undefined : "3 / 4") }}
+                >
+                  <iframe
+                    src={item.demo.url}
+                    title={`${item.label} interactive demo`}
+                    className="absolute inset-0 w-full h-full border-0"
+                    loading="lazy"
+                    sandbox="allow-scripts allow-same-origin"
+                  />
+                </div>
+                {item.demo.caption && (
+                  <figcaption className="px-5 md:px-7 py-4">
+                    <div className="h-px w-8 bg-[#C9B49A]/50 mb-2.5" />
+                    <p className="text-[11px] md:text-[12.5px] text-[#B0B0B0] italic leading-snug">
+                      {item.demo.caption}
                     </p>
                   </figcaption>
                 )}
