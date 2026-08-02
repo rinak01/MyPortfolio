@@ -91,6 +91,16 @@ const ALL_PROJECTS: GridItem[] = [
     { src: "/images/prototypes/ResponsiveTale/RT_product03.jpg", caption: "VR controllers dock into the book frame. Physical and virtual reading collapse into one object." },
     { src: "/images/prototypes/ResponsiveTale/unnamed.jpg", caption: "In use: the reader holds the book while the story unfolds in VR around them." },
   ] },
+  { src: "/images/prototypes/EmmasJellyfish/IDLE_EmeraldJellyfish.png", alt: "Emma's Jellyfish", tag: "Ambient Intelligence · Web", label: "Emma's Jellyfish · The June 19th Project", desc: "The June 19th Project — a glass-bodied, internally luminous jellyfish that lives in a browser tab and reads the quality of your attention. Light is its only language.", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Rapid Prototyping", "Spatial Computing"], year: "2026", context: "The June 19th Project · thejune19thproject.com", tools: ["WebGL / GLSL ES 3.00", "Three.js", "Tone.js · WebAudio", "React", "Higgsfield textures"], notes: "A glass-bodied, internally luminous jellyfish drifting through a deep-sea passage above a bioluminescent reef. Continuous glow is tone-of-voice; five discrete light-words are its vocabulary. Cursor and mic are read as ambient presence — gentle stillness soothes it, real sound is the only thing that can startle it. Trust is remembered per-browser; clearing storage releases it back to the wild.", designThinking: "FIVE PILLARS — P1 Bioluminescent Semantics: light is language; zero decorative glow — every pixel of light traces to a state or meaning. P2 Held Wonder: one radiant being in vast darkness; the void is protagonist-space, ≥40% of frame, always. P3 One Painter's Hand: creature, reef, and UI share one chalky painterly gouache language and one palette. P4 Continuity is Law: every animated value moves as a smooth curve — a hard visual step is a defect, not a style (mechanically enforced + unit-tested). P5 No Instructions: the experience teaches itself through behavior — no tutorials, no hint text inside the world.\n\nPALETTE · THE PASSING LIGHT (80/20 cool foundation, warm rare) — void #04050E · midnight #141A3C · silhouette #2A3560 · reef teal #2EE8D8 · filament cyan #5CF2E8 · mantle amethyst #8E5CF0 · filigree magenta #FF4FD8 · anemone #FF3FA8 · signal gold #FFCC6E · creature core #F2F6FF · panic emerald #0FF266 · moonlight #9FB8C8. Luminance law: nothing outshines the creature's core (≥15:1 contrast to void). Every distinct meaning differs in ≥2 channels — colorblind-safe.\n\nTHE LIGHT-LANGUAGE — five discrete words play over a continuous mood-glow (its tone of voice). Greeting bloom: gold wave crown→tips, boot / return after 5 min (pri 2 / 60s). Ack blink: green double-flash, whole body, on tap (pri 3 / 0.5s). Curious peek: band tips→crown, attention caught (pri 2 / 8s). Playful flourish: rainbow azimuthal spiral, rare spontaneous (pri 1 / 90s). Thinking shimmer: sustained teal sparkle, future chat feature. ALARM (panic emerald): reserved for real sound only — never the cursor. Grammar: crown → tips = telling; tips → crown = sensing.\n\nHOW IT READS YOU — cursor is treated as a small presence swimming in the water. Slow drift → grows curious, drifts closer. Holding still → pulse settles, you calm it. Brush across the bell → a ripple, a purr. Quick play → may start a chase of your wake. Wild jabbing → flinch + darts, trust dips.\n\nMOTION SYSTEM — breath: ω = 1.6·(1 + 2.2·mood)·(1 − 0.4·sleep) rad/s. Mood: asymmetric ease, attack τ 0.12s / release τ 0.9s. Settle: 0.35s dwell + hysteresis (anti-flap). Cinderella color-sweep: 0.9s easeInOutCubic, preempt 3×. Signal gain: slew-limited, min-attack 0.05s (never steps). Cursor wake: ~1.5s ease-out spark-trail.\n\nSYSTEM · FOUR BOXES, ONE-WAY FLOW — you → interaction.js (senses) → state.js (brain) → signals.js (words) → renderer + shaders. Layers never import each other; state and renderer meet only through a single snapshot object. A sanitized uniform bridge is the sole GPU write site — NaN/Inf caught, ranges clamped, time wrapped. 16 automatic tests are executable promises (\"glow can never jump harshly\", \"cannot flicker-spam\").\n\nTRUST — remembered per-browser only, nothing sent anywhere. Trust warms greetings, unlocks play sooner, forgives startle, lets it rest closer. Clearing storage releases it back to the wild.\n\nITERATION PLAYBOOK — 01 have an idea → 02 build hidden behind a ?exp= switch → 03 live with it (only you) → 04 tune by hand (?tune sliders) → 05 watch 2–3 people cold → 06 keep or undo, version the personality file.", images: [
+    { src: "/images/prototypes/EmmasJellyfish/EmmasJellyfish_DiscoveryMoment.png", caption: "The discovery moment — creature mid-greeting-bloom above the reef. Gold wave crown → tips, the light-word for 'I saw you arrive'." },
+    { src: "/images/prototypes/EmmasJellyfish/IDLE_EmeraldJellyfish.png", caption: "Idle drift — glass bell, magenta filigree core, jewelry-fine cyan filaments. Kawaii dot-eyes and garden headpiece retired 2026-07-07; the garden became the world." },
+    { src: "/images/prototypes/EmmasJellyfish/ConceptArt02.png", caption: "Concept art v2 — locked art direction: crystalline bell, razor-fine filaments, blazing white-to-magenta core held in velvet abyss." },
+    { src: "/images/prototypes/EmmasJellyfish/reef01.png", caption: "Reef study 01 — cloud-coral cumulus in electric cyan, silhouette corals receding into midnight indigo." },
+    { src: "/images/prototypes/EmmasJellyfish/reef02.png", caption: "Reef study 02 — fuchsia anemone crown, gold heart, rising spore-lights (the ecosystem visibly breathing)." },
+    { src: "/images/prototypes/EmmasJellyfish/reef03.png", caption: "Reef study 03 — depth stack: void + surface band + moonlight rays behind silhouette corals and lit reef shelf." },
+    { src: "/images/prototypes/EmmasJellyfish/coral_variations.png", caption: "Cloud-coral studies — teal cumulus masses, magenta anemone hero blooms, gold spore drift." },
+    { src: "/images/prototypes/EmmasJellyfish/Screenshot 2026-07-31 at 10.42.51 AM.png", caption: "Live prototype in-browser: cursor-as-presence reading the room." },
+  ] },
   { src: "/images/prototypes/BMWDesignworks/BMW-Designworks-hero.jpg", alt: "BMW Designworks", tag: "BMW Group · Internship", label: "BMW Designworks", desc: "Interaction Design internship at BMW Group's design subsidiary, investigating how designers can work with and incorporate AI tools into their process", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Rapid Prototyping"], year: "2024", context: "BMW Designworks · Santa Monica, CA", tools: ["Figma", "Internal Tools"], notes: "Interaction Design internship at BMW Designworks, BMW Group's design subsidiary. The primary brief was to investigate the user experience surrounding how designers work with, and incorporate, AI tools into their process. The role involved partnering with multiple departments to brainstorm how rapidly developing technology shifts the perception of complexity in software development, and how to mitigate that complexity for the benefit of the end user.", designThinking: "Rather than treating AI as a feature to be bolted into a design tool, the brief asked the harder question: what do designers themselves need from AI? Where should it be visible, where should it disappear, and where should it refuse to act on the designer's behalf?\n\nCross-functional sessions surfaced the underlying concern: every new capability adds perceived complexity for users downstream. The investigation centered on how to absorb that complexity inside the tool, so the surfaces designers ship out to end users feel simpler, not more crowded.", images: [
     { src: "/images/prototypes/BMWDesignworks/BMW-Designworks-hero.jpg", caption: "BMW Designworks studio entrance, Newbury Park, California." },
     { src: "/images/prototypes/BMWDesignworks/unnamed.png", caption: "Inside the studio: an M1 race car staged in the presentation room." },
@@ -102,10 +112,6 @@ const ALL_PROJECTS: GridItem[] = [
     { src: "/images/prototypes/Together/20190210_055418.JPG", caption: "Apothecary corner: leather-bound books, corked bottles, a cameo, the warm interior the cold story moves toward." },
     { src: "/images/prototypes/Together/L1050899.JPG", caption: "Two characters in falling snow, hair built from twisted thread, captured from above." },
     { src: "/images/prototypes/Together/L1060096.JPG", caption: "Detail: floral dress and teal stockings half-buried in real, ground-up snow." },
-  ] },
-  { src: "/images/prototypes/Najeon Moon/iridescent_moon.jpg", alt: "Najeon Moon", tag: "Art Direction · Design System · Interactive", label: "나전 달 · Najeon Moon", desc: "A day/night toggle inspired by 나전칠기 (Korean mother-of-pearl lacquerware): the same object becomes two states", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Tangible Environments"], year: "2026", context: "Studio Master Sheet · No. 002 · MMXXVI", tools: ["Procreate", "Design tokens", "HTML/CSS/JS", "SVG", "Reduced-motion fallback"], notes: "A small ceremony held in an object. The interaction is a single event: the moon turns the room to night, and back. One shell shows two poses (Day: pearl weave, left / Night: void lacquer, right), driven by a 14-token master palette split into two ramps with one shared seam of Signal Gold. Four tenets guide every decision: Material not motif · Slow then still · Gold is the seam · One moon.", designThinking: "MASTER COLOR PALETTE & LUMINANCE LAW — 14 tokens, 2 palettes, 1 seam. Void Lacquer holds the field at 60% on night; Pearl Core keeps whites ≤1% so brightness stays a signal, not a texture. Signal Gold rims labels and interactive edges. Alarm Emerald is reserved for errors only. The luminance law is a contract: no token crosses the seam except Signal Gold.\n\nCOMPOSITION & ENVIRONMENT — Two scenes, one geometry. Night: Void Field · Pearl Right Shore · Foreshore Scatter. Day: Sun Left Shore · Cloud Upper Right · Iridescent Horizon. Environment rules keep both poses on the same underlying grid so the transition reads as a state change, not a redraw.\n\nSHARED GEOMETRY — Every element that appears in one scene has a mirrored counterpart in the other along the same axis, so the eye recognises the object across the toggle. The system is reversible and persistent: 2 states, 1 event, four motion movements (Anticipation 예감 · Traversal 건너감 · Confirmation 확인 · Residue 여운) fitting inside 1.50s total, with a reduced-motion fallback that skips the traversal and cuts straight to the confirmation.\n\nNajunchilgi (나전칠기) is the Korean craft of inlaying paper-thin abalone and mother-of-pearl into black urushi lacquer. Its surface is the design system's north star: cool ink black with a colour-shifting shell embedded in it, held together by hairline gold seams. The interface treats the shell as the light source, not decoration.", demo: { url: "/demos/najeon-moon/index.html", caption: "Interactive demo: tap the scene to toggle Night ⇄ Day. The moon rises, the palette flips across the seam, and the room turns.", height: "520px" }, links: [{ label: "Expanded ocean scene", href: "/demos/najeon-moon/ocean.html" }, { label: "Master sheet (PDF)", href: "/images/prototypes/Najeon Moon/najunchilgi_Design.pdf" }], images: [
-    { src: "/images/prototypes/Najeon Moon/iridescent_moon.jpg", caption: "Hero: iridescent moon rising over a night ocean of scattered pearl tesserae." },
-    { src: "/images/prototypes/Najeon Moon/nightmode_moon.png", caption: "Nacre study: the moon disc as a single najunchilgi inlay, edged with the Signal Gold seam." },
   ] },
   { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/peppersghost01.png", alt: "Ember", tag: "Installation · Spatial Illusion", label: "Ember | The Pepper's Ghost Installation", desc: "A character that lives in a 100-year-old fireplace, reacting to passersby through Pepper's Ghost", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Spatial Computing", "Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "Reality Hack 24 · MIT Media Lab", tools: ["Pepper's Ghost optics", "Procreate", "After Effects", "Projector", "Acrylic"], notes: "An animated fire character named Ember inhabits a long-disused fireplace in CMU's Walker Hall, surfaced through a Pepper's Ghost optical setup. Ember reacts to passersby with shifting moods (heart-eyes, frustration, sleep, delight), giving the empty hearth a small living presence without altering a single brick of the historic mantel.", designThinking: "Began with a site, not a tech: the fireplaces in Walker Hall sit unused for fire-code reasons, but they're the emotional center of every room they occupy. The brief became how do you give a heritage object a second life without invasive intervention.\n\nPepper's Ghost let us add an animated layer on top of the existing space rather than retrofit anything into it. Treating Ember as a character with emotional states (rather than a flame loop) was the decision that turned the install from a tech demo into something people lingered with.", images: [
     { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/peppersghost01.png", caption: "Ember lit inside the historic Walker Hall fireplace, reflected through angled glass." },
@@ -133,7 +139,6 @@ const ALL_PROJECTS: GridItem[] = [
     { src: "/images/prototypes/FlexVR Wellness/hardware.jpg", caption: "Inside the build: a Neuralaxy NeuroBio sensor board housed in a custom 3D-printed enclosure, status LEDs lit." },
     { src: "/images/prototypes/FlexVR Wellness/redbull tower 2.JPG", caption: "The All-Nighter Tower." },
   ] },
-  { src: "/images/prototypes/emmasjellyfish01 1.png", alt: "Emma's Jellyfish", tag: "Interactive · Bio", label: "Emma's Jellyfish", desc: "Bioluminescent jellyfish environment responding to gesture", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Rapid Prototyping", "Interface Design", "Multimodal Systems"], year: "2023", context: "Companion piece to Emma's Tree", tools: ["Arduino", "Leap Motion", "LED strips", "Processing"], notes: "A tabletop bioluminescent jellyfish whose tentacles glow and drift in response to hand proximity. Built as a calming sensory anchor for the same med-student friend the Emma's Tree project was made for." },
   { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education · Hackathon", label: "LeARn", desc: "An AR learning app that brings interactivity and joy back into elementary school subjects, tracking student progress across Art, Math, and Music", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Rapid Prototyping"], year: "April 2022", context: "Venture In Metaverse Hackathon · Harvard", tools: ["Unity", "C#", "Procreate"], notes: "LeARn is an augmented reality application built to help educators and parents teach with more interactivity, longer attention spans, and more enjoyment for elementary school students. The app tracks each student's progress through Art, Math, and Music, with planned expansion into Physics Circuits and Language. Designed to live alongside the traditional classroom rather than replace it.", designThinking: "Started from the question every K-12 teacher asks: how do you hold attention when worksheets are competing with phones? AR lets the same lesson live on the desk in front of a student, making the rotation, manipulation, and exploration of a concept the lesson itself rather than the textbook page.\n\nThe progress-tracking layer was the design move that took the idea from gimmick to tool: educators see what each student has spent time with, and the app calibrates difficulty without surfacing it to the child.", video: { url: "https://youtu.be/Dkjj-q0xRaE", caption: "Demo reel from Venture In Metaverse at Harvard, April 2022." }, links: [{ label: "Watch Demo", href: "https://youtu.be/Dkjj-q0xRaE?si=UeQRA4jqXGIMeJXA" }] },
   { src: "/images/prototypes/CMUPopUp/cmupopup 1.png", alt: "CMU Popup", tag: "Spatial Design · Guest Experience", label: "CMU Popup", desc: "A pop-up book scale model of a Tuscan-themed wine bar guest experience", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["CMU", "Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "Carnegie Mellon · Guest Experience in Theme Parks · Fall 2024", tools: ["Pop-up book construction", "Printed textures", "3D-printed terrain", "Sculpted moss", "Tabletop modeling"], notes: "A foldable, book-style scale model of a Tuscan-themed wine bar guest experience, developed for CMU's Guest Experience in Theme Parks studio. The piece reads as flat from the side and unfolds into a multi-room interior with vineyards, stone garden, and seating, used as a stand-alone presentation artifact rather than a digital render.", designThinking: "Wanted a presentation format that could be carried into any review, no laptop, no projector. The pop-up form gave the design two states: a quiet closed book that invites curiosity, and an opened diorama that lets stakeholders read the spatial logic of a guest's path at a glance.\n\nWorking at a tabletop scale also forced material honesty: every brick texture, table, and tree had to earn its place because there was no room to hide weak detail.", images: [
     { src: "/images/prototypes/CMUPopUp/cmupopup 1.png", caption: "Hero view: the wine bar concept opened to full diorama." },
@@ -545,6 +550,231 @@ function ProjectModal({
             <div className="pt-4 mt-1 border-t border-white/8">
               <span className="block text-[9px] uppercase tracking-[0.2em] text-[#C9B49A] mb-2">Design Thinking</span>
               <p className="text-[13px] text-[#A3A3A3] leading-relaxed whitespace-pre-line">{item.designThinking}</p>
+            </div>
+          )}
+
+          {/* Per-project custom visual blocks — Emma's Jellyfish design system */}
+          {item.alt === "Emma's Jellyfish" && (
+            <div className="pt-4 mt-1 border-t border-white/8 flex flex-col gap-6">
+              {/* Palette */}
+              <div>
+                <span className="block text-[9px] uppercase tracking-[0.2em] mb-3" style={{ color: "#BFF6F0" }}>Palette · The Passing Light</span>
+                <div className="grid grid-cols-6 gap-1.5">
+                  {[
+                    { hex: "#04050E", name: "void" },
+                    { hex: "#141A3C", name: "midnight" },
+                    { hex: "#2A3560", name: "silhouette" },
+                    { hex: "#2EE8D8", name: "reef teal" },
+                    { hex: "#5CF2E8", name: "filament" },
+                    { hex: "#8E5CF0", name: "amethyst" },
+                    { hex: "#FF4FD8", name: "filigree" },
+                    { hex: "#FF3FA8", name: "anemone" },
+                    { hex: "#FFCC6E", name: "gold" },
+                    { hex: "#F2F6FF", name: "core" },
+                    { hex: "#0FF266", name: "panic" },
+                    { hex: "#9FB8C8", name: "moonlight" },
+                  ].map(({ hex, name }) => (
+                    <div key={hex} className="flex flex-col gap-1">
+                      <div className="aspect-square rounded-sm" style={{ background: hex, boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)" }} />
+                      <div className="text-[8px] uppercase tracking-widest text-[#737373] truncate">{name}</div>
+                      <div className="text-[8px] font-mono text-[#525252] truncate">{hex}</div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10.5px] text-[#737373] mt-2 leading-snug">
+                  80/20 cool foundation, warm accents rare. Luminance law: nothing outshines the creature core.
+                </p>
+              </div>
+
+              {/* Light-Language — visualized */}
+              <div>
+                <span className="block text-[9px] uppercase tracking-[0.2em] mb-3" style={{ color: "#BFF6F0" }}>The Light-Language</span>
+                <style dangerouslySetInnerHTML={{ __html: `
+                  @keyframes jf-crown-to-tips { 0% { transform: translateY(-16px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(30px); opacity: 0; } }
+                  @keyframes jf-tips-to-crown { 0% { transform: translateY(30px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-16px); opacity: 0; } }
+                  @keyframes jf-double-flash { 0%,12%,24%,36%,100% { opacity: 0.15; } 6%,30% { opacity: 1; } }
+                  @keyframes jf-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                  @keyframes jf-shimmer { 0%,100% { opacity: 0.25; } 50% { opacity: 1; } }
+                  @keyframes jf-alarm { 0%,60%,100% { opacity: 0.2; } 20%,40% { opacity: 1; } }
+                  .jf-bell { fill: none; stroke: #C9C2F0; stroke-width: 1.2; }
+                  .jf-tent { fill: none; stroke-width: 1; opacity: 0.55; }
+                ` }} />
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { word: "greeting", hex: "#FFCC6E", trigger: "boot / return 5m", anim: "crown-to-tips" },
+                    { word: "ack blink", hex: "#59EB96", trigger: "on tap", anim: "double-flash" },
+                    { word: "curious peek", hex: "#8CE6BF", trigger: "attention caught", anim: "tips-to-crown" },
+                    { word: "playful", hex: "#FF4FD8", trigger: "rare spontaneous", anim: "spin" },
+                    { word: "thinking", hex: "#59DBD6", trigger: "future chat", anim: "shimmer" },
+                    { word: "ALARM", hex: "#0FF266", trigger: "real sound only", anim: "alarm" },
+                  ].map(({ word, hex, trigger, anim }) => (
+                    <div key={word} className="flex flex-col items-center rounded-sm px-2 py-2.5" style={{ background: "rgba(191,246,240,0.03)", border: "1px solid rgba(191,246,240,0.08)" }}>
+                      <svg viewBox="0 0 60 70" width="60" height="70" style={{ overflow: "visible" }}>
+                        {/* base bell + tentacles silhouette (always visible) */}
+                        <path className="jf-bell" d="M 10 24 Q 30 4 50 24 L 46 32 Q 30 38 14 32 Z" />
+                        <path className="jf-tent" stroke={hex} d="M 18 34 Q 16 46 20 60" />
+                        <path className="jf-tent" stroke={hex} d="M 26 35 Q 25 48 27 62" />
+                        <path className="jf-tent" stroke={hex} d="M 34 35 Q 35 48 33 62" />
+                        <path className="jf-tent" stroke={hex} d="M 42 34 Q 44 46 40 60" />
+
+                        {/* animated overlay per pattern */}
+                        {anim === "crown-to-tips" && (
+                          <g style={{ animation: "jf-crown-to-tips 2.4s ease-in-out infinite" }}>
+                            <ellipse cx="30" cy="22" rx="18" ry="6" fill={hex} opacity="0.65" filter="blur(2px)" />
+                          </g>
+                        )}
+                        {anim === "tips-to-crown" && (
+                          <g style={{ animation: "jf-tips-to-crown 2.4s ease-in-out infinite" }}>
+                            <rect x="14" y="34" width="32" height="4" fill={hex} opacity="0.75" rx="2" />
+                          </g>
+                        )}
+                        {anim === "double-flash" && (
+                          <g style={{ animation: "jf-double-flash 1.6s ease-out infinite" }}>
+                            <path d="M 10 24 Q 30 4 50 24 L 46 32 Q 30 38 14 32 Z" fill={hex} opacity="0.75" />
+                            <path stroke={hex} strokeWidth="2" fill="none" opacity="0.9" d="M 18 34 Q 16 46 20 60 M 26 35 Q 25 48 27 62 M 34 35 Q 35 48 33 62 M 42 34 Q 44 46 40 60" />
+                          </g>
+                        )}
+                        {anim === "spin" && (
+                          <g style={{ transformOrigin: "30px 24px", animation: "jf-spin 3s linear infinite" }}>
+                            <circle cx="46" cy="24" r="3" fill="#FF4FD8" />
+                            <circle cx="14" cy="24" r="3" fill="#5CF2E8" />
+                            <circle cx="30" cy="8"  r="3" fill="#FFCC6E" />
+                            <circle cx="30" cy="40" r="3" fill="#8E5CF0" />
+                          </g>
+                        )}
+                        {anim === "shimmer" && (
+                          <g style={{ animation: "jf-shimmer 1.6s ease-in-out infinite" }}>
+                            <circle cx="18" cy="18" r="1.4" fill={hex} />
+                            <circle cx="30" cy="14" r="1.6" fill={hex} />
+                            <circle cx="42" cy="20" r="1.4" fill={hex} />
+                            <circle cx="24" cy="26" r="1.2" fill={hex} />
+                            <circle cx="38" cy="28" r="1.2" fill={hex} />
+                          </g>
+                        )}
+                        {anim === "alarm" && (
+                          <g style={{ animation: "jf-alarm 0.6s ease-out infinite" }}>
+                            <path d="M 10 24 Q 30 4 50 24 L 46 32 Q 30 38 14 32 Z" fill={hex} opacity="0.85" />
+                            <circle cx="30" cy="24" r="26" fill="none" stroke={hex} strokeWidth="1" opacity="0.6" />
+                          </g>
+                        )}
+                      </svg>
+                      <div className="text-[10.5px] mt-1.5 text-center" style={{ color: hex }}>{word}</div>
+                      <div className="text-[8.5px] uppercase tracking-widest text-[#737373] text-center mt-0.5">{trigger}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 flex items-center justify-center gap-4 text-[9.5px] uppercase tracking-widest text-[#737373]">
+                  <span className="flex items-center gap-1.5"><span style={{ color: "#C9C2F0" }}>↓</span> telling (crown → tips)</span>
+                  <span className="flex items-center gap-1.5"><span style={{ color: "#C9C2F0" }}>↑</span> sensing (tips → crown)</span>
+                </div>
+              </div>
+
+              {/* Motion System — visualized curves */}
+              <div>
+                <span className="block text-[9px] uppercase tracking-[0.2em] mb-3" style={{ color: "#BFF6F0" }}>Motion System</span>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    {
+                      name: "breath",
+                      spec: "ω(mood) sine",
+                      // sine wave
+                      path: (() => { let d = "M 0 20"; for (let x = 0; x <= 100; x += 2) d += ` L ${x} ${20 - 14 * Math.sin(x * 0.13)}`; return d; })(),
+                      stroke: "#5CF2E8",
+                    },
+                    {
+                      name: "mood",
+                      spec: "attack 0.12s / release 0.9s",
+                      // asymmetric: quick spike up, slow decay
+                      path: (() => {
+                        let d = "M 0 34";
+                        for (let x = 0; x <= 12; x += 1) d += ` L ${x} ${34 - 26 * (x / 12)}`;
+                        for (let x = 12; x <= 100; x += 2) d += ` L ${x} ${8 + 26 * (1 - Math.exp(-(x - 12) / 22))}`;
+                        return d;
+                      })(),
+                      stroke: "#FFCC6E",
+                    },
+                    {
+                      name: "settle",
+                      spec: "0.35s dwell + hysteresis",
+                      // step with plateau
+                      path: "M 0 30 L 30 30 L 30 12 L 70 12 L 70 30 L 100 30",
+                      stroke: "#8E5CF0",
+                    },
+                    {
+                      name: "sweep",
+                      spec: "Cinderella easeInOutCubic 0.9s",
+                      // S-curve
+                      path: (() => { let d = "M 0 34"; for (let x = 0; x <= 100; x += 2) { const t = x / 100; const y = 34 - 26 * (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2); d += ` L ${x} ${y}`; } return d; })(),
+                      stroke: "#FF4FD8",
+                    },
+                    {
+                      name: "signal",
+                      spec: "slew-limited attack 0.05s",
+                      // stepped-then-smoothed rising staircase
+                      path: (() => {
+                        let d = "M 0 34";
+                        [15, 40, 70].forEach(step => {
+                          d += ` L ${step} 34 L ${step + 8} 22`;
+                        });
+                        d += " L 100 10";
+                        return d;
+                      })(),
+                      stroke: "#59EB96",
+                    },
+                    {
+                      name: "wake",
+                      spec: "spark-trail ~1.5s ease-out",
+                      // exponential fade
+                      path: (() => { let d = "M 0 8"; for (let x = 0; x <= 100; x += 2) d += ` L ${x} ${8 + 28 * (1 - Math.exp(-x / 30))}`; return d; })(),
+                      stroke: "#BFF6F0",
+                    },
+                  ].map(({ name, spec, path, stroke }) => (
+                    <div key={name} className="rounded-sm p-2.5" style={{ background: "rgba(191,246,240,0.03)", border: "1px solid rgba(191,246,240,0.08)" }}>
+                      <svg viewBox="0 0 100 40" width="100%" height="40" preserveAspectRatio="none">
+                        <line x1="0" y1="38" x2="100" y2="38" stroke="rgba(191,246,240,0.10)" strokeWidth="0.5" />
+                        <path d={path} fill="none" stroke={stroke} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: `drop-shadow(0 0 3px ${stroke}88)` }} />
+                      </svg>
+                      <div className="text-[10.5px] mt-1.5" style={{ color: "#EAEAEA" }}>{name}</div>
+                      <div className="text-[9px] font-mono text-[#737373] leading-snug">{spec}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Interaction map */}
+              <div>
+                <span className="block text-[9px] uppercase tracking-[0.2em] mb-2" style={{ color: "#BFF6F0" }}>Interaction · How It Reads You</span>
+                <ul className="space-y-1.5">
+                  {[
+                    ["slow, gentle drift", "grows curious, drifts closer"],
+                    ["holding still near it", "pulse settles — you calm it"],
+                    ["brush across the bell", "a ripple of light — a purr"],
+                    ["quick playful movement", "chases your wake"],
+                    ["wild jabbing", "flinches, darts away — trust dips"],
+                  ].map(([act, res]) => (
+                    <li key={act} className="grid grid-cols-[1fr_14px_1fr] gap-2 items-baseline text-[11px]">
+                      <span className="text-[#A3A3A3]">{act}</span>
+                      <span style={{ color: "#5CF2E8" }}>→</span>
+                      <span className="text-[#EAEAEA]">{res}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-[10px] italic mt-2 text-[#737373]">
+                  Safety rule: cursor alone can never trigger the emerald alarm — reserved for real sound.
+                </p>
+              </div>
+
+              {/* System architecture */}
+              <div>
+                <span className="block text-[9px] uppercase tracking-[0.2em] mb-2" style={{ color: "#BFF6F0" }}>System · Four Boxes, One-Way Flow</span>
+                <div className="rounded-sm p-3 font-mono text-[10px] leading-relaxed" style={{ background: "rgba(191,246,240,0.03)", border: "1px solid rgba(191,246,240,0.08)", color: "#A3A3A3" }}>
+                  <div className="mb-1.5">
+                    <span style={{ color: "#8E5CF0" }}>you</span> → <span style={{ color: "#5CF2E8" }}>senses</span> → <span style={{ color: "#5CF2E8" }}>brain</span> → <span style={{ color: "#FF4FD8" }}>words</span> → <span style={{ color: "#F2F6FF" }}>art</span>
+                  </div>
+                  <div className="text-[#737373]">cursor · voice · touch · time → interaction.js → state.js → signals.js → renderer + shaders</div>
+                  <div className="mt-1.5" style={{ color: "#0FF266" }}>▲ 16 automatic tests · promises like "glow can never jump harshly"</div>
+                </div>
+              </div>
             </div>
           )}
 
