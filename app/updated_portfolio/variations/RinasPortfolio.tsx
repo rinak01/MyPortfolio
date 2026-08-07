@@ -1,0 +1,2632 @@
+"use client";
+
+import { useState, useEffect, useRef, Fragment } from "react";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { Outfit, DM_Sans } from "next/font/google";
+
+const outfit = Outfit({ subsets: ["latin"], weight: ["200", "300", "400", "500"] });
+const sans = DM_Sans({ subsets: ["latin"], weight: ["300", "400", "500"] });
+
+// ─── Filter System ────────────────────────────────────────────────────────────
+type Category =
+  | "Spatial Computing"
+  | "Physical Computing"
+  | "Multimodal Systems"
+  | "Rapid Prototyping"
+  | "Interface Design"
+  | "Tangible Environments"
+  | "CMU"
+  | "MIT Reality Hack"
+  | "Ambient Computing"
+  | "The June 19th Project";
+
+const ALL_CATEGORIES: Category[] = [
+  "Multimodal Systems",
+  "Interface Design",
+  "Ambient Computing",
+  "Spatial Computing",
+  "Physical Computing",
+  "Rapid Prototyping",
+  "Tangible Environments",
+  "CMU",
+  "MIT Reality Hack",
+  "The June 19th Project",
+];
+
+const CAT_STYLE: Record<Category, { dot: string; active: string; text: string }> = {
+  "Spatial Computing": { dot: "#60a5fa", active: "rgba(59,130,246,0.18)", text: "#93c5fd" },
+  "Physical Computing": { dot: "#34d399", active: "rgba(16,185,129,0.18)", text: "#6ee7b7" },
+  "Multimodal Systems": { dot: "#fbbf24", active: "rgba(245,158,11,0.18)", text: "#fde68a" },
+  "Rapid Prototyping": { dot: "#f87171", active: "rgba(239,68,68,0.18)", text: "#fca5a5" },
+  "Interface Design": { dot: "#f472b6", active: "rgba(236,72,153,0.18)", text: "#f9a8d4" },
+  "Tangible Environments": { dot: "#d97706", active: "rgba(180,110,30,0.20)", text: "#fcd34d" },
+  "CMU": { dot: "#22d3ee", active: "rgba(6,182,212,0.18)", text: "#67e8f9" },
+  "MIT Reality Hack": { dot: "#a78bfa", active: "rgba(139,92,246,0.18)", text: "#c4b5fd" },
+  "Ambient Computing": { dot: "#5CF2E8", active: "rgba(92,242,232,0.18)", text: "#99f6e4" },
+  "The June 19th Project": { dot: "#FFCC6E", active: "rgba(255,204,110,0.18)", text: "#fcd9a0" },
+};
+
+interface GridItem {
+  src: string;
+  alt: string;
+  tag: string;
+  label: string;
+  desc: string;
+  categories: Category[];
+  colSpan?: number;
+  aspectClass?: string;
+  scaleClass?: string;
+  // Modal-only fields (optional). Render only when provided.
+  year?: string;             // e.g. "2024", "Spring 2023"
+  context?: string;          // e.g. "CMU coursework", "Personal", "BMW internship"
+  tools?: string[];          // e.g. ["Unity", "Figma", "Arduino"]
+  notes?: string;            // Longer paragraph: process, outcome, what you'd change
+  designThinking?: string;   // Design rationale, principles, decisions
+  links?: { label: string; href: string }[]; // e.g. demo, repo, paper
+  // Optional video shown at the top of the modal's image column.
+  // Accepts a full YouTube URL (youtu.be or youtube.com); embed URL is derived automatically.
+  video?: { url: string; caption?: string };
+  // Optional interactive demo shown at the top of the modal's image column via iframe.
+  // Use for self-contained HTML pages served from /public.
+  demo?: { url: string; caption?: string; height?: string; aspect?: string };
+  // Process images shown by scrolling the modal's image column.
+  // If omitted, the modal falls back to a single image from `src`.
+  // First entry = hero/final shot, subsequent entries = build/process shots.
+  images?: { src: string; caption?: string }[];
+}
+
+// Extract a YouTube video ID from any common URL shape (youtu.be / watch?v= / embed)
+function getYouTubeId(url: string): string | null {
+  const patterns = [
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+const ALL_PROJECTS: GridItem[] = [
+  {
+    src: "/images/prototypes/BMWDesignworks/BMW-Designworks-hero.jpg", alt: "BMW Designworks", tag: "BMW Group · Internship", label: "BMW Designworks", desc: "Interaction Design internship at BMW Group's design subsidiary, investigating how designers can work with and incorporate AI tools into their process", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Rapid Prototyping"], year: "2024", context: "BMW Designworks · Santa Monica, CA", tools: ["Figma", "Internal Tools"], notes: "Interaction Design internship at BMW Designworks, BMW Group's design subsidiary. The primary brief was to investigate the user experience surrounding how designers work with, and incorporate, AI tools into their process. The role involved partnering with multiple departments to brainstorm how rapidly developing technology shifts the perception of complexity in software development, and how to mitigate that complexity for the benefit of the end user.", designThinking: "Rather than treating AI as a feature to be bolted into a design tool, the brief asked the harder question: what do designers themselves need from AI? Where should it be visible, where should it disappear, and where should it refuse to act on the designer's behalf?\n\nCross-functional sessions surfaced the underlying concern: every new capability adds perceived complexity for users downstream. The investigation centered on how to absorb that complexity inside the tool, so the surfaces designers ship out to end users feel simpler, not more crowded.", images: [
+      { src: "/images/prototypes/BMWDesignworks/BMW-Designworks-hero.jpg", caption: "BMW Designworks studio entrance, Newbury Park, California." },
+      { src: "/images/prototypes/BMWDesignworks/unnamed.png", caption: "Inside the studio: an M1 race car staged in the presentation room." },
+      { src: "/images/prototypes/BMWDesignworks/designworksteam.jpg", caption: "Team photo with the Designworks studio after a project review." },
+      { src: "/images/prototypes/BMWDesignworks/interns.jpg", caption: "Off-hours with the intern cohort, Santa Monica Pier." },
+    ]
+  },
+  // Prototypes
+  {
+    src: "/images/prototypes/ResponsiveTale/ResponsiveTale 1.png", alt: "ResponsiveTale", tag: "Interactive · XR", label: "Responsive Tale", desc: "Adaptive storytelling interface reacting to reader behavior", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Multimodal Systems", "Physical Computing"], year: "2024", context: "CMU MHCI coursework", tools: ["Unity", "Figma", "Arduino"], notes: "A spatial story where pacing and visual treatment adapt to the reader's gaze and posture. Eye-tracking signals shifted the typography weight and ambient sound to match attention level, slowing down when readers paused on a passage, accelerating when they skimmed.", designThinking: "Started from the observation that reading is an active, embodied process: eye movement, posture, and breath all telegraph engagement. The prototype treats those signals as design input rather than passive data: when the reader pauses, the system slows, holds the page, and dims peripheral light.\n\nA deliberate trade-off was favoring inferential cues over explicit settings: readers shouldn't have to manage their own pacing for a story to feel responsive.", video: { url: "https://youtu.be/MEf5QaX5Qp0", caption: "Walkthrough of Responsive Tale: gaze-driven pacing and adaptive typography in motion." }, links: [{ label: "Watch Demo", href: "https://youtu.be/MEf5QaX5Qp0?si=N33tx1IwKpvPDvN0" }], images: [
+      { src: "/images/prototypes/ResponsiveTale/ResponsiveTale 1.png", caption: "The book held open, an instrumented surface that drives a spatial story in VR." },
+      { src: "/images/prototypes/ResponsiveTale/RT_product02.jpg", caption: "Internal architecture: battery, ESP32, and sensor array routed across the spine." },
+      { src: "/images/prototypes/ResponsiveTale/RT_product03.jpg", caption: "VR controllers dock into the book frame. Physical and virtual reading collapse into one object." },
+      { src: "/images/prototypes/ResponsiveTale/unnamed.jpg", caption: "In use: the reader holds the book while the story unfolds in VR around them." },
+    ]
+  },
+  {
+    src: "/images/03/emmastree.png", alt: "Emma's Tree", tag: "Biomimicry Hardware", label: "Emma's Tree", desc: "A synthetic plant built for a friend who works 80-hour weeks — it reacts to sunlight, signals for water, and changes with the seasons, without ever depending on her to stay alive", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Physical Computing", "Tangible Environments", "Rapid Prototyping", "The June 19th Project"], year: "2023 Jun – 2024 Jun", context: "Designer & Developer · personal commission", tools: ["Temperature-sensitive filament", "Moisture sensor", "LED indicators", "3D pen", "Solar battery bank"], notes: "My best friend Emma is a medical student who wanted a plant but knew she'd kill it — not out of carelessness, but because 80-hour weeks leave no room for it. Existing alternatives are either lifeless decorations or still demand the attention she doesn't have. The brief became: design a plant for Emma that she can never kill, one that still reacts to sunlight, signals when it wants water, and changes with the seasons, so it feels alive without depending on her to keep it that way.\n\nThe Bloom effect uses temperature-sensitive filament so the tree changes colour on touch or warmth. A moisture sensor signals watering cues organically rather than through an app. LED indicators communicate environmental state at a glance. The branching structure was drawn by hand with a 3D pen for organic form, and the whole thing runs off a solar-powered battery bank.", designThinking: "Designed using biomimicry to solve care fatigue — a synthetic plant that lives and reacts right along with Emma rather than waiting on her. Temperature-sensitive filaments and environmental sensors make it a responsive sensory anchor that mimics the energy of a real plant, so the room still feels inhabited on the days she isn't in it.\n\nNatural materials — real moss, a ceramic pot — keep the technology grounded rather than clinical. The electronics are never the point; they are what lets the object stay restorative and durable and emotionally meaningful instead of reading as a gadget.\n\nThe deliberate inversion: most plant tech tells you what your plant needs, turning a living thing into another task. This one absorbs the need entirely. The tree still expresses state — it blooms, it signals, it shifts with the season — but nothing it expresses is ever a demand.", images: [
+      { src: "/images/03/emmastree.png", caption: "The finished tree: 3D-pen branching, real moss, ceramic pot. Technology grounded in natural material." },
+      { src: "/images/03/treesystem.png", caption: "System diagram: sensor inputs, solar power path, and the filament and LED output channels." },
+      { src: "/images/03/tempchange.png", caption: "The Bloom effect — temperature-sensitive filament shifting colour on touch or ambient warmth." },
+    ]
+  },
+  {
+    src: "/images/prototypes/LuminousJellyfish/Jellyfish_InEnclosure.png", alt: "Luminous Jellyfish", tag: "Light Interface · Ambient Agent", label: "Luminous Jellyfish", desc: "A wordless agent that expresses emotion, status, and intent purely through light, staying readable from midnight to noon", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Ambient Computing", "Interface Design", "Multimodal Systems", "The June 19th Project"], year: "2026", context: "Designer", tools: ["Light modelling", "Contrast normalisation", "Motion design", "Particle systems"], notes: "How can we design real-time agent state indicators (emotion, status, intent) that remain readable in bright ambient light while preventing user cognitive overload?\n\nThe answer is a creature with no words and no face. The reef sets ambient light; the jellyfish emits light. Because the creature is always read against its environment, its expression is normalised against ambient rather than set as an absolute — emit = base(state) × (1 + k · (1 − ambient)), with k ≈ 0.8 so Night reads bold and Day stays legible.", designThinking: "Day caps the brightness channel at 1.00, and that ceiling is the interesting constraint rather than a limitation. Once brightness runs out, high-arousal states like Happy have to be carried by particles and motion instead, which forces the expression system to be multi-channel from the start.\n\nThe second rule is traceability: the jellyfish has no words and no face, so everything the user learns about it, they learn by watching light change in response to their own voice. A reply the user cannot trace back to something they did is not a reply, it is noise.\n\nEach mechanism was built for a jellyfish in a tank, but each answers a constraint any real-time agent interface faces under changing ambient light.", images: [
+      { src: "/images/prototypes/LuminousJellyfish/Jellyfish_InEnclosure.png", caption: "The creature drifting in its glass enclosure above a bioluminescent reef." },
+      { src: "/images/prototypes/LuminousJellyfish/reef_day.jpg", caption: "Day: ambient light at its peak, where the emission channel saturates and motion has to carry expression." },
+      { src: "/images/prototypes/LuminousJellyfish/reef_dusk.jpg", caption: "Dusk: the crossover point where emitted light begins to outrun ambient." },
+      { src: "/images/prototypes/LuminousJellyfish/reef_night.jpg", caption: "Night: ambient near zero, the same emotion rendered at a fraction of the daytime output." },
+      { src: "/images/prototypes/LuminousJellyfish/state_happy.jpg", caption: "Happy: particles and motion added once brightness alone hits its ceiling." },
+      { src: "/images/prototypes/LuminousJellyfish/state_sad.jpg", caption: "Sad: contracted silhouette and dimmed, slower pulse." },
+      { src: "/images/prototypes/LuminousJellyfish/state_sleeping.jpg", caption: "Sleeping: the low-arousal end of the state range, still legible against a dark reef." },
+    ]
+  },
+  {
+    src: "/images/prototypes/Mopad IXD/mopadui.jpg", alt: "Mopad IXD", tag: "Physical Prototype · Vehicle HMI", label: "Mopad IXD", desc: "A dual-screen self-driving moped HMI prototype built from cardboard, PVC pipes, and salvaged phones", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["CMU", "Interface Design", "Physical Computing", "Rapid Prototyping", "Tangible Environments"], year: "2024", context: "Carnegie Mellon · Interaction Design coursework", tools: ["Figma", "Cardboard", "PVC piping", "iPhone", "iPad", "Video prototyping"], notes: "A rapidly-built hardware mockup for the interface of a Self-Autonomous Vehicle (SAV) moped. The rig pairs an iPad windshield that surfaces environmental information (SAV state, upcoming turns, low-battery alerts) with an iPhone dashboard for speed, ETA, and battery. Physical SAV / ON buttons on the handlebars let riders toggle autonomy by hand.", designThinking: "The design problem was interaction for a vehicle you don't fully control. Attention had to be layered: when the moped drives itself the rider becomes a passenger, so the windshield can carry richer content; when they take over, the dashboard becomes primary and everything else quiets down.\n\nBuilding the physical form was as important as designing the screens. A rider's field of view and reach shape what UI can actually live where, so we prototyped the cardboard-and-PVC handlebars before committing to any digital fidelity.", images: [
+      { src: "/images/prototypes/Mopad IXD/mopadui.jpg", caption: "SAV Enabled state: windshield confirms autonomous mode; dashboard shows speed, time, battery, and range." },
+      { src: "/images/prototypes/Mopad IXD/IMG_3782.jpg", caption: "Navigation prompt: a 200-ft turn cue appears on the windshield while the dashboard tracks live speed and battery." },
+      { src: "/images/prototypes/Mopad IXD/IMG_3781 4.jpg", caption: "Low-battery scenario: the interface surfaces the nearest charge station with a one-tap GO route." },
+      { src: "/images/prototypes/Mopad IXD/IMG_6550.jpg", caption: "In-class user testing: classmates try the prototype with paper safety helmets for full role-play immersion." },
+    ]
+  },
+  {
+    src: "/images/prototypes/Ember | The Pepper's Ghost Installation/peppersghost01.png", alt: "Ember", tag: "Installation · Spatial Illusion", label: "Ember | The Pepper's Ghost Installation", desc: "A character that lives in a 100-year-old fireplace, reacting to passersby through Pepper's Ghost", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Spatial Computing", "Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "Reality Hack 24 · MIT Media Lab", tools: ["Pepper's Ghost optics", "Procreate", "After Effects", "Projector", "Acrylic"], notes: "An animated fire character named Ember inhabits a long-disused fireplace in CMU's Walker Hall, surfaced through a Pepper's Ghost optical setup. Ember reacts to passersby with shifting moods (heart-eyes, frustration, sleep, delight), giving the empty hearth a small living presence without altering a single brick of the historic mantel.", designThinking: "Began with a site, not a tech: the fireplaces in Walker Hall sit unused for fire-code reasons, but they're the emotional center of every room they occupy. The brief became how do you give a heritage object a second life without invasive intervention.\n\nPepper's Ghost let us add an animated layer on top of the existing space rather than retrofit anything into it. Treating Ember as a character with emotional states (rather than a flame loop) was the decision that turned the install from a tech demo into something people lingered with.", images: [
+      { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/peppersghost01.png", caption: "Ember lit inside the historic Walker Hall fireplace, reflected through angled glass." },
+      { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/walker fireplace.jpg", caption: "The site: a 100-year-old stone fireplace, sealed for fire code, waiting to be reactivated." },
+      { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/RH24_Ember_Circular.jpg", caption: "Design exploration: circular forms feeding into the flame character's silhouette." },
+      { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/RH24_Pepper's_Ghost_Ember_Reacts.jpg", caption: "Interaction states: Ember reacts differently to ambient input (warmth, hearts, anger, sleep)." },
+      { src: "/images/prototypes/Ember | The Pepper's Ghost Installation/RH24_Ember_Rectangular.jpg", caption: "Rectangular variant of the burning logs, refining how the body would be read at distance." },
+    ]
+  },
+  {
+    src: "/images/prototypes/MIT Reality Hack 2024/hackinginprogress.jpg", alt: "MIT Reality Hack 2024", tag: "Spatial Design · Visual Identity", label: "MIT Reality Hack 2024 | Spatial Design", desc: "Spatial design and illustrated banners for a week-long, 500-person hackathon at MIT", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Interface Design", "Tangible Environments", "Rapid Prototyping"], year: "2024", context: "MIT Reality Hack 2024 · MIT Media Lab", tools: ["Procreate", "Photoshop", "Large-format print", "Site planning"], notes: "The constraint set the brief: aesthetic that elevates the space, but never gets in the way of 500+ hackers building for a full week. The work covered venue planning, visual identity, and banner illustration, deciding where atmosphere belongs and where it should quietly disappear so participants stay in flow.", designThinking: "Mapped the venue by attention budget before drawing anything. Hand-annotated plans came first, marking AR mural placement, up-lighting, and decor positions against existing architecture. High-transit zones got minimal treatment so participants weren't slowed by visual noise; the most considered work went into rest areas, transitions, and arrival moments where a banner could become a small breath between sessions.\n\nThe illustration concept (MIT campus framed through enchanted gothic windows) was chosen for dual-distance behavior. Up close, the carved arch reads as warmth and craft. At a glance across a long room, the carved frame recedes and the building behind becomes a landmark, wayfinding without signage.", images: [
+      { src: "/images/prototypes/MIT Reality Hack 2024/hackinginprogress.jpg", caption: "The hall in full use: 500+ hackers working under the installed banners, custom murals, and event lighting." },
+      { src: "/images/prototypes/MIT Reality Hack 2024/day1_02.jpg", caption: "Install close-up: the daylight and night-time Stata banners hung between the columns where the team had planned them." },
+      { src: "/images/prototypes/MIT Reality Hack 2024/day1_01.jpg", caption: "Wide view of the main hall during Day 1, banners visible across multiple bays as hackers move between sponsor booths." },
+      { src: "/images/prototypes/MIT Reality Hack 2024/sketchofwalker.jpg", caption: "Presentation render of Walker Hall with all banner positions in situ, used to align stakeholders on the spatial design before fabrication." },
+      { src: "/images/prototypes/MIT Reality Hack 2024/RH24_Walker_Hacking_Space.jpg", caption: "Hand-annotated venue plan: mapping AR murals, up-lighting, and decor placement against the existing architecture." },
+      { src: "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_02.JPG", caption: "Banner: Killian Court at sunset framed through an ornate carved arch, sized for the main gathering space." },
+      { src: "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_04_Final.JPG", caption: "Banner: Stata Center reimagined as a daylight reverie, scaled for transit corridors." },
+      { src: "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_01.JPG", caption: "Banner: night-time variant for low-light zones, fireflies and a starlit sky as the rest moment." },
+    ]
+  },
+  { src: "/images/ARVR/library.png", alt: "Immersive Library", tag: "VR · Environment", label: "Immersive Library", desc: "An immersive virtual library designed for focused, single-occupant deep work", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"], year: "2024", context: "CMU 3D environments", tools: ["Unity", "Maya", "Substance Painter"], notes: "A virtual reading room designed for solo deep work. Lighting and shelf scale were tuned so the space felt sized to a single occupant, not a crowd. A quiet counterweight to the usual maximalist VR environment.", video: { url: "https://youtu.be/je2r3acZWLg", caption: "Walkthrough of the immersive library, lit and scaled for one." }, links: [{ label: "Watch Walkthrough", href: "https://youtu.be/je2r3acZWLg?si=1ukq9WEP7v_z4TiF" }] },
+  {
+    src: "/images/prototypes/flexvr 1.png", alt: "FlexVR Wellness", tag: "Hackathon · XR Wellness", label: "FlexVR Wellness", desc: "A 24-hour hardware hack reimagining VR as a wellness, not stimulation, surface", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Physical Computing", "Rapid Prototyping", "Multimodal Systems"], year: "2024", context: "Hardware Hack: Creative Inputs/Outputs", tools: ["Unity", "Arduino", "3D printing", "Biofeedback sensors", "Fabric"], notes: "A 24-hour hardware hackathon prototype that reframed VR away from intensity (combat, exploration) and toward calm: breath-driven pacing, posture-sensitive ambient light, and tactile soft controls. Built end-to-end with a small team in a single weekend.", designThinking: "Most VR pitches itself on intensity. We started from the opposite question: what would VR look like if it were tuned for nervous-system regulation instead of dopamine?\n\nThe hardware constraint forced honesty. With only 24 hours, every input/output had to earn its place. We landed on three: breath as the master clock, posture as the volume knob, and soft tactile controls instead of triggers, all serving a single goal of lowering, not raising, arousal.", video: { url: "https://youtu.be/7zpdAQw5Y1k", caption: "Demo of FlexVR Wellness from the Hardware Hack showcase." }, links: [{ label: "Watch Demo", href: "https://youtu.be/7zpdAQw5Y1k?si=b45U6UR1hrWtO3bM" }], images: [
+      { src: "/images/prototypes/FlexVR Wellness/HardwareCreativeInputOutput.png", caption: "Final presentation: FlexVR Wellness pitched at the Hardware Hack showcase." },
+      { src: "/images/prototypes/FlexVR Wellness/building.jpg", caption: "Mid-hack: prototyping the breath-sensor pipeline alongside the team." },
+      { src: "/images/prototypes/FlexVR Wellness/building02.jpg", caption: "Build station at 2am: 3D-printed enclosures, soldering, and the soft-controller mockup." },
+      { src: "/images/prototypes/FlexVR Wellness/testing1.jpg", caption: "Showcase floor: a teammate wears the EMS sleeve and soft controller while the team documents the demo." },
+      { src: "/images/prototypes/FlexVR Wellness/hardware.jpg", caption: "Inside the build: a Neuralaxy NeuroBio sensor board housed in a custom 3D-printed enclosure, status LEDs lit." },
+      { src: "/images/prototypes/FlexVR Wellness/redbull tower 2.JPG", caption: "The All-Nighter Tower." },
+    ]
+  },
+  { src: "/images/prototypes/LeARn.png", alt: "LeARn", tag: "AR · Education · Hackathon", label: "LeARn", desc: "An AR learning app that brings interactivity and joy back into elementary school subjects, tracking student progress across Art, Math, and Music", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Rapid Prototyping"], year: "April 2022", context: "Venture In Metaverse Hackathon · Harvard", tools: ["Unity", "C#", "Procreate"], notes: "LeARn is an augmented reality application built to help educators and parents teach with more interactivity, longer attention spans, and more enjoyment for elementary school students. The app tracks each student's progress through Art, Math, and Music, with planned expansion into Physics Circuits and Language. Designed to live alongside the traditional classroom rather than replace it.", designThinking: "Started from the question every K-12 teacher asks: how do you hold attention when worksheets are competing with phones? AR lets the same lesson live on the desk in front of a student, making the rotation, manipulation, and exploration of a concept the lesson itself rather than the textbook page.\n\nThe progress-tracking layer was the design move that took the idea from gimmick to tool: educators see what each student has spent time with, and the app calibrates difficulty without surfacing it to the child.", video: { url: "https://youtu.be/Dkjj-q0xRaE", caption: "Demo reel from Venture In Metaverse at Harvard, April 2022." }, links: [{ label: "Watch Demo", href: "https://youtu.be/Dkjj-q0xRaE?si=UeQRA4jqXGIMeJXA" }] },
+  {
+    src: "/images/prototypes/CMUPopUp/cmupopup 1.png", alt: "CMU Popup", tag: "Spatial Design · Guest Experience", label: "CMU Popup", desc: "A pop-up book scale model of a Tuscan-themed wine bar guest experience", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["CMU", "Rapid Prototyping", "Tangible Environments", "Interface Design"], year: "2024", context: "Carnegie Mellon · Guest Experience in Theme Parks · Fall 2024", tools: ["Pop-up book construction", "Printed textures", "3D-printed terrain", "Sculpted moss", "Tabletop modeling"], notes: "A foldable, book-style scale model of a Tuscan-themed wine bar guest experience, developed for CMU's Guest Experience in Theme Parks studio. The piece reads as flat from the side and unfolds into a multi-room interior with vineyards, stone garden, and seating, used as a stand-alone presentation artifact rather than a digital render.", designThinking: "Wanted a presentation format that could be carried into any review, no laptop, no projector. The pop-up form gave the design two states: a quiet closed book that invites curiosity, and an opened diorama that lets stakeholders read the spatial logic of a guest's path at a glance.\n\nWorking at a tabletop scale also forced material honesty: every brick texture, table, and tree had to earn its place because there was no room to hide weak detail.", images: [
+      { src: "/images/prototypes/CMUPopUp/cmupopup 1.png", caption: "Hero view: the wine bar concept opened to full diorama." },
+      { src: "/images/prototypes/CMUPopUp/IMG_6534 2.jpg", caption: "Mid-fold view: the pop-up book structure that supports the standing scene." },
+      { src: "/images/prototypes/CMUPopUp/IMG_6540.jpg", caption: "Detail: stone seating, sculpted moss, and tree placement in the garden zone." },
+    ]
+  },
+  {
+    src: "/images/prototypes/CMU BusWatch/WatchUI.png", alt: "CMU BusWatch", tag: "Wearable · Transit UI", label: "CMU BusWatch", desc: "An Apple Watch companion that helps CMU students catch the 61B bus at a glance", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["CMU", "Interface Design", "Rapid Prototyping"], year: "2024", context: "Carnegie Mellon · Interaction Design coursework", tools: ["Figma", "Pencil sketching", "Storyboarding", "Video prototyping"], notes: "A smartwatch companion for CMU's 61B bus route, letting students glance-check arrival time, pull up a mini map, or voice-modify their default route from the wrist. The scope covered the full IxD arc: storyboarding pain points, sketching UI flow, then producing tappable Figma screens and a video prototype.", designThinking: "Students already know their bus number by heart; they pull the phone out just to check the ETA. The watch face removes that friction: glance, see the number, decide whether to sprint or catch a later run.\n\nThe voice-driven Modify MyBus state came from watching users type on watches (they don't). Restricting keyboard input by default made every downstream input decision self-answer.", images: [
+      { src: "/images/prototypes/CMU BusWatch/WatchUI.png", caption: "UI states across the three primary flows: home selector, en-route ETA with mini map, and voice-driven route modification." },
+      { src: "/images/prototypes/CMU BusWatch/PencilSketch.png", caption: "Storyboard: the user oversleeps, misses the bus, and walks late to class; resolved by the watch surfacing ETA at a glance." },
+      { src: "/images/prototypes/CMU BusWatch/MyBusWatch.png", caption: "Title card from the video prototype documenting the flow end to end." },
+    ]
+  },
+  {
+    src: "/images/prototypes/Together/stopmotion02.png", alt: "Together", tag: "Themed Experience · Sculptural Narrative", label: "Together", desc: "A handcrafted stop-motion vignette imagined as a moment inside a themed attraction, where guests pass from cold solitude into shared warmth", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments", "Multimodal Systems"], year: "2019", context: "Carnegie Mellon · Guest Experience in Theme Parks", tools: ["Polymer clay", "Hand-knotted yarn", "DSLR", "Chroma key"], notes: "A guest-experience concept developed as a stop-motion short for a CMU course on theme park design. Two small characters move from a snowy exterior into a candlelit apothecary lined with books, bottles, and music. Built as a tabletop maquette of a scene a guest could one day walk through, with the camera staging shot-by-shot what the eye should find on entry, mid-journey, and arrival.", designThinking: "The course brief was about staging emotional arrivals: guests don't remember individual props, they remember how a sequence of moments made them feel. The piece is structured around a single temperature change, cold to warm, with no dialogue and no overt event. The 'plot' is the threshold itself.\n\nMaterial choice did the rest of the work. Yarn trees, hand-twisted hair, and ground-up flake snow were chosen so that whoever made it could be felt inside it, the same way the best themed environments hide their craft in plain sight.", video: { url: "https://youtu.be/xhVKbuqAVjY", caption: "The full stop-motion short: cold solitude resolving into shared warmth." }, links: [{ label: "Watch Film", href: "https://youtu.be/xhVKbuqAVjY?si=juypLgVGXBM1c-cw" }], images: [
+      { src: "/images/prototypes/Together/stopmotion02.png", caption: "Interior: the figure absorbed in sheet music among practical candlelight." },
+      { src: "/images/prototypes/Together/20190210_055418.JPG", caption: "Apothecary corner: leather-bound books, corked bottles, a cameo, the warm interior the cold story moves toward." },
+      { src: "/images/prototypes/Together/L1050899.JPG", caption: "Two characters in falling snow, hair built from twisted thread, captured from above." },
+      { src: "/images/prototypes/Together/L1060096.JPG", caption: "Detail: floral dress and teal stockings half-buried in real, ground-up snow." },
+    ]
+  },
+  {
+    src: "/images/prototypes/Portal Reef/portalreef 1.png", alt: "Portal Reef", tag: "Mixed Reality · EEG · Conservation", label: "Portal Reef", desc: "A multimodal MR coral reef built to raise awareness of coral bleaching, with Neuos EEG measuring delight as the cause of the damage", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Spatial Computing", "Multimodal Systems", "Physical Computing", "Interface Design", "Rapid Prototyping"], year: "2022", context: "MIT Reality Hack 2022 · Semi-Finalist", tools: ["Hololens 2", "Arctop Neuos Headband", "Arctop SDK", "Unity", "C#", "Blender", "GitHub"], notes: "A multimodal Mixed Reality coral reef built during MIT Reality Hack 2022 (semi-finalist) to raise awareness of coral destruction. The user explores a vivid reef through a Hololens 2 passthrough environment; when they reach out and touch a coral, the coral turns grey and dies on contact, making the cause of bleaching legible as a behaviour rather than a statistic.\n\nAn Arctop Neuos EEG headband recorded the user's enjoyment in real time while they interacted, capturing the uncomfortable insight at the heart of the brief: people destroy what they love because they love it.", designThinking: "The team's hypothesis was that conservation messaging fails when it relies on guilt or distance. We treated wonder as the entry point and let the consequence land as the user enjoyed it most. Touching a beautiful coral and watching it die in the same instant collapses the emotional gap between visitor and impact.\n\nLayering the Neuos EEG signal on top of the interaction added a second axis. Recording enjoyment exactly when destruction occurs gave us a data artefact that names the contradiction without us having to write it on a wall.", images: [
+      { src: "/images/prototypes/Portal Reef/portalreef 1.png", caption: "Inside the experience: an Anacropora coral information panel surfaces as the user approaches, narrating the species before they reach to touch." },
+      { src: "/images/prototypes/Portal Reef/coralreef.jpg", caption: "The reef the user enters: fish, sponges, and stony coral staged as a living scene to walk into." },
+      { src: "/images/prototypes/Portal Reef/handtracking.png", caption: "Hand-tracking debug pass: the axis gizmo locates the user's hand against the reef, the input that triggers bleaching on contact." },
+      { src: "/images/prototypes/Portal Reef/unityenv.png", caption: "Unity build overview: shipwreck, coral clusters, and floating information cards composed across the seafloor." },
+    ]
+  },
+  { src: "/images/prototypes/stopmotion01.png", alt: "Stop Motion", tag: "Physical · Animation", label: "Stop Motion", desc: "Frame-by-frame physical animation exploring material storytelling", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Rapid Prototyping", "Tangible Environments"], year: "2023", context: "CMU rapid prototyping", tools: ["Dragonframe", "DSLR", "Mixed materials"], notes: "First stop-motion study, focused on the rhythm and patience of frame-by-frame work. Forced a slower making process: every 12 frames bought less than a second of motion." },
+  // Spatial / ARVR
+  {
+    src: "/images/prototypes/RH Cloud/RHcloud 1.png", alt: "RH Cloud", tag: "Responsive · Atmospheric", label: "RH Cloud", desc: "Volumetric cloud environment exploring presence and scale", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["MIT Reality Hack", "Spatial Computing", "Rapid Prototyping", "Tangible Environments"], year: "2024", context: "Personal exploration", tools: ["LED lights", "Cotton", "Craft tools"], notes: "Real-time volumetric clouds rendered at room scale, exploring how vapor and weather can become a spatial interface element. The user's movement subtly displaced the cloud volume, hinting at presence without a literal avatar.", images: [
+      { src: "/images/prototypes/RH Cloud/RHcloud 1.png", caption: "Overview of the main hall, multiple clouds suspended at table height across the room." },
+      { src: "/images/prototypes/RH Cloud/RH24_Day1_Venue_Atmosphere.jpg", caption: "Day 1 close-up: a team works directly beneath one of the cotton clouds, the blue underlight diffusing across the work surface." },
+      { src: "/images/prototypes/RH Cloud/day1.jpg", caption: "Day 1 setup: a smaller cloud staged at the front of the hall as hackers arrive and gather." },
+    ]
+  },
+  {
+    src: "/images/prototypes/PressfToPlay/Screen Shot 2019-11-03 at 3.16.53 PM.PNG", alt: "Press F To Play", tag: "3D Environment · Interactive Narrative", label: "Press F To Play", desc: "A moody, low-poly first-person environment exploring atmospheric storytelling through space", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Interface Design", "Rapid Prototyping"], year: "2019", context: "Early 3D environment exploration", tools: ["Unity", "Maya", "Low-poly modeling", "Practical lighting"], notes: "A walk-and-look interactive scene where the player explores a green-lit, gothic-inflected interior: stone halls, a balance scale, a grand piano upstairs, a grandfather clock with a watching eye. The only prompt the player ever sees is the title itself, leaving everything else to atmosphere.", designThinking: "Set the constraint early: no NPCs, no dialogue, no objectives. The room had to do the work.\n\nLighting carried the tone. Cool green ambient against single warm pools of practical light meant the player's eye was always pulled to where the next moment of interest lived, navigation through atmosphere rather than UI. The piece is less a game and more a study in how an interior can suggest a story without ever telling one.", images: [
+      { src: "/images/prototypes/PressfToPlay/Screen Shot 2019-11-03 at 3.16.53 PM.PNG", caption: "The title prompt in situ, beside a grandfather clock with a watching green eye." },
+      { src: "/images/prototypes/PressfToPlay/Screen Shot 2019-11-03 at 3.27.11 PM 2.PNG", caption: "Main hall reframe: stairs, balance scale, and cobblestone underfoot. The space was built to be wandered." },
+      { src: "/images/prototypes/PressfToPlay/PressfToPlay02.png", caption: "Upstairs interior: piano and twin lamps. Whatever happens here is left to the player to imagine." },
+    ]
+  },
+  { src: "/images/ARVR/studyhall 1.png", alt: "Study Hall", tag: "3D Model · Architecture", label: "Study Hall", desc: "Collaborative virtual study hall with adaptive ambient zones", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"], year: "2024", context: "CMU 3D environments", tools: ["Maya", "Unity", "Substance Painter"], notes: "A multi-user study hall with zones tuned for different work modes: silent reading at one end, collaborative writing at the other. Ambient audio and lighting shifted as users crossed thresholds, without explicit mode switches." },
+  {
+    src: "/images/prototypes/Forest Frangrance/june19th_fragrance.jpg", alt: "Forest Fragrance", tag: "Multimodal · Sensory Design", label: "Forest Fragrance", desc: "A hand-blended pine fragrance paired with a self-built VR forest, designing scent as an equal channel to sight and sound", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Multimodal Systems"], year: "2022", context: "VR forest experience · June 19, 2022 project", tools: ["Perfumery workshop", "Essential oils", "Unity", "Maya"], notes: "A multimodal forest experience pairing an immersive VR environment, built from the ground up in Unity, with a custom pine fragrance composed by hand at a perfumery workshop. The user journey was designed in layers: scent enters first, then ambient sound, then rain, then exploration. The room smelled of pine, damp earth, and faint resin while the headset rendered a forest meant to be wandered, not solved.", designThinking: "Sight and sound are well-mapped in VR; smell is usually treated like a parlor trick. The brief was to design the scent first, with the same care normally given to a soundtrack or shader, then let the visuals support what the nose already knew.\n\nThe user journey added a second decision: the experience stacks senses rather than presenting them all at once. The visitor enters quietly, sprays the fragrance themselves to begin, and only then do rain, ambient audio, and motion layer in. By the time they reach the hidden garden, a new scent is the only signal that they've crossed into a different part of the world. The design rule throughout was the same: never tell the visitor what to feel, give them the layers and let it happen.", images: [
+      { src: "/images/prototypes/Forest Frangrance/june19th_fragrance.jpg", caption: "The hand-blended pine fragrance composed at the perfumery workshop, staged before the experience begins." },
+      { src: "/images/prototypes/Forest Frangrance/frangrancemaking.png", caption: "At the perfumery workshop: composing the pine note by hand, sampling vial by vial." },
+      { src: "/images/prototypes/Forest Frangrance/user journey.jpg", caption: "User journey map: scent, sound, and visual layered across the visitor's path from arrival to hidden garden." },
+      { src: "/images/prototypes/Forest Frangrance/unityforest.png", caption: "The Unity forest at dusk: layered foliage and silhouetted treeline against a colored sky." },
+      { src: "/images/prototypes/Forest Frangrance/forestlantern.png", caption: "Inside the canopy: a single lantern as the only warm point of light, drawing the visitor deeper in." },
+    ]
+  },
+  { src: "/images/ARVR/flowers 1.png", alt: "Flowers", tag: "3D Modeling · Texture Study", label: "Flowers", desc: "A botanical 3D study built to practice modeling and hand-painted texture mapping from petal to stem", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing", "Rapid Prototyping"], year: "2024", context: "Personal study · 3D modeling and texture mapping practice", tools: ["Maya", "Procreate", "Unity"], notes: "A small botanical scene built as a deliberate technical exercise. Each flower, leaf, and stem was modeled by hand in Maya, UV-unwrapped, then painted petal-by-petal in Procreate so every texture map was hand-made rather than generated. The goal was less to ship an experience and more to internalize the modeling-to-texture pipeline at a craft level." },
+  { src: "/images/ARVR/trees01 1.png", alt: "Trees 01", tag: "Augmented Reality · Nature", label: "Trees 01", desc: "Forest density study exploring depth and spatial perception", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Spatial Computing"], year: "2024", context: "Personal exploration", tools: ["Spark AR", "Maya"], notes: "A density and parallax study: how many tree instances are needed before AR foliage reads as 'forest' rather than 'set dressing'. Found the threshold sat around 40 unique silhouettes within view distance." },
+];
+
+// ─── Static Tailwind col-span map (dynamic strings get purged) ───────────────
+// mobile fix: col-span only applies at lg; on mobile each item takes 1 column of grid-cols-2
+const COL_SPAN_CLASS: Record<number, string> = {
+  2: "lg:col-span-2",
+  3: "lg:col-span-3",
+  4: "lg:col-span-4",
+  6: "lg:col-span-6",
+};
+
+// ─── FilterCategoryButton ────────────────────────────────────────────────────
+function FilterCategoryButton({
+  cat,
+  isActive,
+  onClick,
+}: {
+  cat: Category;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  const s = CAT_STYLE[cat];
+  // mobile fix: tap target ≥40px on phones via py-2.5 + min-h-[40px]; desktop tightness preserved at lg:
+  return (
+    <button
+      onClick={onClick}
+      className="relative flex items-center gap-2 pl-3 pr-4 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap select-none"
+      style={isActive
+        ? { background: s.active, borderColor: s.dot, color: s.text, boxShadow: `0 0 12px ${s.dot}50` }
+        : { background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.15)", color: "#909090" }
+      }
+    >
+      <span className="w-2 h-2 rounded-full shrink-0" style={{ background: isActive ? s.dot : "#555" }} />
+      {cat}
+    </button>
+  );
+}
+
+// ─── FilteredThumb ────────────────────────────────────────────────────────────
+function FilteredThumb({
+  item,
+  activeFilter,
+  outfitClass,
+  onOpen,
+}: {
+  item: GridItem;
+  activeFilter: Category | null;
+  outfitClass: string;
+  onOpen: (item: GridItem) => void;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Color logic:
+  // - Filter active → always full color (only matches are rendered)
+  // - No filter + hovering → full color
+  // - No filter + not hovering → grayscale
+  const inColor = activeFilter !== null || isHovered;
+
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={slowFade}
+      onClick={() => onOpen(item)}
+      className={`${COL_SPAN_CLASS[item.colSpan ?? 3]} group cursor-pointer flex flex-col`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Image well: aspect-ratio container holds the picture + (desktop-only) hover overlay */}
+      <div className={`${item.aspectClass ?? "aspect-[16/9]"} bg-[#141414] overflow-hidden rounded-sm relative`}>
+        <motion.img
+          loading="lazy"
+          decoding="async"
+          src={item.src}
+          alt={item.alt}
+          className={`w-full h-full object-cover ${item.scaleClass ?? ""}`}
+          animate={{
+            filter: inColor ? "grayscale(0%) brightness(1)" : "grayscale(100%) brightness(0.7)",
+          }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        />
+        {/* Hover overlay — desktop only (lg+). On phones the caption strip below the image carries metadata. */}
+        <div className="hidden lg:flex absolute inset-0 bg-gradient-to-t from-black/95 via-black/80 to-black/20 backdrop-blur-[6px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex-col justify-end px-5 py-5">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#E8D4BE] mb-1 font-semibold" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}>
+            {item.tag}
+          </span>
+          <span className={`${outfitClass} text-white text-base font-medium mb-1 leading-tight`} style={{ textShadow: "0 2px 4px rgba(0,0,0,0.9)" }}>
+            {item.label}
+          </span>
+          <span className="text-[#E5E5E5] text-[12.5px] leading-relaxed font-normal mb-2.5" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}>
+            {item.desc}
+          </span>
+          {/* Category pills (desktop modal-substitute) */}
+          <div className="flex flex-wrap gap-1 mt-1">
+            {item.categories.map((c) => (
+              <span
+                key={c}
+                className="text-[9px] font-semibold px-2.5 py-0.5 rounded-full bg-black/60 border border-white/15 backdrop-blur-md"
+                style={{ color: CAT_STYLE[c].text, textShadow: "0 1px 2px rgba(0,0,0,0.9)" }}
+              >
+                {c}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Caption strip — phones/tablets only. Editorial two-line block: tag (small uppercase) then title. */}
+      <div className="lg:hidden pt-2 pb-1 px-0.5">
+        <p className="text-[9.5px] uppercase tracking-[0.2em] text-[#737373] font-semibold leading-none mb-1.5 truncate">
+          {item.tag}
+        </p>
+        <p className={`${outfitClass} text-[13px] text-[#EAEAEA] font-medium leading-snug line-clamp-2`}>
+          {item.label}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── ProjectModal, opens when a selected-projects thumb is clicked ─────────
+function ProjectModal({
+  item,
+  outfitClass,
+  onClose,
+  onPrev,
+  onNext,
+  hasPrev,
+  hasNext,
+}: {
+  item: GridItem;
+  outfitClass: string;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  hasPrev: boolean;
+  hasNext: boolean;
+}) {
+  // Build image list, use `images` if provided, else fall back to single `src`
+  const images = item.images && item.images.length > 0
+    ? item.images
+    : [{ src: item.src, caption: undefined as string | undefined }];
+
+  // Reset scroll on project change
+  const panelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (panelRef.current) panelRef.current.scrollTop = 0;
+  }, [item.alt]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft" && hasPrev) onPrev();
+      if (e.key === "ArrowRight" && hasNext) onNext();
+    };
+    window.addEventListener("keydown", handleKey);
+    // Lock body scroll while open
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose, onPrev, onNext, hasPrev, hasNext]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10"
+      onClick={onClose}
+    >
+      {/* Frosted-blur backdrop */}
+      <div
+        className="absolute inset-0 bg-black/75"
+        style={{ backdropFilter: "blur(18px) saturate(120%)", WebkitBackdropFilter: "blur(18px) saturate(120%)" }}
+      />
+
+      {/* Modal content, whole panel scrolls as one unit */}
+      <motion.div
+        ref={panelRef}
+        initial={{ scale: 0.96, opacity: 0, y: 12 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.96, opacity: 0, y: 12 }}
+        transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+        className="relative z-10 w-full max-w-5xl max-h-[88vh] overflow-y-auto rounded-md bg-[#0E0E0E] border border-white/8 shadow-[0_20px_80px_rgba(0,0,0,0.7)]"
+        style={{ scrollbarWidth: "thin" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex flex-col md:flex-row md:items-start">
+
+          {/* Image column, magazine spread: hero shot + editorial grid */}
+          <div className="w-full md:w-3/5 bg-[#0A0A0A] flex flex-col">
+            {/* Optional video, sits above the hero shot when present */}
+            {item.video && getYouTubeId(item.video.url) && (
+              <figure className="flex flex-col bg-black">
+                <div className="relative w-full aspect-video">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${getYouTubeId(item.video.url)}`}
+                    title={`${item.label} demo video`}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+                {item.video.caption && (
+                  <figcaption className="px-5 md:px-7 py-4">
+                    <div className="h-px w-8 bg-[#C9B49A]/50 mb-2.5" />
+                    <p className="text-[11px] md:text-[12.5px] text-[#B0B0B0] italic leading-snug">
+                      {item.video.caption}
+                    </p>
+                  </figcaption>
+                )}
+              </figure>
+            )}
+
+            {/* Optional interactive demo iframe, sits above hero shot when present */}
+            {item.demo && (
+              <figure className="flex flex-col bg-black">
+                <div
+                  className="relative w-full bg-black"
+                  style={{ height: item.demo.height ?? undefined, aspectRatio: item.demo.aspect ?? (item.demo.height ? undefined : "3 / 4") }}
+                >
+                  <iframe
+                    src={item.demo.url}
+                    title={`${item.label} interactive demo`}
+                    className="absolute inset-0 w-full h-full border-0"
+                    loading="lazy"
+                    sandbox="allow-scripts allow-same-origin"
+                  />
+                </div>
+                {item.demo.caption && (
+                  <figcaption className="px-5 md:px-7 py-4">
+                    <div className="h-px w-8 bg-[#C9B49A]/50 mb-2.5" />
+                    <p className="text-[11px] md:text-[12.5px] text-[#B0B0B0] italic leading-snug">
+                      {item.demo.caption}
+                    </p>
+                  </figcaption>
+                )}
+              </figure>
+            )}
+
+            {/* Hero, feature shot, full bleed */}
+            <figure className="flex flex-col">
+              <div className="relative w-full bg-black">
+                <img
+                  src={images[0].src}
+                  alt={images[0].caption || item.alt}
+                  className={`w-full h-auto block ${item.scaleClass ?? ""}`}
+                />
+              </div>
+              {images[0].caption && (
+                <figcaption className="px-5 md:px-7 py-4">
+                  <div className="h-px w-8 bg-[#C9B49A]/50 mb-2.5" />
+                  <p className="text-[11px] md:text-[12.5px] text-[#B0B0B0] italic leading-snug">
+                    {images[0].caption}
+                  </p>
+                </figcaption>
+              )}
+            </figure>
+
+            {/* Editorial stack: single column, natural aspect ratios for full legibility */}
+            {images.length > 1 && (
+              <div className="flex flex-col gap-y-7 px-3 md:px-4 pt-3 pb-5 md:pb-6">
+                {images.slice(1).map((img, i) => (
+                  <figure key={`${img.src}-${i}`} className="flex flex-col">
+                    <div className="relative w-full bg-black overflow-hidden">
+                      <img
+                        src={img.src}
+                        alt={img.caption || `${item.label}`}
+                        className="w-full h-auto block"
+                      />
+                    </div>
+                    {img.caption && (
+                      <figcaption className="pt-3 px-1">
+                        <div className="h-px w-8 bg-[#C9B49A]/45 mb-2" />
+                        <p className="text-[11px] md:text-[12px] text-[#A3A3A3] italic leading-snug">
+                          {img.caption}
+                        </p>
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Details column, sticky to top of scroll panel on desktop */}
+          <div className="w-full md:w-2/5 p-6 md:p-8 flex flex-col gap-4 bg-gradient-to-b from-[#101010] to-[#0A0A0A] md:sticky md:top-0 md:self-start md:max-h-[88vh] md:overflow-y-auto"
+            style={{ scrollbarWidth: "thin" }}
+          >
+            {/* Tag + Year header row */}
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-[#C9B49A] font-semibold">
+                {item.tag}
+              </span>
+              {item.year && (
+                <span className="text-[10px] uppercase tracking-[0.18em] text-[#737373] font-medium shrink-0">
+                  {item.year}
+                </span>
+              )}
+            </div>
+
+            {/* Title */}
+            <h3 className={`${outfitClass} text-2xl md:text-3xl font-light text-[#EAEAEA] leading-tight`}>
+              {item.label}
+            </h3>
+
+            {/* Short description */}
+            <p className="text-[14px] text-[#A3A3A3] leading-relaxed">
+              {item.desc}
+            </p>
+
+            {/* Category pills */}
+            <div className="flex flex-wrap gap-1.5">
+              {item.categories.map((c) => (
+                <span
+                  key={c}
+                  className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/15"
+                  style={{ color: CAT_STYLE[c].text }}
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+
+            {/* Optional sections, render only if data present */}
+            {(item.context || (item.tools && item.tools.length > 0)) && (
+              <div className="pt-4 mt-2 border-t border-white/8 grid grid-cols-2 gap-x-4 gap-y-4">
+                {item.context && (
+                  <div>
+                    <span className="block text-[9px] uppercase tracking-[0.2em] text-[#737373] mb-1.5">Context</span>
+                    <span className="text-[12.5px] text-[#EAEAEA] leading-snug">{item.context}</span>
+                  </div>
+                )}
+                {item.tools && item.tools.length > 0 && (
+                  <div>
+                    <span className="block text-[9px] uppercase tracking-[0.2em] text-[#737373] mb-1.5">Tools</span>
+                    <div className="flex flex-wrap gap-1">
+                      {item.tools.map(t => (
+                        <span key={t} className="text-[10.5px] text-[#EAEAEA] border border-white/15 px-2 py-0.5 rounded-sm">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Notes / process paragraph */}
+            {item.notes && (
+              <div className="pt-4 mt-1 border-t border-white/8">
+                <span className="block text-[9px] uppercase tracking-[0.2em] text-[#737373] mb-2">Notes</span>
+                <p className="text-[13px] text-[#A3A3A3] leading-relaxed">{item.notes}</p>
+              </div>
+            )}
+
+            {/* Design Thinking, rationale / approach / principles */}
+            {item.designThinking && (
+              <div className="pt-4 mt-1 border-t border-white/8">
+                <span className="block text-[9px] uppercase tracking-[0.2em] text-[#C9B49A] mb-2">Design Thinking</span>
+                <p className="text-[13px] text-[#A3A3A3] leading-relaxed whitespace-pre-line">{item.designThinking}</p>
+              </div>
+            )}
+
+
+            {/* External links */}
+            {item.links && item.links.length > 0 && (
+              <div className="pt-4 mt-1 border-t border-white/8 flex flex-wrap gap-2">
+                {item.links.map(link => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-[#EAEAEA] border border-[#C9B49A]/40 hover:border-[#C9B49A] hover:bg-[#C9B49A]/10 px-3 py-1.5 rounded-sm transition-all duration-200"
+                  >
+                    {link.label}
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d="M7 17 17 7" />
+                      <path d="M7 7h10v10" />
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+      </motion.div>
+
+      {/* Close button, floats on backdrop above the panel so it doesn't overlap content */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        aria-label="Close"
+        className="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center transition-all duration-200 backdrop-blur-md cursor-pointer"
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+          <line x1="3" y1="3" x2="11" y2="11" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="11" y1="3" x2="3" y2="11" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      </button>
+
+      {/* Prev / Next arrows, outside the panel, floating against backdrop */}
+      {hasPrev && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          aria-label="Previous project"
+          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 items-center justify-center transition-all duration-200 backdrop-blur-md cursor-pointer"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </button>
+      )}
+      {hasNext && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          aria-label="Next project"
+          className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 items-center justify-center transition-all duration-200 backdrop-blur-md cursor-pointer"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      )}
+    </motion.div>
+  );
+}
+
+const slowFade = {
+  hidden: { opacity: 0, filter: "blur(4px)" },
+  visible: {
+    opacity: 1, filter: "blur(0px)",
+    transition: { duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }
+  }
+};
+
+const lineReveal = {
+  hidden: { scaleX: 0, originX: 0 },
+  visible: {
+    scaleX: 1,
+    transition: { duration: 1.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 }
+  }
+};
+
+// Label / section heading style
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+  <span className="block text-[13px] uppercase tracking-[0.22em] text-[#C9B49A] mb-2.5">
+    {children}
+  </span>
+);
+
+// Divider
+const Hairline = () => <div className="w-full h-[1px] bg-white/5 my-5" />;
+
+// ─── Scrollspy Nav ───
+const NAV_ITEMS = [
+  { id: "project-01", label: "BMW Adaptive UI" },
+  { id: "project-02", label: "CMU Proactive Agent" },
+  { id: "project-03", label: "AI Trend Forecasting" },
+  { id: "selected-projects", label: "Selected Projects" },
+  { id: "project-meet", label: "Nice to Meet You" },
+];
+
+function ScrollNav() {
+  const [active, setActive] = useState("project-01");
+
+  useEffect(() => {
+    // Scroll-based active detection: find the last section whose top
+    // has passed the activation line (~30% from the top of the viewport).
+    const updateActive = () => {
+      const activationLine = window.innerHeight * 0.3;
+      let current = NAV_ITEMS[0].id;
+      for (const { id } of NAV_ITEMS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= activationLine) current = id;
+      }
+      setActive(current);
+    };
+
+    updateActive();
+    window.addEventListener("scroll", updateActive, { passive: true });
+    window.addEventListener("resize", updateActive);
+    return () => {
+      window.removeEventListener("scroll", updateActive);
+      window.removeEventListener("resize", updateActive);
+    };
+  }, []);
+
+  return (
+    <nav className="fixed right-5 top-[320px] z-50 hidden lg:flex flex-col items-center gap-0">
+      {NAV_ITEMS.map(({ id, label }, i) => (
+        <div key={id} className="flex flex-col items-center">
+          {/* Dot + tooltip row */}
+          <a
+            href={`#${id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="relative flex items-center group/dot py-1"
+          >
+            {/* Dot, active state has a silver metallic glow */}
+            <div
+              className={`w-[7px] h-[7px] rounded-full transition-all duration-300 ${active === id
+                ? "bg-[#E5E7EB] scale-150 shadow-[0_0_8px_rgba(229,231,235,0.95),0_0_18px_rgba(192,192,192,0.6),0_0_30px_rgba(148,163,184,0.35)]"
+                : "bg-[#444] group-hover/dot:bg-[#888]"
+                }`}
+            />
+            {/* Tooltip label, appears to the left on hover (nav lives on right) */}
+            <span
+              className="absolute right-5 whitespace-nowrap text-[11px] tracking-wide pointer-events-none
+                opacity-0 group-hover/dot:opacity-100 translate-x-1 group-hover/dot:translate-x-0
+                transition-all duration-200 px-2 py-1 rounded-sm bg-[#1A1A1A] border border-white/10
+                text-[#EAEAEA]"
+            >
+              {label}
+            </span>
+          </a>
+          {/* Connector line */}
+          {i < NAV_ITEMS.length - 1 && (
+            <div className="w-[1px] h-5 bg-white/10" />
+          )}
+        </div>
+      ))}
+    </nav>
+  );
+}
+
+// ─── Back-to-Top Button (clean modern circular button) ─────────────────────
+function BackToTopButton() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setVisible(window.scrollY > window.innerHeight * 0.6);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <motion.button
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      initial={false}
+      animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 12 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50
+        w-11 h-11 rounded-full flex items-center justify-center
+        bg-white/95 hover:bg-white border border-black/5
+        shadow-[0_4px_16px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_22px_rgba(0,0,0,0.35)]
+        hover:-translate-y-0.5 active:translate-y-0
+        transition-all duration-300 backdrop-blur-sm cursor-pointer
+        ${visible ? "" : "pointer-events-none"}`}
+      aria-label="Back to top"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#0F172A"
+        strokeWidth="2.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden
+      >
+        <path d="M12 19V5" />
+        <path d="m5 12 7-7 7 7" />
+      </svg>
+    </motion.button>
+  );
+}
+
+export default function RinasPortfolio() {
+  const [pinned, setPinned] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<Category | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [hearts, setHearts] = useState<{ id: number; x: number; y: number; scale: number; rotation: number; fill: string; highlight: string; outline: string }[]>([]);
+  const [selectedProject, setSelectedProject] = useState<GridItem | null>(null);
+
+  // Filtered list mirrors what's rendered in the grid, used for modal prev/next
+  const filteredProjects = activeFilter === null
+    ? ALL_PROJECTS
+    : ALL_PROJECTS.filter(item => item.categories.includes(activeFilter));
+  const selectedIndex = selectedProject
+    ? filteredProjects.findIndex(p => p.alt === selectedProject.alt)
+    : -1;
+
+  const handleAddHearts = () => {
+    const newHearts = Array.from({ length: 4 }).map((_, i) => {
+      // Warm yellow shades to coordinate beautifully with the rose bouquet
+      const baseYellows = ["#facc15", "#fde047", "#eab308", "#ca8a04", "#b45309"];
+      const highlights = ["#fef08a", "#fef9c3", "#fef08a", "#fde047", "#ca8a04"];
+
+      const idx = Math.floor(Math.random() * baseYellows.length);
+      const randomFill = baseYellows[idx];
+      const randomHighlight = highlights[idx];
+
+      // Ring distribution so they spawn AROUND the main center heart, not on top of it!
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 40 + Math.random() * 100; // 40px to 140px away from center
+      const randomX = Math.cos(angle) * distance * 1.8; // stretched horizontally to the sides!
+      const randomY = Math.sin(angle) * distance * 0.65 - 10; // flatter vertically to avoid overlapping headers/footers!
+
+      const randomScale = 0.45 + Math.random() * 0.65; // scales dynamically from 0.45 (tiny) to 1.1 (slightly larger) for beautiful depth!
+      const randomRotation = (Math.random() - 0.5) * 40; // natural random tilt
+
+      return {
+        id: Date.now() + Math.random() + i,
+        x: randomX,
+        y: randomY,
+        scale: randomScale,
+        rotation: randomRotation,
+        fill: randomFill,
+        highlight: randomHighlight,
+        outline: "#b45309"
+      };
+    });
+    setHearts((prev) => [...prev, ...newHearts]);
+  };
+
+  const filterBarRef = useRef<HTMLDivElement>(null);
+  return (
+    /* mobile fix: MotionConfig reducedMotion="user" makes every motion.* respect prefers-reduced-motion */
+    <MotionConfig reducedMotion="user">
+      <div className={`${sans.className} min-h-screen bg-[#0C0C0C] text-[#A3A3A3] selection:bg-[#B39D82] selection:text-[#0C0C0C] font-light`}>
+
+        <ScrollNav />
+        <BackToTopButton />
+
+        {/* Subtle material texture overlay */}
+        <div className="fixed inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+
+        {/* ─── Header ─── */}
+        {/* mobile fix: tighter horizontal + top padding on phones */}
+        <header className="px-5 sm:px-8 md:px-16 pt-16 sm:pt-20 md:pt-24 pb-10 sm:pb-12 md:pb-16 max-w-[1600px] mx-auto">
+          <motion.div initial="hidden" animate="visible" variants={slowFade}
+            className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+            <div>
+              <div className="flex items-baseline gap-6 mb-6 flex-wrap sm:flex-nowrap">
+                <h1 className={`${outfit.className} text-5xl md:text-7xl font-light text-[#EAEAEA] tracking-tight`}>
+                  Rina Kim
+                </h1>
+                {/* mobile fix: bigger tap target (≥40px tall via py-2.5 + min-h on phones) and slightly larger label */}
+                <a
+                  href="/images/Resume_RinaKim.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-4 lg:px-3.5 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-sm text-[10px] lg:text-[9px] font-semibold uppercase tracking-[0.15em] border transition-all duration-300 cursor-pointer relative -translate-y-0 lg:-translate-y-[9px]
+                  bg-[#1C1A17] text-[#A3A3A3] border-[#B39D82]/40 shadow-[0_4px_12px_rgba(0,0,0,0.5)] hover:bg-[#B39D82] hover:text-[#0C0C0C] hover:border-[#B39D82] hover:shadow-[0_0_15px_rgba(179,157,130,0.35)] shrink-0"
+                >
+                  <span className="pl-[0.15em] text-center">Resume</span>
+                </a>
+              </div>
+              <p className="text-sm tracking-[0.15em] uppercase text-[#737373] mb-2">
+                <span className="font-semibold text-[#A3A3A3]">Product Designer</span>, UX/UI Design ·{" "}
+                <button
+                  type="button"
+                  onClick={() => document.getElementById("selected-projects")?.scrollIntoView({ behavior: "smooth" })}
+                  aria-label="Jump to Selected Projects"
+                  className="relative inline cursor-pointer uppercase tracking-[0.15em] transition-all duration-500 ease-out
+                  hover:text-[#EAEAEA]
+                  hover:[text-shadow:0_0_8px_rgba(234,234,234,0.45),0_0_18px_rgba(201,180,154,0.25)]"
+                >
+                  Prototyping
+                </button>
+                {" "}· Systems Thinking
+              </p>
+              <p className="text-[15px] text-[#A3A3A3] leading-relaxed max-w-xl mt-6">
+                Masters in Human-Computer Interaction from <span className="text-[#EAEAEA] font-medium">Carnegie Mellon University</span>.
+                Previously at <span className="text-[#EAEAEA] font-medium">BMW Group Technology Office</span>.
+                Specializing in Automotive HMI, Interface Design, and Rapid Prototyping that bridge research and production.
+              </p>
+            </div>
+            <div className="text-right text-sm leading-relaxed text-[#A3A3A3]">
+            </div>
+          </motion.div>
+          <motion.div initial="hidden" animate="visible" variants={lineReveal}
+            className="w-full h-[1px] bg-gradient-to-r from-[#B39D82]/40 via-[#B39D82]/10 to-transparent" />
+        </header>
+
+        {/* mobile fix: reduce side padding + section spacing on phones (was 32px/160px, now 20px/64px) */}
+        <main className="max-w-[1600px] mx-auto px-5 sm:px-8 md:px-16 pb-16 sm:pb-24 md:pb-32 space-y-16 sm:space-y-24 md:space-y-40">
+
+          {/* ─── Project 01: BMW Adaptive Generative UI ─── */}
+          <motion.article id="project-01" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade} className="group">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+
+              {/* Left, meta + content */}
+              <div className="lg:col-span-4 flex flex-col gap-8">
+                <div className="flex items-baseline gap-4">
+                  <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>01</span>
+                  <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">BMW Group</span>
+                </div>
+
+                <div>
+                  <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-1`}>
+                    Adaptive Generative UI
+                  </h2>
+                  <p className="text-[12px] tracking-widest uppercase text-[#A3A3A3] mb-6">
+                    2025 Jun – 2026 Jan &nbsp;·&nbsp; UX Engineer Intern
+                  </p>
+
+                  <div className="space-y-6 text-[15px] text-[#A3A3A3] leading-relaxed">
+                    {/* The Problem */}
+                    <div>
+                      <SectionLabel>The Problem</SectionLabel>
+                      <div className="bg-[#1A1A1A] rounded-sm p-6 border border-white/10">
+                        <p className="mb-3">
+                          In-vehicle interfaces are static. They show the same things the same way, forcing drivers to dig for information at the exact moments road conditions, fatigue, or hazards make digging dangerous.
+                        </p>
+                        <p>
+                          <span className="text-[#EAEAEA] font-medium">Design challenge:</span> Compose the interface itself from contex. Driver state, road conditions, route - instead of asking the driver to navigate to what they need.
+                        </p>
+                      </div>
+                    </div>
+
+                    <Hairline />
+
+                    {/* Overview moved to full-width row below */}
+
+                    <Hairline />
+
+                    <div>
+                      <SectionLabel>Technologies</SectionLabel>
+                      <div className="flex flex-wrap gap-2">
+                        {["React", "Three.js", "Generative AI", "Automotive UI"].map(t => (
+                          <span key={t} className="text-[11px] uppercase tracking-widest text-[#A3A3A3] border border-white/20 px-3 py-1 rounded-sm">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right, imagery */}
+              <div className="lg:col-span-8 space-y-4">
+                <div className="aspect-[21/9] overflow-hidden bg-[#141414] rounded-sm">
+                  <img loading="lazy" decoding="async" src="/images/00/neueklasse.webp" alt="BMW Interface"
+                    className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-[1.02] transition-all duration-1000 ease-out" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="aspect-video bg-[#141414] rounded-sm p-6 flex items-center justify-center">
+                    <img loading="lazy" decoding="async" src="/images/00/layers_whitetext.png" alt="Layers diagram" className="w-full h-auto opacity-90" />
+                  </div>
+                  <div className="aspect-video bg-[#141414] rounded-sm p-6 flex items-center justify-center">
+                    <img loading="lazy" decoding="async" src="/images/00/pipeline.png" alt="Pipeline diagram" className="w-full h-auto opacity-90" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Overview + Agent → Capabilities diagram (full width) */}
+              <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-16">
+                {/* Overview text */}
+                <div className="lg:col-span-5 text-[15px] text-[#A3A3A3] leading-relaxed">
+                  <SectionLabel>Overview</SectionLabel>
+                  <p>
+                    Developed a context-aware UI framework that utilizes generative models to synthesize interface components in real-time. By analyzing driver telemetry, cabin state, and environmental context, the system provides proactive information hierarchy, minimizing cognitive load while enhancing vehicle interaction.
+                  </p>
+                </div>
+
+                {/* Agent → Capabilities mapping */}
+                <div className="lg:col-span-7">
+                  <div className="bg-[#111] rounded-md border border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.55)] p-5 md:p-6">
+                    <div className="grid grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 items-stretch">
+                      {/* Agent column */}
+                      <div className="flex flex-col gap-2.5">
+                        <div className="flex items-center justify-center text-center py-2 rounded bg-[#1A1A1A] border border-[#C9B49A]/40 min-h-[36px]">
+                          <span className="text-[11px] md:text-[13px] font-medium tracking-wider text-[#EAEAEA]">Agent</span>
+                        </div>
+                        {[
+                          "Models: Plans and decides",
+                          "Tools: Acts and integrates",
+                          "Orchestration: Manages memory, tools, and errors",
+                          "Runtime: Executes",
+                        ].map((label, i) => (
+                          <div key={label} className="flex-1 flex items-center px-3 py-2.5 rounded bg-[#161616] border border-white/[0.06]">
+                            <span className="text-[#C9B49A] text-[10px] md:text-[11px] font-semibold mr-2 shrink-0">{i + 1}.</span>
+                            <span className="text-[10px] md:text-[11.5px] text-[#B0B0B0] leading-[1.35]">{label}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Arrow */}
+                      <div className="flex items-center justify-center">
+                        <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
+                          <path d="M0 9 H22 M17 3 L23 9 L17 15" stroke="#C9B49A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+
+                      {/* Capabilities column */}
+                      <div className="flex flex-col gap-2.5">
+                        <div className="flex items-center justify-center text-center py-2 rounded bg-[#1A1A1A] border border-[#C9B49A]/40 min-h-[36px]">
+                          <span className="text-[11px] md:text-[13px] font-medium tracking-wider text-[#EAEAEA]">Capabilities</span>
+                        </div>
+                        {[
+                          "Conversation Analytics",
+                          "Data Exploration",
+                          "Reasoning",
+                          "Dynamic Tool Selection",
+                          "Data Governance",
+                        ].map(cap => (
+                          <div key={cap} className="flex-1 flex items-center justify-center text-center px-3 py-2.5 rounded bg-[#161616] border border-white/[0.06]">
+                            <span className="text-[10px] md:text-[11.5px] text-[#B0B0B0] leading-[1.35]">{cap}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Key Contributions & Agent Architecture Diagram */}
+              <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div className="lg:col-span-5 space-y-3 text-[13.5px] text-[#A3A3A3] leading-relaxed">
+                  <SectionLabel>Key Contributions</SectionLabel>
+                  <ul className="space-y-2.5">
+                    <li className="flex gap-2.5">
+                      <span className="text-[#C9B49A] shrink-0">·</span>
+                      <span>Modular HMI architecture decoupling UI layout from data streams, enabling seamless adaptation to driver context.</span>
+                    </li>
+                    <li className="flex gap-2.5">
+                      <span className="text-[#C9B49A] shrink-0">·</span>
+                      <span>React-based orchestration layer synchronizing generative model outputs with vehicle displays at sub-50ms latency.</span>
+                    </li>
+                    <li className="flex gap-2.5">
+                      <span className="text-[#C9B49A] shrink-0">·</span>
+                      <span>Adaptive HMI prototype translating experimental generative design into safety-critical dashboard implementation.</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="lg:col-span-7">
+                  {/* ── Inline Agent Architecture Diagram ── */}
+                  <div className="bg-[#111] rounded-md p-5 md:p-7 border border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.55)]">
+                    {/* ── Main Agent ── */}
+                    <div className="flex justify-center mb-3">
+                      <div className="px-8 py-2.5 rounded-full border border-[#C9B49A]/40 bg-[#1A1A1A]">
+                        <span className={`${outfit.className} text-[13px] md:text-[14px] font-medium tracking-wide text-[#EAEAEA]`}>Main Agent</span>
+                      </div>
+                    </div>
+
+                    {/* ── Connector lines (SVG) ── */}
+                    <svg viewBox="0 0 500 36" className="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+                      {/* Vertical stem */}
+                      <line x1="250" y1="0" x2="250" y2="12" stroke="#C9B49A" strokeWidth="0.8" strokeDasharray="3 2" opacity="0.5" />
+                      {/* Horizontal rail */}
+                      <line x1="50" y1="12" x2="450" y2="12" stroke="#C9B49A" strokeWidth="0.8" opacity="0.35" />
+                      {/* 5 vertical drops */}
+                      {[50, 150, 250, 350, 450].map(x => (
+                        <line key={x} x1={x} y1="12" x2={x} y2="36" stroke="#C9B49A" strokeWidth="0.8" opacity="0.35" />
+                      ))}
+                    </svg>
+
+                    {/* ── Agent cards grid ── */}
+                    {/* mobile fix: 2 cols on phones, 3 on small tablets, 5 on desktop so text stays legible */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
+                      {[
+                        {
+                          agent: "Agent A",
+                          domain: "Navigation",
+                          mode: "Reachability",
+                          items: ["Navigation Mapping", "Route Itinerary Preview", "Adaptive Route Analytics", "Live Traffic", "Arrival Metrics"],
+                        },
+                        {
+                          agent: "Agent B",
+                          domain: "Comfort",
+                          mode: "Passenger",
+                          items: ["Thermal Cabin Comfort", "Visibility Optimization", "Thermodynamic Seating", "Spa Mode"],
+                        },
+                        {
+                          agent: "Agent C",
+                          domain: "Weather",
+                          mode: "Road Focus",
+                          items: ["Microclimate & Destination Outlook", "En-Route Environmental Timeline", "Active Weather Advisories", "Predictive Road Analytics"],
+                        },
+                        {
+                          agent: "Agent D",
+                          domain: "Media",
+                          mode: "Entertainment",
+                          items: ["Playback Control", "Music Queue", "Audio Engineering", "Source Switching", "Multizone Audio", "Podcast Audiobook Control"],
+                        },
+                        {
+                          agent: "Agent E",
+                          domain: "Vehicle Shadow",
+                          mode: "Vehicle Health",
+                          items: ["Tire Pressure Analytics", "Engine Oil Level Metrics", "Incident Telemetry Recorder", "Hydraulic Brake Fluid Integrity", "Kinetic Brake Pad Wear Analytics"],
+                        },
+                      ].map(({ agent, domain, mode, items }) => (
+                        <div key={agent} className="flex flex-col gap-2">
+                          {/* Agent header, fixed min-height so single & double-line labels align */}
+                          <div className="flex flex-col items-center justify-center text-center px-1 py-1.5 rounded border border-[#C9B49A]/30 bg-[#1A1A1A] min-h-[44px]">
+                            {/* mobile fix: 11px when cards are 2-up on phone; tighten to 10px at desktop's 5-up density */}
+                            <span className="block text-[11px] lg:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
+                              {agent}
+                            </span>
+                            <span className="block text-[11px] lg:text-[10px] font-medium tracking-wider text-[#EAEAEA] leading-[1.25]">
+                              {domain}
+                            </span>
+                          </div>
+
+                          {/* Capability list, flex-1 stretches all cards to equal height */}
+                          <div className="flex-1 rounded bg-[#161616] border border-white/[0.04] px-2.5 py-2.5">
+                            <ul className="space-y-[4px]">
+                              {items.map(item => (
+                                <li key={item} className="flex gap-1.5 items-start">
+                                  {/* mobile fix: bullet readable on phones (was 6px) */}
+                                  <span className="text-[#C9B49A] text-[9px] lg:text-[7px] mt-[4px] shrink-0">•</span>
+                                  {/* mobile fix: body 11px on phones (was 7px → illegible) */}
+                                  <span className="text-[11px] lg:text-[8.5px] text-[#B0B0B0] leading-[1.35]">{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Mode badge, fixed min-height so single & double-line labels align */}
+                          <div className="flex items-center justify-center text-center px-1 py-1 rounded bg-[#1A1A1A] border border-[#C9B49A]/20 min-h-[26px]">
+                            {/* mobile fix: legible mode label on phones */}
+                            <span className="text-[10px] lg:text-[9px] font-semibold uppercase tracking-[0.12em] text-[#C9B49A] leading-[1.2]">{mode} Mode</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* ── Expanded case-study content ── */}
+            <div className="mt-20 space-y-20">
+
+              {/* Project Brief */}
+              {/* <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              <div className="lg:col-span-4">
+                <SectionLabel>Project Brief</SectionLabel>
+                <div className="space-y-2 text-[13px] text-[#A3A3A3]">
+                  <p><span className="text-[#C9B49A]">Project</span>, Adaptive In-Vehicle AI Interface</p>
+                  <p><span className="text-[#C9B49A]">Timeline</span>, June – December 2025</p>
+                  <p><span className="text-[#C9B49A]">Role</span>, UX Research · Interaction Design · Prototyping</p>
+                  <p><span className="text-[#C9B49A]">Unit</span>, BMW Group · ZI-14 · Automotive HMI</p>
+                </div>
+              </div>
+              <div className="lg:col-span-8">
+                <p className="text-[15px] text-[#A3A3A3] leading-relaxed mb-5">
+                  In-vehicle interfaces are static. They present information uniformly regardless of who is driving, what conditions exist outside, or what cognitive demands the driver is already managing.
+                </p>
+                <div className="border-l-2 border-[#B39D82]/40 pl-5 py-1">
+                  <p className="text-[15px] text-[#EAEAEA] leading-relaxed italic">
+                    Design a generative UI system for the BMW X5 that dynamically composes its own interface in response to driver state, environment, and task context, reducing cognitive load while surfacing the right information at the right moment.
+                  </p>
+                </div>
+              </div>
+            </div> */}
+
+
+              <Hairline />
+
+              {/* Research & Design Timeline */}
+              {/* <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              <div className="lg:col-span-4">
+                <SectionLabel>Research &amp; Design Timeline</SectionLabel>
+                <p className="text-[13px] text-[#A3A3A3] leading-relaxed">
+                  Work ran across two parallel tracks: <span className="text-[#EAEAEA]">ORPHEO</span> (interaction design, generative UI architecture, high-fidelity prototyping) and <span className="text-[#EAEAEA]">ALPHA</span> (physiological sensor integration, research framework design, usability testing and data collection).
+                </p>
+              </div>
+              <div className="lg:col-span-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {[
+                    { month: "Jun", phase: "Onboarding & Discovery" },
+                    { month: "Jul", phase: "Ideation" },
+                    { month: "Aug", phase: "Concept Pitch + Sensors" },
+                    { month: "Sep", phase: "Research Framework" },
+                    { month: "Oct", phase: "Usability Testing + Iteration" },
+                    { month: "Nov", phase: "Refinement + Testing" },
+                    { month: "Dec", phase: "Final Design Delivery" },
+                  ].map(({ month, phase }) => (
+                    <div key={month} className="bg-[#141414] rounded-sm px-4 py-3 border border-white/5">
+                      <span className="block text-[11px] uppercase tracking-widest text-[#C9B49A] mb-1">{month}</span>
+                      <span className="text-[13px] text-[#A3A3A3]">{phase}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div> */}
+
+
+              <Hairline />
+
+              {/* Skills Applied */}
+              <div>
+                <SectionLabel>Skills Applied</SectionLabel>
+                <div className="overflow-hidden rounded-sm border border-white/8">
+                  {[
+                    { area: "UX Research", detail: "Interpreted biometric and behavioral signals through scenario-based testing to surface interaction principles for high-stakes, low-attention driving contexts" },
+                    { area: "Interaction Design", detail: "Designed a generative UI system with context-gated surfacing and glance-budget constraints, prototyped through adaptive driving modes in Figma" },
+                    { area: "Systems Thinking", detail: "Modeled multi-agent orchestration across sensor, context, and intent layers to map real-time inputs into legible, prioritized UI decisions" },
+                    { area: "Cross-functional", detail: "Translated raw sensor outputs and engineering constraints into shared design requirements, aligning research, product, and engineering on what the car should show and when" },
+                    /* mobile fix: stack the area label above the detail on phones; restore 3/9 row at md+ */
+                  ].map(({ area, detail }, i) => (
+                    <div key={area} className={`grid grid-cols-1 md:grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
+                      <div className="md:col-span-3 px-4 pt-4 pb-1 md:py-4 md:border-r border-white/5">
+                        <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{area}</span>
+                      </div>
+                      <div className="md:col-span-9 px-4 pb-4 pt-1 md:py-4">
+                        <span className="text-[14px] md:text-[13px] text-[#A3A3A3] leading-relaxed">{detail}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Research Approach, hidden */}
+              <div className="hidden">
+                <SectionLabel>Research Approach</SectionLabel>
+                <p className="text-[14px] text-[#A3A3A3] leading-relaxed max-w-2xl mb-8">
+                  Grounded in two complementary methods: physiological measurement to capture what drivers cannot self-report, and structured usability testing to observe how they interact with dynamic interfaces.
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  {[
+                    {
+                      title: "Physiological Data Collection",
+                      body: "Integrated a multi-sensor pipeline to capture driver state data that feeds directly into the UI's context gating logic. Design decisions grounded in measurable cognitive and physiological signals rather than self-reported preference alone.",
+                      meta: [
+                        { label: "Method", value: "Multi-sensor capture" },
+                        { label: "Instruments", value: "PSI · PPG · HR · CRM" },
+                        { label: "Output", value: "CSV pipeline → context gating" },
+                      ],
+                      icon: (
+                        // Waveform / pulse, biometric capture
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                          <path d="M2 12h3l2-6 3 12 3-9 2 5 2-2h5" />
+                        </svg>
+                      ),
+                    },
+                    {
+                      title: "Usability Testing Framework",
+                      body: "Designed a structured testing framework to evaluate how drivers interact with dynamically generated interfaces under varying scenario conditions. Findings directly informed iteration on the isochrone GenUI concept and real-time layout logic.",
+                      meta: [
+                        { label: "Method", value: "Scenario-based task testing" },
+                        { label: "Window", value: "Oct – Nov 2025" },
+                        { label: "Output", value: "GenUI iteration · layout logic" },
+                      ],
+                      icon: (
+                        // Clipboard checklist, structured testing
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                          <rect x="5" y="4" width="14" height="17" rx="1.5" />
+                          <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" />
+                          <path d="M8.5 11l1.5 1.5L13 9.5" />
+                          <path d="M8.5 16l1.5 1.5L13 14.5" />
+                        </svg>
+                      ),
+                    },
+                  ].map(({ title, body, meta, icon }) => (
+                    <div key={title} className="bg-[#141414] rounded-sm border border-white/5 p-6 flex flex-col gap-5">
+                      {/* Header, icon + title */}
+                      <div className="flex items-center gap-3">
+                        <span className="w-9 h-9 rounded-sm flex items-center justify-center border border-[#C9B49A]/30 bg-[#1A1A1A] text-[#C9B49A] shrink-0">
+                          {icon}
+                        </span>
+                        <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{title}</span>
+                      </div>
+
+                      {/* Body */}
+                      <p className="text-[14px] text-[#A3A3A3] leading-relaxed">
+                        {body}
+                      </p>
+
+                      {/* Methods strip */}
+                      <div className="border-t border-white/5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-3">
+                        {meta.map(({ label, value }) => (
+                          <div key={label} className="flex flex-col gap-1 min-w-0">
+                            <span className="text-[9px] uppercase tracking-[0.2em] text-[#737373]">{label}</span>
+                            <span className="text-[12px] text-[#EAEAEA] leading-snug break-words">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Hairline />
+
+              {/* Key Design Decisions */}
+              <div>
+                <SectionLabel>Key Design Decisions</SectionLabel>
+                <p className="text-[14px] text-[#A3A3A3] mb-8">Three principles shaped every design decision across the project.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    {
+                      title: "Surface, don\u2019t bury",
+                      body: "Information the driver needs appears without navigation. The interface assembles itself around context \u2014 snowy roads, an incoming call, a known route \u2014 rather than waiting for the driver to request it.",
+                      icon: (
+                        // Eye \u2014 visibility / surface
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      ),
+                    },
+                    {
+                      title: "Minimum viable glance",
+                      body: "Every screen evaluated against a glance budget. Safety-critical data chunked into scannable modules readable in under two seconds without sustained visual attention.",
+                      icon: (
+                        // Stopwatch \u2014 glance budget
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                          <circle cx="12" cy="14" r="7" />
+                          <path d="M12 10v4l2 2" />
+                          <path d="M9 3h6" />
+                          <path d="M12 3v3" />
+                        </svg>
+                      ),
+                    },
+                    {
+                      title: "State over preference",
+                      body: "Driver state data \u2014 fatigue signals, cognitive load, speed \u2014 gates what is shown and how. Comfort controls auto-adjust. Map overlays appear and collapse based on current capacity, not just settings.",
+                      icon: (
+                        // Pulse line \u2014 biometric / state
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                          <path d="M3 12h4l2-5 3 10 2-7 2 4 2-2h3" />
+                        </svg>
+                      ),
+                    },
+                    {
+                      title: "Context continuity",
+                      body: "The system maintains awareness across modes \u2014 navigation, comfort, media, vehicle health \u2014 orchestrating agents so decisions in one domain inform layout choices in another.",
+                      icon: (
+                        // Connected nodes \u2014 orchestration / network
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                          <circle cx="5" cy="6" r="2" />
+                          <circle cx="19" cy="6" r="2" />
+                          <circle cx="12" cy="18" r="2" />
+                          <path d="M6.5 7.3 10.7 16.7" />
+                          <path d="M17.5 7.3 13.3 16.7" />
+                          <path d="M7 6h10" />
+                        </svg>
+                      ),
+                    },
+                  ].map(({ title, body, icon }) => (
+                    <div key={title} className="bg-[#141414] rounded-sm p-6 border border-white/5 flex flex-col gap-3">
+                      <span className="w-9 h-9 rounded-sm flex items-center justify-center border border-[#C9B49A]/30 bg-[#1A1A1A] text-[#C9B49A]">
+                        {icon}
+                      </span>
+                      <span className="text-[#EAEAEA] text-[13px] font-medium">{title}</span>
+                      <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{body}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Hairline />
+
+              {/* Interaction Model */}
+              <div>
+                <SectionLabel>Interaction Model</SectionLabel>
+                <div className="rounded-sm border border-white/8 bg-[#141414] p-8">
+                  <p className="text-[13px] text-[#A3A3A3] leading-relaxed mb-8 max-w-xl">
+                    Voice and sensor input become generators of new interface components. The driver does not navigate, the interface responds.
+                  </p>
+
+                  {/* Flow */}
+                  <div className="flex flex-col gap-0">
+                    {[
+                      { step: "01", label: "Driver Input", sub: "Voice · Sensor · Telemetry" },
+                      { step: "02", label: "Intent Parsing", sub: "NLP · Context classification" },
+                      { step: "03", label: "UI Generation", sub: "Component synthesis · Agent selection" },
+                      { step: "04", label: "Layout Orchestration", sub: "Priority scoring · Glance-budget check" },
+                      { step: "05", label: "Rendered Interface", sub: "Sub-50ms · Auto-dismissed when resolved", hoverImage: "/images/00/BMW_Roadstoavoid.png" },
+                    ].map(({ step, label, sub, hoverImage }, i, arr) => (
+                      <div key={step} className={`flex flex-col relative ${hoverImage ? "group/step" : ""}`}>
+                        <div className="flex items-center gap-5">
+                          {/* Step number + node */}
+                          <div className="flex flex-col items-center" style={{ width: 36 }}>
+                            <div className={`w-9 h-9 rounded-sm flex items-center justify-center border ${i === arr.length - 1 ? "border-[#C9B49A]/60 bg-[#C9B49A]/10" : "border-white/10 bg-[#1a1a1a]"}`}>
+                              <span className="text-[10px] tracking-widest text-[#C9B49A]">{step}</span>
+                            </div>
+                          </div>
+                          {/* Label */}
+                          <div className={`min-w-0 ${hoverImage ? "cursor-default" : ""}`}>
+                            <p className={`text-[13px] font-medium tracking-wide ${i === arr.length - 1 ? "text-[#C9B49A]" : "text-[#E5E5E5]"}`}>
+                              {label}
+                              {hoverImage && (
+                                <span className="ml-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-sm bg-white/10 text-[9px] uppercase tracking-widest text-white/70">
+                                  Hover Me
+                                </span>
+                              )}
+                            </p>
+                            <p className="text-[11px] text-[#555] tracking-wide mt-0.5">{sub}</p>
+                          </div>
+                        </div>
+                        {/* Connector */}
+                        {i < arr.length - 1 && (
+                          <div className="flex items-start gap-5">
+                            <div style={{ width: 36 }} className="flex justify-center">
+                              <div className="w-px h-6 bg-white/8" />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Hover image panel */}
+                        {/* mobile fix: hidden on phones/tablets (hover-only affordance + would overflow viewport); shown at md+ */}
+                        {hoverImage && (
+                          <div
+                            className="hidden md:block absolute left-[280px] top-1/2 -translate-y-1/2 z-50 w-[300px] md:w-[400px]
+                            opacity-0 translate-x-4 pointer-events-none group-hover/step:opacity-100 group-hover/step:translate-x-0
+                            transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                          >
+                            <div className="relative rounded-md border border-white/10 bg-[#0C0C0C] shadow-[0_0_40px_rgba(0,0,0,0.8)] overflow-hidden p-1">
+                              <img
+                                src={hoverImage}
+                                alt={label}
+                                className="w-full h-auto object-cover rounded-sm"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Example callout */}
+                  <div className="mt-8 border border-white/8 rounded-sm bg-[#111] p-4">
+                    <p className="text-[10px] uppercase tracking-widest text-[#C9B49A] mb-2">Example</p>
+                    <p className="text-[12px] text-[#A3A3A3] leading-relaxed break-words whitespace-normal">
+                      Driver says <span className="text-[#E5E5E5]">"Show me roads to avoid"</span> during a snowstorm → system generates a contextual map overlay with icy patch markers, congestion warnings, and a black ice alert, assembled on demand, dismissed automatically when conditions clear.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <Hairline />
+
+              {/* High-Fidelity Screens */}
+              <div>
+                <SectionLabel>High-Fidelity Screens</SectionLabel>
+                <p className="text-[13px] text-[#A3A3A3] mb-8 max-w-2xl break-words whitespace-normal">
+                  Designed in Figma, validated against one primary scenario, Kennedy Expressway, Chicago, 32°F. High information density, genuine safety stakes.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { title: "Passenger Comfort Panel", body: "Identity, dual-zone temp, seat controls, tire pressure, and range, one glanceable view. No multi-step navigation." },
+                    { title: "Danger Zone Map Overlay", body: "Icy patch markers, congestion flags, and black ice alert. Auto-surfaces on weather trigger. Dismissed when conditions clear." },
+                    { title: "Snow Readiness Module", body: "Tire pressure, brake wear, road focus mode, heated steering, assembled proactively. Surfaces without being asked." },
+                    { title: "Climate Ring Display", body: "Dual-zone temp as ambient rings in the instrument cluster. Communicates state without pulling sustained attention from the road." },
+                  ].map(({ title, body }) => (
+                    <div key={title} className="bg-[#141414] rounded-sm p-6 border border-white/5">
+                      <p className="text-[11px] uppercase tracking-widest text-[#C9B49A] mb-2">{title}</p>
+                      <p className="text-[13px] text-[#A3A3A3] leading-relaxed">{body}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Hairline />
+
+              {/* Industry Exposure */}
+              {/* <div>
+              <SectionLabel>Industry Exposure</SectionLabel>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div className="bg-[#141414] rounded-sm p-6 border border-white/5 space-y-4">
+                  <div>
+                    <p className="text-[#EAEAEA] text-[14px] font-medium mb-0.5">Stanford HAI</p>
+                    <p className="text-[11px] uppercase tracking-widest text-[#C9B49A]">September 2025 · Human-Centered AI Symposium</p>
+                  </div>
+                  <ul className="space-y-2">
+                    {[
+                      "Agents are shifting from features within an interface to the interface layer itself \u2014 validating the GenUI orchestrator approach.",
+                      "Stanford Medicine\u2019s EHR integration showed AI can move fast in high-stakes, regulated environments \u2014 relevant to automotive safety constraints.",
+                      "Haptic and relational modalities are the next frontier for building user trust beyond text \u2014 directly applicable to low-glance HMI design.",
+                    ].map((item, i) => (
+                      <li key={i} className="flex gap-3 text-[13px] text-[#A3A3A3] leading-relaxed list-none">
+                        <span className="text-[#C9B49A] shrink-0 mt-0.5">\u2014</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-[#141414] rounded-sm p-6 border border-white/5 space-y-4">
+                  <div>
+                    <p className="text-[#EAEAEA] text-[14px] font-medium mb-0.5">Google DevFest SV</p>
+                    <p className="text-[11px] uppercase tracking-widest text-[#C9B49A]">November 2025 · Google Developer Groups</p>
+                  </div>
+                  <ul className="space-y-2">
+                    {[
+                      "The four-stage agent lifecycle (Models, Tools, Orchestration, Runtime) gave clearer language for structuring the orchestrator\u2019s decision logic in design documentation.",
+                      "Trajectory scoring and hallucination checks as evaluation metrics informed how I thought about testing GenUI consistency across scenarios.",
+                      "The shift from writing code to orchestrating agent \u2018brains\u2019 mirrors the shift from designing screens to designing decision systems.",
+                    ].map((item, i) => (
+                      <li key={i} className="flex gap-3 text-[13px] text-[#A3A3A3] leading-relaxed list-none">
+                        <span className="text-[#C9B49A] shrink-0 mt-0.5">\u2014</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div> */}
+
+              <Hairline />
+
+              {/* IND / myPPMI Relevance */}
+              {/* <div>
+              <SectionLabel>Why This Work Is Relevant to IND / myPPMI.org</SectionLabel>
+              <p className="text-[14px] text-[#A3A3A3] mb-6 max-w-2xl leading-relaxed">
+                Designing for drivers navigating complex, high-stakes environments and designing for Parkinson&apos;s research participants managing their own health data share the same fundamental challenge: <span className="text-[#EAEAEA]">surface what matters, reduce friction, and never assume a fixed user state.</span>
+              </p>
+              <div className="overflow-hidden rounded-sm border border-white/8">
+                {[
+                  { theme: "Adaptive accessibility", connection: "Designing UI that responds to driver state \u2014 fatigue, cognitive load, motor engagement \u2014 maps directly to designing for PPMI\u2019s participant base: older adults, those with motor symptoms, and users across widely varying digital literacy levels." },
+                  { theme: "Research-to-design synthesis", connection: "I built the research framework and used sensor data to drive interface decisions \u2014 not as a handoff but as a continuous loop. IND needs the same: qualitative and quantitative research translated into actionable design for myPPMI." },
+                  { theme: "Complex data, human interface", connection: "Translating multi-sensor physiological data into glanceable, non-clinical UI is the same problem as making Parkinson\u2019s biomarker data meaningful and accessible to participants who are not researchers." },
+                  { theme: "Global, inclusive design", connection: "Multi-modal, multi-context design for an international platform (50+ BMW markets) developed habits of localization and cultural flexibility directly applicable to PPMI\u2019s 50+ global clinical sites." },
+                  { theme: "Healthcare AI context", connection: "Stanford HAI exposure to AI integration in regulated clinical environments (Epic/EHR) provides relevant context for designing responsibly within IND\u2019s research and compliance constraints." },
+                ].map(({ theme, connection }, i) => (
+                  <div key={theme} className={`grid grid-cols-12 border-b border-white/5 last:border-b-0 ${i % 2 === 0 ? "bg-[#141414]" : "bg-[#111]"}`}>
+                    <div className="col-span-3 p-4 border-r border-white/5">
+                      <span className="text-[12px] uppercase tracking-widest text-[#C9B49A]">{theme}</span>
+                    </div>
+                    <div className="col-span-9 p-4">
+                      <span className="text-[13px] text-[#A3A3A3] leading-relaxed">{connection}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div> */}
+
+            </div>
+          </motion.article>
+
+          {/* ─── Project 02: SmaSH Lab | Proactive Agent ─── */}
+          <motion.article id="project-02" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+
+              {/* Right, imagery */}
+              <div className="lg:col-span-6 order-2 space-y-4">
+                {/* ── Inline Speech-Flow Chart (translucent navy panel) ── */}
+                <div
+                  className="rounded-md border border-[#60A5FA]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md"
+                  style={{ background: "rgba(11, 28, 48, 0.55)" }}
+                >
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-[10px] uppercase tracking-[0.24em] text-[#7DD3FC] font-semibold">Speech Pipeline</span>
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-slate-400">Real-time</span>
+                  </div>
+
+                  {/* Sample utterance caption */}
+                  <p className="text-[11px] md:text-[12px] text-slate-400 italic mb-5 leading-snug">
+                    Sample input: <span className="text-slate-200 not-italic">&ldquo;hey um, can you turn up the… volume thing?&rdquo;</span>
+                  </p>
+
+                  {/* Flow chart SVG */}
+                  <svg
+                    viewBox="0 0 1000 1140"
+                    className="w-full h-auto block"
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{ fontFamily: "inherit" }}
+                  >
+                    <defs>
+                      {/* Arrow marker */}
+                      <marker id="pa-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M0,1 L9,5 L0,9 Z" fill="#60A5FA" />
+                      </marker>
+                      {/* Soft drop shadow for boxes */}
+                      <filter id="pa-shadow" x="-5%" y="-5%" width="110%" height="120%">
+                        <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#0F172A" floodOpacity="0.10" />
+                      </filter>
+                    </defs>
+
+                    {/* ── 1. User Input Speech, pill ── */}
+                    <g filter="url(#pa-shadow)">
+                      <rect x="40" y="14" width="560" height="100" rx="50" fill="white" stroke="#60A5FA" strokeWidth="3" />
+                    </g>
+                    <text x="320" y="64" textAnchor="middle" dominantBaseline="central"
+                      fontSize="26" fontWeight="700" fill="#0F172A">User Input Speech</text>
+
+                    {/* Dashed connector with open dots (source link) */}
+                    <circle cx="320" cy="124" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+                    <line x1="320" y1="132" x2="320" y2="184" stroke="#60A5FA" strokeWidth="2" strokeDasharray="6 6" />
+                    <circle cx="320" cy="192" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+
+                    {/* ── 2. Audio Dataset, large rounded rect with list ── */}
+                    <g filter="url(#pa-shadow)">
+                      <rect x="40" y="200" width="560" height="320" rx="22" fill="white" stroke="#60A5FA" strokeWidth="3" />
+                    </g>
+                    <text x="90" y="246" fontSize="26" fontWeight="700" fill="#0F172A">Audio Dataset</text>
+                    {[
+                      "Prompt Relevant Speech File",
+                      "Prompt Irrelevant Speech Files",
+                      "Formal Speech Files",
+                      "Informal Speech Files",
+                      "Background Noise Speech Files",
+                    ].map((item, i) => {
+                      const y = 308 + i * 38;
+                      return (
+                        <g key={item}>
+                          <circle cx="130" cy={y - 5} r="3.5" fill="#0F172A" />
+                          <text x="150" y={y} fontSize="18" fill="#1E293B">{item}</text>
+                        </g>
+                      );
+                    })}
+
+                    {/* Connector ↓ to Speech To Text */}
+                    <circle cx="320" cy="528" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+                    <line x1="320" y1="536" x2="320" y2="588" stroke="#60A5FA" strokeWidth="2.5" markerEnd="url(#pa-arrow)" />
+
+                    {/* ── 3. Speech To Text, rounded rect ── */}
+                    <g filter="url(#pa-shadow)">
+                      <rect x="40" y="598" width="560" height="140" rx="22" fill="white" stroke="#60A5FA" strokeWidth="3" />
+                    </g>
+                    <text x="320" y="650" textAnchor="middle" dominantBaseline="central"
+                      fontSize="26" fontWeight="700" fill="#0F172A">Speech To Text</text>
+                    <text x="320" y="694" textAnchor="middle" dominantBaseline="central"
+                      fontSize="22" fontWeight="700" fill="#0F172A">NLP + Semantic Analysis</text>
+
+                    {/* Side annotation: Labeled Audio Dataset */}
+                    <line x1="600" y1="668" x2="668" y2="668" stroke="#60A5FA" strokeWidth="2" strokeDasharray="5 5" />
+                    <rect x="668" y="618" width="3" height="100" fill="#60A5FA" />
+                    <g filter="url(#pa-shadow)">
+                      <rect x="680" y="610" width="290" height="116" rx="6" fill="#EFF6FF" stroke="#60A5FA" strokeWidth="1.8" />
+                    </g>
+                    <text x="700" y="646" fontSize="16" fontWeight="700" fill="#0F172A">Labeled Audio Dataset:</text>
+                    <text x="700" y="676" fontSize="15" fill="#1E293B">For validating semantic</text>
+                    <text x="700" y="696" fontSize="15" fill="#1E293B">recognition</text>
+
+                    {/* Connector ↓ to Classification */}
+                    <circle cx="320" cy="746" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+                    <line x1="320" y1="754" x2="320" y2="794" stroke="#60A5FA" strokeWidth="2.5" markerEnd="url(#pa-arrow)" />
+
+                    {/* ── 4. Classification, diamond ── */}
+                    <g filter="url(#pa-shadow)">
+                      <polygon points="320,800 530,920 320,1040 110,920"
+                        fill="white" stroke="#60A5FA" strokeWidth="3" strokeLinejoin="round" />
+                    </g>
+                    <text x="320" y="900" textAnchor="middle" dominantBaseline="central"
+                      fontSize="24" fontWeight="700" fill="#0F172A">Classification</text>
+                    {/* Sub-question with bullet */}
+                    <circle cx="208" cy="938" r="3.5" fill="#0F172A" />
+                    <text x="222" y="942" fontSize="17" fill="#1E293B">Are semantics relevant</text>
+                    <text x="222" y="966" fontSize="17" fill="#1E293B">to the system?</text>
+
+                    {/* Side annotation: Evaluation notes */}
+                    <line x1="530" y1="920" x2="668" y2="920" stroke="#60A5FA" strokeWidth="2" strokeDasharray="5 5" />
+                    <rect x="668" y="830" width="3" height="180" fill="#60A5FA" />
+                    <g filter="url(#pa-shadow)">
+                      <rect x="680" y="820" width="290" height="200" rx="6" fill="#EFF6FF" stroke="#60A5FA" strokeWidth="1.8" />
+                    </g>
+                    {/* Annotation text, two bullet entries */}
+                    <text x="700" y="858" fontSize="14" fill="#3B82F6" fontWeight="700">▸</text>
+                    <text x="718" y="858" fontSize="14" fill="#1E293B">In evaluation, loop through all</text>
+                    <text x="718" y="878" fontSize="14" fill="#1E293B">audio files/dataset to calculate</text>
+                    <text x="718" y="898" fontSize="14" fill="#1E293B">accuracy</text>
+                    <text x="700" y="938" fontSize="14" fill="#3B82F6" fontWeight="700">▸</text>
+                    <text x="718" y="938" fontSize="14" fill="#1E293B">the evaluation process involves</text>
+                    <text x="718" y="958" fontSize="14" fill="#1E293B">systematically looping through all</text>
+                    <text x="718" y="978" fontSize="14" fill="#1E293B">audio files to calculate model</text>
+                    <text x="718" y="998" fontSize="14" fill="#1E293B">accuracy.</text>
+
+                    {/* Branch connector, open dot at diamond bottom */}
+                    <circle cx="320" cy="1046" r="5" fill="white" stroke="#60A5FA" strokeWidth="2" />
+
+                    {/* YES branch, left, with rounded turn */}
+                    <path d="M 320 1054 L 320 1066 Q 320 1078 308 1078 L 152 1078 Q 140 1078 140 1090 L 140 1108"
+                      stroke="#60A5FA" strokeWidth="2.5" fill="none" markerEnd="url(#pa-arrow)" strokeLinejoin="round" strokeLinecap="round" />
+
+                    {/* NO branch, right, with rounded turn */}
+                    <path d="M 320 1054 L 320 1066 Q 320 1078 332 1078 L 488 1078 Q 500 1078 500 1090 L 500 1108"
+                      stroke="#60A5FA" strokeWidth="2.5" fill="none" markerEnd="url(#pa-arrow)" strokeLinejoin="round" strokeLinecap="round" />
+
+                    {/* Check badge, YES */}
+                    <g filter="url(#pa-shadow)">
+                      <circle cx="140" cy="1098" r="18" fill="#60A5FA" stroke="white" strokeWidth="2" />
+                    </g>
+                    <path d="M 131 1098 L 138 1105 L 150 1092" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+
+                    {/* X badge, NO */}
+                    <g filter="url(#pa-shadow)">
+                      <circle cx="500" cy="1098" r="18" fill="#60A5FA" stroke="white" strokeWidth="2" />
+                    </g>
+                    <path d="M 491 1089 L 509 1107 M 509 1089 L 491 1107" stroke="white" strokeWidth="2.6" strokeLinecap="round" fill="none" />
+                  </svg>
+
+                  {/* Output row, Agent Responds | Agent Ignores */}
+                  <div className="grid grid-cols-2 gap-4 -mt-2">
+                    <div className="rounded-2xl border-[3px] border-[#60A5FA] bg-white shadow-[0_4px_14px_rgba(15,23,42,0.10)] py-4 px-4 text-center">
+                      <span className="text-[15px] md:text-[17px] font-bold text-slate-900 tracking-tight">Agent Responds</span>
+                    </div>
+                    <div className="rounded-2xl border-[3px] border-[#60A5FA] bg-white shadow-[0_4px_14px_rgba(15,23,42,0.10)] py-4 px-4 text-center">
+                      <span className="text-[15px] md:text-[17px] font-bold text-slate-900 tracking-tight">Agent Ignores</span>
+                    </div>
+                  </div>
+
+                  {/* Footer metric */}
+                  <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
+                    <span className="text-[9px] uppercase tracking-[0.22em] text-slate-400">Classification Accuracy</span>
+                    <span className={`${outfit.className} text-[16px] text-white font-light`}>&gt;90<span className="text-[#7DD3FC]">%</span></span>
+                  </div>
+                </div>
+                {/* NLP diagram */}
+                {/* <div className="bg-[#141414] rounded-sm p-6 flex items-center justify-center">
+                <img loading="lazy" decoding="async" src="/images/01/NLP01.png" alt="NLP Semantic Analysis" className="w-[85%] h-auto opacity-70 invert" />
+              </div> */}
+                {/* ── Response Accuracy, Formal vs Informal Comparison ── */}
+                <div
+                  className="rounded-md border border-[#60A5FA]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md"
+                  style={{ background: "rgba(11, 28, 48, 0.55)" }}
+                >
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-[10px] uppercase tracking-[0.24em] text-[#7DD3FC] font-semibold">Response Accuracy</span>
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-slate-400">Formal vs Informal</span>
+                  </div>
+
+                  {/* Caption */}
+                  <p className="text-[11px] md:text-[12px] text-slate-400 italic mb-5 leading-snug">
+                    Classification accuracy across speech conditions, split by speaking style.
+                  </p>
+
+                  {/* Legend */}
+                  <div className="flex items-center gap-5 mb-6 pb-4 border-b border-white/10">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-sm" style={{ background: "linear-gradient(90deg,#38BDF8,#7DD3FC)", boxShadow: "0 0 8px rgba(56,189,248,0.5)" }} />
+                      <span className="text-[10.5px] uppercase tracking-[0.18em] text-slate-200 font-medium">Formal</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-sm border border-[#7DD3FC]/60" style={{ background: "rgba(125,211,252,0.15)" }} />
+                      <span className="text-[10.5px] uppercase tracking-[0.18em] text-slate-200 font-medium">Informal</span>
+                    </div>
+                  </div>
+
+                  {/* Vertical double-bar chart */}
+                  {(() => {
+                    const data = [
+                      { condition: "Prompt Relevant", formal: 96, informal: 93 },
+                      { condition: "Prompt Irrelevant", formal: 94, informal: 90 },
+                      { condition: "Background Noise", formal: 89, informal: 84 },
+                    ];
+                    return (
+                      <div>
+                        {/* Chart area */}
+                        <div className="relative pt-6" style={{ height: 280 }}>
+                          {/* Y-axis labels */}
+                          <div className="absolute left-0 top-6 bottom-7 w-7 flex flex-col justify-between items-end text-[9px] text-slate-500 tracking-wide">
+                            <span>100</span>
+                            <span>75</span>
+                            <span>50</span>
+                            <span>25</span>
+                            <span>0</span>
+                          </div>
+
+                          {/* Plot area */}
+                          <div className="absolute left-9 right-2 top-6 bottom-7">
+                            {/* Horizontal gridlines */}
+                            {[0, 25, 50, 75, 100].map(v => (
+                              <div
+                                key={v}
+                                className="absolute left-0 right-0 h-px bg-white/[0.06]"
+                                style={{ bottom: `${v}%` }}
+                              />
+                            ))}
+
+                            {/* Bar groups */}
+                            <div className="absolute inset-0 flex items-end justify-around">
+                              {data.map(({ condition, formal, informal }, i) => (
+                                <div key={condition} className="relative flex items-end gap-1.5 h-full">
+                                  {/* Formal bar column */}
+                                  <div className="relative h-full w-9 md:w-11">
+                                    {/* Value label */}
+                                    <span
+                                      className={`${outfit.className} absolute left-1/2 -translate-x-1/2 text-[10.5px] md:text-[11.5px] text-white font-light whitespace-nowrap`}
+                                      style={{ bottom: `calc(${formal}% + 4px)` }}
+                                    >
+                                      {formal}<span className="text-[#7DD3FC] text-[8.5px]">%</span>
+                                    </span>
+                                    {/* Bar */}
+                                    <motion.div
+                                      initial={{ height: 0 }}
+                                      whileInView={{ height: `${formal}%` }}
+                                      viewport={{ once: true, margin: "-10%" }}
+                                      transition={{ duration: 1.2, delay: i * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+                                      className="absolute bottom-0 left-0 right-0 rounded-t-md"
+                                      style={{
+                                        background: "linear-gradient(180deg, #7DD3FC 0%, #38BDF8 100%)",
+                                        boxShadow: "0 0 12px rgba(56,189,248,0.4)",
+                                      }}
+                                    />
+                                  </div>
+
+                                  {/* Informal bar column */}
+                                  <div className="relative h-full w-9 md:w-11">
+                                    <span
+                                      className={`${outfit.className} absolute left-1/2 -translate-x-1/2 text-[10.5px] md:text-[11.5px] text-slate-200 font-light whitespace-nowrap`}
+                                      style={{ bottom: `calc(${informal}% + 4px)` }}
+                                    >
+                                      {informal}<span className="text-[#7DD3FC] text-[8.5px]">%</span>
+                                    </span>
+                                    <motion.div
+                                      initial={{ height: 0 }}
+                                      whileInView={{ height: `${informal}%` }}
+                                      viewport={{ once: true, margin: "-10%" }}
+                                      transition={{ duration: 1.2, delay: i * 0.15 + 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                                      className="absolute bottom-0 left-0 right-0 rounded-t-md border border-b-0 border-[#7DD3FC]/60"
+                                      style={{
+                                        background: "rgba(125,211,252,0.16)",
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* X-axis labels */}
+                        <div className="ml-9 mr-2 mt-2 flex justify-around items-start">
+                          {data.map(({ condition }) => (
+                            <div key={condition} className="flex flex-col items-center text-center max-w-[110px]">
+                              <span className="text-[10.5px] md:text-[11.5px] text-slate-200 font-medium tracking-wide leading-tight">
+                                {condition}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Footer metric */}
+                  <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                    <span className="text-[9px] uppercase tracking-[0.22em] text-slate-400">Overall Mean Accuracy</span>
+                    <span className={`${outfit.className} text-[20px] text-white font-light`}>
+                      &gt;90<span className="text-[#7DD3FC]">%</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Left, meta + content */}
+              <div className="lg:col-span-5 order-1 flex flex-col gap-8">
+                <div className="flex items-center gap-4">
+                  <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA] leading-none`}>02</span>
+                  <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">CMU SmaSH Lab</span>
+
+                  {/* Jellyfish button + aquarium panel (hover preview, click to pin) */}
+                  <div className="relative group/jelly shrink-0">
+                    {/* The button */}
+                    <button
+                      onClick={() => setPinned(p => !p)}
+                      className={`w-12 h-12 rounded-full border flex items-center justify-center overflow-hidden transition-all duration-300 cursor-pointer
+                      group-hover/jelly:scale-110
+                      ${pinned
+                          ? 'border-[#38BDF8] shadow-[0_0_20px_rgba(56,189,248,0.5)]'
+                          : 'border-[#93C5FD]/60 hover:border-[#93C5FD] group-hover/jelly:shadow-[0_0_16px_rgba(147,197,253,0.45)]'
+                        }`}
+                      style={{ background: 'radial-gradient(circle at 40% 35%, #0a2a3a 0%, #041520 55%, #020d18 100%)' }}
+                      aria-label={pinned ? 'Unpin Aquarium' : 'Pin Aquarium'}
+                    >
+                      <img loading="lazy" decoding="async" src="/images/kawaii_jellyfish.png" alt="Jellyfish" className="w-full h-full object-cover" />
+                    </button>
+
+                    {/* Aquarium panel: shows on hover OR when pinned */}
+                    {/* mobile fix: cap width to viewport (was fixed 340px); also clamp via max-w so it never overflows */}
+                    <div
+                      className={`absolute left-14 top-1/2 -translate-y-1/2 z-50 w-[min(340px,calc(100vw-5rem))]
+                      transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]
+                      ${pinned
+                          ? 'opacity-100 translate-x-0 pointer-events-auto'
+                          : 'opacity-0 translate-x-2 pointer-events-none group-hover/jelly:opacity-100 group-hover/jelly:translate-x-0'
+                        }`}
+                    >
+                      <div className="relative rounded-[28px] border-2 border-[#38BDF8] bg-[#050d1a]/80 backdrop-blur-2xl shadow-[0_0_40px_rgba(56,189,248,0.15),inset_0_0_60px_rgba(0,20,50,0.6)] overflow-hidden">
+                        {/* Diorama image */}
+                        <div className="relative">
+                          <img
+                            loading="lazy"
+                            decoding="async"
+                            src="/images/deep_sea_diorama.png"
+                            alt="Deep Sea Diorama"
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#050d1a]/60 via-transparent to-[#050d1a]/20 pointer-events-none" />
+                        </div>
+
+                        {/* X close button, only visible when pinned */}
+                        {pinned && (
+                          <button
+                            onClick={e => { e.stopPropagation(); setPinned(false); }}
+                            className="absolute top-3 right-3 w-6 h-6 rounded-full bg-black/40 border border-white/20 flex items-center justify-center hover:bg-black/70 hover:border-white/50 transition-all duration-200"
+                            aria-label="Close"
+                          >
+                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                              <line x1="1" y1="1" x2="7" y2="7" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                              <line x1="7" y1="1" x2="1" y2="7" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-1`}>
+                    Proactive Agent
+                  </h2>
+                  <p className="text-[12px] tracking-widest uppercase text-[#A3A3A3] mb-6">
+                    2024 Sep – 2025 Aug &nbsp;·&nbsp; Research Assistant
+                  </p>
+
+                  <div className="space-y-6 text-[15px] text-[#A3A3A3] leading-relaxed">
+                    {/* The Problem */}
+                    <div>
+                      <SectionLabel>The Problem</SectionLabel>
+                      <div className="bg-[#1A1A1A] rounded-sm p-6 border border-white/10">
+                        <p className="text-[13px] mb-3">
+                          Voice assistants react to whatever they hear. They transcribe filler, misread half-finished thoughts, and respond when nobody was talking to them, then stay silent at the moment a user actually needs help.
+                        </p>
+                        <p className="text-[13px]">
+                          <span className="text-[#EAEAEA] font-medium">Design challenge:</span> Classify intent from noisy, real-world speech so the agent acts only when the signal is clear.
+                        </p>
+                      </div>
+                    </div>
+
+                    <Hairline />
+
+                    {/* Overview */}
+                    <div>
+                      <SectionLabel>Overview</SectionLabel>
+                      <p className="text-[13px]">
+                        Researched &amp; built a semantic classification pipeline for adaptive multimodal systems that isolates relevant user intent from environmental noise and linguistic variations, achieving &gt;90% response accuracy.
+                      </p>
+                    </div>
+
+                    <Hairline />
+
+                    {/* Key Contributions */}
+                    <div>
+                      <SectionLabel>Key Contributions</SectionLabel>
+                      <ul className="space-y-3">
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span>NLP pipeline development</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span>User intent prediction model</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span>Real-time response generation</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <Hairline />
+
+                    {/* Impact */}
+                    <div>
+                      <SectionLabel>Impact</SectionLabel>
+                      <ul className="space-y-3">
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="font-semibold text-[#EAEAEA]">Robust Semantic Orchestration:</span> Engineered a classification pipeline that bridges the gap between raw speech-to-text and actionable intent, handling the nuance of informal speech.</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="font-semibold text-[#EAEAEA]">Multimodal Scalability:</span> Created a modular framework for adaptive systems that can be integrated into various hardware environments, from smart homes to automotive HMIs.</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="font-semibold text-[#EAEAEA]">Real-time Decision Logic:</span> Developed the logic for "Agent Responds vs. Agent Ignores," a critical component for the next generation of "always-on" ambient computing.</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <Hairline />
+
+                    {/* Performance metric */}
+                    <div className="pt-2">
+                      <SectionLabel>Performance Metric</SectionLabel>
+                      <span className={`${outfit.className} text-2xl text-[#EAEAEA]`}>&gt;90% Accuracy</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </motion.article>
+
+          <div className="w-full h-[1px] bg-white/5" />
+
+          {/* ─── Project 03: AI Trend Forecasting ─── */}
+          <motion.article id="project-03" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-10%" }} variants={slowFade}>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start justify-center">
+
+              {/* Left, meta + content */}
+              <div className="lg:col-span-6 flex flex-col gap-8">
+                <div className="flex items-baseline gap-4">
+                  <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA]`}>03</span>
+                  <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">CMU & Surefront</span>
+                </div>
+
+                <div>
+                  <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-1`}>
+                    AI Trend Forecasting
+                  </h2>
+                  <p className="text-[12px] tracking-widest uppercase text-[#A3A3A3] mb-6">
+                    2024 Jan – 2024 Aug &nbsp;·&nbsp; UX Researcher &amp; Developer
+                  </p>
+
+                  <div className="space-y-6 text-[15px] text-[#A3A3A3] leading-relaxed">
+                    {/* Overview */}
+                    <div>
+                      <SectionLabel>Overview</SectionLabel>
+                      <p>
+                        Built a B2B tool designed to bridge the gap between high-level data analytics and creative execution. It leverages real-time data and AI to empower fashion professionals, from designers to merchandisers, to make informed, proactive decisions.
+                      </p>
+                    </div>
+
+                    <Hairline />
+
+                    {/* Key Features */}
+                    <div>
+                      <SectionLabel>Key Features</SectionLabel>
+                      <ul className="space-y-4">
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="text-[#EAEAEA]">Dynamic Data Integration:</span> Built to process and visualize real-time growth metrics, search volumes, and month-over-month performance curves.</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="text-[#EAEAEA]">Agentic AI Implementation:</span> The Personal Fashion Assistant democratizes data, instead of navigating three layers of menus, a user can simply ask: "What footwear is trending in Paris right now?"</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="text-[#EAEAEA]">Advanced Analytics &amp; Visualization:</span> Real-time growth metrics, search volumes, and month-over-month performance curves.</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <Hairline />
+
+                    {/* Impact */}
+                    <div>
+                      <SectionLabel>Impact</SectionLabel>
+                      <ul className="space-y-5">
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="text-[#EAEAEA]">75% Reduction in Research Latency:</span> Consolidating real-time APIs into a single HMI, reducing validation time from 4 hours of manual cross-referencing to &lt;60 seconds.</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="text-[#EAEAEA]">90% Decrease in Interaction Cost:</span> Replaced a 12-click multi-step filtering process with a single natural language input, significantly lowering cognitive load for non-technical stakeholders.</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#C9B49A] shrink-0">·</span>
+                          <span><span className="text-[#EAEAEA]">Trend Velocity Accuracy:</span> Month-over-month performance curves provide a 42.5% more granular view of trend momentum vs. traditional static quarterly reports.</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <Hairline />
+
+                    {/* Metrics */}
+                    <div className="grid grid-cols-2 gap-4 pt-2">
+                      <div>
+                        <SectionLabel>Research Latency</SectionLabel>
+                        <span className={`${outfit.className} text-2xl text-[#EAEAEA]`}>−75%</span>
+                      </div>
+                      <div>
+                        <SectionLabel>Interaction Cost</SectionLabel>
+                        <span className={`${outfit.className} text-2xl text-[#EAEAEA]`}>−90%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right, imagery stacked vertically, framed in semi-transparent panels (enlarged ~30%, grows rightward) */}
+              <div className="lg:col-span-4 flex flex-col gap-4 lg:scale-[1.30] lg:origin-top-left lg:ml-4">
+                {/* Dashboard, framed, image scales within panel */}
+                <div
+                  className="w-full rounded-md border border-[#C9B49A]/15 p-4 md:p-5 backdrop-blur-md shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
+                  style={{ background: "rgba(20, 18, 14, 0.42)" }}
+                >
+                  <div className="w-full aspect-[3/4] overflow-hidden rounded-sm bg-black/20">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src="/images/02/trend_forecasting_dashboard 1.png"
+                      alt="AI Trend Forecasting Dashboard"
+                      className="w-full h-full object-contain object-center opacity-95 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out"
+                    />
+                  </div>
+                </div>
+
+                {/* Surefront Interviews, framed, image scales within panel */}
+                <div
+                  className="w-full rounded-md border border-[#C9B49A]/15 p-4 md:p-5 backdrop-blur-md shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
+                  style={{ background: "rgba(20, 18, 14, 0.42)" }}
+                >
+                  <div className="w-full aspect-[3/2] overflow-hidden rounded-sm bg-black/20">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src="/images/02/SurefrontInterviews.png"
+                      alt="Surefront Interviews"
+                      className="w-full h-full object-contain object-center opacity-95 hover:opacity-100 hover:scale-[1.02] transition-all duration-700 ease-out"
+                    />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </motion.article>
+
+          {/* ─── More Projects Header ─── */}
+          <div className="pt-16 pb-12 text-center">
+            <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[#EAEAEA]`}>
+              More things I built!{" "}
+              {/* mobile fix: drop the kaomoji to its own line on phones so neither piece breaks awkwardly; inline on md+ */}
+              <span className="block md:inline">＿〆(。╹‿ ╹ 。)</span>
+            </h2>
+          </div>
+
+          {/* ─── Sticky Filter Bar ──────────────────────────────────────────── */}
+          <div
+            ref={filterBarRef}
+            className="sticky top-0 z-40 -mx-8 md:-mx-16 px-8 md:px-16 py-4 border-b border-white/5"
+            style={{ background: "rgba(12,12,12,0.92)", backdropFilter: "blur(14px)" }}
+          >
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Label */}
+              <span className="text-[12px] uppercase tracking-[0.2em] text-[#5a5a5a] shrink-0 mr-1">Filter</span>
+              {/* All pill */}
+              {/* mobile fix: All-pill tap target matches category pills (≥40px on phones) */}
+              <button
+                onClick={() => setActiveFilter(null)}
+                className="flex items-center gap-2 pl-3 pr-4 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap"
+                style={activeFilter === null
+                  ? { background: "rgba(255,255,255,0.14)", borderColor: "rgba(255,255,255,0.40)", color: "#EAEAEA" }
+                  : { background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.12)", color: "#888" }
+                }
+              >
+                <span className="w-2 h-2 rounded-full bg-[#EAEAEA] shrink-0"
+                  style={{ opacity: activeFilter === null ? 1 : 0.3 }} />
+                All
+              </button>
+              {/* Category pills */}
+              {ALL_CATEGORIES.map((cat) => (
+                <FilterCategoryButton
+                  key={cat}
+                  cat={cat}
+                  isActive={activeFilter === cat}
+                  onClick={() => setActiveFilter(activeFilter === cat ? null : cat)}
+                />
+              ))}
+            </div>
+
+          </div>
+
+          {/* ─── Selected Projects ─── */}
+          <section id="selected-projects" className="pt-12">
+            <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
+              Selected Projects
+            </h2>
+            {/* mobile fix: stack 2 thumbs per row on phones, 4 on small tablets, 6 on desktop */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+              {filteredProjects.map((item) => (
+                <FilteredThumb
+                  key={item.alt}
+                  item={item}
+                  activeFilter={activeFilter}
+                  outfitClass={outfit.className}
+                  onOpen={setSelectedProject}
+                />
+              ))}
+            </div>
+          </section>
+
+          {/* ─── About Me & Footer Transition ─── */}
+          {/* mobile fix: section negative margin matches main padding; vertical padding scales down on phones */}
+          <section id="about-me" className="-mx-5 sm:-mx-8 md:-mx-16 relative pt-20 sm:pt-32 md:pt-48 pb-16 sm:pb-24 md:pb-32 overflow-hidden flex flex-col items-center">
+
+            {/* Font Import for Pixel Text */}
+            <style dangerouslySetInnerHTML={{ __html: "@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');" }} />
+
+            {/* Black Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none bg-[#0C0C0C]" />
+
+            {/* Pixel Stars Overlay
+          <div
+            className="absolute inset-0 z-0 pointer-events-none"
+            style={{
+              background: `url("data:image/svg+xml,%3Csvg width='240' height='240' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 30h1v1h-1zM110 200h1v1h-1zM10 100h1v1h-1z' fill='%23ffffff' fill-opacity='0.3'/%3E%3Cpath d='M140 60h2v2h-2zM80 150h2v2h-2zM210 180h2v2h-2z' fill='%23ffffff' fill-opacity='0.5'/%3E%3Cpath d='M170 110h3v3h-3z' fill='%23ffffff' fill-opacity='0.8'/%3E%3C/svg%3E")`,
+              backgroundSize: "240px 240px",
+              imageRendering: "pixelated"
+            }}
+          /> */}
+
+            {/* About Me Title */}
+            {/* mobile fix: tighten container padding and inner gap on phones */}
+            <div className="relative z-10 w-full max-w-[1600px] px-5 sm:px-8 md:px-10 flex flex-col items-center justify-center pt-12 sm:pt-20 md:pt-24 pb-16 sm:pb-24 md:pb-32">
+              {/* mobile fix: smaller pixel headline so the 320px viewport doesn't push it off the title baseline */}
+              <h2 className="text-xl sm:text-2xl md:text-4xl text-white tracking-widest drop-shadow-[4px_4px_0_rgba(0,0,0,0.4)]" style={{ fontFamily: "'Press Start 2P', cursive", imageRendering: "pixelated" }}>
+                About Me
+              </h2>
+            </div>
+
+            {/* ─── Contact Footer ─── */}
+            {/* mobile fix: tighter side padding so the contact board image fills more of the phone screen */}
+            <footer id="project-meet" className="relative z-10 w-full max-w-[1600px] px-4 sm:px-8 md:px-16 flex justify-center">
+              <div className="relative w-full max-w-3xl mx-auto group">
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src="/images/NiceToMeetYou/myboard.png"
+                  alt="My Contact Board"
+                  className="w-full h-auto object-contain rounded-sm shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+                />
+
+                {/* Gmail Hover Area */}
+                <div
+                  className="absolute z-20 block group/gmail cursor-pointer"
+                  style={{ left: '26.5%', top: '15.5%', width: '10.5%', height: '10.5%' }}
+                  onClick={() => {
+                    navigator.clipboard.writeText("by.rinakim@gmail.com");
+                    setCopiedEmail(true);
+                    setTimeout(() => setCopiedEmail(false), 2000);
+                  }}
+                >
+                  {/* Distinctive hover outline */}
+                  <div className="w-full h-full rounded-sm border-4 border-transparent group-hover/gmail:border-black/30 group-hover/gmail:bg-white/10 group-hover/gmail:scale-110 transition-all duration-300" />
+
+                  {/* Copy/Pasteable Tooltip */}
+                  <div className="absolute left-full top-1/2 -translate-y-1/2 ml-6 pointer-events-none opacity-0 group-hover/gmail:opacity-100 group-hover/gmail:pointer-events-auto group-hover/gmail:translate-x-2 transition-all duration-300 z-50">
+                    <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                      <p className={`${copiedEmail ? "text-green-500" : "text-black"} text-[12px] font-bold whitespace-nowrap mb-2`} style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                        {copiedEmail ? "Copied!" : "Click to copy!"}
+                      </p>
+                      <a href="mailto:by.rinakim@gmail.com" className="block text-gray-500 hover:text-black transition-colors select-all cursor-pointer font-bold"
+                        style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", fontSize: "10px" }}
+                        onClick={e => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          navigator.clipboard.writeText("by.rinakim@gmail.com");
+                          setCopiedEmail(true);
+                          setTimeout(() => setCopiedEmail(false), 2000);
+                        }}>
+                        by.rinakim@gmail.com
+                      </a>
+
+                      {/* Bubble tail left */}
+                      <div className="absolute -left-[16px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[16px] border-r-black" />
+                      <div className="absolute -left-[10px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[16px] border-r-white" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* LinkedIn Link */}
+                <a
+                  href="https://www.linkedin.com/in/rina-kim-9a3864171/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute z-10 block group/linkedin"
+                  style={{ left: '26.5%', top: '28.5%', width: '10.5%', height: '10.5%' }}
+                  aria-label="LinkedIn Profile"
+                >
+                  <div className="w-full h-full rounded-sm border-4 border-transparent group-hover/linkedin:border-black/30 group-hover/linkedin:bg-white/10 group-hover/linkedin:scale-110 transition-all duration-300 cursor-pointer" />
+                  {/* Tooltip */}
+                  <div className="absolute left-full top-1/2 -translate-y-1/2 ml-6 pointer-events-none opacity-0 group-hover/linkedin:opacity-100 group-hover/linkedin:translate-x-2 transition-all duration-300 z-50">
+                    <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                      <p className="text-black text-[12px] font-bold whitespace-nowrap" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                        Connect with me!
+                      </p>
+
+                      {/* Bubble tail left */}
+                      <div className="absolute -left-[16px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[16px] border-r-black" />
+                      <div className="absolute -left-[10px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[16px] border-r-white" />
+                    </div>
+                  </div>
+                </a>
+
+                {/* Nana Polaroid Hover */}
+                <div
+                  className="absolute z-10 block cursor-pointer group/nana"
+                  style={{ left: '38%', top: '35%', width: '14.5%', height: '25%' }}
+                >
+                  <div className="w-full h-full rounded-sm group-hover/nana:bg-white/10 transition-colors duration-300" />
+                  {/* Pop-out image */}
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[240px] sm:w-[320px] pointer-events-none opacity-0 group-hover/nana:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
+                    <div className="relative rounded-sm border-[6px] border-[#F2F0E6] bg-[#F2F0E6] shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden p-1 pb-12 transform -rotate-2">
+                      <img loading="lazy" decoding="async" src="/images/NiceToMeetYou/nana01.jpg" alt="Nana" className="w-full h-auto object-cover border border-black/10" />
+                      <p className="absolute bottom-3 left-0 w-full text-center text-[#333] font-medium text-lg" style={{ fontFamily: "'Marker Felt', 'Comic Sans MS', cursive" }}>Nana</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Cortada Polaroid Hover */}
+                <div
+                  className="absolute z-10 block cursor-pointer group/cortada"
+                  style={{ left: '50.5%', top: '16.5%', width: '15.5%', height: '24%' }}
+                >
+                  <div className="w-full h-full rounded-sm group-hover/cortada:bg-white/10 transition-colors duration-300" />
+                  {/* Pop-out image */}
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[240px] sm:w-[320px] pointer-events-none opacity-0 group-hover/cortada:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
+                    <div className="relative rounded-sm border-[6px] border-[#F2F0E6] bg-[#F2F0E6] shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden p-1 pb-12 transform rotate-2">
+                      <img loading="lazy" decoding="async" src="/images/NiceToMeetYou/cortada01.JPEG" alt="Cortada" className="w-full h-auto object-cover border border-black/10" />
+                      <p className="absolute bottom-3 left-0 w-full text-center text-[#333] font-medium text-lg" style={{ fontFamily: "'Marker Felt', 'Comic Sans MS', cursive" }}>Cortada</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pennant Hover */}
+                <div
+                  className="absolute z-10 block group/pennant"
+                  style={{ left: '68%', top: '9%', width: '28%', height: '18%' }}
+                >
+                  <div className="w-full h-full rounded-sm group-hover/pennant:bg-white/5 transition-colors duration-300 cursor-help" />
+
+                  {/* Pixelated thought bubble */}
+                  <div className="absolute bottom-[90%] left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none opacity-0 group-hover/pennant:opacity-100 group-hover/pennant:-translate-y-3 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+                    <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                      <p className="text-black text-[12px] font-bold whitespace-nowrap text-center" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                        CMU MHCI &apos;25!
+                      </p>
+                      {/* Bubble tail */}
+                      <div className="absolute -bottom-[16px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-black" />
+                      <div className="absolute -bottom-[8px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-white" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bouquet Hover */}
+                <div
+                  className="absolute z-10 block group/bouquet"
+                  style={{ left: '16%', top: '32%', width: '22%', height: '48%' }}
+                >
+                  <div className="w-full h-full rounded-sm group-hover/bouquet:bg-white/5 transition-colors duration-300 cursor-help" />
+
+                  {/* Pixelated thought bubble floating to the left */}
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 mr-6 pointer-events-none opacity-0 group-hover/bouquet:opacity-100 group-hover/bouquet:-translate-x-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-50">
+                    <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                      <p className="text-[#b45309] text-[14px] font-bold whitespace-nowrap text-center" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", fontSize: "14px", lineHeight: "1.5" }}>
+                        &lt;3
+                      </p>
+                      {/* Bubble tail right */}
+                      <div className="absolute -right-[16px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[16px] border-l-black" />
+                      <div className="absolute -right-[10px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[16px] border-l-white" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3D Printer Hover */}
+                <div
+                  className="absolute z-10 block group/printer"
+                  style={{ left: '57%', top: '48%', width: '38%', height: '45%' }}
+                >
+                  <div className="w-full h-full rounded-sm group-hover/printer:bg-white/5 transition-colors duration-300 cursor-help" />
+
+                  {/* Pixelated thought bubble */}
+                  <div className="absolute bottom-[90%] left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none opacity-0 group-hover/printer:opacity-100 group-hover/printer:-translate-y-3 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+                    <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                      <p className="text-black text-[14px] font-bold whitespace-nowrap" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", fontSize: "12px", lineHeight: "1.5" }}>
+                        Currently printing<br />a cat toy 🐾
+                      </p>
+                      {/* Bubble tail */}
+                      <div className="absolute -bottom-[16px] right-12 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-black" />
+                      <div className="absolute -bottom-[8px] right-12 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-white" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Iced Coffee Hover, "Strawberry Latte" */}
+                <div
+                  className="absolute z-20 block group/coffee"
+                  style={{ left: '5%', top: '64%', width: '13%', height: '33%' }}
+                >
+                  <div className="w-full h-full rounded-sm group-hover/coffee:bg-white/5 transition-colors duration-300 cursor-help" />
+
+                  {/* Pixelated thought bubble */}
+                  <div className="absolute bottom-[90%] left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none opacity-0 group-hover/coffee:opacity-100 group-hover/coffee:-translate-y-3 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+                    <div className="bg-white border-4 border-black p-4 relative" style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.5)", borderRadius: "4px" }}>
+                      <p className="text-[#b45309] text-[12px] font-bold whitespace-nowrap text-center" style={{ fontFamily: "'Press Start 2P', 'Courier New', Courier, monospace", lineHeight: "1.5" }}>
+                        Strawberry Latte
+                      </p>
+                      {/* Bubble tail */}
+                      <div className="absolute -bottom-[16px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-black" />
+                      <div className="absolute -bottom-[8px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[16px] border-t-white" />
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </footer>
+
+            {/* Small yellow pixelated heart at the bottom center */}
+            <div className="relative z-10 mt-32 flex justify-center items-center pb-16">
+
+              {/* Render heart bundle (behind the main clickable heart) */}
+              {hearts.map((h) => (
+                <div
+                  key={h.id}
+                  className="absolute pointer-events-none z-10"
+                  style={{
+                    transform: `translate(${h.x}px, ${h.y}px) scale(${h.scale}) rotate(${h.rotation}deg)`,
+                    transition: "all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+                  }}
+                >
+                  <svg
+                    width="32"
+                    height="28"
+                    viewBox="0 0 11 9"
+                    style={{ imageRendering: 'pixelated' }}
+                    className="drop-shadow-[2px_3px_0px_rgba(0,0,0,0.5)]"
+                  >
+                    {/* Outline (#b45309) */}
+                    <g fill="#b45309">
+                      <rect x="2" y="0" width="1" height="1" />
+                      <rect x="8" y="0" width="1" height="1" />
+                      <rect x="1" y="1" width="1" height="1" />
+                      <rect x="3" y="1" width="1" height="1" />
+                      <rect x="7" y="1" width="1" height="1" />
+                      <rect x="9" y="1" width="1" height="1" />
+                      <rect x="0" y="2" width="1" height="1" />
+                      <rect x="4" y="2" width="1" height="1" />
+                      <rect x="6" y="2" width="1" height="1" />
+                      <rect x="10" y="2" width="1" height="1" />
+                      <rect x="0" y="3" width="1" height="1" />
+                      <rect x="5" y="3" width="1" height="1" />
+                      <rect x="10" y="3" width="1" height="1" />
+                      <rect x="1" y="4" width="1" height="1" />
+                      <rect x="9" y="4" width="1" height="1" />
+                      <rect x="2" y="5" width="1" height="1" />
+                      <rect x="8" y="5" width="1" height="1" />
+                      <rect x="3" y="6" width="1" height="1" />
+                      <rect x="7" y="6" width="1" height="1" />
+                      <rect x="4" y="7" width="1" height="1" />
+                      <rect x="6" y="7" width="1" height="1" />
+                      <rect x="5" y="8" width="1" height="1" />
+                    </g>
+
+                    {/* Dynamic Yellow Shade Fill */}
+                    <g fill={h.fill}>
+                      <rect x="2" y="1" width="1" height="1" />
+                      <rect x="8" y="1" width="1" height="1" />
+                      <rect x="1" y="2" width="1" height="1" />
+                      <rect x="2" y="2" width="1" height="1" />
+                      <rect x="3" y="2" width="1" height="1" />
+                      <rect x="7" y="2" width="1" height="1" />
+                      <rect x="9" y="2" width="1" height="1" />
+                      <rect x="1" y="3" width="1" height="1" />
+                      <rect x="2" y="3" width="1" height="1" />
+                      <rect x="3" y="3" width="1" height="1" />
+                      <rect x="4" y="3" width="1" height="1" />
+                      <rect x="4" y="4" width="1" height="1" />
+                      <rect x="5" y="4" width="1" height="1" />
+                      <rect x="6" y="4" width="1" height="1" />
+                      <rect x="5" y="5" width="1" height="1" />
+                      <rect x="6" y="5" width="1" height="1" />
+                      <rect x="7" y="5" width="1" height="1" />
+                      <rect x="4" y="6" width="1" height="1" />
+                      <rect x="5" y="6" width="1" height="1" />
+                      <rect x="6" y="6" width="1" height="1" />
+                      <rect x="5" y="7" width="1" height="1" />
+                    </g>
+
+                    {/* Lighter Highlights */}
+                    <g fill={h.highlight}>
+                      <rect x="6" y="3" width="1" height="1" />
+                      <rect x="3" y="4" width="1" height="1" />
+                      <rect x="7" y="4" width="1" height="1" />
+                      <rect x="4" y="5" width="1" height="1" />
+                    </g>
+
+                    {/* White Sparkles/Reflections */}
+                    <g fill="#ffffff">
+                      <rect x="8" y="2" width="1" height="1" />
+                      <rect x="7" y="3" width="1" height="1" />
+                      <rect x="8" y="3" width="1" height="1" />
+                      <rect x="9" y="3" width="1" height="1" />
+                      <rect x="2" y="4" width="1" height="1" />
+                      <rect x="8" y="4" width="1" height="1" />
+                      <rect x="3" y="5" width="1" height="1" />
+                    </g>
+                  </svg>
+                </div>
+              ))}
+
+              <svg
+                width="32"
+                height="28"
+                viewBox="0 0 11 9"
+                style={{ imageRendering: 'pixelated' }}
+                className="w-8 h-7 drop-shadow-[2px_3px_0px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:scale-125 cursor-pointer relative z-20"
+                onClick={handleAddHearts}
+              >
+                {/* Outline (#b45309) */}
+                <g fill="#b45309">
+                  <rect x="2" y="0" width="1" height="1" />
+                  <rect x="8" y="0" width="1" height="1" />
+                  <rect x="1" y="1" width="1" height="1" />
+                  <rect x="3" y="1" width="1" height="1" />
+                  <rect x="7" y="1" width="1" height="1" />
+                  <rect x="9" y="1" width="1" height="1" />
+                  <rect x="0" y="2" width="1" height="1" />
+                  <rect x="4" y="2" width="1" height="1" />
+                  <rect x="6" y="2" width="1" height="1" />
+                  <rect x="10" y="2" width="1" height="1" />
+                  <rect x="0" y="3" width="1" height="1" />
+                  <rect x="5" y="3" width="1" height="1" />
+                  <rect x="10" y="3" width="1" height="1" />
+                  <rect x="1" y="4" width="1" height="1" />
+                  <rect x="9" y="4" width="1" height="1" />
+                  <rect x="2" y="5" width="1" height="1" />
+                  <rect x="8" y="5" width="1" height="1" />
+                  <rect x="3" y="6" width="1" height="1" />
+                  <rect x="7" y="6" width="1" height="1" />
+                  <rect x="4" y="7" width="1" height="1" />
+                  <rect x="6" y="7" width="1" height="1" />
+                  <rect x="5" y="8" width="1" height="1" />
+                </g>
+
+                {/* Standard Fill (#facc15 - Vibrant Golden Yellow) */}
+                <g fill="#facc15">
+                  <rect x="2" y="1" width="1" height="1" />
+                  <rect x="8" y="1" width="1" height="1" />
+                  <rect x="1" y="2" width="1" height="1" />
+                  <rect x="2" y="2" width="1" height="1" />
+                  <rect x="3" y="2" width="1" height="1" />
+                  <rect x="7" y="2" width="1" height="1" />
+                  <rect x="9" y="2" width="1" height="1" />
+                  <rect x="1" y="3" width="1" height="1" />
+                  <rect x="2" y="3" width="1" height="1" />
+                  <rect x="3" y="3" width="1" height="1" />
+                  <rect x="4" y="3" width="1" height="1" />
+                  <rect x="4" y="4" width="1" height="1" />
+                  <rect x="5" y="4" width="1" height="1" />
+                  <rect x="6" y="4" width="1" height="1" />
+                  <rect x="5" y="5" width="1" height="1" />
+                  <rect x="6" y="5" width="1" height="1" />
+                  <rect x="7" y="5" width="1" height="1" />
+                  <rect x="4" y="6" width="1" height="1" />
+                  <rect x="5" y="6" width="1" height="1" />
+                  <rect x="6" y="6" width="1" height="1" />
+                  <rect x="5" y="7" width="1" height="1" />
+                </g>
+
+                {/* Light Highlights (#fef08a - Pastel Shading) */}
+                <g fill="#fef08a">
+                  <rect x="6" y="3" width="1" height="1" />
+                  <rect x="3" y="4" width="1" height="1" />
+                  <rect x="7" y="4" width="1" height="1" />
+                  <rect x="4" y="5" width="1" height="1" />
+                </g>
+
+                {/* White Sparkle/Reflection Highlights (#ffffff) */}
+                <g fill="#ffffff">
+                  <rect x="8" y="2" width="1" height="1" />
+                  <rect x="7" y="3" width="1" height="1" />
+                  <rect x="8" y="3" width="1" height="1" />
+                  <rect x="9" y="3" width="1" height="1" />
+                  <rect x="2" y="4" width="1" height="1" />
+                  <rect x="8" y="4" width="1" height="1" />
+                  <rect x="3" y="5" width="1" height="1" />
+                </g>
+              </svg>
+            </div>
+          </section>
+
+        </main >
+
+        {/* Selected Projects modal, opens on thumbnail click */}
+        <AnimatePresence>
+          {selectedProject && (
+            <ProjectModal
+              key={selectedProject.alt}
+              item={selectedProject}
+              outfitClass={outfit.className}
+              onClose={() => setSelectedProject(null)}
+              onPrev={() => {
+                if (selectedIndex > 0) setSelectedProject(filteredProjects[selectedIndex - 1]);
+              }}
+              onNext={() => {
+                if (selectedIndex < filteredProjects.length - 1) setSelectedProject(filteredProjects[selectedIndex + 1]);
+              }}
+              hasPrev={selectedIndex > 0}
+              hasNext={selectedIndex < filteredProjects.length - 1}
+            />
+          )}
+        </AnimatePresence>
+      </div >
+    </MotionConfig>
+  );
+}

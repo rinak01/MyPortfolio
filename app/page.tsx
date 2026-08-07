@@ -1,7 +1,7 @@
 "use client";
 
-import Var7ClassyAuto from "./updated_portfolio/variations/Var7ClassyAuto";
+import RinasPortfolio from "./updated_portfolio/variations/RinasPortfolio";
 
 export default function RootPage() {
-  return <Var7ClassyAuto />;
+  return <RinasPortfolio />;
 }

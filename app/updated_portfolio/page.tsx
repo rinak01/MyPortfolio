@@ -1,1 +1,1 @@
-export { default } from "./variations/Var7ClassyAuto";
+export { default } from "./variations/RinasPortfolio";
