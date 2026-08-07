@@ -807,7 +807,6 @@ function BackToTopButton() {
 }
 
 export default function RinasPortfolio() {
-  const [pinned, setPinned] = useState(false);
   const [activeFilter, setActiveFilter] = useState<Category | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [hearts, setHearts] = useState<{ id: number; x: number; y: number; scale: number; rotation: number; fill: string; highlight: string; outline: string }[]>([]);
@@ -1877,63 +1876,6 @@ export default function RinasPortfolio() {
                 <div className="flex items-center gap-4">
                   <span className={`${outfit.className} text-5xl font-light text-[#EAEAEA] leading-none`}>02</span>
                   <span className="text-sm uppercase tracking-[0.2em] text-[#C9B49A]">CMU SmaSH Lab</span>
-
-                  {/* Jellyfish button + aquarium panel (hover preview, click to pin) */}
-                  <div className="relative group/jelly shrink-0">
-                    {/* The button */}
-                    <button
-                      onClick={() => setPinned(p => !p)}
-                      className={`w-12 h-12 rounded-full border flex items-center justify-center overflow-hidden transition-all duration-300 cursor-pointer
-                      group-hover/jelly:scale-110
-                      ${pinned
-                          ? 'border-[#38BDF8] shadow-[0_0_20px_rgba(56,189,248,0.5)]'
-                          : 'border-[#93C5FD]/60 hover:border-[#93C5FD] group-hover/jelly:shadow-[0_0_16px_rgba(147,197,253,0.45)]'
-                        }`}
-                      style={{ background: 'radial-gradient(circle at 40% 35%, #0a2a3a 0%, #041520 55%, #020d18 100%)' }}
-                      aria-label={pinned ? 'Unpin Aquarium' : 'Pin Aquarium'}
-                    >
-                      <img loading="lazy" decoding="async" src="/images/kawaii_jellyfish.png" alt="Jellyfish" className="w-full h-full object-cover" />
-                    </button>
-
-                    {/* Aquarium panel: shows on hover OR when pinned */}
-                    {/* mobile fix: cap width to viewport (was fixed 340px); also clamp via max-w so it never overflows */}
-                    <div
-                      className={`absolute left-14 top-1/2 -translate-y-1/2 z-50 w-[min(340px,calc(100vw-5rem))]
-                      transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]
-                      ${pinned
-                          ? 'opacity-100 translate-x-0 pointer-events-auto'
-                          : 'opacity-0 translate-x-2 pointer-events-none group-hover/jelly:opacity-100 group-hover/jelly:translate-x-0'
-                        }`}
-                    >
-                      <div className="relative rounded-[28px] border-2 border-[#38BDF8] bg-[#050d1a]/80 backdrop-blur-2xl shadow-[0_0_40px_rgba(56,189,248,0.15),inset_0_0_60px_rgba(0,20,50,0.6)] overflow-hidden">
-                        {/* Diorama image */}
-                        <div className="relative">
-                          <img
-                            loading="lazy"
-                            decoding="async"
-                            src="/images/deep_sea_diorama.png"
-                            alt="Deep Sea Diorama"
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#050d1a]/60 via-transparent to-[#050d1a]/20 pointer-events-none" />
-                        </div>
-
-                        {/* X close button, only visible when pinned */}
-                        {pinned && (
-                          <button
-                            onClick={e => { e.stopPropagation(); setPinned(false); }}
-                            className="absolute top-3 right-3 w-6 h-6 rounded-full bg-black/40 border border-white/20 flex items-center justify-center hover:bg-black/70 hover:border-white/50 transition-all duration-200"
-                            aria-label="Close"
-                          >
-                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                              <line x1="1" y1="1" x2="7" y2="7" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                              <line x1="7" y1="1" x2="1" y2="7" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 <div>
@@ -2151,69 +2093,71 @@ export default function RinasPortfolio() {
             </div>
           </motion.article>
 
-          {/* ─── More Projects Header ─── */}
-          <div className="pt-16 pb-12 text-center">
-            <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[#EAEAEA]`}>
-              More things I built!{" "}
-              {/* mobile fix: drop the kaomoji to its own line on phones so neither piece breaks awkwardly; inline on md+ */}
-              <span className="block md:inline">＿〆(。╹‿ ╹ 。)</span>
-            </h2>
-          </div>
-
-          {/* ─── Sticky Filter Bar ──────────────────────────────────────────── */}
-          <div
-            ref={filterBarRef}
-            className="sticky top-0 z-40 -mx-8 md:-mx-16 px-8 md:px-16 py-4 border-b border-white/5"
-            style={{ background: "rgba(12,12,12,0.92)", backdropFilter: "blur(14px)" }}
-          >
-            <div className="flex items-center gap-3 flex-wrap">
-              {/* Label */}
-              <span className="text-[12px] uppercase tracking-[0.2em] text-[#5a5a5a] shrink-0 mr-1">Filter</span>
-              {/* All pill */}
-              {/* mobile fix: All-pill tap target matches category pills (≥40px on phones) */}
-              <button
-                onClick={() => setActiveFilter(null)}
-                className="flex items-center gap-2 pl-3 pr-4 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap"
-                style={activeFilter === null
-                  ? { background: "rgba(255,255,255,0.14)", borderColor: "rgba(255,255,255,0.40)", color: "#EAEAEA" }
-                  : { background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.12)", color: "#888" }
-                }
-              >
-                <span className="w-2 h-2 rounded-full bg-[#EAEAEA] shrink-0"
-                  style={{ opacity: activeFilter === null ? 1 : 0.3 }} />
-                All
-              </button>
-              {/* Category pills */}
-              {ALL_CATEGORIES.map((cat) => (
-                <FilterCategoryButton
-                  key={cat}
-                  cat={cat}
-                  isActive={activeFilter === cat}
-                  onClick={() => setActiveFilter(activeFilter === cat ? null : cat)}
-                />
-              ))}
+          {/* ─── More Projects Header + Sticky Filter Bar (grouped so they sit close together, independent of the section rhythm above) ─── */}
+          <div>
+            <div className="pt-16 pb-14 text-center">
+              <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[#EAEAEA]`}>
+                More things I built!{" "}
+                {/* mobile fix: drop the kaomoji to its own line on phones so neither piece breaks awkwardly; inline on md+ */}
+                <span className="block md:inline">＿〆(。╹‿ ╹ 。)</span>
+              </h2>
             </div>
 
-          </div>
+            {/* ─── Sticky Filter Bar ──────────────────────────────────────────── */}
+            <div
+              ref={filterBarRef}
+              className="sticky top-0 z-40 -mx-8 md:-mx-16 px-8 md:px-16 py-4 border-b border-white/5"
+              style={{ background: "rgba(12,12,12,0.92)", backdropFilter: "blur(14px)" }}
+            >
+              <div className="flex items-center gap-3 flex-wrap">
+                {/* Label */}
+                <span className="text-[12px] uppercase tracking-[0.2em] text-[#5a5a5a] shrink-0 mr-1">Filter</span>
+                {/* All pill */}
+                {/* mobile fix: All-pill tap target matches category pills (≥40px on phones) */}
+                <button
+                  onClick={() => setActiveFilter(null)}
+                  className="flex items-center gap-2 pl-3 pr-4 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-full text-[13px] font-medium tracking-wide border transition-all duration-300 cursor-pointer whitespace-nowrap"
+                  style={activeFilter === null
+                    ? { background: "rgba(255,255,255,0.14)", borderColor: "rgba(255,255,255,0.40)", color: "#EAEAEA" }
+                    : { background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.12)", color: "#888" }
+                  }
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#EAEAEA] shrink-0"
+                    style={{ opacity: activeFilter === null ? 1 : 0.3 }} />
+                  All
+                </button>
+                {/* Category pills */}
+                {ALL_CATEGORIES.map((cat) => (
+                  <FilterCategoryButton
+                    key={cat}
+                    cat={cat}
+                    isActive={activeFilter === cat}
+                    onClick={() => setActiveFilter(activeFilter === cat ? null : cat)}
+                  />
+                ))}
+              </div>
 
-          {/* ─── Selected Projects ─── */}
-          <section id="selected-projects" className="pt-12">
-            <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
-              Selected Projects
-            </h2>
-            {/* mobile fix: stack 2 thumbs per row on phones, 4 on small tablets, 6 on desktop */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
-              {filteredProjects.map((item) => (
-                <FilteredThumb
-                  key={item.alt}
-                  item={item}
-                  activeFilter={activeFilter}
-                  outfitClass={outfit.className}
-                  onOpen={setSelectedProject}
-                />
-              ))}
             </div>
-          </section>
+
+            {/* ─── Selected Projects (grouped with the header + filter bar above so the section rhythm doesn't reintroduce the gap) ─── */}
+            <section id="selected-projects" className="pt-28">
+              <h2 className={`${outfit.className} text-3xl font-light text-[#EAEAEA] mb-12`}>
+                Selected Projects
+              </h2>
+              {/* mobile fix: stack 2 thumbs per row on phones, 4 on small tablets, 6 on desktop */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+                {filteredProjects.map((item) => (
+                  <FilteredThumb
+                    key={item.alt}
+                    item={item}
+                    activeFilter={activeFilter}
+                    outfitClass={outfit.className}
+                    onOpen={setSelectedProject}
+                  />
+                ))}
+              </div>
+            </section>
+          </div>
 
           {/* ─── About Me & Footer Transition ─── */}
           {/* mobile fix: section negative margin matches main padding; vertical padding scales down on phones */}
