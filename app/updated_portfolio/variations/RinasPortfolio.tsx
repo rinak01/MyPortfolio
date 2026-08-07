@@ -2095,7 +2095,7 @@ export default function RinasPortfolio() {
 
           {/* ─── More Projects Header + Sticky Filter Bar (grouped so they sit close together, independent of the section rhythm above) ─── */}
           <div>
-            <div className="pt-16 pb-14 text-center">
+            <div className="pt-48 pb-14 text-center">
               <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[#EAEAEA]`}>
                 More things I built!{" "}
                 {/* mobile fix: drop the kaomoji to its own line on phones so neither piece breaks awkwardly; inline on md+ */}
