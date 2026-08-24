@@ -46,7 +46,7 @@ const CAT_STYLE: Record<Category, { dot: string; active: string; text: string }>
   "The June 19th Project": { dot: "#FFCC6E", active: "rgba(255,204,110,0.18)", text: "#fcd9a0" },
 };
 
-interface GridItem {
+export interface GridItem {
   src: string;
   alt: string;
   tag: string;
@@ -89,7 +89,7 @@ function getYouTubeId(url: string): string | null {
   return null;
 }
 
-const ALL_PROJECTS: GridItem[] = [
+export const ALL_PROJECTS: GridItem[] = [
   {
     src: "/images/prototypes/BMWDesignworks/BMW-Designworks-hero.jpg", alt: "BMW Designworks", tag: "BMW Group · Internship", label: "BMW Designworks", desc: "Interaction Design internship at BMW Group's design subsidiary, investigating how designers can work with and incorporate AI tools into their process", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Rapid Prototyping"], year: "2024", context: "BMW Designworks · Santa Monica, CA", tools: ["Figma", "Internal Tools"], notes: "Interaction Design internship at BMW Designworks, BMW Group's design subsidiary. The primary brief was to investigate the user experience surrounding how designers work with, and incorporate, AI tools into their process. The role involved partnering with multiple departments to brainstorm how rapidly developing technology shifts the perception of complexity in software development, and how to mitigate that complexity for the benefit of the end user.", designThinking: "Rather than treating AI as a feature to be bolted into a design tool, the brief asked the harder question: what do designers themselves need from AI? Where should it be visible, where should it disappear, and where should it refuse to act on the designer's behalf?\n\nCross-functional sessions surfaced the underlying concern: every new capability adds perceived complexity for users downstream. The investigation centered on how to absorb that complexity inside the tool, so the surfaces designers ship out to end users feel simpler, not more crowded.", images: [
       { src: "/images/prototypes/BMWDesignworks/BMW-Designworks-hero.jpg", caption: "BMW Designworks studio entrance, Newbury Park, California." },
@@ -746,10 +746,10 @@ function ScrollNav() {
             />
             {/* Tooltip label, appears to the left on hover (nav lives on right) */}
             <span
-              className="absolute right-5 whitespace-nowrap text-[11px] tracking-wide pointer-events-none
-                opacity-0 group-hover/dot:opacity-100 translate-x-1 group-hover/dot:translate-x-0
-                transition-all duration-200 px-2 py-1 rounded-sm bg-[#1A1A1A] border border-white/10
-                text-[#EAEAEA]"
+              className="absolute right-[calc(100%+10px)] top-1/2 -translate-y-1/2 whitespace-nowrap text-[11px] tracking-wide pointer-events-none
+                opacity-0 group-hover/dot:opacity-100 translate-x-2 group-hover/dot:translate-x-0
+                transition-all duration-200 px-2.5 py-1 rounded bg-[#111] border border-white/15
+                text-[#E5E7EB] shadow-lg"
             >
               {label}
             </span>
