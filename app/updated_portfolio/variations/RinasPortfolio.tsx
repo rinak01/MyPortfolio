@@ -476,9 +476,13 @@ function CaseStudyCard({ item, outfitClass }: { item: CaseStudy; outfitClass: st
       viewport={{ once: true, margin: "-10%" }}
       variants={slowFade}
       whileHover="lifted"
-      // The notch geometry rides on these three variables so it scales with the
-      // card instead of staying 96px wide on a 294px phone card.
-      className="group relative flex flex-col [--notch:76px] [--btn:60px] [--fillet:20px] lg:[--notch:96px] lg:[--btn:77px] lg:[--fillet:24px] focus-within:outline focus-within:outline-1 focus-within:outline-offset-[14px] focus-within:outline-accent/70 rounded-lg transition-transform duration-250 active:scale-[0.99] active:duration-150"
+      // Deep-link target. /v2 links its three flagship cards at /#project-01,
+      // -02 and -03; those ids existed nowhere, so all three silently dumped
+      // the visitor at the top of this page. Derived from item.num so the
+      // anchors can't drift from the cards they point at.
+      id={`project-${item.num}`}
+      // scroll-mt keeps the card clear of the viewport edge on arrival.
+      className="scroll-mt-24 group relative flex flex-col [--notch:76px] [--btn:60px] [--fillet:20px] lg:[--notch:96px] lg:[--btn:77px] lg:[--fillet:24px] focus-within:outline focus-within:outline-1 focus-within:outline-offset-[14px] focus-within:outline-accent/70 rounded-lg transition-transform duration-250 active:scale-[0.99] active:duration-150"
     >
       <div style={{ background: "var(--raised)", boxShadow: "var(--card-shadow), var(--well-rim)" }}
         className="relative aspect-[16/10] overflow-hidden rounded-lg border border-white/20">
