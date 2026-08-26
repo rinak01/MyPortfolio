@@ -109,10 +109,10 @@ export const ALL_PROJECTS: GridItem[] = [
     ]
   },
     {
-    src: "/images/03/emmastree.png", alt: "Emma's Tree", tag: "Biomimicry Hardware", label: "Emma's Tree", desc: "A synthetic plant built for a friend who works 80-hour weeks — it reacts to sunlight, signals for water, and changes with the seasons, without ever depending on her to stay alive", colSpan: 2, aspectClass: "aspect-[16/9]", objectPosition: "center 30%", categories: ["Physical Computing", "Tangible Environments", "Rapid Prototyping"], year: "2023 Jun – 2024 Jun", context: "The June 19th Project · Designer & Developer, personal commission", tools: ["Temperature-sensitive filament", "Moisture sensor", "LED indicators", "3D pen", "Solar battery bank"], notes: "My best friend Emma is a medical student who wanted a plant but knew she'd kill it — not out of carelessness, but because 80-hour weeks leave no room for it. Existing alternatives are either lifeless decorations or still demand the attention she doesn't have. The brief became: design a plant for Emma that she can never kill, one that still reacts to sunlight, signals when it wants water, and changes with the seasons, so it feels alive without depending on her to keep it that way.\n\nThe Bloom effect uses temperature-sensitive filament so the tree changes colour on touch or warmth. A moisture sensor signals watering cues organically rather than through an app. LED indicators communicate environmental state at a glance. The branching structure was drawn by hand with a 3D pen for organic form, and the whole thing runs off a solar-powered battery bank.", designThinking: "Designed using biomimicry to solve care fatigue — a synthetic plant that lives and reacts right along with Emma rather than waiting on her. Temperature-sensitive filaments and environmental sensors make it a responsive sensory anchor that mimics the energy of a real plant, so the room still feels inhabited on the days she isn't in it.\n\nNatural materials — real moss, a ceramic pot — keep the technology grounded rather than clinical. The electronics are never the point; they are what lets the object stay restorative and durable and emotionally meaningful instead of reading as a gadget.\n\nThe deliberate inversion: most plant tech tells you what your plant needs, turning a living thing into another task. This one absorbs the need entirely. The tree still expresses state — it blooms, it signals, it shifts with the season — but nothing it expresses is ever a demand.", images: [
-      { src: "/images/03/emmastree.png", caption: "The finished tree: 3D-pen branching, real moss, ceramic pot. Technology grounded in natural material." },
-      { src: "/images/03/treesystem.png", caption: "System diagram: sensor inputs, solar power path, and the filament and LED output channels." },
-      { src: "/images/03/tempchange.png", caption: "The Bloom effect — temperature-sensitive filament shifting colour on touch or ambient warmth." },
+    src: "/images/prototypes/EmmasTree/emmastree.png", alt: "Emma's Tree", tag: "Biomimicry Hardware", label: "Emma's Tree", desc: "A synthetic plant built for a friend who works 80-hour weeks — it reacts to sunlight, signals for water, and changes with the seasons, without ever depending on her to stay alive", colSpan: 2, aspectClass: "aspect-[16/9]", objectPosition: "center 30%", categories: ["Physical Computing", "Tangible Environments", "Rapid Prototyping"], year: "2023 Jun – 2024 Jun", context: "The June 19th Project · Designer & Developer, personal commission", tools: ["Temperature-sensitive filament", "Moisture sensor", "LED indicators", "3D pen", "Solar battery bank"], notes: "My best friend Emma is a medical student who wanted a plant but knew she'd kill it — not out of carelessness, but because 80-hour weeks leave no room for it. Existing alternatives are either lifeless decorations or still demand the attention she doesn't have. The brief became: design a plant for Emma that she can never kill, one that still reacts to sunlight, signals when it wants water, and changes with the seasons, so it feels alive without depending on her to keep it that way.\n\nThe Bloom effect uses temperature-sensitive filament so the tree changes colour on touch or warmth. A moisture sensor signals watering cues organically rather than through an app. LED indicators communicate environmental state at a glance. The branching structure was drawn by hand with a 3D pen for organic form, and the whole thing runs off a solar-powered battery bank.", designThinking: "Designed using biomimicry to solve care fatigue — a synthetic plant that lives and reacts right along with Emma rather than waiting on her. Temperature-sensitive filaments and environmental sensors make it a responsive sensory anchor that mimics the energy of a real plant, so the room still feels inhabited on the days she isn't in it.\n\nNatural materials — real moss, a ceramic pot — keep the technology grounded rather than clinical. The electronics are never the point; they are what lets the object stay restorative and durable and emotionally meaningful instead of reading as a gadget.\n\nThe deliberate inversion: most plant tech tells you what your plant needs, turning a living thing into another task. This one absorbs the need entirely. The tree still expresses state — it blooms, it signals, it shifts with the season — but nothing it expresses is ever a demand.", images: [
+      { src: "/images/prototypes/EmmasTree/emmastree.png", caption: "The finished tree: 3D-pen branching, real moss, ceramic pot. Technology grounded in natural material." },
+      { src: "/images/prototypes/EmmasTree/treesystem.png", caption: "System diagram: sensor inputs, solar power path, and the filament and LED output channels." },
+      { src: "/images/prototypes/EmmasTree/tempchange.png", caption: "The Bloom effect — temperature-sensitive filament shifting colour on touch or ambient warmth." },
     ]
   },
     {
@@ -425,7 +425,7 @@ const CASE_STUDIES: CaseStudy[] = [
     outcome: "Aligned research, product, and engineering on one set of context-gating rules — what the car surfaces, and when.",
     tags: ["Automotive HMI", "Generative UI"],
     id: "bmw-adaptive-ui",
-    img: "/images/00/neueklasse.webp",
+    img: "/images/01/neueklasse.webp",
     Body: BMWCaseStudyBody,
   },
   {
@@ -437,7 +437,7 @@ const CASE_STUDIES: CaseStudy[] = [
     outcome: "Over 90% intent-classification accuracy on unscripted speech, in a modular pipeline built to port across hardware.",
     tags: ["Voice Interfaces", "ML Research"],
     id: "cmu-proactive-agent",
-    img: "/images/01/proactive agent pipeline.png",
+    img: "/images/02/proactive agent pipeline.png",
     fit: "contain",
     Body: SmashCaseStudyBody,
   },
@@ -450,7 +450,7 @@ const CASE_STUDIES: CaseStudy[] = [
     outcome: "Scored 4–5 of 5 on willingness to buy. Shipped a design system, engineer-agreed feasibility ratings, and a roadmap through Q4 2026.",
     tags: ["Enterprise UX", "Product Design"],
     id: "cmu-surefront-plm",
-    img: "/images/02/surefront-lineplanning.jpg",
+    img: "/images/03/surefront/surefront-lineplanning.jpg",
     Body: SurefrontCaseStudyBody,
   },
 ];
@@ -476,10 +476,10 @@ function CaseStudyCard({ item, outfitClass }: { item: CaseStudy; outfitClass: st
       viewport={{ once: true, margin: "-10%" }}
       variants={slowFade}
       whileHover="lifted"
-      // Deep-link target. /v2 links its three flagship cards at /#project-01,
-      // -02 and -03; those ids existed nowhere, so all three silently dumped
-      // the visitor at the top of this page. Derived from item.num so the
-      // anchors can't drift from the cards they point at.
+      // Deep-link target: /#project-01, -02, -03 address a specific case
+      // study, so a single project can be linked directly from a CV, an
+      // email or anywhere else. Derived from item.num so the anchors can't
+      // drift from the cards they point at.
       id={`project-${item.num}`}
       // scroll-mt keeps the card clear of the viewport edge on arrival.
       className="scroll-mt-24 group relative flex flex-col [--notch:76px] [--btn:60px] [--fillet:20px] lg:[--notch:96px] lg:[--btn:77px] lg:[--fillet:24px] focus-within:outline focus-within:outline-1 focus-within:outline-offset-[14px] focus-within:outline-accent/70 rounded-lg transition-transform duration-250 active:scale-[0.99] active:duration-150"
@@ -1335,19 +1335,19 @@ function BMWCaseStudyBody() {
               {/* Right, imagery */}
               <div className="lg:col-span-8 space-y-4">
                 <div className="relative aspect-[21/9] overflow-hidden bg-raised rounded-sm">
-                  <Image src="/images/00/neueklasse.webp" alt="BMW Interface" fill
+                  <Image src="/images/01/neueklasse.webp" alt="BMW Interface" fill
                     sizes="(max-width: 1024px) 100vw, 66vw"
                     className="object-cover opacity-80 hover:opacity-100 hover:scale-[1.02] transition-all duration-400 ease-out" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="aspect-video bg-raised rounded-sm p-6 flex items-center justify-center">
                     <>
-                      <Image src="/images/00/layers_whitetext.png" alt="Layers diagram" width={dimsOf("/images/00/layers_whitetext.png").w} height={dimsOf("/images/00/layers_whitetext.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="only-dark w-full h-auto opacity-90" />
-                      <Image src="/images/00/layers.png" alt="Layers diagram" width={dimsOf("/images/00/layers.png").w} height={dimsOf("/images/00/layers.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="only-light w-full h-auto opacity-90" />
+                      <Image src="/images/01/layers_whitetext.png" alt="Layers diagram" width={dimsOf("/images/01/layers_whitetext.png").w} height={dimsOf("/images/01/layers_whitetext.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="only-dark w-full h-auto opacity-90" />
+                      <Image src="/images/01/layers.png" alt="Layers diagram" width={dimsOf("/images/01/layers.png").w} height={dimsOf("/images/01/layers.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="only-light w-full h-auto opacity-90" />
                     </>
                   </div>
                   <div className="aspect-video bg-raised rounded-sm p-6 flex items-center justify-center">
-                    <Image src="/images/00/pipeline.png" alt="Pipeline diagram" width={dimsOf("/images/00/pipeline.png").w} height={dimsOf("/images/00/pipeline.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="w-full h-auto opacity-90" />
+                    <Image src="/images/01/pipeline.png" alt="Pipeline diagram" width={dimsOf("/images/01/pipeline.png").w} height={dimsOf("/images/01/pipeline.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="w-full h-auto opacity-90" />
                   </div>
                 </div>
               </div>
@@ -1769,7 +1769,7 @@ function BMWCaseStudyBody() {
                       { step: "02", label: "Intent Parsing", sub: "NLP · Context classification" },
                       { step: "03", label: "UI Generation", sub: "Component synthesis · Agent selection" },
                       { step: "04", label: "Layout Orchestration", sub: "Priority scoring · Glance-budget check" },
-                      { step: "05", label: "Rendered Interface", sub: "Sub-50ms · Auto-dismissed when resolved", hoverImage: "/images/00/BMW_Roadstoavoid.png" },
+                      { step: "05", label: "Rendered Interface", sub: "Sub-50ms · Auto-dismissed when resolved", hoverImage: "/images/01/BMW_Roadstoavoid.png" },
                     ].map(({ step, label, sub, hoverImage }, i, arr) => (
                       <div key={step} className={`flex flex-col relative ${hoverImage ? "group/step" : ""}`}>
                         <div className="flex items-center gap-5">
@@ -2089,7 +2089,7 @@ function SmashCaseStudyBody() {
                 </div>
                 {/* NLP diagram */}
                 {/* <div className="bg-raised rounded-sm p-6 flex items-center justify-center">
-                <Image loading="lazy" src="/images/01/NL01.png" alt="NLP Semantic Analysis" width={dimsOf("/images/01/NL01.png").w} height={dimsOf("/images/01/NL01.png").h} sizes="(max-width: 1024px) 100vw, 50vw" className="w-[85%] h-auto opacity-70 dark-invert" />
+                <Image loading="lazy" src="/images/02/NL01.png" alt="NLP Semantic Analysis" width={dimsOf("/images/02/NL01.png").w} height={dimsOf("/images/02/NL01.png").h} sizes="(max-width: 1024px) 100vw, 50vw" className="w-[85%] h-auto opacity-70 dark-invert" />
               </div> */}
                 {/* ── Response Accuracy, Formal vs Informal Comparison ── */}
                 <div
@@ -2396,7 +2396,7 @@ function SurefrontCaseStudyBody() {
               <div className="lg:col-span-7 space-y-4">
                 <figure className="space-y-2">
                   <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                    <Image loading="lazy" src="/images/02/surefront-lineplanning.jpg" alt="Line planning workspace showing season KPIs, style rows, and a merchant notes panel" width={dimsOf("/images/02/surefront-lineplanning.jpg").w} height={dimsOf("/images/02/surefront-lineplanning.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                    <Image loading="lazy" src="/images/03/surefront/surefront-lineplanning.jpg" alt="Line planning workspace showing season KPIs, style rows, and a merchant notes panel" width={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").w} height={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
                   </div>
                   <figcaption className="text-sm text-meta leading-relaxed">
                     Line planning: assortment, targets, and merchant intent in one editable view, replacing the line sheet and spreadsheet pair.
@@ -2406,7 +2406,7 @@ function SurefrontCaseStudyBody() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <figure className="space-y-2">
                     <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                      <Image loading="lazy" src="/images/02/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart beside the product catalogue" width={dimsOf("/images/02/surefront-analytics.jpg").w} height={dimsOf("/images/02/surefront-analytics.jpg").h} sizes="(max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                      <Image loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart beside the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
                     </div>
                     <figcaption className="text-sm text-meta leading-relaxed">
                       Analytics, built as a coded prototype so interactions could be tested rather than described.
@@ -2415,7 +2415,7 @@ function SurefrontCaseStudyBody() {
 
                   <figure className="space-y-2">
                     <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                      <Image loading="lazy" src="/images/02/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/02/surefront-library.jpg").w} height={dimsOf("/images/02/surefront-library.jpg").h} sizes="(max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                      <Image loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
                     </div>
                     <figcaption className="text-sm text-meta leading-relaxed">
                       Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.
@@ -2432,7 +2432,7 @@ function SurefrontCaseStudyBody() {
                   <div className="lg:col-span-7">
                     <figure className="space-y-2">
                       <div className="w-full overflow-hidden rounded-sm border border-line bg-white/[0.96] p-3">
-                        <Image loading="lazy" src="/images/02/surefront-style-flow.png" alt="Before and after diagram of style creation, from four steps repeated per variant to a maximum of two" width={dimsOf("/images/02/surefront-style-flow.png").w} height={dimsOf("/images/02/surefront-style-flow.png").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto" />
+                        <Image loading="lazy" src="/images/03/surefront/surefront-style-flow.png" alt="Before and after diagram of style creation, from four steps repeated per variant to a maximum of two" width={dimsOf("/images/03/surefront/surefront-style-flow.png").w} height={dimsOf("/images/03/surefront/surefront-style-flow.png").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto" />
                       </div>
                       <figcaption className="text-sm text-meta leading-relaxed">
                         Creating a jacket in five sizes and four colors meant duplicating the base product nineteen times and relinking every child. Restructured into one variant-set step, with per-variant editing only where something genuinely differs.
