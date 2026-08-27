@@ -2334,21 +2334,57 @@ function SurefrontCaseStudyBody() {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-              {/* Left, meta + framing */}
-              <div className="lg:col-span-5 flex flex-col gap-8">
-                <div className="flex items-baseline gap-4">
+              {/* Title, then the result. Impact leads: a reader who stops after
+                  the first screen should still leave knowing how it landed and
+                  which parts were mine. The narrative picks up below. */}
+              <div className="lg:col-span-12">
+                <div className="flex items-baseline gap-4 mb-8">
                   <span className={`${outfit.className} text-5xl font-light text-ink`}>03</span>
                   <span className="text-sm uppercase tracking-[0.2em] text-accent">CMU &times; Surefront</span>
                 </div>
+                <h2 className={`${outfit.className} text-3xl font-light text-ink mb-1`}>
+                  Making PLM the place apparel teams actually work
+                </h2>
+                <p className="text-sm tracking-widest uppercase text-body">
+                  2025 Jan – 2025 Aug &nbsp;·&nbsp; MHCI Capstone &nbsp;·&nbsp; UX Research &amp; Product Design
+                </p>
+              </div>
 
-                <div>
-                  <h2 className={`${outfit.className} text-3xl font-light text-ink mb-1`}>
-                    Making PLM the place apparel teams actually work
-                  </h2>
-                  <p className="text-sm tracking-widest uppercase text-body mb-6">
-                    2025 Jan – 2025 Aug &nbsp;·&nbsp; MHCI Capstone &nbsp;·&nbsp; UX Research &amp; Product Design
+              {/* Outcome, moved above the narrative to lead with impact. */}
+              <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                <div className="lg:col-span-5 text-base text-body leading-relaxed">
+                  <SectionLabel>Outcome</SectionLabel>
+                  <p className="mb-4">
+                    Designers and product developers scored the redesigned workflows four to five out of five on whether they would buy the software. Merchandisers described the line planner as strategic at a glance, and the concept campaign confirmed the demand independently of our interview pool.
                   </p>
+                  <p>
+                    We handed off a design system and implementation guidelines, feasibility ratings agreed with Surefront&rsquo;s engineer feature by feature, and a quarterly roadmap running from Q4 2025 to Q4 2026.
+                  </p>
+                </div>
 
+                <div className="lg:col-span-7">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      // Lead with the outcome, not the effort: the step collapse is the
+                      // strongest number here. Co-design partners still appear in Research
+                      // and in "How it was tested", so nothing is lost by demoting them.
+                      { value: "19 \u2192 1", label: "Duplications to create one style" },
+                      { value: "30+", label: "Interviews" },
+                      { value: "11", label: "Usability sessions" },
+                      { value: "4–5 / 5", label: "Would-buy score" },
+                    ].map(({ value, label }) => (
+                      <div key={label} className="rounded-sm border border-line bg-raised p-5">
+                        <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>
+                        <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Left, framing */}
+              <div className="lg:col-span-5 flex flex-col gap-8">
+                <div>
                   <div className="space-y-6 text-base text-body leading-relaxed">
                     {/* The Problem */}
                     <div>
@@ -2403,8 +2439,22 @@ function SurefrontCaseStudyBody() {
                 </div>
               </div>
 
-              {/* Right, product imagery */}
+              {/* Right, research exhibit then product imagery. The interviews
+                  panel leads: it sits beside the Research column on the left, so
+                  the two halves of the row cover the same beat before the page
+                  moves on to what was designed. */}
               <div className="lg:col-span-7 space-y-4">
+                {/* 481px source: rendering it wider only upscales an already small
+                    export. Left-aligned in the column rather than stretched. */}
+                <figure className="space-y-2 max-w-[481px]">
+                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                    <Image loading="lazy" src="/images/03/surefront/SurefrontInterviews.png" alt="Breakdown of thirty-plus research participants by role and company type, with averages for years of experience, in-house PLM selection team members, and PLM consultants" width={dimsOf("/images/03/surefront/SurefrontInterviews.png").w} height={dimsOf("/images/03/surefront/SurefrontInterviews.png").h} sizes="(max-width: 640px) 100vw, 481px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                  </div>
+                  <figcaption className="text-sm text-meta leading-relaxed">
+                    Who the thirty-plus interviews actually reached, by role and company type. Twelve years of experience on average, seven people who had sat on an in-house PLM selection team, and three consultants who run PLM selection and implementation for a living. Recruiting, protocol, and synthesis were mine.
+                  </figcaption>
+                </figure>
+
                 <figure className="space-y-2">
                   {/* Annotated: the screenshot alone cannot say which parts are the
                       design decision and which were already there. Pins are
@@ -2447,25 +2497,16 @@ function SurefrontCaseStudyBody() {
                   </ol>
                 </figure>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <figure className="space-y-2">
-                    <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                      <Image loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart beside the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                    </div>
-                    <figcaption className="text-sm text-meta leading-relaxed">
-                      Analytics, built as a coded prototype so interactions could be tested rather than described.
-                    </figcaption>
-                  </figure>
-
-                  <figure className="space-y-2">
-                    <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                      <Image loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                    </div>
-                    <figcaption className="text-sm text-meta leading-relaxed">
-                      Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.
-                    </figcaption>
-                  </figure>
-                </div>
+                {/* Full width, not the old two-up: at half column these read as
+                    texture rather than as screens anyone can inspect. */}
+                <figure className="space-y-2">
+                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                    <Image loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                  </div>
+                  <figcaption className="text-sm text-meta leading-relaxed">
+                    Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.
+                  </figcaption>
+                </figure>
               </div>
 
               {/* Full width, design decisions */}
@@ -2480,6 +2521,29 @@ function SurefrontCaseStudyBody() {
                       </div>
                       <figcaption className="text-sm text-meta leading-relaxed">
                         Creating a jacket in five sizes and four colors meant duplicating the base product nineteen times and relinking every child. Restructured into one variant-set step, with per-variant editing only where something genuinely differs.
+                      </figcaption>
+                    </figure>
+
+                    {/* The diagram above claims the collapse; this shows it happening.
+                        Nineteen -> one is the headline stat now, so it should not rest
+                        on a before/after drawing alone. Same preload="none" + poster
+                        treatment as the analytics clip: nothing ships until play. */}
+                    <figure className="space-y-2 pt-6">
+                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                        <video
+                          controls
+                          preload="none"
+                          playsInline
+                          poster="/images/03/surefront/style-creation-poster.jpg"
+                          className="w-full h-auto block"
+                        >
+                          <source src="/images/03/surefront/style-creation.mp4" type="video/mp4" />
+                          Your browser does not support embedded video. The clip shows one style being
+                          created with every size and colour variant selected in a single pass.
+                        </video>
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        One pass, every variant. Sizes and colours are multi-selected on the style itself, and fabric, finish, and the measurement sheet are pulled from the centralized libraries rather than retyped, which is the second decision below doing the work that makes the first one possible.
                       </figcaption>
                     </figure>
                   </div>
@@ -2522,6 +2586,18 @@ function SurefrontCaseStudyBody() {
                   weeks for a product developer to migrate data out of the PLM into Excel before they could judge
                   whether a season was balanced.
                 </p>
+
+                {/* Capped at 545px: the source is 1089px wide, so anything larger
+                    is upscaling on a 2x display, and this is dense UI where the
+                    legibility is the whole point. */}
+                <figure className="space-y-2 mb-10 max-w-[545px]">
+                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                    <Image loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart bound to the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 640px) 100vw, 545px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                  </div>
+                  <figcaption className="text-sm text-meta leading-relaxed">
+                    Version two: the chart and the catalogue on one screen, so a filter is always visibly acting on the products behind the numbers.
+                  </figcaption>
+                </figure>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                   <div className="lg:col-span-7 space-y-6">
@@ -2597,43 +2673,16 @@ function SurefrontCaseStudyBody() {
                   </div>
                 </div>
               </div>
-              {/* Full width, outcome */}
-              <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-20 border-t border-line-strong mt-16">
-                <div className="lg:col-span-5 text-base text-body leading-relaxed">
-                  <SectionLabel>Outcome</SectionLabel>
-                  <p className="mb-4">
-                    Designers and product developers scored the redesigned workflows four to five out of five on whether they would buy the software. Merchandisers described the line planner as strategic at a glance, and the concept campaign confirmed the demand independently of our interview pool.
-                  </p>
-                  <p>
-                    We handed off a design system and implementation guidelines, feasibility ratings agreed with Surefront&rsquo;s engineer feature by feature, and a quarterly roadmap running from Q4 2025 to Q4 2026.
-                  </p>
-                </div>
-
-                <div className="lg:col-span-7">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {[
-                      // Lead with the outcome, not the effort: the step collapse is the
-                      // strongest number here. Co-design partners still appear in Research
-                      // and in "How it was tested", so nothing is lost by demoting them.
-                      { value: "19 \u2192 1", label: "Duplications to create one style" },
-                      { value: "30+", label: "Interviews" },
-                      { value: "11", label: "Usability sessions" },
-                      { value: "4–5 / 5", label: "Would-buy score" },
-                    ].map(({ value, label }) => (
-                      <div key={label} className="rounded-sm border border-line bg-raised p-5">
-                        <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>
-                        <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 rounded-sm border border-line bg-panel-2 p-5 text-base text-body leading-relaxed">
-                    <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-2">Left open</span>
+              {/* Closes the case study. The result is at the top now, so what is
+                  still unsolved is the honest note to end on. */}
+              <div className="lg:col-span-12 pt-20 border-t border-line-strong mt-16">
+                <div className="lg:w-7/12">
+                  <SectionLabel>Left open</SectionLabel>
+                  <p className="text-base text-body leading-relaxed">
                     Pivot-table depth, libraries that differ company to company, and migrating legacy data from systems that all report their numbers differently. Each is named in the handoff rather than designed around.
-                  </div>
+                  </p>
                 </div>
               </div>
-
 
             </div></>
 
