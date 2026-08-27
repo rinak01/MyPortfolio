@@ -2553,9 +2553,12 @@ function SurefrontCaseStudyBody() {
                 </p>
               </div>
 
-              {/* Outcome, moved above the narrative to lead with impact. */}
-              <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                <div className="lg:col-span-5 text-base text-body leading-relaxed">
+              {/* Outcome, moved above the narrative to lead with impact, and given
+                  a panel of its own so it reads as the headline rather than as one
+                  more row of body copy. Same panel vocabulary as The Problem box
+                  below it, with the accent border doing the emphasis. */}
+              <div className="lg:col-span-12 rounded-sm border border-accent/30 bg-panel-2 p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                <div className="lg:col-span-4 text-base text-body leading-relaxed">
                   <SectionLabel>Outcome</SectionLabel>
                   <p className="mb-4">
                     Designers and product developers scored the redesigned workflows four to five out of five on whether they would buy the software. Merchandisers described the line planner as strategic at a glance, and the concept campaign confirmed the demand independently of our interview pool.
@@ -2565,19 +2568,19 @@ function SurefrontCaseStudyBody() {
                   </p>
                 </div>
 
-                <div className="lg:col-span-7">
+                <div className="lg:col-span-8">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
                       // Lead with the outcome, not the effort: the step collapse is the
                       // strongest number here. Co-design partners still appear in Research
                       // and in "How it was tested", so nothing is lost by demoting them.
-                      { value: "19 \u2192 1", label: "Duplications to create one style" },
+                      { value: "19 \u2192 1", label: "Duplications per style" },
                       { value: "30+", label: "Interviews" },
                       { value: "11", label: "Usability sessions" },
                       { value: "4–5 / 5", label: "Would-buy score" },
                     ].map(({ value, label }) => (
                       <div key={label} className="rounded-sm border border-line bg-raised p-5">
-                        <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>
+                        <span className={`${outfit.className} block text-2xl md:text-3xl text-ink mb-2 whitespace-nowrap`}>{value}</span>
                         <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
                       </div>
                     ))}
@@ -2614,7 +2617,7 @@ function SurefrontCaseStudyBody() {
                     <div>
                       <SectionLabel>My Role</SectionLabel>
                       <p>
-                        Five-person MHCI capstone team, working directly with Surefront&rsquo;s product and engineering leads over eight months. My scope: I owned primary research end to end, thirty-plus interviews, the study protocol, and synthesis, and led the coded analytics prototype used to test interaction patterns with merchandisers rather than just describe them.
+                        Five-person MHCI capstone team, working directly with Surefront&rsquo;s product and engineering leads. My scope was three things. I owned primary research end to end, thirty-plus interviews, the study protocol, and synthesis. I owned the trend signals module below, from the tab-switching finding that justified it through to the shipped screens. And I led the coded analytics prototype, so the interaction patterns could be tested with merchandisers rather than described to them.
                       </p>
                     </div>
 
@@ -2710,6 +2713,70 @@ function SurefrontCaseStudyBody() {
                     Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.
                   </figcaption>
                 </figure>
+              </div>
+
+              {/* Trend signals: the module that started the whole thesis, shown as
+                  it shipped and as it should have been. Kept honest — the revision
+                  is labelled as a revision, not passed off as delivered work. */}
+              <div className="lg:col-span-12 pt-16">
+                <SectionLabel>Trend Signals</SectionLabel>
+
+                <p className={`${outfit.className} text-2xl md:text-3xl font-light text-ink leading-snug max-w-3xl mb-4`}>
+                  Merchandisers were spotting trends in three tabs, none of them the PLM.
+                </p>
+                <p className="text-base text-body leading-relaxed max-w-2xl mb-10">
+                  Instagram for what people were wearing, Google Trends for whether it was growing, then the PLM to see
+                  whether they had anything like it. The trend and the line lived in different tools, so the answer to
+                  &ldquo;should we make this&rdquo; was assembled by hand every time. This module put the signal next to
+                  the catalogue it applies to.
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                  <div className="lg:col-span-4">
+                    <figure className="space-y-2 max-w-[346px]">
+                      <div className="w-full overflow-hidden rounded-sm border border-line bg-raised">
+                        <Image loading="lazy" src="/images/03/surefront/trend_forecasting_dashboard 1.png" alt="The trend dashboard as shipped, with a purple gradient background, a mocked social post, and a product tile with a retail price" width={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").w} height={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").h} sizes="(max-width: 640px) 100vw, 346px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        <span className="text-ink">As shipped.</span> It works, and it tested well on comprehension. It also
+                        reads as a shopping app: a consumer gradient, a mocked influencer post, and a product tile with a
+                        retail price, in a tool whose users are merchandisers and product developers.
+                      </figcaption>
+                    </figure>
+                  </div>
+
+                  <div className="lg:col-span-8">
+                    <figure className="space-y-2">
+                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised p-2 sm:p-3">
+                        <TrendSignalsMock />
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        <span className="text-ink">Revision, not delivered work.</span> Same data, same module, rebuilt in the
+                        register its users actually work in. Built in code rather than redrawn as an image, so it stays sharp
+                        at any size and follows the page rather than sitting on it as a screenshot.
+                      </figcaption>
+                    </figure>
+                  </div>
+                </div>
+
+                <div className="pt-10">
+                  <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-4">What changed, and why</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
+                    {[
+                      ["A score with nothing behind it", "The shipped version showed a bare 95 and asked to be trusted. Momentum now states its inputs, growth, volume, and weeks sustained, keeps all three on the row, and says how they combine. A number a merchandiser cannot argue with is a number they will not act on."],
+                      ["A price tag, in a PLM", "The $89.99 product tile answered a shopper's question. Merchandisers are asking whether they already carry anything like this, so it became matching styles in your line, with style number, season, colourway, and sell-through. This is the whole argument for putting trends inside the PLM rather than beside it."],
+                      ["Invented social proof", "A mocked @handle with likes and comments is evidence of nothing, and it invites the reader to check whether the account is real. Replaced with counted, attributed sources."],
+                      ["A persona nobody asked for", "\u201cPersonal Fashion Assistant\u201d framed a merchandising tool as a companion app. The queries underneath were the useful part, so they stayed and the character went."],
+                      ["Data with no reading", "The growth curve showed a shape and left the interpretation to the viewer. It now carries the read: sustained six-week growth is a season-level shift, and should be planned against rather than chased in-season."],
+                      ["Consumer skin on an enterprise tool", "The purple gradient set an expectation the rest of the platform does not meet. The revision uses the product's own neutral surface, so the module looks like it belongs in the PLM the rest of this case study is about."],
+                    ].map(([h, body]) => (
+                      <div key={h}>
+                        <span className="block text-ink mb-1.5">{h}</span>
+                        <p className="text-base text-body leading-relaxed">{body}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Full width, design decisions */}
@@ -2876,70 +2943,6 @@ function SurefrontCaseStudyBody() {
                   </div>
                 </div>
               </div>
-              {/* Trend signals: the module that started the whole thesis, shown as
-                  it shipped and as it should have been. Kept honest — the revision
-                  is labelled as a revision, not passed off as delivered work. */}
-              <div className="lg:col-span-12 pt-16">
-                <SectionLabel>Trend Signals</SectionLabel>
-
-                <p className={`${outfit.className} text-2xl md:text-3xl font-light text-ink leading-snug max-w-3xl mb-4`}>
-                  Merchandisers were spotting trends in three tabs, none of them the PLM.
-                </p>
-                <p className="text-base text-body leading-relaxed max-w-2xl mb-10">
-                  Instagram for what people were wearing, Google Trends for whether it was growing, then the PLM to see
-                  whether they had anything like it. The trend and the line lived in different tools, so the answer to
-                  &ldquo;should we make this&rdquo; was assembled by hand every time. This module put the signal next to
-                  the catalogue it applies to.
-                </p>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-                  <div className="lg:col-span-4">
-                    <figure className="space-y-2 max-w-[346px]">
-                      <div className="w-full overflow-hidden rounded-sm border border-line bg-raised">
-                        <Image loading="lazy" src="/images/03/surefront/trend_forecasting_dashboard 1.png" alt="The trend dashboard as shipped, with a purple gradient background, a mocked social post, and a product tile with a retail price" width={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").w} height={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").h} sizes="(max-width: 640px) 100vw, 346px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                      </div>
-                      <figcaption className="text-sm text-meta leading-relaxed">
-                        <span className="text-ink">As shipped.</span> It works, and it tested well on comprehension. It also
-                        reads as a shopping app: a consumer gradient, a mocked influencer post, and a product tile with a
-                        retail price, in a tool whose users are merchandisers and product developers.
-                      </figcaption>
-                    </figure>
-                  </div>
-
-                  <div className="lg:col-span-8">
-                    <figure className="space-y-2">
-                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised p-2 sm:p-3">
-                        <TrendSignalsMock />
-                      </div>
-                      <figcaption className="text-sm text-meta leading-relaxed">
-                        <span className="text-ink">Revision, not delivered work.</span> Same data, same module, rebuilt in the
-                        register its users actually work in. Built in code rather than redrawn as an image, so it stays sharp
-                        at any size and follows the page rather than sitting on it as a screenshot.
-                      </figcaption>
-                    </figure>
-                  </div>
-                </div>
-
-                <div className="pt-10">
-                  <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-4">What changed, and why</span>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
-                    {[
-                      ["A score with nothing behind it", "The shipped version showed a bare 95 and asked to be trusted. Momentum now states its inputs, growth, volume, and weeks sustained, keeps all three on the row, and says how they combine. A number a merchandiser cannot argue with is a number they will not act on."],
-                      ["A price tag, in a PLM", "The $89.99 product tile answered a shopper's question. Merchandisers are asking whether they already carry anything like this, so it became matching styles in your line, with style number, season, colourway, and sell-through. This is the whole argument for putting trends inside the PLM rather than beside it."],
-                      ["Invented social proof", "A mocked @handle with likes and comments is evidence of nothing, and it invites the reader to check whether the account is real. Replaced with counted, attributed sources."],
-                      ["A persona nobody asked for", "\u201cPersonal Fashion Assistant\u201d framed a merchandising tool as a companion app. The queries underneath were the useful part, so they stayed and the character went."],
-                      ["Data with no reading", "The growth curve showed a shape and left the interpretation to the viewer. It now carries the read: sustained six-week growth is a season-level shift, and should be planned against rather than chased in-season."],
-                      ["Consumer skin on an enterprise tool", "The purple gradient set an expectation the rest of the platform does not meet. The revision uses the product's own neutral surface, so the module looks like it belongs in the PLM the rest of this case study is about."],
-                    ].map(([h, body]) => (
-                      <div key={h}>
-                        <span className="block text-ink mb-1.5">{h}</span>
-                        <p className="text-base text-body leading-relaxed">{body}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
               {/* Closes the case study. The result is at the top now, so what is
                   still unsolved is the honest note to end on. */}
               <div className="lg:col-span-12 pt-20 border-t border-line-strong mt-16">
