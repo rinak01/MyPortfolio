@@ -446,9 +446,12 @@ const CASE_STUDIES: CaseStudy[] = [
     org: "CMU × Surefront",
     title: "Making PLM the place apparel teams actually work",
     meta: "2025 Jan – 2025 Aug · MHCI Capstone",
-    // Previous subtitle, kept for comparison per Rina's request:
-    // desc: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it.",
-    desc: "Merchandisers were checking Instagram, Google Trends, and their PLM in three different tabs to spot a trend. We put the trend data inside the PLM so the tab-switching stopped.",
+    // Subtitle history, kept for comparison per Rina's request:
+    // v1, accurate but abstract: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it."
+    // v2, concrete but unsupported — the trends/tab-switching story belongs to the
+    //     Trends module that was cut in 2fc16aa, so the body never paid it off:
+    //     "Merchandisers were checking Instagram, Google Trends, and their PLM in three different tabs to spot a trend. We put the trend data inside the PLM so the tab-switching stopped."
+    desc: "Designers duplicated one jacket nineteen times to create it. Merchandisers waited three weeks for data the PLM already held. Both worked around the system meant to hold their work.",
     outcome: "Team scored 4–5 of 5 on willingness to buy and shipped a design system, engineer-agreed feasibility ratings, and a roadmap through Q4 2026, on research and a prototype I owned.",
     tags: ["Enterprise UX", "Product Design"],
     id: "cmu-surefront-plm",
@@ -2354,13 +2357,14 @@ function SurefrontCaseStudyBody() {
                         <p className="mb-3">
                           Surefront&rsquo;s MerchOps platform served jewelry and furniture brands and wanted to enter apparel, a market where every team already owns a product lifecycle management tool and quietly works around it. Designers rebuilt the same product data by hand. Merchandisers ran entire seasons out of Excel and waited two to three weeks for product developers to migrate data out of the system that was supposed to hold it.
                         </p>
-                        {/* Previous version, kept for comparison per Rina's request:
+                        {/* Earlier versions, kept for comparison per Rina's request:
+                            v1: "give apparel teams a reason to work inside the PLM instead of beside it."
+                            v2: "merchandisers were tab-switching between Instagram, Google Trends,
+                                 and the PLM to spot a trend. Put the trend inside the PLM so they
+                                 didn't have to." — cut because the Trends module it refers to is not
+                                 part of this case study, so the promise had no payoff below. */}
                         <p>
-                          <span className="text-[var(--ink)] font-medium">Design challenge:</span> give apparel teams a reason to work inside the PLM instead of beside it.
-                        </p>
-                        */}
-                        <p>
-                          <span className="text-[var(--ink)] font-medium">Design challenge:</span> merchandisers were tab-switching between Instagram, Google Trends, and the PLM to spot a trend. Put the trend inside the PLM so they didn&rsquo;t have to.
+                          <span className="text-[var(--ink)] font-medium">Design challenge:</span> collapse the work that pushed teams out of the PLM in the first place, duplicating a style per variant, retyping shared data, and waiting on someone else to export a season.
                         </p>
                       </div>
                     </div>
@@ -2413,7 +2417,7 @@ function SurefrontCaseStudyBody() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <figure className="space-y-2">
                     <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                      <Image loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart beside the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                      <Image loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart beside the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
                     </div>
                     <figcaption className="text-sm text-meta leading-relaxed">
                       Analytics, built as a coded prototype so interactions could be tested rather than described.
@@ -2422,7 +2426,7 @@ function SurefrontCaseStudyBody() {
 
                   <figure className="space-y-2">
                     <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                      <Image loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                      <Image loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
                     </div>
                     <figcaption className="text-sm text-meta leading-relaxed">
                       Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.
@@ -2485,9 +2489,12 @@ function SurefrontCaseStudyBody() {
                 <div className="lg:col-span-7">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
+                      // Lead with the outcome, not the effort: the step collapse is the
+                      // strongest number here. Co-design partners still appear in Research
+                      // and in "How it was tested", so nothing is lost by demoting them.
+                      { value: "19 \u2192 1", label: "Duplications to create one style" },
                       { value: "30+", label: "Interviews" },
                       { value: "11", label: "Usability sessions" },
-                      { value: "5", label: "Co-design partners" },
                       { value: "4–5 / 5", label: "Would-buy score" },
                     ].map(({ value, label }) => (
                       <div key={label} className="rounded-sm border border-line bg-raised p-5">
