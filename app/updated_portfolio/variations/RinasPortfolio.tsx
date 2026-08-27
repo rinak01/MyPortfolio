@@ -2761,14 +2761,16 @@ function SurefrontCaseStudyBody() {
 
                 <div className="pt-10">
                   <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-4">What changed, and why</span>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
+                  {/* Three, not six. The gradient, the persona and the mocked social
+                      post are all visible in the comparison above and do not need
+                      prose; these three are the ones that are design reasoning rather
+                      than taste. They also run in order: make the signal trustworthy,
+                      then readable, then actionable against the line. */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
                     {[
-                      ["A score with nothing behind it", "The shipped version showed a bare 95 and asked to be trusted. Momentum now states its inputs, growth, volume, and weeks sustained, keeps all three on the row, and says how they combine. A number a merchandiser cannot argue with is a number they will not act on."],
-                      ["A price tag, in a PLM", "The $89.99 product tile answered a shopper's question. Merchandisers are asking whether they already carry anything like this, so it became matching styles in your line, with style number, season, colourway, and sell-through. This is the whole argument for putting trends inside the PLM rather than beside it."],
-                      ["Invented social proof", "A mocked @handle with likes and comments is evidence of nothing, and it invites the reader to check whether the account is real. Replaced with counted, attributed sources."],
-                      ["A persona nobody asked for", "\u201cPersonal Fashion Assistant\u201d framed a merchandising tool as a companion app. The queries underneath were the useful part, so they stayed and the character went."],
+                      ["A price tag, in a PLM", "The $89.99 tile answered a shopper's question. Merchandisers are asking whether they already carry anything like it, so it became matching styles in your line: style number, season, colourway, sell-through. That is the whole argument for putting trends inside the PLM rather than beside it."],
+                      ["A score with nothing behind it", "The shipped version showed a bare 95 and asked to be trusted. Momentum now names its inputs, keeps growth, volume and weeks sustained on the row, and says how they combine. A number a merchandiser cannot argue with is one they will not act on."],
                       ["Data with no reading", "The growth curve showed a shape and left the interpretation to the viewer. It now carries the read: sustained six-week growth is a season-level shift, and should be planned against rather than chased in-season."],
-                      ["Consumer skin on an enterprise tool", "The purple gradient set an expectation the rest of the platform does not meet. The revision uses the product's own neutral surface, so the module looks like it belongs in the PLM the rest of this case study is about."],
                     ].map(([h, body]) => (
                       <div key={h}>
                         <span className="block text-ink mb-1.5">{h}</span>
