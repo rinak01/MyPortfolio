@@ -446,8 +446,10 @@ const CASE_STUDIES: CaseStudy[] = [
     org: "CMU × Surefront",
     title: "Making PLM the place apparel teams actually work",
     meta: "2025 Jan – 2025 Aug · MHCI Capstone",
-    desc: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it.",
-    outcome: "Scored 4–5 of 5 on willingness to buy. Shipped a design system, engineer-agreed feasibility ratings, and a roadmap through Q4 2026.",
+    // Previous subtitle, kept for comparison per Rina's request:
+    // desc: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it.",
+    desc: "Merchandisers were checking Instagram, Google Trends, and their PLM in three different tabs to spot a trend. We put the trend data inside the PLM so the tab-switching stopped.",
+    outcome: "Team scored 4–5 of 5 on willingness to buy and shipped a design system, engineer-agreed feasibility ratings, and a roadmap through Q4 2026, on research and a prototype I owned.",
     tags: ["Enterprise UX", "Product Design"],
     id: "cmu-surefront-plm",
     img: "/images/03/surefront/surefront-lineplanning.jpg",
@@ -2352,19 +2354,24 @@ function SurefrontCaseStudyBody() {
                         <p className="mb-3">
                           Surefront&rsquo;s MerchOps platform served jewelry and furniture brands and wanted to enter apparel, a market where every team already owns a product lifecycle management tool and quietly works around it. Designers rebuilt the same product data by hand. Merchandisers ran entire seasons out of Excel and waited two to three weeks for product developers to migrate data out of the system that was supposed to hold it.
                         </p>
+                        {/* Previous version, kept for comparison per Rina's request:
                         <p>
                           <span className="text-[var(--ink)] font-medium">Design challenge:</span> give apparel teams a reason to work inside the PLM instead of beside it.
+                        </p>
+                        */}
+                        <p>
+                          <span className="text-[var(--ink)] font-medium">Design challenge:</span> merchandisers were tab-switching between Instagram, Google Trends, and the PLM to spot a trend. Put the trend inside the PLM so they didn&rsquo;t have to.
                         </p>
                       </div>
                     </div>
 
                     <Hairline />
 
-                    {/* Team & Role */}
+                    {/* My Role */}
                     <div>
-                      <SectionLabel>Team &amp; Role</SectionLabel>
+                      <SectionLabel>My Role</SectionLabel>
                       <p>
-                        Five-person MHCI capstone team working directly with Surefront&rsquo;s product and engineering leads over eight months. I worked on user research and product design, and on the coded prototype used to test the analytics interactions.
+                        Five-person MHCI capstone team, working directly with Surefront&rsquo;s product and engineering leads over eight months. My scope: I owned primary research end to end, thirty-plus interviews, the study protocol, and synthesis, and led the coded analytics prototype used to test interaction patterns with merchandisers rather than just describe them.
                       </p>
                     </div>
 
@@ -2541,6 +2548,8 @@ function SurefrontCaseStudyBody() {
                       { value: "2\u20133 wks", label: "Wait for a season\u2019s data, before" },
                       { value: "Q1\u2013Q3 2026", label: "Analytics milestones on Surefront\u2019s roadmap" },
                       { value: "2", label: "Coded prototype rounds with merchandisers" },
+                      // Placeholder: exact split TBD, confirm before shipping.
+                      { value: "9 \u00b7 6 \u00b7 3", label: "[Placeholder] Companies \u00b7 verticals \u00b7 countries in the research pool" },
                     ].map(({ value, label }) => (
                       <div key={label} className="rounded-sm border border-line bg-raised p-5">
                         <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>
