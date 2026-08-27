@@ -445,7 +445,7 @@ const CASE_STUDIES: CaseStudy[] = [
     num: "03",
     org: "CMU × Surefront",
     title: "Making PLM the place apparel teams actually work",
-    meta: "2025 Jan – 2025 Aug · MHCI Capstone",
+    meta: "2024 Winter – 2025 Summer · MHCI Capstone",
     // Subtitle history, kept for comparison per Rina's request:
     // v1, accurate but abstract: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it."
     // v2, concrete but unsupported — the trends/tab-switching story belongs to the
@@ -2328,6 +2328,209 @@ function SmashCaseStudyBody() {
             );
 }
 
+// ─── Trend Signals, redesigned ───────────────────────────────────────────────
+// The version that shipped read as a consumer app: purple gradient, a mocked
+// Instagram post, a $89.99 product tile, and a "Personal Fashion Assistant".
+// Real PLM users are merchandisers and PD managers, so this is the same module
+// in the register they actually work in. Rendered in JSX rather than as an
+// image because the original export is only 692px wide and cannot survive a
+// full-width slot on a 2x display.
+//
+// Palette is the product's own light UI, not the portfolio's dark chrome, so it
+// reads as a screen rather than as page furniture — same treatment the style
+// flow diagram already gets.
+const TS = {
+  page: "#F4F6F8",
+  card: "#FFFFFF",
+  line: "#E3E8EF",
+  ink: "#0F172A",
+  ink2: "#334155",
+  muted: "#64748B",
+  accent: "#2563EB",
+  accentSoft: "#EFF4FF",
+  // #059669 measured 3.77:1 on white, under AA for the 10-11px it is used at.
+  pos: "#047857",   // 5.48:1
+};
+
+function TrendSignalsMock() {
+  const signals = [
+    { r: 1, name: "Vintage dresses", m: 95, g: "+45%", v: "89K", w: "6 wks", s: "4 styles" },
+    { r: 2, name: "Sustainable fashion", m: 87, g: "+38%", v: "67K", w: "5 wks", s: "7 styles" },
+    { r: 3, name: "Athleisure", m: 82, g: "+32%", v: "54K", w: "9 wks", s: "12 styles" },
+    { r: 4, name: "Minimalist style", m: 78, g: "+28%", v: "43K", w: "4 wks", s: "6 styles" },
+    { r: 5, name: "Streetwear", m: 75, g: "+25%", v: "38K", w: "3 wks", s: "9 styles" },
+  ];
+  const sources = [
+    { label: "Google Trends search volume", val: "89K", d: "+45%" },
+    { label: "Retailer new arrivals", val: "312 SKUs", d: "+18%" },
+    { label: "Social mention volume", val: "24K", d: "+52%" },
+  ];
+  const matches = [
+    { id: "XXYY11-0", nm: "Midi Dress – Gathered Fit", se: "SS26", c: "Coral Pink", st: "68%" },
+    { id: "XXYY12-0", nm: "Midi Dress – Long Sleeve", se: "SS26", c: "Sage", st: "54%" },
+    { id: "XXYY13-0", nm: "V-Neck Dress", se: "FW25", c: "Elephant Blue", st: "71%" },
+  ];
+  // 6 months of momentum; rises then eases, matching the shipped chart's shape
+  const pts = [14, 19, 26, 31, 29, 23];
+  const maxY = 35;
+  const path = pts.map((v, i) => `${(i / (pts.length - 1)) * 300},${70 - (v / maxY) * 62}`).join(" L ");
+
+  return (
+    <div style={{ background: TS.page, color: TS.ink }} className="w-full rounded-sm p-3 sm:p-4 text-[11px] leading-tight">
+      {/* Header + query */}
+      <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3 mb-2.5">
+        <div className="flex items-baseline justify-between gap-3 flex-wrap mb-2.5">
+          <span className="text-[13px] font-semibold tracking-tight">Trend signals</span>
+          <span style={{ color: TS.muted }} className="text-[10px]">
+            Sources: Google Trends · retailer new-arrival feeds · social mention volume
+          </span>
+        </div>
+        <div className="flex gap-1.5 flex-wrap">
+          <div style={{ borderColor: TS.line, color: TS.muted }} className="flex-1 min-w-[140px] rounded-sm border px-2 py-1.5">
+            Search a category, fabric, or silhouette
+          </div>
+          {["Region: NA", "Window: 12 mo", "Category: Dresses"].map(f => (
+            <div key={f} style={{ borderColor: TS.line, color: TS.ink2 }} className="rounded-sm border px-2 py-1.5 whitespace-nowrap">
+              {f} <span style={{ color: TS.muted }}>▾</span>
+            </div>
+          ))}
+          <div style={{ background: TS.accent }} className="rounded-sm px-3 py-1.5 text-white font-medium whitespace-nowrap">
+            Run
+          </div>
+        </div>
+      </div>
+
+      {/* Ranked signals, with the index broken into its parts */}
+      <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3 mb-2.5 overflow-x-auto">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: TS.muted }}>
+          Ranked signals
+        </div>
+        <table className="w-full min-w-[440px] border-collapse">
+          <thead>
+            <tr style={{ color: TS.muted }} className="text-left text-[10px]">
+              {["#", "Signal", "Momentum", "Growth", "Volume", "Sustained", "In your line"].map(h => (
+                <th key={h} style={{ borderColor: TS.line }} className="border-b pb-1.5 font-medium">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {signals.map(s => (
+              <tr key={s.r} style={{ borderColor: TS.line }} className="border-b last:border-0">
+                <td style={{ color: TS.muted }} className="py-1.5 pr-2 tabular-nums">{s.r}</td>
+                <td className="py-1.5 pr-2 font-medium whitespace-nowrap">{s.name}</td>
+                <td className="py-1.5 pr-2">
+                  <span style={{ background: TS.accentSoft, color: TS.accent }} className="rounded-sm px-1.5 py-0.5 font-semibold tabular-nums">
+                    {s.m}
+                  </span>
+                </td>
+                <td style={{ color: TS.pos }} className="py-1.5 pr-2 tabular-nums">{s.g}</td>
+                <td className="py-1.5 pr-2 tabular-nums" style={{ color: TS.ink2 }}>{s.v}</td>
+                <td className="py-1.5 pr-2 tabular-nums" style={{ color: TS.ink2 }}>{s.w}</td>
+                <td className="py-1.5 whitespace-nowrap" style={{ color: TS.accent }}>{s.s}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {/* The shipped version showed a bare "95" with nothing to anchor it */}
+        <p style={{ color: TS.muted }} className="text-[10px] mt-2 leading-snug">
+          Momentum is search growth, absolute volume, and weeks sustained, normalised to 0–100 over the selected window.
+          The three inputs stay on the row so the index can be argued with.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5">
+        {/* Momentum curve + the editorial read */}
+        <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3">
+          <div className="flex items-baseline justify-between mb-2">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: TS.muted }}>
+              Vintage dresses, 6 months
+            </span>
+            <span style={{ color: TS.pos }} className="text-[11px] font-semibold tabular-nums">+42.5%</span>
+          </div>
+          <svg viewBox="0 0 300 80" className="w-full h-auto" preserveAspectRatio="none" aria-hidden="true">
+            {[0, 20, 40, 60].map(y => (
+              <line key={y} x1="0" y1={y + 8} x2="300" y2={y + 8} stroke={TS.line} strokeWidth="1" />
+            ))}
+            <path d={`M ${path} L 300,70 L 0,70 Z`} fill={TS.accent} fillOpacity="0.10" />
+            <path d={`M ${path}`} fill="none" stroke={TS.accent} strokeWidth="2" strokeLinejoin="round" />
+          </svg>
+          <div className="flex justify-between text-[9px] mt-1" style={{ color: TS.muted }}>
+            {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map(m => <span key={m}>{m}</span>)}
+          </div>
+          <p className="text-[10px] mt-2 leading-snug" style={{ color: TS.ink2 }}>
+            <span className="font-semibold">Read:</span> sustained six-week growth suggests a season-level shift, not a
+            viral spike. Plan against it for SS26 rather than chasing it in-season.
+          </p>
+        </div>
+
+        {/* Evidence, attributed rather than a mocked social post */}
+        <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: TS.muted }}>
+            Signal sources
+          </div>
+          {sources.map(s => (
+            <div key={s.label} style={{ borderColor: TS.line }} className="flex items-center justify-between gap-2 border-b last:border-0 py-2">
+              <span style={{ color: TS.ink2 }} className="leading-snug">{s.label}</span>
+              <span className="flex items-baseline gap-2 shrink-0">
+                <span className="tabular-nums font-medium">{s.val}</span>
+                <span style={{ color: TS.pos }} className="tabular-nums text-[10px]">{s.d}</span>
+              </span>
+            </div>
+          ))}
+          <p style={{ color: TS.muted }} className="text-[10px] mt-2 leading-snug">
+            Each signal is traceable to a counted source. Nothing is asserted without one.
+          </p>
+        </div>
+      </div>
+
+      {/* The move that makes this belong in a PLM at all */}
+      <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3 mb-2.5 overflow-x-auto">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: TS.muted }}>
+          Matching styles in your line
+        </div>
+        <table className="w-full min-w-[420px] border-collapse">
+          <thead>
+            <tr style={{ color: TS.muted }} className="text-left text-[10px]">
+              {["Style #", "Name", "Season", "Colorway", "Sell-through"].map(h => (
+                <th key={h} style={{ borderColor: TS.line }} className="border-b pb-1.5 font-medium">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {matches.map(m => (
+              <tr key={m.id} style={{ borderColor: TS.line }} className="border-b last:border-0">
+                <td className="py-1.5 pr-2 tabular-nums" style={{ color: TS.accent }}>{m.id}</td>
+                <td className="py-1.5 pr-2 whitespace-nowrap">{m.nm}</td>
+                <td className="py-1.5 pr-2" style={{ color: TS.ink2 }}>{m.se}</td>
+                <td className="py-1.5 pr-2" style={{ color: TS.ink2 }}>{m.c}</td>
+                <td className="py-1.5 tabular-nums font-medium">{m.st}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* No persona, no chat character: a query surface with real questions */}
+      <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: TS.muted }}>
+          Ask of the data
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {[
+            "Which SS26 styles map to rising signals?",
+            "Where is olive trending against last season?",
+            "Which signals have we no styles for?",
+          ].map(q => (
+            <span key={q} style={{ borderColor: TS.line, color: TS.ink2 }} className="rounded-sm border px-2 py-1">
+              {q}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SurefrontCaseStudyBody() {
   return (
 <>
@@ -2346,7 +2549,7 @@ function SurefrontCaseStudyBody() {
                   Making PLM the place apparel teams actually work
                 </h2>
                 <p className="text-sm tracking-widest uppercase text-body">
-                  2025 Jan – 2025 Aug &nbsp;·&nbsp; MHCI Capstone &nbsp;·&nbsp; UX Research &amp; Product Design
+                  2024 Winter – 2025 Summer &nbsp;·&nbsp; MHCI Capstone &nbsp;·&nbsp; UX Research &amp; Product Design
                 </p>
               </div>
 
@@ -2673,6 +2876,70 @@ function SurefrontCaseStudyBody() {
                   </div>
                 </div>
               </div>
+              {/* Trend signals: the module that started the whole thesis, shown as
+                  it shipped and as it should have been. Kept honest — the revision
+                  is labelled as a revision, not passed off as delivered work. */}
+              <div className="lg:col-span-12 pt-16">
+                <SectionLabel>Trend Signals</SectionLabel>
+
+                <p className={`${outfit.className} text-2xl md:text-3xl font-light text-ink leading-snug max-w-3xl mb-4`}>
+                  Merchandisers were spotting trends in three tabs, none of them the PLM.
+                </p>
+                <p className="text-base text-body leading-relaxed max-w-2xl mb-10">
+                  Instagram for what people were wearing, Google Trends for whether it was growing, then the PLM to see
+                  whether they had anything like it. The trend and the line lived in different tools, so the answer to
+                  &ldquo;should we make this&rdquo; was assembled by hand every time. This module put the signal next to
+                  the catalogue it applies to.
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                  <div className="lg:col-span-4">
+                    <figure className="space-y-2 max-w-[346px]">
+                      <div className="w-full overflow-hidden rounded-sm border border-line bg-raised">
+                        <Image loading="lazy" src="/images/03/surefront/trend_forecasting_dashboard 1.png" alt="The trend dashboard as shipped, with a purple gradient background, a mocked social post, and a product tile with a retail price" width={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").w} height={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").h} sizes="(max-width: 640px) 100vw, 346px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        <span className="text-ink">As shipped.</span> It works, and it tested well on comprehension. It also
+                        reads as a shopping app: a consumer gradient, a mocked influencer post, and a product tile with a
+                        retail price, in a tool whose users are merchandisers and product developers.
+                      </figcaption>
+                    </figure>
+                  </div>
+
+                  <div className="lg:col-span-8">
+                    <figure className="space-y-2">
+                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised p-2 sm:p-3">
+                        <TrendSignalsMock />
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        <span className="text-ink">Revision, not delivered work.</span> Same data, same module, rebuilt in the
+                        register its users actually work in. Built in code rather than redrawn as an image, so it stays sharp
+                        at any size and follows the page rather than sitting on it as a screenshot.
+                      </figcaption>
+                    </figure>
+                  </div>
+                </div>
+
+                <div className="pt-10">
+                  <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-4">What changed, and why</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
+                    {[
+                      ["A score with nothing behind it", "The shipped version showed a bare 95 and asked to be trusted. Momentum now states its inputs, growth, volume, and weeks sustained, keeps all three on the row, and says how they combine. A number a merchandiser cannot argue with is a number they will not act on."],
+                      ["A price tag, in a PLM", "The $89.99 product tile answered a shopper's question. Merchandisers are asking whether they already carry anything like this, so it became matching styles in your line, with style number, season, colourway, and sell-through. This is the whole argument for putting trends inside the PLM rather than beside it."],
+                      ["Invented social proof", "A mocked @handle with likes and comments is evidence of nothing, and it invites the reader to check whether the account is real. Replaced with counted, attributed sources."],
+                      ["A persona nobody asked for", "\u201cPersonal Fashion Assistant\u201d framed a merchandising tool as a companion app. The queries underneath were the useful part, so they stayed and the character went."],
+                      ["Data with no reading", "The growth curve showed a shape and left the interpretation to the viewer. It now carries the read: sustained six-week growth is a season-level shift, and should be planned against rather than chased in-season."],
+                      ["Consumer skin on an enterprise tool", "The purple gradient set an expectation the rest of the platform does not meet. The revision uses the product's own neutral surface, so the module looks like it belongs in the PLM the rest of this case study is about."],
+                    ].map(([h, body]) => (
+                      <div key={h}>
+                        <span className="block text-ink mb-1.5">{h}</span>
+                        <p className="text-base text-body leading-relaxed">{body}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {/* Closes the case study. The result is at the top now, so what is
                   still unsolved is the honest note to end on. */}
               <div className="lg:col-span-12 pt-20 border-t border-line-strong mt-16">

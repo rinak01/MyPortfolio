@@ -12,6 +12,7 @@ export const IMG_DIMS: Record<string, { w: number; h: number }> = {
   "/images/02/proactive agent pipeline.png": { w: 2166, h: 2294 },
   "/images/03/surefront/SurefrontInterviews.png": { w: 481, h: 312 },
   "/images/03/surefront/style-creation-poster.jpg": { w: 960, h: 600 },
+  "/images/03/surefront/trend_forecasting_dashboard 1.png": { w: 692, h: 951 },
   "/images/03/surefront/surefront-analytics.jpg": { w: 1089, h: 704 },
   "/images/03/surefront/surefront-library.jpg": { w: 1091, h: 681 },
   "/images/03/surefront/surefront-lineplanning.jpg": { w: 1091, h: 705 },
