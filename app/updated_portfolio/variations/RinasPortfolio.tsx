@@ -2406,12 +2406,45 @@ function SurefrontCaseStudyBody() {
               {/* Right, product imagery */}
               <div className="lg:col-span-7 space-y-4">
                 <figure className="space-y-2">
-                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                  {/* Annotated: the screenshot alone cannot say which parts are the
+                      design decision and which were already there. Pins are
+                      aria-hidden decoration; the numbered legend below carries the
+                      text, so nothing is lost without them. Positions are % of the
+                      image box, so they track it at every breakpoint. */}
+                  <div className="relative w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
                     <Image loading="lazy" src="/images/03/surefront/surefront-lineplanning.jpg" alt="Line planning workspace showing season KPIs, style rows, and a merchant notes panel" width={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").w} height={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                    {[
+                      // Placed on labels and chrome, never on data: the KPI values,
+                      // their targets, and every style row stay readable underneath.
+                      { n: 1, left: "26%", top: "22%" },
+                      { n: 2, left: "30%", top: "35.5%" },
+                      { n: 3, left: "79%", top: "19%" },
+                    ].map(({ n, left, top }) => (
+                      <span
+                        key={n}
+                        aria-hidden="true"
+                        style={{ left, top, background: "var(--mark-fill)", borderColor: "var(--mark-ring)", color: "var(--mark-glyph)" }}
+                        className="absolute -translate-x-1/2 -translate-y-1/2 grid h-5 w-5 md:h-6 md:w-6 place-items-center rounded-full border text-2xs md:text-xs font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+                      >
+                        {n}
+                      </span>
+                    ))}
                   </div>
                   <figcaption className="text-sm text-meta leading-relaxed">
                     Line planning: assortment, targets, and merchant intent in one editable view, replacing the line sheet and spreadsheet pair.
                   </figcaption>
+                  <ol className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-2 pt-1">
+                    {[
+                      "Season targets sit on the plan itself, so net sales, cost, and margin are read against goal rather than in a separate sheet.",
+                      "Assortment and line sheet collapsed into one editable table, the pair merchandisers previously kept in parallel.",
+                      "Merchant intent, notes and focus colours, captured beside the assortment it refers to instead of in email.",
+                    ].map((text, i) => (
+                      <li key={i} className="flex gap-2 text-sm text-body leading-snug">
+                        <span className="text-accent shrink-0 tabular-nums">{i + 1}</span>
+                        <span>{text}</span>
+                      </li>
+                    ))}
+                  </ol>
                 </figure>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -2474,8 +2507,98 @@ function SurefrontCaseStudyBody() {
                 </div>
               </div>
 
+              {/* Deep dive: the analytics module, and the version of it that failed.
+                  Every figure and quote below is drawn from the Surefront x CMU
+                  summer report, Jan-Aug 2025. Placed before Outcome: this is the
+                  design story, so it should not read as an appendix to the result. */}
+              <div className="lg:col-span-12 pt-16">
+                <SectionLabel>Analytics Dashboard</SectionLabel>
+
+                <p className={`${outfit.className} text-2xl md:text-3xl font-light text-ink leading-snug max-w-3xl mb-4`}>
+                  Merchandisers said they would switch PLM for this one feature.
+                </p>
+                <p className="text-base text-body leading-relaxed max-w-2xl mb-12">
+                  Past-season analysis was happening off-platform, or not at all. Merchandisers waited two to three
+                  weeks for a product developer to migrate data out of the PLM into Excel before they could judge
+                  whether a season was balanced.
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                  <div className="lg:col-span-7 space-y-6">
+                    <blockquote className="border-l border-accent pl-5">
+                      <p className="text-base text-body leading-relaxed italic">
+                        &ldquo;Past sales analysis happens off-PLM or not at all. If it had that, I&rsquo;d put it at
+                        the top. I would switch today if the software had this feature.&rdquo;
+                      </p>
+                      <cite className="not-italic block text-xs uppercase tracking-[0.16em] text-meta mt-3">
+                        Merchandiser, usability session
+                      </cite>
+                    </blockquote>
+
+                    <div>
+                      <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-2">
+                        What the first version got wrong
+                      </span>
+                      <p className="text-base text-body leading-relaxed">
+                        Version one put analytics beside the catalogue but kept the two separate. Testing killed it
+                        for two specific reasons. Merchandisers would not trust a filter they could not watch act on
+                        the products, and two-dimensional charts could not carry the three dimensions their pivot
+                        tables already gave them. Version two bound the chart to the catalogue and added the third axis.
+                      </p>
+                    </div>
+
+                    {/* The coded prototype, version two. A still cannot show a filter
+                        acting on the products, which is the whole thing testing said
+                        version one failed at, so this claim is carried by the clip.
+                        preload="none" keeps the 9.9MB off the initial page load: the
+                        poster is all that ships until someone presses play. */}
+                    <figure className="space-y-2 pt-2">
+                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                        <video
+                          controls
+                          preload="none"
+                          playsInline
+                          poster="/images/03/surefront/analytics-prototype-poster.jpg"
+                          className="w-full h-auto block"
+                        >
+                          <source src="/images/03/surefront/analytics-prototype.mp4" type="video/mp4" />
+                          Your browser does not support embedded video. The clip shows filters in the
+                          coded analytics prototype updating the product catalogue and the stacked chart together.
+                        </video>
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        Version two, running. Filter chips narrow the catalogue and the chart at the same time, and
+                        Stack&nbsp;By adds the third dimension that flat charts could not carry. Coded prototype, mine.
+                      </figcaption>
+                    </figure>
+                  </div>
+
+                  <div className="lg:col-span-5 space-y-4">
+                    {[
+                      { value: "2\u20133 wks", label: "Wait for a season\u2019s data, before" },
+                      { value: "Q1\u2013Q3 2026", label: "Analytics milestones on Surefront\u2019s roadmap" },
+                      { value: "2", label: "Coded prototype rounds with merchandisers" },
+                      // Placeholder: exact split TBD, confirm before shipping.
+                      { value: "9 \u00b7 6 \u00b7 3", label: "[Placeholder] Companies \u00b7 verticals \u00b7 countries in the research pool" },
+                    ].map(({ value, label }) => (
+                      <div key={label} className="rounded-sm border border-line bg-raised p-5">
+                        <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>
+                        <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
+                      </div>
+                    ))}
+
+                    <div className="rounded-sm border border-line bg-panel-2 p-5 text-base text-body leading-relaxed">
+                      <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-2">How it was tested</span>
+                      Eleven think-aloud sessions with designers and product developers averaging twelve years in
+                      apparel, plus co-design with five merchandisers. Demand for the merchandiser segment was tested
+                      separately with LinkedIn ads, where merchandiser, buyer, and IT manager titles clicked through
+                      at materially higher rates than other job titles.
+                    </div>
+                  </div>
+                </div>
+              </div>
               {/* Full width, outcome */}
-              <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-16">
+              <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-20 border-t border-line-strong mt-16">
                 <div className="lg:col-span-5 text-base text-body leading-relaxed">
                   <SectionLabel>Outcome</SectionLabel>
                   <p className="mb-4">
@@ -2511,69 +2634,6 @@ function SurefrontCaseStudyBody() {
                 </div>
               </div>
 
-              {/* Outcome section. Every figure and quote below is drawn from the
-                  Surefront x CMU summer report, Jan-Aug 2025. */}
-              <div className="lg:col-span-12 pt-20 border-t border-line-strong mt-16">
-                <SectionLabel>Analytics Dashboard</SectionLabel>
-
-                <p className={`${outfit.className} text-2xl md:text-3xl font-light text-ink leading-snug max-w-3xl mb-4`}>
-                  Merchandisers said they would switch PLM for this one feature.
-                </p>
-                <p className="text-base text-body leading-relaxed max-w-2xl mb-12">
-                  Past-season analysis was happening off-platform, or not at all. Merchandisers waited two to three
-                  weeks for a product developer to migrate data out of the PLM into Excel before they could judge
-                  whether a season was balanced.
-                </p>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-                  <div className="lg:col-span-7 space-y-6">
-                    <blockquote className="border-l border-accent pl-5">
-                      <p className="text-base text-body leading-relaxed italic">
-                        &ldquo;Past sales analysis happens off-PLM or not at all. If it had that, I&rsquo;d put it at
-                        the top. I would switch today if the software had this feature.&rdquo;
-                      </p>
-                      <cite className="not-italic block text-xs uppercase tracking-[0.16em] text-meta mt-3">
-                        Merchandiser, usability session
-                      </cite>
-                    </blockquote>
-
-                    <div>
-                      <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-2">
-                        What the first version got wrong
-                      </span>
-                      <p className="text-base text-body leading-relaxed">
-                        Version one put analytics beside the catalogue but kept the two separate. Testing killed it
-                        for two specific reasons. Merchandisers would not trust a filter they could not watch act on
-                        the products, and two-dimensional charts could not carry the three dimensions their pivot
-                        tables already gave them. Version two bound the chart to the catalogue and added the third axis.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-5 space-y-4">
-                    {[
-                      { value: "2\u20133 wks", label: "Wait for a season\u2019s data, before" },
-                      { value: "Q1\u2013Q3 2026", label: "Analytics milestones on Surefront\u2019s roadmap" },
-                      { value: "2", label: "Coded prototype rounds with merchandisers" },
-                      // Placeholder: exact split TBD, confirm before shipping.
-                      { value: "9 \u00b7 6 \u00b7 3", label: "[Placeholder] Companies \u00b7 verticals \u00b7 countries in the research pool" },
-                    ].map(({ value, label }) => (
-                      <div key={label} className="rounded-sm border border-line bg-raised p-5">
-                        <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>
-                        <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
-                      </div>
-                    ))}
-
-                    <div className="rounded-sm border border-line bg-panel-2 p-5 text-base text-body leading-relaxed">
-                      <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-2">How it was tested</span>
-                      Eleven think-aloud sessions with designers and product developers averaging twelve years in
-                      apparel, plus co-design with five merchandisers. Demand for the merchandiser segment was tested
-                      separately with LinkedIn ads, where merchandiser, buyer, and IT manager titles clicked through
-                      at materially higher rates than other job titles.
-                    </div>
-                  </div>
-                </div>
-              </div>
 
             </div></>
 
