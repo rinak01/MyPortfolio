@@ -2949,6 +2949,17 @@ function SurefrontCaseStudyBody() {
                     </div>
                   </div>
                 </div>
+
+                {/* Closes the case study. With Outcome at the top and "Left open"
+                    gone, the section otherwise ended on a recruitment footnote. This
+                    ties the quote that opens the section to the roadmap card beside
+                    it: both facts are already on this page. */}
+                <div className="pt-12 mt-12 border-t border-line-soft">
+                  <p className="text-base md:text-lg text-body leading-relaxed max-w-2xl">
+                    The feature a merchandiser said they would switch PLM for did not stop at the prototype:
+                    <span className="text-ink"> analytics sits on Surefront&rsquo;s roadmap for Q1&ndash;Q3 2026.</span>
+                  </p>
+                </div>
               </div>
 
             </div></>
