@@ -582,7 +582,10 @@ function CaseStudyCard({ item, outfitClass }: { item: CaseStudy; outfitClass: st
             own rule and label so a reader scanning the three cards can find
             the results without opening anything. */}
         {item.outcome && (
-          <div className="mt-4 pt-4 border-t border-line-soft">
+          // Panelled rather than ruled, matching the Outcome block at the top of
+          // the expanded case study, so the result reads as the emphasis on the
+          // card too instead of as a footnote under the description.
+          <div className="mt-4 rounded-sm border border-accent/30 bg-panel-2 p-4">
             <span className="block text-2xs uppercase tracking-[0.22em] text-accent mb-1.5">
               Outcome
             </span>
