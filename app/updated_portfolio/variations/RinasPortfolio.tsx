@@ -2950,16 +2950,6 @@ function SurefrontCaseStudyBody() {
                   </div>
                 </div>
               </div>
-              {/* Closes the case study. The result is at the top now, so what is
-                  still unsolved is the honest note to end on. */}
-              <div className="lg:col-span-12 pt-20 border-t border-line-strong mt-16">
-                <div className="lg:w-7/12">
-                  <SectionLabel>Left open</SectionLabel>
-                  <p className="text-base text-body leading-relaxed">
-                    Pivot-table depth, libraries that differ company to company, and migrating legacy data from systems that all report their numbers differently. Each is named in the handoff rather than designed around.
-                  </p>
-                </div>
-              </div>
 
             </div></>
 
