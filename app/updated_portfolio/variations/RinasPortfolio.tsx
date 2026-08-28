@@ -6,6 +6,7 @@ import { motion, AnimatePresence, MotionConfig, useIsPresent } from "framer-moti
 import Image from "next/image";
 import { Outfit, DM_Sans } from "next/font/google";
 import { dimsOf } from "./imageDims";
+import ProactiveAgentDemo from "./ProactiveAgentDemo";
 
 // The archive tile and the modal hero are a layoutId pair, so both halves must
 // be motion components. Created once at module scope — rebuilding it per render
@@ -437,6 +438,10 @@ interface CaseStudy {
   meta: string;
   desc: string;
   outcome?: string;      // what the work produced — the card states a problem, this states the result
+  // The one figure worth reading at card size, lifted out of `outcome` so it
+  // isn't buried mid-sentence. Omit where a project has no single headline
+  // number — the outcome prose then carries the block on its own.
+  stat?: { value: string; label: string };
   tags: string[];
   id: string;            // stable key; the body renders in the overlay, not on the page
   img: string;
@@ -468,7 +473,8 @@ const CASE_STUDIES: CaseStudy[] = [
     // on unscripted speech", reported the fluent-speaker mean as if it were the
     // whole result. The second run — same pipeline, limited-proficiency speakers —
     // is the actual finding, and a single accuracy figure conceals it.
-    outcome: "Above 90% classification accuracy with fluent speakers; the same pipeline came apart on limited-proficiency speech, which is the result worth reporting.",
+    outcome: "The same pipeline came apart on limited-proficiency speech — the result worth reporting.",
+    stat: { value: ">90%", label: "Fluent speakers" },
     tags: ["Voice Interfaces", "ML Research"],
     id: "cmu-proactive-agent",
     img: "/images/02/proactive agent pipeline.png",
@@ -619,10 +625,24 @@ function CaseStudyCard({ item, outfitClass }: { item: CaseStudy; outfitClass: st
           // Panelled rather than ruled, matching the Outcome block at the top of
           // the expanded case study, so the result reads as the emphasis on the
           // card too instead of as a footnote under the description.
+          // A card is scanned, not read. When the outcome was three lines of
+          // body copy at the same size as the description above it, the one
+          // number a reader would remember sat mid-sentence. `stat` pulls it
+          // out as an anchor; the sentence stays underneath as the qualifier.
           <div className="mt-4 rounded-sm border border-accent/30 bg-panel-2 p-4">
-            <span className="block text-2xs uppercase tracking-[0.22em] text-accent mb-1.5">
+            <span className="block text-2xs uppercase tracking-[0.22em] text-accent mb-2">
               Outcome
             </span>
+            {item.stat && (
+              <div className="flex items-baseline gap-2.5 mb-2">
+                <span className={`${outfitClass} text-3xl font-light leading-none text-[var(--ink)]`}>
+                  {item.stat.value}
+                </span>
+                <span className="text-2xs uppercase tracking-[0.18em] text-[var(--meta)] leading-snug">
+                  {item.stat.label}
+                </span>
+              </div>
+            )}
             <p className="text-sm text-[var(--body)] leading-relaxed">
               {item.outcome}
             </p>
@@ -2050,20 +2070,33 @@ function SmashCaseStudyBody() {
                     </p>
                   </div>
 
-                  <div className="lg:col-span-7">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="lg:col-span-7 space-y-4">
+                    {/* Two tiles, not four. "2 speaker groups" and "5 speech
+                        conditions" were removed once the corpus was located:
+                        it holds eight non-empty condition folders, not five,
+                        and the limited-proficiency condition appears there as a
+                        condition ("wrong_grammar_samples") and as a line in the
+                        system prompt rather than as a second set of speakers.
+                        Both tiles stated things the data does not support.
+                        A limited-proficiency figure belongs opposite the fluent
+                        mean here — it is the comparison the headline promises —
+                        and is still waiting on Rina's number. */}
+                    <div className="grid grid-cols-2 gap-4">
                       {[
                         { value: "84–96%", label: "Fluent range" },
                         { value: ">90%", label: "Fluent mean" },
-                        { value: "2", label: "Speaker groups" },
-                        { value: "5", label: "Speech conditions" },
                       ].map(({ value, label }) => (
                         <div key={label} className="rounded-sm border border-line bg-raised p-5">
-                          <span className={`${outfit.className} block text-2xl md:text-3xl text-ink mb-2 whitespace-nowrap`}>{value}</span>
-                          <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
+                          <span className={`${outfit.className} block text-2xl md:text-3xl text-ink mb-2 whitespace-nowrap tracking-tight`}>{value}</span>
+                          <span className="block text-xs uppercase tracking-[0.14em] text-meta leading-snug">{label}</span>
                         </div>
                       ))}
                     </div>
+
+                    {/* The live pipeline, filling what was dead space under the
+                        tiles. A case study about when an agent should stay quiet
+                        is more convincing when the reader can make it stay quiet. */}
+                    <ProactiveAgentDemo />
                   </div>
                 </div>
               </div>
@@ -2255,7 +2288,7 @@ function SmashCaseStudyBody() {
                       are one of two runs, and presenting them unqualified was what
                       made a 12-point band look like the whole result. */}
                   <div className="flex items-center justify-between mb-2.5">
-                    <span className="text-xs uppercase tracking-[0.24em] text-[var(--dgm-accent)] font-semibold">Response Accuracy</span>
+                    <span className="text-xs uppercase tracking-[0.24em] text-[var(--dgm-accent)] font-semibold">Accuracy by condition</span>
                     <span className="text-2xs uppercase tracking-[0.2em] text-[var(--dgm-on-plate-3)]">Fluent Speakers</span>
                   </div>
 
@@ -2404,14 +2437,25 @@ function SmashCaseStudyBody() {
                     — same treatment as the 481px Surefront interviews figure. */}
                 <figure className="space-y-2 rounded-lg border border-[var(--dgm-stroke)]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md" style={{ background: "var(--dgm-plate)" }}>
                   <div className="flex items-center justify-between mb-2.5">
-                    <span className="text-xs uppercase tracking-[0.24em] text-[var(--dgm-accent)] font-semibold">Response Accuracy</span>
+                    {/* Not "Response Accuracy". Both panels carried that title,
+                        which side by side read as one metric across two groups —
+                        but this chart plots which way the agent answered, and the
+                        two series sum to 100% by construction. The harness counts
+                        deflections against total files; it never computes accuracy,
+                        because whether a woodworking reply is correct depends on
+                        whether the row was a relevant condition. */}
+                    <span className="text-xs uppercase tracking-[0.24em] text-[var(--dgm-accent)] font-semibold">Which way it answered</span>
                     <span className="text-2xs uppercase tracking-[0.2em] text-[var(--dgm-on-plate-3)]">Limited Proficiency</span>
                   </div>
                   <div className="w-full max-w-[452px] overflow-hidden rounded-sm bg-white">
                     <Image loading="lazy" src="/images/02/updatedGraph.png" alt="Bar chart titled Proactive Agent Response Accuracy, Limited Proficiency In Language, comparing woodworking and non-woodworking responses across four speech conditions" width={dimsOf("/images/02/updatedGraph.png").w} height={dimsOf("/images/02/updatedGraph.png").h} sizes="(max-width: 640px) 100vw, 452px" className="w-full h-auto" />
                   </div>
+                  {/* The caption used to compare this directly against the panel
+                      opposite, which invited the reader to treat two different
+                      measurements as one. It now says how to read this chart on
+                      its own terms first. */}
                   <figcaption className="text-xs md:text-sm text-[var(--dgm-on-plate-3)] leading-relaxed pt-1">
-                    The same pipeline, run with speakers of limited English proficiency. The fluent-speaker results above sit inside a twelve-point band; here the conditions spread from near-perfect to roughly even odds. The mean barely moves — the variance is the finding.
+                    Each pair shows how the agent replied to that condition: with a woodworking answer, or by deflecting. Which one is correct flips by row — on the relevant conditions the agent should answer, on the irrelevant one it should stay quiet. Read that way, it is right about the noisy relevant clips and the irrelevant clips, and closest to a coin flip on the third bar.
                   </figcaption>
                 </figure>
               </div>
