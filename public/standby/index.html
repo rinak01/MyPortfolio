@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Luminous Jellyfish · StandBy</title>
+<style>
+  :root{
+    --room:#0a0a0c;
+    --chrome:#ffffff;
+    --chrome-dim:rgba(255,255,255,.55);
+    --radius-device:46px;
+    --radius-widget:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(120% 90% at 50% 8%, #17171c 0%, #0a0a0c 55%, #050506 100%);
+    color:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Inter,system-ui,sans-serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:26px;padding:34px 24px;min-height:100%;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- device ---------- */
+  .device{
+    position:relative;
+    width:min(1120px, 94vw);
+    aspect-ratio:19.5/9;
+    background:#000;
+    border-radius:var(--radius-device);
+    padding:12px;
+    box-shadow:
+      0 0 0 1.5px rgba(255,255,255,.10),
+      0 0 0 9px #0b0b0d,
+      0 42px 90px -20px rgba(0,0,0,.9),
+      0 0 140px -40px rgba(90,190,255,.30);
+    transition:opacity 1.4s ease, filter 1.4s ease, transform 1.4s ease;
+  }
+  .device.dozing{opacity:.42;filter:saturate(.75) brightness(.8);transform:scale(.995)}
+
+  .screen{
+    position:relative;height:100%;width:100%;
+    border-radius:calc(var(--radius-device) - 12px);
+    overflow:hidden;background:#000;
+    display:grid;grid-template-columns:1fr 1fr;grid-template-rows:100%;gap:14px;padding:14px;
+  }
+
+  .widget{
+    position:relative;min-width:0;min-height:0;border-radius:var(--radius-widget);overflow:hidden;
+    background:#08090c;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+  }
+
+  /* ---------- clock pane ---------- */
+  .clock{
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:clamp(18px,2.6vw,34px);
+    background:
+      radial-gradient(120% 120% at 12% 0%, rgba(255,255,255,.055) 0%, rgba(255,255,255,0) 58%),
+      #08090c;
+  }
+  .date{
+    font-size:clamp(11px,1.15vw,15px);letter-spacing:.09em;text-transform:uppercase;
+    color:var(--chrome-dim);font-weight:590;
+  }
+  .time{
+    font-size:clamp(64px,10.4vw,148px);
+    line-height:.86;font-weight:250;letter-spacing:-.045em;
+    font-variant-numeric:tabular-nums;
+    color:var(--chrome);
+    text-shadow:0 0 42px rgba(255,255,255,.14);
+    display:flex;align-items:baseline;gap:.08em;
+  }
+  .time .suffix{font-size:.22em;font-weight:600;letter-spacing:.02em;color:var(--chrome-dim);transform:translateY(-.35em)}
+
+  .readout{display:flex;flex-direction:column;gap:clamp(7px,.75vw,11px)}
+  .rowline{display:flex;align-items:center;gap:10px;font-size:clamp(10px,1.02vw,13.5px);color:var(--chrome-dim);font-weight:500}
+  .rowline .k{width:4.9em;flex:none;letter-spacing:.055em;text-transform:uppercase;font-size:.87em;color:rgba(255,255,255,.36)}
+  .rowline .v{color:rgba(255,255,255,.9);font-variant-numeric:tabular-nums;font-weight:560}
+  .bar{position:relative;flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.10);overflow:hidden}
+  .bar i{position:absolute;inset:0 auto 0 0;border-radius:2px;background:currentColor;transition:width .55s cubic-bezier(.32,.72,0,1)}
+  .statedot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 12px 1px currentColor}
+  .statename{color:#fff;font-weight:600;letter-spacing:-.01em;font-size:clamp(12px,1.25vw,17px)}
+  .statesub{color:rgba(255,255,255,.42);font-size:clamp(9.5px,.95vw,12.5px);letter-spacing:.01em}
+
+  /* Night Mode tints only the chrome, never the creature */
+  .screen.night .clock{--chrome:#ff9a78;--chrome-dim:rgba(255,138,102,.5)}
+  .screen.night .clock .rowline .v{color:rgba(255,150,115,.92)}
+  .screen.night .clock .rowline .k{color:rgba(255,130,95,.4)}
+  .screen.night .clock .statename{color:#ff9a78}
+  .screen.night .clock .statesub{color:rgba(255,130,95,.42)}
+  .screen.night .clock .bar{background:rgba(255,120,85,.14)}
+  .screen.night .time{text-shadow:0 0 46px rgba(255,110,60,.22)}
+
+  /* ---------- tank pane ---------- */
+  .tank{background:#000}
+  .tank::after{
+    content:"";position:absolute;inset:auto 0 0 0;height:34%;pointer-events:none;
+    background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.16) 45%, rgba(0,0,0,0));
+  }
+  .tank canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+  .tanklabel{
+    position:absolute;z-index:2;left:16px;bottom:13px;
+    font-size:clamp(9px,.92vw,11.5px);letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.42);font-weight:600;
+    text-shadow:0 1px 12px rgba(0,0,0,.8);pointer-events:none;
+  }
+
+  /* ---------- dev bar (outside the device) ---------- */
+  .devbar{
+    width:min(1120px,94vw);display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+    padding:13px 18px;border-radius:17px;
+    background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);
+    font-size:12px;color:rgba(255,255,255,.55);
+    opacity:.34;transition:opacity .3s ease;
+  }
+  .devbar:hover{opacity:1}
+  .devbar .grp{display:flex;align-items:center;gap:9px}
+  .devbar label{letter-spacing:.08em;text-transform:uppercase;font-size:10px;font-weight:650;color:rgba(255,255,255,.38)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:230px;height:3px;border-radius:2px;background:rgba(255,255,255,.16);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.6)}
+  .seg{display:flex;gap:3px;padding:3px;border-radius:11px;background:rgba(255,255,255,.06)}
+  .seg button{
+    border:0;cursor:pointer;font:inherit;font-size:11.5px;font-weight:560;
+    padding:5px 12px;border-radius:9px;background:transparent;color:rgba(255,255,255,.55);
+    transition:background .18s ease,color .18s ease;
+  }
+  .seg button[aria-pressed="true"]{background:rgba(255,255,255,.16);color:#fff}
+  .devbar .val{font-variant-numeric:tabular-nums;color:rgba(255,255,255,.8);min-width:3.4em}
+
+  @media (max-width:720px){
+    .screen{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+    .time{font-size:clamp(44px,13vw,90px)}
+  }
+  @media (prefers-reduced-motion:reduce){ .device{transition:none} }
+</style>
+</head>
+<body>
+
+<div class="device" id="device">
+  <div class="screen" id="screen">
+
+    <section class="widget clock">
+      <div class="date" id="date">Tuesday, August 25</div>
+
+      <div class="time" id="time">10:42<span class="suffix" id="suffix">AM</span></div>
+
+      <div class="readout">
+        <div class="rowline">
+          <span class="statedot" id="dot"></span>
+          <span class="statename" id="statename">Idle</span>
+          <span class="statesub" id="statesub">resting pulse</span>
+        </div>
+        <div class="rowline">
+          <span class="k">Ambient</span>
+          <span class="bar" id="ambientbar" style="color:rgba(255,255,255,.55)"><i style="width:0%"></i></span>
+          <span class="v" id="ambientval">0.00</span>
+        </div>
+        <div class="rowline">
+          <span class="k">Emit</span>
+          <span class="bar" id="emitbar"><i style="width:0%"></i></span>
+          <span class="v" id="emitval">0.00</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="widget tank">
+      <canvas id="tank"></canvas>
+      <div class="tanklabel" id="tanklabel">Enclosure · Live</div>
+    </section>
+
+  </div>
+</div>
+
+<div class="devbar">
+  <div class="grp">
+    <label for="tod">Time of day</label>
+    <input id="tod" type="range" min="0" max="1439" step="1" value="630" />
+    <span class="val" id="todval">10:30</span>
+  </div>
+  <div class="grp">
+    <label>State</label>
+    <div class="seg" id="seg">
+      <button data-state="auto" aria-pressed="true">Auto</button>
+      <button data-state="idle" aria-pressed="false">Idle</button>
+      <button data-state="curious" aria-pressed="false">Curious</button>
+      <button data-state="happy" aria-pressed="false">Happy</button>
+    </div>
+  </div>
+  <div class="grp">
+    <label>Clock</label>
+    <div class="seg" id="clockseg">
+      <button data-clock="live" aria-pressed="true">Live</button>
+      <button data-clock="scrub" aria-pressed="false">Follow scrub</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  /* =========================================================
+     State model
+     emit = base(state) × (1 + k · (1 − ambient)),  k = 0.8
+     ambient is set by the reef (time of day), emission by the creature.
+     ========================================================= */
+  const K = 0.8;
+
+  const STATES = {
+    idle:    { base:0.45, sub:"resting pulse",              rate:0.42, sway:0.60, spawn:0.22, contract:0.85, col:[ 96,196,255] },
+    curious: { base:0.70, sub:"reaching toward stimulus",   rate:0.78, sway:1.05, spawn:0.70, contract:1.00, col:[168,140,255] },
+    happy:   { base:1.00, sub:"particles carry the arousal",rate:1.20, sway:1.45, spawn:2.60, contract:1.25, col:[255,148,72] },
+  };
+  const ORDER = ["idle","curious","happy","curious"];
+
+  const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+  const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const mix=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];
+  const rgba=(c,a)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+
+  // Reef ambient curve over 24h: dark until ~4:30, full by ~8:30, falls off 16:30→20:30
+  function ambientAt(h){
+    if(h < 4.5)  return 0;
+    if(h < 8.5)  return smooth((h-4.5)/4);
+    if(h < 16.5) return 1;
+    if(h < 20.5) return 1 - smooth((h-16.5)/4);
+    return 0;
+  }
+
+  /* =========================================================
+     Scene palettes (top / bottom water, reef glow)
+     ========================================================= */
+  const WATER_NIGHT_TOP=[6,17,30],   WATER_NIGHT_BOT=[1,4,9];
+  const WATER_DAY_TOP =[38,132,168], WATER_DAY_BOT =[5,38,60];
+  const CORAL_COL     =[ 92,255,214];
+
+  /* =========================================================
+     Canvas setup
+     ========================================================= */
+  const cvs = document.getElementById("tank");
+  const ctx = cvs.getContext("2d");
+  let W=0,H=0,DPR=1;
+
+  function resize(){
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    const r = cvs.getBoundingClientRect();
+    W = Math.max(1, r.width); H = Math.max(1, r.height);
+    cvs.width = Math.round(W*DPR); cvs.height = Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    buildReef();
+  }
+  window.addEventListener("resize", resize);
+
+  /* reef silhouette, deterministic */
+  let reef=[];
+  function buildReef(){
+    reef=[];
+    let seed=20260619;
+    const rnd=()=>{ seed=(seed*1664525+1013904223)>>>0; return seed/4294967296; };
+    // two layers: a low, dark back ridge and a taller, brighter front bed
+    const layers=[{n:11,depth:0.35,hi:0.13,lo:0.05,gl:0.45},{n:9,depth:1.0,hi:0.26,lo:0.08,gl:1.0}];
+    for(const L of layers){
+      for(let i=0;i<L.n;i++){
+        const span=(i+0.5)/L.n;
+        reef.push({
+          x:(span + (rnd()-0.5)*0.16) * W*1.16 - W*0.08,
+          h:H*(L.lo + rnd()*(L.hi-L.lo)),
+          w:W*(0.030 + rnd()*rnd()*0.075),
+          lean:(rnd()-0.5)*0.55,
+          glow:(0.25 + rnd()*0.75)*L.gl,
+          depth:L.depth,
+          ph:rnd()*Math.PI*2,
+          spd:0.45+rnd()*0.8,
+        });
+      }
+    }
+    reef.sort((a,b)=>a.depth-b.depth);
+  }
+
+  /* =========================================================
+     Reef plates (Higgsfield renders) — the enclosure at three ambients.
+     Creature stays procedural; only the environment is photographic.
+     ========================================================= */
+  const PLATES = {
+    day:   "../images/prototypes/LuminousJellyfish/standby/plate_day.jpg",
+    dusk:  "../images/prototypes/LuminousJellyfish/standby/plate_dusk.jpg",
+    night: "../images/prototypes/LuminousJellyfish/standby/plate_night.jpg",
+  };
+  const plate = {};
+  let platesReady = 0;
+  for(const k in PLATES){
+    const img = new Image();
+    img.onload = () => { platesReady++; };
+    img.src = PLATES[k];
+    plate[k] = img;
+  }
+
+  function drawCover(img, alpha){
+    if(alpha <= 0.002 || !img.complete || !img.naturalWidth) return;
+    const ir = img.naturalWidth/img.naturalHeight, cr = W/H;
+    let dw, dh;
+    if(ir > cr){ dh = H; dw = H*ir; } else { dw = W; dh = W/ir; }
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(img, (W-dw)/2, (H-dh)*0.62, dw, dh);
+    ctx.globalAlpha = 1;
+  }
+
+  function drawPlates(ambient){
+    const wNight = 1 - smooth(ambient/0.22);
+    const wDay   = smooth((ambient-0.55)/0.45);
+    const wDusk  = clamp(1 - wNight - wDay, 0, 1);
+    ctx.fillStyle = "#01040a"; ctx.fillRect(0,0,W,H);
+    if(platesReady === 0){ drawWater(ambient); drawReef(0, ambient); return; }
+    drawCover(plate.night, wNight);
+    drawCover(plate.dusk,  wDusk);
+    drawCover(plate.day,   wDay);
+  }
+
+  /* particles */
+  const parts=[];
+  function spawnParticle(x,y,R,col){
+    parts.push({
+      x:x+(Math.random()-0.5)*R*1.5,
+      y:y+Math.random()*R*1.1,
+      vy:-(4+Math.random()*13),
+      vx:(Math.random()-0.5)*7,
+      r:0.7+Math.random()*1.7,
+      life:0, max:1.4+Math.random()*2.2,
+      col,
+    });
+  }
+
+  /* =========================================================
+     Runtime state
+     ========================================================= */
+  let stateMode="auto", stateIndex=0, stateSince=0;
+  let cur = { base:STATES.idle.base, rate:STATES.idle.rate, sway:STATES.idle.sway,
+              spawn:STATES.idle.spawn, contract:STATES.idle.contract, col:STATES.idle.col.slice() };
+  let curName="idle";
+  let clockMode="live";
+  let scrubMinutes = new Date().getHours()*60 + new Date().getMinutes();
+  document.getElementById("tod").value = scrubMinutes;
+
+  function targetState(){
+    if(stateMode!=="auto") return {name:stateMode, s:STATES[stateMode]};
+    const name = ORDER[stateIndex % ORDER.length];
+    return {name, s:STATES[name]};
+  }
+
+  /* =========================================================
+     Drawing
+     ========================================================= */
+  function drawWater(ambient){
+    const top = mix(WATER_NIGHT_TOP, WATER_DAY_TOP, ambient);
+    const bot = mix(WATER_NIGHT_BOT, WATER_DAY_BOT, ambient);
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0, rgba(top,1));
+    g.addColorStop(1, rgba(bot,1));
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
+
+  function drawCaustics(t, ambient){
+    if(ambient<=0.02) return;
+    ctx.save();
+    ctx.globalCompositeOperation="lighter";
+    if(ctx.filter !== undefined) ctx.filter = `blur(${Math.max(14, W*0.035)}px)`;
+    for(let i=0;i<5;i++){
+      const x = W*(0.06+i*0.22) + Math.sin(t*0.19+i*1.7)*W*0.05;
+      const wdt = W*0.032*(0.7+0.6*Math.sin(t*0.31+i));
+      const g = ctx.createLinearGradient(x, 0, x - W*0.16, H);
+      g.addColorStop(0,   `rgba(196,242,255,${0.085*ambient})`);
+      g.addColorStop(0.55,`rgba(196,242,255,${0.030*ambient})`);
+      g.addColorStop(1,   "rgba(196,242,255,0)");
+      ctx.fillStyle=g;
+      ctx.beginPath();
+      ctx.moveTo(x-wdt,0); ctx.lineTo(x+wdt,0);
+      ctx.lineTo(x-W*0.13,H*0.98); ctx.lineTo(x-W*0.19,H*0.98);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.filter="none";
+    ctx.restore();
+  }
+
+  function drawReef(t, ambient){
+    const bio = 1-ambient;
+    ctx.save();
+    for(const c of reef){
+      const baseY=H+H*0.02*(1-c.depth);
+      const tipX=c.x + c.w*c.lean;
+      const tipY=baseY-c.h;
+      const pulse=0.5+0.5*Math.sin(t*c.spd + c.ph);
+      const bodyCol=mix(mix([1,7,13],[3,34,52],ambient),[0,0,0],1-c.depth*0.75);
+
+      ctx.save();
+      ctx.globalCompositeOperation="lighter";
+      const gg=ctx.createRadialGradient(tipX,tipY,0,tipX,tipY,c.w*3.0);
+      gg.addColorStop(0, rgba(CORAL_COL, (0.26*bio+0.035)*c.glow*(0.6+0.4*pulse)));
+      gg.addColorStop(1, rgba(CORAL_COL, 0));
+      ctx.fillStyle=gg;
+      ctx.fillRect(tipX-c.w*3.2, tipY-c.w*3.2, c.w*6.4, c.w*6.4+c.h);
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.moveTo(c.x-c.w, baseY);
+      ctx.bezierCurveTo(c.x-c.w*0.80, baseY-c.h*0.55, tipX-c.w*0.30, tipY+c.h*0.10, tipX, tipY);
+      ctx.bezierCurveTo(tipX+c.w*0.30, tipY+c.h*0.10, c.x+c.w*0.80, baseY-c.h*0.55, c.x+c.w, baseY);
+      ctx.closePath();
+      ctx.fillStyle=rgba(bodyCol,1); ctx.fill();
+
+      ctx.save();
+      ctx.globalCompositeOperation="lighter";
+      ctx.fillStyle=rgba(CORAL_COL,(0.12+0.5*bio*pulse)*c.glow);
+      ctx.beginPath(); ctx.ellipse(tipX,tipY,c.w*0.17,c.w*0.11,c.lean*0.6,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+    // seat the bed in shadow
+    const vg=ctx.createLinearGradient(0,H*0.72,0,H);
+    vg.addColorStop(0,"rgba(0,0,0,0)"); vg.addColorStop(1,"rgba(0,0,0,.45)");
+    ctx.fillStyle=vg; ctx.fillRect(0,H*0.72,W,H*0.28);
+    ctx.restore();
+  }
+
+  function drawJellyfish(t, x, y, R, emit, col, contract, sway){
+    const pulse = (Math.sin(t*cur.rate*Math.PI*2)+1)/2;
+    const eased = Math.pow(pulse, 1.7);
+    const squeeze = eased*0.26*contract;
+    const w = R*(0.95 + squeeze*0.9);
+    const h = R*(0.80 - squeeze*0.55);
+    const a  = clamp(emit,0,1.8);   // halo drive: night is allowed to run hot
+    const aB = clamp(emit,0,1.05);  // body drive: kept below blow-out so hue survives
+
+    ctx.save();
+
+    // outer emission halo — this is the channel that saturates in daylight
+    ctx.globalCompositeOperation="lighter";
+    const halo = ctx.createRadialGradient(x, y-h*0.35, 0, x, y-h*0.35, R*3.3);
+    halo.addColorStop(0,   rgba(col, 0.20*a));
+    halo.addColorStop(0.35,rgba(col, 0.085*a));
+    halo.addColorStop(1,   rgba(col, 0));
+    ctx.fillStyle=halo;
+    ctx.fillRect(x-R*3.4, y-R*3.7, R*6.8, R*6.8);
+
+    // tendrils
+    ctx.lineCap="round";
+    for(let i=0;i<9;i++){
+      const off=(i-4)/4;
+      const sx=x+off*w*0.66;
+      const len=R*(2.0+0.55*Math.sin(i*1.9));
+      const grad=ctx.createLinearGradient(sx,y,sx,y+len);
+      grad.addColorStop(0, rgba(col, 0.55*aB));
+      grad.addColorStop(0.45, rgba(col, 0.22*aB));
+      grad.addColorStop(1, rgba(col, 0));
+      ctx.strokeStyle=grad;
+      ctx.lineWidth=Math.max(1.1, R*0.045*(1-Math.abs(off)*0.35));
+      ctx.beginPath(); ctx.moveTo(sx,y);
+      for(let s=1;s<=20;s++){
+        const f=s/20;
+        const wob=Math.sin(t*1.5*sway - f*3.6 + i*0.85)*R*0.19*f*sway;
+        const drop=len*f + eased*R*0.22*f;
+        ctx.lineTo(sx + wob + off*R*0.30*f, y + drop);
+      }
+      ctx.stroke();
+    }
+
+    // bell
+    ctx.beginPath();
+    ctx.moveTo(x-w, y);
+    ctx.bezierCurveTo(x-w, y-h*1.65, x+w, y-h*1.65, x+w, y);
+    ctx.bezierCurveTo(x+w*0.55, y+h*0.30, x-w*0.55, y+h*0.30, x-w, y);
+    ctx.closePath();
+    const bg=ctx.createLinearGradient(x, y-h*1.25, x, y+h*0.3);
+    bg.addColorStop(0, rgba(col, 0.72*aB));
+    bg.addColorStop(0.55, rgba(col, 0.34*aB));
+    bg.addColorStop(1, rgba(col, 0.10*aB));
+    ctx.fillStyle=bg; ctx.fill();
+
+    // rim
+    ctx.strokeStyle=rgba(mix(col,[255,255,255],0.40), 0.55*aB);
+    ctx.lineWidth=Math.max(1, R*0.035);
+    ctx.stroke();
+
+    // nucleus
+    const nb=ctx.createRadialGradient(x, y-h*0.55, 0, x, y-h*0.55, w*0.55);
+    nb.addColorStop(0, rgba(mix(col,[255,255,255],0.28), 0.62*aB));
+    nb.addColorStop(1, rgba(col, 0));
+    ctx.fillStyle=nb;
+    ctx.beginPath(); ctx.ellipse(x, y-h*0.55, w*0.55, h*0.62, 0, 0, Math.PI*2); ctx.fill();
+
+    ctx.restore();
+    return {pulse:eased, w, h};
+  }
+
+  function drawParticles(dt, a){
+    ctx.save();
+    ctx.globalCompositeOperation="lighter";
+    for(let i=parts.length-1;i>=0;i--){
+      const p=parts[i];
+      p.life+=dt;
+      if(p.life>=p.max){ parts.splice(i,1); continue; }
+      p.x+=p.vx*dt; p.y+=p.vy*dt;
+      p.vx+=Math.sin(p.life*3+p.x*0.02)*6*dt;
+      const f=1-p.life/p.max;
+      ctx.fillStyle=rgba(p.col, 0.9*f*clamp(a,0,1.5));
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r*(0.6+f*1.1),0,Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  /* =========================================================
+     Clock chrome
+     ========================================================= */
+  const el = {
+    date:document.getElementById("date"),
+    time:document.getElementById("time"),
+    screen:document.getElementById("screen"),
+    dot:document.getElementById("dot"),
+    statename:document.getElementById("statename"),
+    statesub:document.getElementById("statesub"),
+    ambientbar:document.getElementById("ambientbar").firstElementChild,
+    ambientval:document.getElementById("ambientval"),
+    emitbarWrap:document.getElementById("emitbar"),
+    emitbar:document.getElementById("emitbar").firstElementChild,
+    emitval:document.getElementById("emitval"),
+    todval:document.getElementById("todval"),
+    tanklabel:document.getElementById("tanklabel"),
+    device:document.getElementById("device"),
+  };
+
+  const DAYS=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  function pad(n){ return n<10?"0"+n:""+n; }
+
+  function renderClock(hours24, minutes){
+    const h12 = ((hours24+11)%12)+1;
+    el.time.innerHTML = `${h12}:${pad(minutes)}<span class="suffix">${hours24<12?"AM":"PM"}</span>`;
+    const d=new Date();
+    el.date.textContent = `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+  }
+
+  /* =========================================================
+     Doze: StandBy dims when nothing is happening, wakes on input
+     ========================================================= */
+  let lastInput = performance.now();
+  const wake = () => { lastInput = performance.now(); el.device.classList.remove("dozing"); };
+  ["pointermove","pointerdown","keydown","wheel","touchstart"].forEach(e=>window.addEventListener(e, wake, {passive:true}));
+
+  /* =========================================================
+     Main loop
+     ========================================================= */
+  let last = performance.now(), t = 0, spawnAcc = 0;
+
+  function frame(now){
+    const dt = Math.min(0.05, (now-last)/1000);
+    last = now; t += dt;
+
+    // --- clock source
+    let hours24, minutes;
+    if(clockMode==="live"){
+      const d=new Date(); hours24=d.getHours(); minutes=d.getMinutes();
+    } else {
+      hours24=Math.floor(scrubMinutes/60); minutes=scrubMinutes%60;
+    }
+    renderClock(hours24, minutes);
+
+    // --- ambient always follows the scrub (that is the reef control)
+    const hourFloat = scrubMinutes/60;
+    const ambient = ambientAt(hourFloat);
+
+    // --- state easing
+    if(stateMode==="auto" && t-stateSince > 13){ stateIndex++; stateSince=t; }
+    const {name, s} = targetState();
+    curName = name;
+    const e = 1-Math.pow(0.001, dt);           // ~exponential ease, frame-rate independent
+    cur.base    = lerp(cur.base, s.base, e);
+    cur.rate    = lerp(cur.rate, s.rate, e);
+    cur.sway    = lerp(cur.sway, s.sway, e);
+    cur.spawn   = lerp(cur.spawn, s.spawn, e);
+    cur.contract= lerp(cur.contract, s.contract, e);
+    cur.col     = mix(cur.col, s.col, e);
+
+    // --- the formula
+    const emit = cur.base * (1 + K*(1-ambient));
+
+    // --- scene
+    ctx.clearRect(0,0,W,H);
+    drawPlates(ambient);
+    drawCaustics(t, ambient*0.4);
+
+    const R  = Math.min(W,H)*0.155;
+    const jx = W*0.52 + Math.sin(t*0.21)*W*0.10 + Math.sin(t*0.07+1.3)*W*0.04;
+    const jy = H*0.40 + Math.sin(t*0.33+0.6)*H*0.075;
+
+    // the creature's light lands on the bed it is read against
+    ctx.save();
+    ctx.globalCompositeOperation="lighter";
+    const pool=ctx.createRadialGradient(jx, H*0.88, 0, jx, H*0.88, R*3.2);
+    const poolA=0.16*clamp(emit,0,1.6)*(1-ambient*0.55);
+    pool.addColorStop(0, rgba(cur.col, poolA));
+    pool.addColorStop(1, rgba(cur.col, 0));
+    ctx.fillStyle=pool; ctx.fillRect(jx-R*3.4, H*0.88-R*3.4, R*6.8, R*6.8);
+    ctx.restore();
+
+    drawParticles(dt, emit);
+    drawJellyfish(t, jx, jy, R, emit, cur.col, cur.contract, cur.sway);
+
+    // seat the plate inside the widget
+    const vig=ctx.createRadialGradient(W*0.5, H*0.45, Math.min(W,H)*0.30, W*0.5, H*0.45, Math.max(W,H)*0.78);
+    vig.addColorStop(0,"rgba(0,0,0,0)"); vig.addColorStop(1,"rgba(0,0,0,.42)");
+    ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
+
+    // particle emission scales with arousal AND emission — the second channel
+    spawnAcc += dt * cur.spawn * 26 * (0.5+emit*0.7);
+    while(spawnAcc >= 1){ spawnParticle(jx, jy, R, cur.col); spawnAcc -= 1; }
+    if(parts.length > 420) parts.splice(0, parts.length-420);
+
+    // --- chrome
+    const night = ambient < 0.05;
+    el.screen.classList.toggle("night", night);
+    el.dot.style.color = rgba(cur.col, 1);
+    el.emitbarWrap.style.color = rgba(cur.col, 0.95);
+    el.statename.textContent = curName[0].toUpperCase()+curName.slice(1);
+    el.statesub.textContent  = STATES[curName].sub;
+    el.ambientbar.style.width = (ambient*100).toFixed(1)+"%";
+    el.ambientval.textContent = ambient.toFixed(2);
+    el.emitbar.style.width = clamp(emit/1.8,0,1)*100+"%";
+    el.emitval.textContent = emit.toFixed(2);
+    el.tanklabel.textContent = night ? "Enclosure · Night Mode" : "Enclosure · Live";
+
+    if(now-lastInput > 14000) el.device.classList.add("dozing");
+
+    requestAnimationFrame(frame);
+  }
+
+  /* =========================================================
+     Dev controls
+     ========================================================= */
+  const tod=document.getElementById("tod");
+  function syncTod(){
+    scrubMinutes = +tod.value;
+    el.todval.textContent = `${pad(Math.floor(scrubMinutes/60))}:${pad(scrubMinutes%60)}`;
+  }
+  tod.addEventListener("input", syncTod);
+  syncTod();
+
+  document.getElementById("seg").addEventListener("click", ev=>{
+    const b=ev.target.closest("button"); if(!b) return;
+    stateMode=b.dataset.state; stateSince=t;
+    [...ev.currentTarget.children].forEach(c=>c.setAttribute("aria-pressed", String(c===b)));
+  });
+  document.getElementById("clockseg").addEventListener("click", ev=>{
+    const b=ev.target.closest("button"); if(!b) return;
+    clockMode=b.dataset.clock;
+    [...ev.currentTarget.children].forEach(c=>c.setAttribute("aria-pressed", String(c===b)));
+  });
+
+  resize();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

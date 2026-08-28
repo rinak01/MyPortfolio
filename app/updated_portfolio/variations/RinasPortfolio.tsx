@@ -6,6 +6,7 @@ import { motion, AnimatePresence, MotionConfig, useIsPresent } from "framer-moti
 import Image from "next/image";
 import { Outfit, DM_Sans } from "next/font/google";
 import { dimsOf } from "./imageDims";
+import ProactiveAgentDemo from "./ProactiveAgentDemo";
 
 // The archive tile and the modal hero are a layoutId pair, so both halves must
 // be motion components. Created once at module scope — rebuilding it per render
@@ -437,6 +438,10 @@ interface CaseStudy {
   meta: string;
   desc: string;
   outcome?: string;      // what the work produced — the card states a problem, this states the result
+  // The one figure worth reading at card size, lifted out of `outcome` so it
+  // isn't buried mid-sentence. Omit where a project has no single headline
+  // number — the outcome prose then carries the block on its own.
+  stat?: { value: string; label: string };
   tags: string[];
   id: string;            // stable key; the body renders in the overlay, not on the page
   img: string;
@@ -464,7 +469,12 @@ const CASE_STUDIES: CaseStudy[] = [
     title: "Proactive Agent",
     meta: "2024 Sep – 2025 Aug · Research Assistant",
     desc: "Classify intent from noisy, real-world speech so the agent acts only when the signal is clear, instead of answering every stray sentence.",
-    outcome: "Over 90% intent-classification accuracy on unscripted speech, in a modular pipeline built to port across hardware.",
+    // Outcome history: the earlier line, "Over 90% intent-classification accuracy
+    // on unscripted speech", reported the fluent-speaker mean as if it were the
+    // whole result. The second run — same pipeline, limited-proficiency speakers —
+    // is the actual finding, and a single accuracy figure conceals it.
+    outcome: "The same pipeline came apart on limited-proficiency speech — the result worth reporting.",
+    stat: { value: ">90%", label: "Fluent speakers" },
     tags: ["Voice Interfaces", "ML Research"],
     id: "cmu-proactive-agent",
     img: "/images/02/proactive agent pipeline.png",
@@ -615,10 +625,24 @@ function CaseStudyCard({ item, outfitClass }: { item: CaseStudy; outfitClass: st
           // Panelled rather than ruled, matching the Outcome block at the top of
           // the expanded case study, so the result reads as the emphasis on the
           // card too instead of as a footnote under the description.
+          // A card is scanned, not read. When the outcome was three lines of
+          // body copy at the same size as the description above it, the one
+          // number a reader would remember sat mid-sentence. `stat` pulls it
+          // out as an anchor; the sentence stays underneath as the qualifier.
           <div className="mt-4 rounded-sm border border-accent/30 bg-panel-2 p-4">
-            <span className="block text-2xs uppercase tracking-[0.22em] text-accent mb-1.5">
+            <span className="block text-2xs uppercase tracking-[0.22em] text-accent mb-2">
               Outcome
             </span>
+            {item.stat && (
+              <div className="flex items-baseline gap-2.5 mb-2">
+                <span className={`${outfitClass} text-3xl font-light leading-none text-[var(--ink)]`}>
+                  {item.stat.value}
+                </span>
+                <span className="text-2xs uppercase tracking-[0.18em] text-[var(--meta)] leading-snug">
+                  {item.stat.label}
+                </span>
+              </div>
+            )}
             <p className="text-sm text-[var(--body)] leading-relaxed">
               {item.outcome}
             </p>
@@ -2015,8 +2039,70 @@ function SmashCaseStudyBody() {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
+              {/* Lead with the result, same panel vocabulary as 03's Outcome block:
+                  the finding as a headline, the numbers as tiles beside it. The
+                  header used to sit at the top of the left column, where it was
+                  followed by five sections of prose before the reader learned what
+                  the study actually found. */}
+              <div className="lg:col-span-12 order-first flex flex-col gap-8">
+                <div className="flex items-center gap-4">
+                  <span className={`${outfit.className} text-5xl font-light text-ink leading-none`}>02</span>
+                  <span className="text-sm uppercase tracking-[0.2em] text-accent">CMU SmaSH Lab</span>
+                </div>
+
+                <div>
+                  <h2 className={`${outfit.className} text-3xl font-light text-ink mb-1`}>
+                    Proactive Agent
+                  </h2>
+                  <p className="text-sm tracking-widest uppercase text-body">
+                    2024 Sep – 2025 Aug &nbsp;·&nbsp; Research Assistant &nbsp;·&nbsp; Pipeline owned end to end
+                  </p>
+                </div>
+
+                <div className="rounded-sm border border-accent/30 bg-panel-2 p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                  <div className="lg:col-span-5">
+                    <SectionLabel>Finding</SectionLabel>
+                    <p className={`${outfit.className} text-2xl md:text-3xl font-light text-ink leading-snug mb-4`}>
+                      Fluent speakers sat inside a twelve-point band. Change who was speaking, and the same pipeline came apart.
+                    </p>
+                    <p className="text-sm text-body leading-relaxed">
+                      Speaker proficiency, not phrasing and not noise, was the variable that mattered. It moves the spread rather than the mean, which is exactly what a single accuracy figure hides.
+                    </p>
+                  </div>
+
+                  <div className="lg:col-span-7 space-y-4">
+                    {/* Two tiles, not four. "2 speaker groups" and "5 speech
+                        conditions" were removed once the corpus was located:
+                        it holds eight non-empty condition folders, not five,
+                        and the limited-proficiency condition appears there as a
+                        condition ("wrong_grammar_samples") and as a line in the
+                        system prompt rather than as a second set of speakers.
+                        Both tiles stated things the data does not support.
+                        A limited-proficiency figure belongs opposite the fluent
+                        mean here — it is the comparison the headline promises —
+                        and is still waiting on Rina's number. */}
+                    <div className="grid grid-cols-2 gap-4">
+                      {[
+                        { value: "84–96%", label: "Fluent range" },
+                        { value: ">90%", label: "Fluent mean" },
+                      ].map(({ value, label }) => (
+                        <div key={label} className="rounded-sm border border-line bg-raised p-5">
+                          <span className={`${outfit.className} block text-2xl md:text-3xl text-ink mb-2 whitespace-nowrap tracking-tight`}>{value}</span>
+                          <span className="block text-xs uppercase tracking-[0.14em] text-meta leading-snug">{label}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* The live pipeline, filling what was dead space under the
+                        tiles. A case study about when an agent should stay quiet
+                        is more convincing when the reader can make it stay quiet. */}
+                    <ProactiveAgentDemo />
+                  </div>
+                </div>
+              </div>
+
               {/* Right, imagery */}
-              <div className="lg:col-span-6 order-2 space-y-4">
+              <div className="lg:col-span-6 order-3 space-y-4">
                 {/* ── Inline Speech-Flow Chart (translucent navy panel) ── */}
                 <div
                   className="rounded-lg border border-[var(--dgm-stroke)]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md"
@@ -2025,12 +2111,12 @@ function SmashCaseStudyBody() {
                   {/* Header */}
                   <div className="flex items-center justify-between mb-2.5">
                     <span className="text-xs uppercase tracking-[0.24em] text-[var(--dgm-accent)] font-semibold">Speech Pipeline</span>
-                    <span className="text-2xs uppercase tracking-[0.2em] text-slate-400">Real-time</span>
+                    <span className="text-2xs uppercase tracking-[0.2em] text-[var(--dgm-on-plate-3)]">Real-time</span>
                   </div>
 
                   {/* Sample utterance caption */}
-                  <p className="text-xs md:text-sm text-slate-400 italic mb-5 leading-snug">
-                    Sample input: <span className="text-slate-200 not-italic">&ldquo;hey um, can you turn up the… volume thing?&rdquo;</span>
+                  <p className="text-xs md:text-sm text-[var(--dgm-on-plate-3)] italic mb-5 leading-snug">
+                    Sample input: <span className="text-[var(--dgm-on-plate-2)] not-italic">&ldquo;hey um, can you turn up the… volume thing?&rdquo;</span>
                   </p>
 
                   {/* Flow chart SVG */}
@@ -2174,12 +2260,21 @@ function SmashCaseStudyBody() {
                     </div>
                   </div>
 
-                  {/* Footer metric */}
+                  {/* Footer metric. ">90%" appeared three times on this page with no
+                      denominator attached to any of them; it holds for the fluent
+                      group and is labelled as such wherever it still appears. */}
                   <div className="mt-5 pt-4 border-t border-line flex items-center justify-between">
-                    <span className="text-2xs uppercase tracking-[0.22em] text-slate-400">Classification Accuracy</span>
-                    <span className={`${outfit.className} text-lg text-[var(--dgm-fill)] font-light`}>&gt;90<span className="text-[var(--dgm-accent)]">%</span></span>
+                    <span className="text-2xs uppercase tracking-[0.22em] text-[var(--dgm-on-plate-3)]">Classification Accuracy, fluent speakers</span>
+                    <span className={`${outfit.className} text-lg text-[var(--dgm-on-plate)] font-light`}>&gt;90<span className="text-[var(--dgm-accent)]">%</span></span>
                   </div>
                 </div>
+              </div>
+
+              {/* Both accuracy runs in one full-width row, so the comparison is a
+                  glance rather than a scroll. Splitting them across the two columns
+                  put a page of narrative between the twelve-point band and the
+                  spread it is being contrasted against. */}
+              <div className="lg:col-span-12 order-4 grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
                 {/* NLP diagram */}
                 {/* <div className="bg-raised rounded-sm p-6 flex items-center justify-center">
                 <Image loading="lazy" src="/images/02/NL01.png" alt="NLP Semantic Analysis" width={dimsOf("/images/02/NL01.png").w} height={dimsOf("/images/02/NL01.png").h} sizes="(max-width: 1024px) 100vw, 50vw" className="w-[85%] h-auto opacity-70 dark-invert" />
@@ -2189,26 +2284,28 @@ function SmashCaseStudyBody() {
                   className="rounded-lg border border-[var(--dgm-stroke)]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md"
                   style={{ background: "var(--dgm-plate)" }}
                 >
-                  {/* Header */}
+                  {/* Header. Scoped to the fluent-speaker group: these six values
+                      are one of two runs, and presenting them unqualified was what
+                      made a 12-point band look like the whole result. */}
                   <div className="flex items-center justify-between mb-2.5">
-                    <span className="text-xs uppercase tracking-[0.24em] text-[var(--dgm-accent)] font-semibold">Response Accuracy</span>
-                    <span className="text-2xs uppercase tracking-[0.2em] text-slate-400">Formal vs Informal</span>
+                    <span className="text-xs uppercase tracking-[0.24em] text-[var(--dgm-accent)] font-semibold">Accuracy by condition</span>
+                    <span className="text-2xs uppercase tracking-[0.2em] text-[var(--dgm-on-plate-3)]">Fluent Speakers</span>
                   </div>
 
                   {/* Caption */}
-                  <p className="text-xs md:text-sm text-slate-400 italic mb-5 leading-snug">
-                    Classification accuracy across speech conditions, split by speaking style.
+                  <p className="text-xs md:text-sm text-[var(--dgm-on-plate-3)] italic mb-5 leading-snug">
+                    Classification accuracy across speech conditions, split by speaking style. Fluent English speakers.
                   </p>
 
                   {/* Legend */}
                   <div className="flex items-center gap-5 mb-6 pb-4 border-b border-line">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-sm" style={{ background: "linear-gradient(90deg,#38BDF8,#7DD3FC)", boxShadow: "0 0 8px rgba(56,189,248,0.5)" }} />
-                      <span className="text-xs uppercase tracking-[0.18em] text-slate-200 font-medium">Formal</span>
+                      <span className="text-xs uppercase tracking-[0.18em] text-[var(--dgm-on-plate-2)] font-medium">Formal</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-sm border border-[var(--dgm-accent)]/60" style={{ background: "rgba(125,211,252,0.15)" }} />
-                      <span className="text-xs uppercase tracking-[0.18em] text-slate-200 font-medium">Informal</span>
+                      <span className="text-xs uppercase tracking-[0.18em] text-[var(--dgm-on-plate-2)] font-medium">Informal</span>
                     </div>
                   </div>
 
@@ -2221,10 +2318,13 @@ function SmashCaseStudyBody() {
                     ];
                     return (
                       <div>
-                        {/* Chart area */}
+                        {/* Chart area. The plot starts 40px down rather than 24px:
+                            a 96% bar puts its value label above the 100 gridline, and
+                            at the old offset the two collided. The whole point of this
+                            panel is that the numbers are readable. */}
                         <div className="relative pt-6" style={{ height: 280 }}>
                           {/* Y-axis labels */}
-                          <div className="absolute left-0 top-6 bottom-7 w-7 flex flex-col justify-between items-end text-2xs text-slate-500 tracking-wide">
+                          <div className="absolute left-0 top-10 bottom-7 w-7 flex flex-col justify-between items-end text-2xs text-[var(--dgm-on-plate-3)] tracking-wide">
                             <span>100</span>
                             <span>75</span>
                             <span>50</span>
@@ -2233,7 +2333,7 @@ function SmashCaseStudyBody() {
                           </div>
 
                           {/* Plot area */}
-                          <div className="absolute left-9 right-2 top-6 bottom-7">
+                          <div className="absolute left-9 right-2 top-10 bottom-7">
                             {/* Horizontal gridlines */}
                             {[0, 25, 50, 75, 100].map(v => (
                               <div
@@ -2249,9 +2349,15 @@ function SmashCaseStudyBody() {
                                 <div key={condition} className="relative flex items-end gap-1.5 h-full">
                                   {/* Formal bar column */}
                                   <div className="relative h-full w-9 md:w-11">
-                                    {/* Value label */}
+                                    {/* Value label. --dgm-fill is #0f172a, the ink for
+                                        the white plates in the SVG above, and it does
+                                        not flip with the theme; on this navy panel it
+                                        measured 1.04:1, so the formal value — the
+                                        higher number in every pair — was invisible.
+                                        --dgm-on-plate does flip, and -2 carries the
+                                        secondary series, matching the bars' hierarchy. */}
                                     <span
-                                      className={`${outfit.className} absolute left-1/2 -translate-x-1/2 text-xs text-[var(--dgm-fill)] whitespace-nowrap`}
+                                      className={`${outfit.className} absolute left-1/2 -translate-x-1/2 text-xs text-[var(--dgm-on-plate)] whitespace-nowrap`}
                                       style={{ bottom: `calc(${formal}% + 4px)` }}
                                     >
                                       {formal}<span className="text-[var(--dgm-accent)] text-2xs">%</span>
@@ -2273,7 +2379,7 @@ function SmashCaseStudyBody() {
                                   {/* Informal bar column */}
                                   <div className="relative h-full w-9 md:w-11">
                                     <span
-                                      className={`${outfit.className} absolute left-1/2 -translate-x-1/2 text-xs text-slate-200 whitespace-nowrap`}
+                                      className={`${outfit.className} absolute left-1/2 -translate-x-1/2 text-xs text-[var(--dgm-on-plate-2)] whitespace-nowrap`}
                                       style={{ bottom: `calc(${informal}% + 4px)` }}
                                     >
                                       {informal}<span className="text-[var(--dgm-accent)] text-2xs">%</span>
@@ -2299,7 +2405,7 @@ function SmashCaseStudyBody() {
                         <div className="ml-9 mr-2 mt-2 flex justify-around items-start">
                           {data.map(({ condition }) => (
                             <div key={condition} className="flex flex-col items-center text-center max-w-[110px]">
-                              <span className="text-xs text-slate-200 font-medium tracking-wide leading-tight">
+                              <span className="text-xs text-[var(--dgm-on-plate-2)] font-medium tracking-wide leading-tight">
                                 {condition}
                               </span>
                             </div>
@@ -2309,108 +2415,136 @@ function SmashCaseStudyBody() {
                     );
                   })()}
 
-                  {/* Footer metric */}
+                  {/* Footer metric. Qualified to the group it describes — the same
+                      number reported for the limited-proficiency run would be
+                      misleading, which is the point the figure below makes. */}
                   <div className="mt-4 pt-4 border-t border-line flex items-center justify-between">
-                    <span className="text-2xs uppercase tracking-[0.22em] text-slate-400">Overall Mean Accuracy</span>
-                    <span className={`${outfit.className} text-xl text-[var(--dgm-fill)] font-light`}>
+                    <span className="text-2xs uppercase tracking-[0.22em] text-[var(--dgm-on-plate-3)]">Mean, fluent speakers</span>
+                    <span className={`${outfit.className} text-xl text-[var(--dgm-on-plate)] font-light`}>
                       &gt;90<span className="text-[var(--dgm-accent)]">%</span>
                     </span>
                   </div>
                 </div>
+
+                {/* ── The second run: same pipeline, limited-proficiency speakers ──
+                    Shown as the original lab export rather than rebuilt in JSX. The
+                    values were never transcribed anywhere in the repo, and putting
+                    numbers read off a chart image onto a portfolio is the exact
+                    failure this section is trying to avoid. If Rina sends the exact
+                    figures, this becomes a second styled chart matching the one
+                    above; until then the source artifact is the honest thing to show.
+                    Source export is 452px wide, so it is capped rather than stretched
+                    — same treatment as the 481px Surefront interviews figure. */}
+                <figure className="space-y-2 rounded-lg border border-[var(--dgm-stroke)]/20 p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md" style={{ background: "var(--dgm-plate)" }}>
+                  <div className="flex items-center justify-between mb-2.5">
+                    {/* Not "Response Accuracy". Both panels carried that title,
+                        which side by side read as one metric across two groups —
+                        but this chart plots which way the agent answered, and the
+                        two series sum to 100% by construction. The harness counts
+                        deflections against total files; it never computes accuracy,
+                        because whether a woodworking reply is correct depends on
+                        whether the row was a relevant condition. */}
+                    <span className="text-xs uppercase tracking-[0.24em] text-[var(--dgm-accent)] font-semibold">Which way it answered</span>
+                    <span className="text-2xs uppercase tracking-[0.2em] text-[var(--dgm-on-plate-3)]">Limited Proficiency</span>
+                  </div>
+                  <div className="w-full max-w-[452px] overflow-hidden rounded-sm bg-white">
+                    <Image loading="lazy" src="/images/02/updatedGraph.png" alt="Bar chart titled Proactive Agent Response Accuracy, Limited Proficiency In Language, comparing woodworking and non-woodworking responses across four speech conditions" width={dimsOf("/images/02/updatedGraph.png").w} height={dimsOf("/images/02/updatedGraph.png").h} sizes="(max-width: 640px) 100vw, 452px" className="w-full h-auto" />
+                  </div>
+                  {/* The caption used to compare this directly against the panel
+                      opposite, which invited the reader to treat two different
+                      measurements as one. It now says how to read this chart on
+                      its own terms first. */}
+                  <figcaption className="text-xs md:text-sm text-[var(--dgm-on-plate-3)] leading-relaxed pt-1">
+                    Each pair shows how the agent replied to that condition: with a woodworking answer, or by deflecting. Which one is correct flips by row — on the relevant conditions the agent should answer, on the irrelevant one it should stay quiet. Read that way, it is right about the noisy relevant clips and the irrelevant clips, and closest to a coin flip on the third bar.
+                  </figcaption>
+                </figure>
               </div>
 
-              {/* Left, meta + content */}
-              <div className="lg:col-span-5 order-1 flex flex-col gap-8">
-                <div className="flex items-center gap-4">
-                  <span className={`${outfit.className} text-5xl font-light text-ink leading-none`}>02</span>
-                  <span className="text-sm uppercase tracking-[0.2em] text-accent">CMU SmaSH Lab</span>
-                </div>
+              {/* Left, the written record. Deliberately short: the panel above
+                  carries the result and the two charts opposite carry the evidence,
+                  so this column only has to say how the study was run and what it
+                  cannot claim. An earlier pass put all of that in prose and buried
+                  the finding underneath it. */}
+              <div className="lg:col-span-5 order-2 flex flex-col gap-8">
+                <div className="space-y-6 text-base text-body leading-relaxed">
 
-                <div>
-                  <h2 className={`${outfit.className} text-3xl font-light text-ink mb-1`}>
-                    Proactive Agent
-                  </h2>
-                  <p className="text-sm tracking-widest uppercase text-body mb-6">
-                    2024 Sep – 2025 Aug &nbsp;·&nbsp; Research Assistant
-                  </p>
-
-                  <div className="space-y-6 text-base text-body leading-relaxed">
-                    {/* The Problem */}
-                    <div>
-                      <SectionLabel>The Problem</SectionLabel>
-                      <div className="bg-panel-2 rounded-sm p-6 border border-line">
-                        <p className="text-sm mb-3">
-                          Voice assistants react to whatever they hear. They transcribe filler, misread half-finished thoughts, and respond when nobody was talking to them, then stay silent at the moment a user actually needs help.
-                        </p>
-                        <p className="text-sm">
-                          <span className="text-[var(--ink)] font-medium">Design challenge:</span> Classify intent from noisy, real-world speech so the agent acts only when the signal is clear.
-                        </p>
-                      </div>
-                    </div>
-
-                    <Hairline />
-
-                    {/* Overview */}
-                    <div>
-                      <SectionLabel>Overview</SectionLabel>
+                  <div>
+                    <SectionLabel>Research Question</SectionLabel>
+                    <div className="bg-panel-2 rounded-sm p-6 border border-line">
+                      <p className="text-sm mb-3">
+                        An agent in a woodworking shop hears everything: instructions meant for it, side conversation meant for someone else, and machine noise under both.
+                      </p>
                       <p className="text-sm">
-                        Researched &amp; built a semantic classification pipeline for adaptive multimodal systems that isolates relevant user intent from environmental noise and linguistic variations, achieving &gt;90% response accuracy.
+                        <span className="text-[var(--ink)] font-medium">The question:</span> can it tell, from speech alone, what was meant for it — and does that hold when the speaker is not fluent in English?
                       </p>
                     </div>
+                  </div>
 
-                    <Hairline />
+                  <Hairline />
 
-                    {/* Key Contributions */}
-                    <div>
-                      <SectionLabel>Key Contributions</SectionLabel>
-                      <ul className="space-y-3">
-                        <li className="flex gap-3">
-                          <span className="text-accent shrink-0">·</span>
-                          <span>NLP pipeline development</span>
-                        </li>
-                        <li className="flex gap-3">
-                          <span className="text-accent shrink-0">·</span>
-                          <span>User intent prediction model</span>
-                        </li>
-                        <li className="flex gap-3">
-                          <span className="text-accent shrink-0">·</span>
-                          <span>Real-time response generation</span>
-                        </li>
-                      </ul>
-                    </div>
+                  {/* Method as a spec grid. The same five facts ran to four long
+                      bullets before; as label-and-line pairs they scan in a glance
+                      and the diagram opposite does the explaining. */}
+                  <div>
+                    <SectionLabel>Method</SectionLabel>
+                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                      {[
+                        ["Corpus", "Recorded in-lab, fewer than ten speakers."],
+                        ["Conditions", "Relevant and irrelevant prompts, formal and informal, over shop noise."],
+                        ["Groups", "Fluent English and limited proficiency, identical protocol."],
+                        ["Decision", "Speech to text, then semantics to a binary relevance call."],
+                        ["Evaluation", "Every clip in the labeled set, not a sample."],
+                        ["Owned", "Conditions, recording, labeling, classifier, evaluation."],
+                      ].map(([term, def]) => (
+                        <div key={term}>
+                          <dt className="text-xs uppercase tracking-[0.16em] text-meta mb-1">{term}</dt>
+                          <dd className="text-sm leading-snug">{def}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
 
-                    <Hairline />
+                  <Hairline />
 
-                    {/* Impact */}
-                    <div>
-                      <SectionLabel>Impact</SectionLabel>
-                      <ul className="space-y-3">
-                        <li className="flex gap-3">
+                  <div>
+                    <SectionLabel>What the numbers say</SectionLabel>
+                    <ul className="space-y-2.5 text-sm">
+                      {[
+                        "Informal phrasing cost three to five points. Survivable.",
+                        "Background noise set the floor, at 84%.",
+                        "Proficiency moved the spread, not the mean — which is why one headline number hides it.",
+                        "Silence was scored as an outcome, so answering the wrong thing counts against the system.",
+                      ].map(t => (
+                        <li key={t} className="flex gap-3">
                           <span className="text-accent shrink-0">·</span>
-                          <span><span className="font-semibold text-ink">Robust Semantic Orchestration:</span> Engineered a classification pipeline that bridges the gap between raw speech-to-text and actionable intent, handling the nuance of informal speech.</span>
+                          <span>{t}</span>
                         </li>
-                        <li className="flex gap-3">
-                          <span className="text-accent shrink-0">·</span>
-                          <span><span className="font-semibold text-ink">Multimodal Scalability:</span> Created a modular framework for adaptive systems that can be integrated into various hardware environments, from smart homes to automotive HMIs.</span>
-                        </li>
-                        <li className="flex gap-3">
-                          <span className="text-accent shrink-0">·</span>
-                          <span><span className="font-semibold text-ink">Real-time Decision Logic:</span> Developed the logic for "Agent Responds vs. Agent Ignores," a critical component for the next generation of "always-on" ambient computing.</span>
-                        </li>
-                      </ul>
-                    </div>
+                      ))}
+                    </ul>
+                  </div>
 
-                    <Hairline />
+                  <Hairline />
 
-                    {/* Performance metric */}
-                    <div className="pt-2">
-                      <SectionLabel>Performance Metric</SectionLabel>
-                      <span className={`${outfit.className} text-2xl text-ink`}>&gt;90% Accuracy</span>
+                  {/* Limitations as chips rather than a bulleted list: four short
+                      constraints read as a row of caveats, not as a fifth section
+                      competing with the findings for attention. */}
+                  <div>
+                    <SectionLabel>Limitations</SectionLabel>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "Pilot scale, under ten speakers",
+                        "No baseline — accuracy is absolute",
+                        "One domain",
+                        "Elicited, not overheard",
+                      ].map(t => (
+                        <span key={t} className="rounded-sm border border-line bg-panel-2 px-3 py-1.5 text-xs text-meta">
+                          {t}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
-
             </div></>
 
             );
@@ -2644,10 +2778,53 @@ function SurefrontCaseStudyBody() {
               {/* Outcome, moved above the narrative to lead with impact, and given
                   a panel of its own so it reads as the headline rather than as one
                   more row of body copy. Same panel vocabulary as The Problem box
-                  below it, with the accent border doing the emphasis. */}
-              <div className="lg:col-span-12 rounded-sm border border-accent/30 bg-panel-2 p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-                <div className="lg:col-span-4 text-base text-body leading-relaxed">
-                  <SectionLabel>Outcome</SectionLabel>
+                  below it, with the accent border doing the emphasis.
+
+                  Stacked bands rather than prose-beside-tiles. Side by side, the
+                  four tiles were 124px against a 209px prose column and left an
+                  L-shaped hole under them; at a quarter of the panel each they were
+                  also too narrow for their own labels, so "Interviews" sat on one
+                  line while its neighbours took two and hung with 21px of slack
+                  beneath it. Full width gives every label a single line and puts the
+                  numbers where the eye lands first — the same order 02 uses. */}
+              <div className="lg:col-span-12 rounded-sm border border-accent/30 bg-panel-2 p-6 md:p-8">
+                <SectionLabel>Outcome</SectionLabel>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                  {[
+                    // Lead with the outcome, not the effort: the step collapse is the
+                    // strongest number here. Co-design partners still appear in Research
+                    // and in "How it was tested", so nothing is lost by demoting them.
+                    { value: "19 → 1", label: "Duplications per style" },
+                    { value: "30+", label: "Interviews" },
+                    { value: "11", label: "Usability sessions" },
+                    // Spaces around the slash made this the widest value in the row
+                    // while carrying the least information; closed up, it sits at the
+                    // same visual weight as "19 → 1".
+                    { value: "4–5/5", label: "Would-buy score" },
+                  ].map(({ value, label }) => (
+                    <div key={label} className="rounded-sm border border-line bg-raised p-5 flex flex-col">
+                      {/* Negative tracking on the display size, per the rule that
+                          type tightens as it grows; the label keeps positive tracking
+                          because it is small and set in caps. */}
+                      <span className={`${outfit.className} block text-2xl md:text-3xl text-ink whitespace-nowrap tracking-tight`}>{value}</span>
+                      {/* Was text-sm at leading-relaxed — 13px caps on a 21px line,
+                          which floated the two label lines apart.
+
+                          mt-auto pins every label to the bottom of its card. The row
+                          stretches to a common height, so a label that wraps to one
+                          line while its neighbours take two would otherwise hang with
+                          a line of slack beneath it — which is what "Interviews" did.
+                          Bottom-aligned, the spare line sits above the label as
+                          breathing room instead of below it as a hole. Desktop fits
+                          every label on one line; this is what holds the row together
+                          at the two-column mobile width. */}
+                      <span className="mt-auto pt-2.5 block text-xs uppercase tracking-[0.14em] text-meta leading-snug">{label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-base text-body leading-relaxed max-w-3xl">
                   <p className="mb-4">
                     Designers and product developers scored the redesigned workflows four to five out of five on whether they would buy the software. Merchandisers described the line planner as strategic at a glance, and the concept campaign confirmed the demand independently of our interview pool.
                   </p>
@@ -2655,21 +2832,31 @@ function SurefrontCaseStudyBody() {
                     We handed off a design system and implementation guidelines, feasibility ratings agreed with Surefront&rsquo;s engineer feature by feature, and a quarterly roadmap running from Q4 2025 to Q4 2026.
                   </p>
                 </div>
-
-                <div className="lg:col-span-8">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* Role, folded into the outcome panel rather than sitting as its
+                    own section further down. Proximity is the whole point: the
+                    numbers above are a team result, and the attribution for them
+                    belongs against them, not a screen later. It also finally has
+                    the width for three columns — in the five-of-twelve narrative
+                    column these had to stack as rows. Tile vocabulary matches the
+                    stats directly above so the band reads as one panel. */}
+                <div className="mt-8 border-t border-line pt-8">
+                  <SectionLabel>My Role</SectionLabel>
+                  <p className="text-base text-body leading-relaxed mb-5 max-w-2xl">
+                    Five-person MHCI capstone team, working directly with Surefront&rsquo;s product and engineering leads. Three things were mine.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {[
-                      // Lead with the outcome, not the effort: the step collapse is the
-                      // strongest number here. Co-design partners still appear in Research
-                      // and in "How it was tested", so nothing is lost by demoting them.
-                      { value: "19 \u2192 1", label: "Duplications per style" },
-                      { value: "30+", label: "Interviews" },
-                      { value: "11", label: "Usability sessions" },
-                      { value: "4–5 / 5", label: "Would-buy score" },
-                    ].map(({ value, label }) => (
-                      <div key={label} className="rounded-sm border border-line bg-raised p-5">
-                        <span className={`${outfit.className} block text-2xl md:text-3xl text-ink mb-2 whitespace-nowrap`}>{value}</span>
-                        <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
+                      { n: "01", verb: "Owned", title: "Primary research", detail: "Thirty-plus interviews, the study protocol, and synthesis, end to end." },
+                      { n: "02", verb: "Owned", title: "Trend signals module", detail: "From the tab-switching finding that justified it through to the shipped screens." },
+                      { n: "03", verb: "Led", title: "Analytics prototype", detail: "Coded, so merchandisers could test the interaction patterns instead of hearing them described." },
+                    ].map(({ n, verb, title, detail }) => (
+                      <div key={n} className="rounded-sm border border-line bg-raised p-5">
+                        <div className="flex items-baseline justify-between gap-3 mb-2.5">
+                          <span className={`${outfit.className} text-xl font-light text-accent leading-none tabular-nums`}>{n}</span>
+                          <span className="text-2xs uppercase tracking-[0.18em] text-meta">{verb}</span>
+                        </div>
+                        <span className="block text-sm text-ink font-medium mb-1.5">{title}</span>
+                        <p className="text-sm text-meta leading-snug">{detail}</p>
                       </div>
                     ))}
                   </div>
@@ -2697,16 +2884,6 @@ function SurefrontCaseStudyBody() {
                           <span className="text-[var(--ink)] font-medium">Design challenge:</span> collapse the work that pushed teams out of the PLM in the first place, duplicating a style per variant, retyping shared data, and waiting on someone else to export a season.
                         </p>
                       </div>
-                    </div>
-
-                    <Hairline />
-
-                    {/* My Role */}
-                    <div>
-                      <SectionLabel>My Role</SectionLabel>
-                      <p>
-                        Five-person MHCI capstone team, working directly with Surefront&rsquo;s product and engineering leads. My scope was three things. I owned primary research end to end, thirty-plus interviews, the study protocol, and synthesis. I owned the trend signals module below, from the tab-switching finding that justified it through to the shipped screens. And I led the coded analytics prototype, so the interaction patterns could be tested with merchandisers rather than described to them.
-                      </p>
                     </div>
 
                     <Hairline />

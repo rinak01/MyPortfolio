@@ -10,6 +10,7 @@ export const IMG_DIMS: Record<string, { w: number; h: number }> = {
   "/images/01/pipeline.png": { w: 639, h: 360 },
   "/images/02/NL01.png": { w: 3307, h: 3307 },
   "/images/02/proactive agent pipeline.png": { w: 2166, h: 2294 },
+  "/images/02/updatedGraph.png": { w: 452, h: 448 },
   "/images/03/surefront/SurefrontInterviews.png": { w: 481, h: 312 },
   "/images/03/surefront/style-creation-poster.jpg": { w: 960, h: 600 },
   "/images/03/surefront/trend_forecasting_dashboard 1.png": { w: 692, h: 951 },
