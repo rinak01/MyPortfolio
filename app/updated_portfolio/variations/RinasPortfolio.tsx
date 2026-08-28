@@ -2926,8 +2926,13 @@ function SurefrontCaseStudyBody() {
                       { value: "2\u20133 wks", label: "Wait for a season\u2019s data, before" },
                       { value: "Q1\u2013Q3 2026", label: "Analytics milestones on Surefront\u2019s roadmap" },
                       { value: "2", label: "Coded prototype rounds with merchandisers" },
-                      // Placeholder: exact split TBD, confirm before shipping.
-                      { value: "9 \u00b7 6 \u00b7 3", label: "[Placeholder] Companies \u00b7 verticals \u00b7 countries in the research pool" },
+                      // Was a placeholder invented from the brief's example figure
+                      // ("9 companies, 6 verticals, 3 countries") and never confirmed,
+                      // so it is not shippable as a research claim. Replaced with a
+                      // number this page already states twice, in the Research bullets
+                      // and in "How it was tested" directly below, and which belongs to
+                      // this row's subject: how the analytics work was actually built.
+                      { value: "5", label: "Merchandisers in weekly co-design" },
                     ].map(({ value, label }) => (
                       <div key={label} className="rounded-sm border border-line bg-raised p-5">
                         <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>
