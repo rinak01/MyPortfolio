@@ -64,7 +64,14 @@ export interface GridItem {
   tools?: string[];          // e.g. ["Unity", "Figma", "Arduino"]
   notes?: string;            // Longer paragraph: process, outcome, what you'd change
   designThinking?: string;   // Design rationale, principles, decisions
+  // Staged process narrative. Use where the story is the sequence itself —
+  // research, concepting, prototype, testing, what changed and why.
+  process?: { title: string; body: string }[];
   links?: { label: string; href: string }[]; // e.g. demo, repo, paper
+  // A row of shots that leads the modal's image column, shown side by side
+  // above everything else. For sets that are read together rather than in
+  // sequence, and for sources too small to carry the full column width.
+  heroRow?: { images: { src: string; label: string }[]; caption?: string };
   // Optional video shown at the top of the modal's image column.
   // Accepts a full YouTube URL (youtu.be or youtube.com); embed URL is derived automatically.
   video?: { url: string; caption?: string };
@@ -131,11 +138,34 @@ export const ALL_PROJECTS: GridItem[] = [
     ]
   },
     {
-    src: "/images/prototypes/Mopad IXD/mopadui.jpg", alt: "Mopad IXD", tag: "Physical Prototype · Vehicle HMI", label: "Mopad IXD", desc: "A dual-screen self-driving moped HMI prototype built from cardboard, PVC pipes, and salvaged phones", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Physical Computing", "Tangible Environments"], year: "2024", context: "Carnegie Mellon · Interaction Design coursework", tools: ["Figma", "Cardboard", "PVC piping", "iPhone", "iPad", "Video prototyping"], notes: "A rapidly-built hardware mockup for the interface of a Self-Autonomous Vehicle (SAV) moped. The rig pairs an iPad windshield that surfaces environmental information (SAV state, upcoming turns, low-battery alerts) with an iPhone dashboard for speed, ETA, and battery. Physical SAV / ON buttons on the handlebars let riders toggle autonomy by hand.", designThinking: "The design problem was interaction for a vehicle you don't fully control. Attention had to be layered: when the moped drives itself the rider becomes a passenger, so the windshield can carry richer content; when they take over, the dashboard becomes primary and everything else quiets down.\n\nBuilding the physical form was as important as designing the screens. A rider's field of view and reach shape what UI can actually live where, so we prototyped the cardboard-and-PVC handlebars before committing to any digital fidelity.", images: [
-      { src: "/images/prototypes/Mopad IXD/mopadui.jpg", caption: "SAV Enabled state: windshield confirms autonomous mode; dashboard shows speed, time, battery, and range." },
-      { src: "/images/prototypes/Mopad IXD/IMG_3782.jpg", caption: "Navigation prompt: a 200-ft turn cue appears on the windshield while the dashboard tracks live speed and battery." },
-      { src: "/images/prototypes/Mopad IXD/IMG_3781 4.jpg", caption: "Low-battery scenario: the interface surfaces the nearest charge station with a one-tap GO route." },
-      { src: "/images/prototypes/Mopad IXD/IMG_6550.jpg", caption: "In-class user testing: classmates try the prototype with paper safety helmets for full role-play immersion." },
+    src: "/images/prototypes/Mopad IXD/mopadui.jpg", alt: "Self-driving moped HMI", tag: "Physical Prototype · Vehicle HMI", label: "Self-Driving Moped HMI", desc: "A cardboard-and-PVC moped rig for designing the handoff between rider and autonomous vehicle", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Interface Design", "Physical Computing", "Tangible Environments"], year: "Fall 2024", context: "Carnegie Mellon · Interaction Design Fundamentals · Team of 3 with Brenna Lindblad and Carter Owen · My role: primary research, concepting, physical prototype build", tools: ["Figma", "Crazy 8s", "Paper prototyping", "Cardboard", "PVC piping", "iPhone", "iPad", "Video prototyping"], notes: "A full design cycle for a semi-autonomous (SAV) moped: primary research, paper prototype, two rounds of user testing, working demo-day rig.\n\nThe final build pairs an iPad windshield HUD with an iPhone dashboard on a cardboard-and-PVC frame, with working brakes, throttle, blinkers, horn, and physical ON and SAV buttons. A helmet unlocks it by face ID.", designThinking: "The problem was never the moped. It was the handoff: who is driving right now, and can the rider tell without reading anything?\n\nThat set one rule. Attention follows control. Under SAV the rider is a passenger and the windshield can carry more; the moment control returns, the dashboard goes primary and everything else quiets down.", process: [
+      { title: "Helmet, not phone, unlocks the moped", body: "Riders have far fewer phone-mounting options than cyclists, so the interface moved onto the vehicle. Crazy 8s then killed the phone entirely: the helmet is the key, which puts helmet use in the critical path instead of on a warning label." },
+      { title: "One SAV button, not three autonomy levels", body: "We cut the levels 1–3 dial for a single button. SAV is unfamiliar territory, so the system absorbs the choice rather than the rider. Bottle caps stood in for the buttons in paper, because the shape reads as pushable before any label does." },
+      { title: "Cut the foot brake every tester preferred", body: "The most useful testing result contradicted preference. Two braking systems gave the rider one more decision at the worst possible moment, so the foot brake went and the hand brakes stayed, labelled." },
+      { title: "Cyan, because blue was already taken", body: "Testers could not tell 'SAV is on' from 'the vehicle is on'. Status moved from blue dots to a persistent banner and a ring around the speedometer, in cyan, because blue already belonged to navigation." },
+      { title: "'SAV DISENGAGING' instead of 'Takeover'", body: "Takeover language read as alarming rather than clear, and the call to action softened from 'Brake now!' to 'Prepare to brake'. Enough warning to act on, not enough to panic at." },
+      { title: "The unlock we would redesign", body: "Face ID verifies that the helmet is present, not that it is worn. The next version gates the ride on a head detected inside the helmet plus proximity to the moped." },
+    ], heroRow: {
+      images: [
+        { src: "/images/prototypes/Mopad IXD/screen_sav_active.jpg", label: "SAV active" },
+        { src: "/images/prototypes/Mopad IXD/screen_sav_disengaging.jpg", label: "Handoff" },
+        { src: "/images/prototypes/Mopad IXD/screen_low_battery.jpg", label: "Low battery" },
+      ],
+      caption: "The three states the interface exists to make legible: autonomy on, control coming back, and range running out. Cyan separates SAV from navigation blue; the handoff was de-escalated from 'Takeover' after testing.",
+    }, images: [
+      // The process in the order it happened: research, concepting, paper
+      // prototype, testing, final build, showcase. The first entry also fills
+      // the modal's full-bleed hero slot.
+      { src: "/images/prototypes/Mopad IXD/task_analysis.jpg", caption: "Task analysis: priorities ranked by bullseye, each task broken into steps, then every control mapped to where it lives on the vehicle." },
+      { src: "/images/prototypes/Mopad IXD/crazy8_sketches.jpg", caption: "Crazy 8s. Circled panels survived, including the helmet unlock." },
+      { src: "/images/prototypes/Mopad IXD/paper_controls.jpg", caption: "Paper controls tested for form and reach before any screen existed." },
+      { src: "/images/prototypes/Mopad IXD/paper_prototype_hud.jpg", caption: "Paper prototype: bottle-cap ON and SAV buttons, hand-drawn HUD states." },
+      { src: "/images/prototypes/Mopad IXD/testing_iteration_plan.jpg", caption: "Every issue observed in testing, paired with the change it drove." },
+      { src: "/images/prototypes/Mopad IXD/final_rig_unlocked.jpg", caption: "The rebuilt rig, unlocked by helmet. SAV and ON sit within thumb reach." },
+      { src: "/images/prototypes/Mopad IXD/IMG_3782.jpg", caption: "Navigation: a 200-ft turn cue on the windshield, live speed below." },
+      { src: "/images/prototypes/Mopad IXD/IMG_3781 4.jpg", caption: "The charging scenario running on the rig." },
+      { src: "/images/prototypes/Mopad IXD/mopadui.jpg", caption: "Final rig, SAV enabled. Windshield carries state, dashboard carries speed, time, battery, and range." },
+      { src: "/images/prototypes/Mopad IXD/demo_day.jpg", caption: "Demo day: one rider on the controls, the next waiting in the helmet." },
     ]
   },
     {
@@ -848,6 +878,39 @@ function ProjectModal({
           {/* Image column, magazine spread: hero shot + editorial grid */}
           <div className="w-full md:w-3/5 bg-sunken flex flex-col">
             {/* Optional video, sits above the hero shot when present */}
+            {/* Hero row: shots read together, side by side, above everything */}
+            {item.heroRow && item.heroRow.images.length > 0 && (
+              <figure className="flex flex-col px-3 md:px-4 pt-3 md:pt-4">
+                <div className="grid grid-cols-3 gap-2 md:gap-3">
+                  {item.heroRow.images.map((shot) => (
+                    <div key={shot.src} className="flex flex-col gap-2">
+                      {/* Fixed ratio so the three line up; sources differ by <1% */}
+                      <div className="relative w-full bg-black overflow-hidden aspect-[695/1000]">
+                        <Image
+                          src={shot.src}
+                          alt={`${item.label} — ${shot.label}`}
+                          fill
+                          sizes="(max-width: 768px) 30vw, 180px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <span className="text-2xs uppercase tracking-[0.16em] text-meta text-center leading-snug">
+                        {shot.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                {item.heroRow.caption && (
+                  <figcaption className="pt-4 px-1">
+                    <div className="h-px w-8 bg-accent/45 mb-2" />
+                    <p className="text-xs md:text-sm text-body italic leading-snug">
+                      {item.heroRow.caption}
+                    </p>
+                  </figcaption>
+                )}
+              </figure>
+            )}
+
             {item.video && getYouTubeId(item.video.url) && (
               <figure className="flex flex-col bg-black">
                 <div className="relative w-full aspect-video">
@@ -1028,6 +1091,28 @@ function ProjectModal({
               </div>
             )}
 
+            {/* Staged process narrative */}
+            {item.process && item.process.length > 0 && (
+              <div className="pt-4 mt-1 border-t border-line-soft">
+                <span className="block text-2xs uppercase tracking-[0.2em] text-accent mb-3">Process</span>
+                <ol className="flex flex-col gap-4">
+                  {item.process.map((step, i) => (
+                    <li key={step.title} className="flex gap-3">
+                      <span
+                        className="shrink-0 text-2xs tabular-nums tracking-[0.15em] text-meta pt-[3px]"
+                        aria-hidden
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="min-w-0">
+                        <h4 className="text-sm text-ink leading-snug mb-1">{step.title}</h4>
+                        <p className="text-sm text-body leading-relaxed whitespace-pre-line">{step.body}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
 
             {/* External links */}
             {item.links && item.links.length > 0 && (
