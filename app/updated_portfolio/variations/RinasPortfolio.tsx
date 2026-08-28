@@ -445,9 +445,14 @@ const CASE_STUDIES: CaseStudy[] = [
     num: "03",
     org: "CMU × Surefront",
     title: "Making PLM the place apparel teams actually work",
-    meta: "2025 Jan – 2025 Aug · MHCI Capstone",
-    desc: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it.",
-    outcome: "Scored 4–5 of 5 on willingness to buy. Shipped a design system, engineer-agreed feasibility ratings, and a roadmap through Q4 2026.",
+    meta: "2024 Winter – 2025 Summer · MHCI Capstone",
+    // Subtitle history, kept for comparison per Rina's request:
+    // v1, accurate but abstract: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it."
+    // v2, concrete but unsupported — the trends/tab-switching story belongs to the
+    //     Trends module that was cut in 2fc16aa, so the body never paid it off:
+    //     "Merchandisers were checking Instagram, Google Trends, and their PLM in three different tabs to spot a trend. We put the trend data inside the PLM so the tab-switching stopped."
+    desc: "Designers duplicated one jacket nineteen times to create it. Merchandisers waited three weeks for data the PLM already held. Both worked around the system meant to hold their work.",
+    outcome: "Team scored 4–5 of 5 on willingness to buy and shipped a design system, engineer-agreed feasibility ratings, and a roadmap through Q4 2026, on research and a prototype I owned.",
     tags: ["Enterprise UX", "Product Design"],
     id: "cmu-surefront-plm",
     img: "/images/03/surefront/surefront-lineplanning.jpg",
@@ -577,7 +582,10 @@ function CaseStudyCard({ item, outfitClass }: { item: CaseStudy; outfitClass: st
             own rule and label so a reader scanning the three cards can find
             the results without opening anything. */}
         {item.outcome && (
-          <div className="mt-4 pt-4 border-t border-line-soft">
+          // Panelled rather than ruled, matching the Outcome block at the top of
+          // the expanded case study, so the result reads as the emphasis on the
+          // card too instead of as a footnote under the description.
+          <div className="mt-4 rounded-sm border border-accent/30 bg-panel-2 p-4">
             <span className="block text-2xs uppercase tracking-[0.22em] text-accent mb-1.5">
               Outcome
             </span>
@@ -2323,27 +2331,269 @@ function SmashCaseStudyBody() {
             );
 }
 
+// ─── Trend Signals, redesigned ───────────────────────────────────────────────
+// The version that shipped read as a consumer app: purple gradient, a mocked
+// Instagram post, a $89.99 product tile, and a "Personal Fashion Assistant".
+// Real PLM users are merchandisers and PD managers, so this is the same module
+// in the register they actually work in. Rendered in JSX rather than as an
+// image because the original export is only 692px wide and cannot survive a
+// full-width slot on a 2x display.
+//
+// Palette is the product's own light UI, not the portfolio's dark chrome, so it
+// reads as a screen rather than as page furniture — same treatment the style
+// flow diagram already gets.
+const TS = {
+  page: "#F4F6F8",
+  card: "#FFFFFF",
+  line: "#E3E8EF",
+  ink: "#0F172A",
+  ink2: "#334155",
+  muted: "#64748B",
+  accent: "#2563EB",
+  accentSoft: "#EFF4FF",
+  // #059669 measured 3.77:1 on white, under AA for the 10-11px it is used at.
+  pos: "#047857",   // 5.48:1
+};
+
+function TrendSignalsMock() {
+  const signals = [
+    { r: 1, name: "Vintage dresses", m: 95, g: "+45%", v: "89K", w: "6 wks", s: "4 styles" },
+    { r: 2, name: "Sustainable fashion", m: 87, g: "+38%", v: "67K", w: "5 wks", s: "7 styles" },
+    { r: 3, name: "Athleisure", m: 82, g: "+32%", v: "54K", w: "9 wks", s: "12 styles" },
+    { r: 4, name: "Minimalist style", m: 78, g: "+28%", v: "43K", w: "4 wks", s: "6 styles" },
+    { r: 5, name: "Streetwear", m: 75, g: "+25%", v: "38K", w: "3 wks", s: "9 styles" },
+  ];
+  const sources = [
+    { label: "Google Trends search volume", val: "89K", d: "+45%" },
+    { label: "Retailer new arrivals", val: "312 SKUs", d: "+18%" },
+    { label: "Social mention volume", val: "24K", d: "+52%" },
+  ];
+  const matches = [
+    { id: "XXYY11-0", nm: "Midi Dress – Gathered Fit", se: "SS26", c: "Coral Pink", st: "68%" },
+    { id: "XXYY12-0", nm: "Midi Dress – Long Sleeve", se: "SS26", c: "Sage", st: "54%" },
+    { id: "XXYY13-0", nm: "V-Neck Dress", se: "FW25", c: "Elephant Blue", st: "71%" },
+  ];
+  // 6 months of momentum; rises then eases, matching the shipped chart's shape
+  const pts = [14, 19, 26, 31, 29, 23];
+  const maxY = 35;
+  const path = pts.map((v, i) => `${(i / (pts.length - 1)) * 300},${70 - (v / maxY) * 62}`).join(" L ");
+
+  return (
+    <div style={{ background: TS.page, color: TS.ink }} className="w-full rounded-sm p-3 sm:p-4 text-[11px] leading-tight">
+      {/* Header + query */}
+      <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3 mb-2.5">
+        <div className="flex items-baseline justify-between gap-3 flex-wrap mb-2.5">
+          <span className="text-[13px] font-semibold tracking-tight">Trend signals</span>
+          <span style={{ color: TS.muted }} className="text-[10px]">
+            Sources: Google Trends · retailer new-arrival feeds · social mention volume
+          </span>
+        </div>
+        <div className="flex gap-1.5 flex-wrap">
+          <div style={{ borderColor: TS.line, color: TS.muted }} className="flex-1 min-w-[140px] rounded-sm border px-2 py-1.5">
+            Search a category, fabric, or silhouette
+          </div>
+          {["Region: NA", "Window: 12 mo", "Category: Dresses"].map(f => (
+            <div key={f} style={{ borderColor: TS.line, color: TS.ink2 }} className="rounded-sm border px-2 py-1.5 whitespace-nowrap">
+              {f} <span style={{ color: TS.muted }}>▾</span>
+            </div>
+          ))}
+          <div style={{ background: TS.accent }} className="rounded-sm px-3 py-1.5 text-white font-medium whitespace-nowrap">
+            Run
+          </div>
+        </div>
+      </div>
+
+      {/* Ranked signals, with the index broken into its parts */}
+      <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3 mb-2.5 overflow-x-auto">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: TS.muted }}>
+          Ranked signals
+        </div>
+        <table className="w-full min-w-[440px] border-collapse">
+          <thead>
+            <tr style={{ color: TS.muted }} className="text-left text-[10px]">
+              {["#", "Signal", "Momentum", "Growth", "Volume", "Sustained", "In your line"].map(h => (
+                <th key={h} style={{ borderColor: TS.line }} className="border-b pb-1.5 font-medium">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {signals.map(s => (
+              <tr key={s.r} style={{ borderColor: TS.line }} className="border-b last:border-0">
+                <td style={{ color: TS.muted }} className="py-1.5 pr-2 tabular-nums">{s.r}</td>
+                <td className="py-1.5 pr-2 font-medium whitespace-nowrap">{s.name}</td>
+                <td className="py-1.5 pr-2">
+                  <span style={{ background: TS.accentSoft, color: TS.accent }} className="rounded-sm px-1.5 py-0.5 font-semibold tabular-nums">
+                    {s.m}
+                  </span>
+                </td>
+                <td style={{ color: TS.pos }} className="py-1.5 pr-2 tabular-nums">{s.g}</td>
+                <td className="py-1.5 pr-2 tabular-nums" style={{ color: TS.ink2 }}>{s.v}</td>
+                <td className="py-1.5 pr-2 tabular-nums" style={{ color: TS.ink2 }}>{s.w}</td>
+                <td className="py-1.5 whitespace-nowrap" style={{ color: TS.accent }}>{s.s}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {/* The shipped version showed a bare "95" with nothing to anchor it */}
+        <p style={{ color: TS.muted }} className="text-[10px] mt-2 leading-snug">
+          Momentum is search growth, absolute volume, and weeks sustained, normalised to 0–100 over the selected window.
+          The three inputs stay on the row so the index can be argued with.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5">
+        {/* Momentum curve + the editorial read */}
+        <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3">
+          <div className="flex items-baseline justify-between mb-2">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: TS.muted }}>
+              Vintage dresses, 6 months
+            </span>
+            <span style={{ color: TS.pos }} className="text-[11px] font-semibold tabular-nums">+42.5%</span>
+          </div>
+          <svg viewBox="0 0 300 80" className="w-full h-auto" preserveAspectRatio="none" aria-hidden="true">
+            {[0, 20, 40, 60].map(y => (
+              <line key={y} x1="0" y1={y + 8} x2="300" y2={y + 8} stroke={TS.line} strokeWidth="1" />
+            ))}
+            <path d={`M ${path} L 300,70 L 0,70 Z`} fill={TS.accent} fillOpacity="0.10" />
+            <path d={`M ${path}`} fill="none" stroke={TS.accent} strokeWidth="2" strokeLinejoin="round" />
+          </svg>
+          <div className="flex justify-between text-[9px] mt-1" style={{ color: TS.muted }}>
+            {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map(m => <span key={m}>{m}</span>)}
+          </div>
+          <p className="text-[10px] mt-2 leading-snug" style={{ color: TS.ink2 }}>
+            <span className="font-semibold">Read:</span> sustained six-week growth suggests a season-level shift, not a
+            viral spike. Plan against it for SS26 rather than chasing it in-season.
+          </p>
+        </div>
+
+        {/* Evidence, attributed rather than a mocked social post */}
+        <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: TS.muted }}>
+            Signal sources
+          </div>
+          {sources.map(s => (
+            <div key={s.label} style={{ borderColor: TS.line }} className="flex items-center justify-between gap-2 border-b last:border-0 py-2">
+              <span style={{ color: TS.ink2 }} className="leading-snug">{s.label}</span>
+              <span className="flex items-baseline gap-2 shrink-0">
+                <span className="tabular-nums font-medium">{s.val}</span>
+                <span style={{ color: TS.pos }} className="tabular-nums text-[10px]">{s.d}</span>
+              </span>
+            </div>
+          ))}
+          <p style={{ color: TS.muted }} className="text-[10px] mt-2 leading-snug">
+            Each signal is traceable to a counted source. Nothing is asserted without one.
+          </p>
+        </div>
+      </div>
+
+      {/* The move that makes this belong in a PLM at all */}
+      <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3 mb-2.5 overflow-x-auto">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: TS.muted }}>
+          Matching styles in your line
+        </div>
+        <table className="w-full min-w-[420px] border-collapse">
+          <thead>
+            <tr style={{ color: TS.muted }} className="text-left text-[10px]">
+              {["Style #", "Name", "Season", "Colorway", "Sell-through"].map(h => (
+                <th key={h} style={{ borderColor: TS.line }} className="border-b pb-1.5 font-medium">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {matches.map(m => (
+              <tr key={m.id} style={{ borderColor: TS.line }} className="border-b last:border-0">
+                <td className="py-1.5 pr-2 tabular-nums" style={{ color: TS.accent }}>{m.id}</td>
+                <td className="py-1.5 pr-2 whitespace-nowrap">{m.nm}</td>
+                <td className="py-1.5 pr-2" style={{ color: TS.ink2 }}>{m.se}</td>
+                <td className="py-1.5 pr-2" style={{ color: TS.ink2 }}>{m.c}</td>
+                <td className="py-1.5 tabular-nums font-medium">{m.st}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* No persona, no chat character: a query surface with real questions */}
+      <div style={{ background: TS.card, borderColor: TS.line }} className="rounded-sm border p-3">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: TS.muted }}>
+          Ask of the data
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {[
+            "Which SS26 styles map to rising signals?",
+            "Where is olive trending against last season?",
+            "Which signals have we no styles for?",
+          ].map(q => (
+            <span key={q} style={{ borderColor: TS.line, color: TS.ink2 }} className="rounded-sm border px-2 py-1">
+              {q}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SurefrontCaseStudyBody() {
   return (
 <>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-              {/* Left, meta + framing */}
-              <div className="lg:col-span-5 flex flex-col gap-8">
-                <div className="flex items-baseline gap-4">
+              {/* Title, then the result. Impact leads: a reader who stops after
+                  the first screen should still leave knowing how it landed and
+                  which parts were mine. The narrative picks up below. */}
+              <div className="lg:col-span-12">
+                <div className="flex items-baseline gap-4 mb-8">
                   <span className={`${outfit.className} text-5xl font-light text-ink`}>03</span>
                   <span className="text-sm uppercase tracking-[0.2em] text-accent">CMU &times; Surefront</span>
                 </div>
+                <h2 className={`${outfit.className} text-3xl font-light text-ink mb-1`}>
+                  Making PLM the place apparel teams actually work
+                </h2>
+                <p className="text-sm tracking-widest uppercase text-body">
+                  2024 Winter – 2025 Summer &nbsp;·&nbsp; MHCI Capstone &nbsp;·&nbsp; UX Research &amp; Product Design
+                </p>
+              </div>
 
-                <div>
-                  <h2 className={`${outfit.className} text-3xl font-light text-ink mb-1`}>
-                    Making PLM the place apparel teams actually work
-                  </h2>
-                  <p className="text-sm tracking-widest uppercase text-body mb-6">
-                    2025 Jan – 2025 Aug &nbsp;·&nbsp; MHCI Capstone &nbsp;·&nbsp; UX Research &amp; Product Design
+              {/* Outcome, moved above the narrative to lead with impact, and given
+                  a panel of its own so it reads as the headline rather than as one
+                  more row of body copy. Same panel vocabulary as The Problem box
+                  below it, with the accent border doing the emphasis. */}
+              <div className="lg:col-span-12 rounded-sm border border-accent/30 bg-panel-2 p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                <div className="lg:col-span-4 text-base text-body leading-relaxed">
+                  <SectionLabel>Outcome</SectionLabel>
+                  <p className="mb-4">
+                    Designers and product developers scored the redesigned workflows four to five out of five on whether they would buy the software. Merchandisers described the line planner as strategic at a glance, and the concept campaign confirmed the demand independently of our interview pool.
                   </p>
+                  <p>
+                    We handed off a design system and implementation guidelines, feasibility ratings agreed with Surefront&rsquo;s engineer feature by feature, and a quarterly roadmap running from Q4 2025 to Q4 2026.
+                  </p>
+                </div>
 
+                <div className="lg:col-span-8">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      // Lead with the outcome, not the effort: the step collapse is the
+                      // strongest number here. Co-design partners still appear in Research
+                      // and in "How it was tested", so nothing is lost by demoting them.
+                      { value: "19 \u2192 1", label: "Duplications per style" },
+                      { value: "30+", label: "Interviews" },
+                      { value: "11", label: "Usability sessions" },
+                      { value: "4–5 / 5", label: "Would-buy score" },
+                    ].map(({ value, label }) => (
+                      <div key={label} className="rounded-sm border border-line bg-raised p-5">
+                        <span className={`${outfit.className} block text-2xl md:text-3xl text-ink mb-2 whitespace-nowrap`}>{value}</span>
+                        <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Left, framing */}
+              <div className="lg:col-span-5 flex flex-col gap-8">
+                <div>
                   <div className="space-y-6 text-base text-body leading-relaxed">
                     {/* The Problem */}
                     <div>
@@ -2352,19 +2602,25 @@ function SurefrontCaseStudyBody() {
                         <p className="mb-3">
                           Surefront&rsquo;s MerchOps platform served jewelry and furniture brands and wanted to enter apparel, a market where every team already owns a product lifecycle management tool and quietly works around it. Designers rebuilt the same product data by hand. Merchandisers ran entire seasons out of Excel and waited two to three weeks for product developers to migrate data out of the system that was supposed to hold it.
                         </p>
+                        {/* Earlier versions, kept for comparison per Rina's request:
+                            v1: "give apparel teams a reason to work inside the PLM instead of beside it."
+                            v2: "merchandisers were tab-switching between Instagram, Google Trends,
+                                 and the PLM to spot a trend. Put the trend inside the PLM so they
+                                 didn't have to." — cut because the Trends module it refers to is not
+                                 part of this case study, so the promise had no payoff below. */}
                         <p>
-                          <span className="text-[var(--ink)] font-medium">Design challenge:</span> give apparel teams a reason to work inside the PLM instead of beside it.
+                          <span className="text-[var(--ink)] font-medium">Design challenge:</span> collapse the work that pushed teams out of the PLM in the first place, duplicating a style per variant, retyping shared data, and waiting on someone else to export a season.
                         </p>
                       </div>
                     </div>
 
                     <Hairline />
 
-                    {/* Team & Role */}
+                    {/* My Role */}
                     <div>
-                      <SectionLabel>Team &amp; Role</SectionLabel>
+                      <SectionLabel>My Role</SectionLabel>
                       <p>
-                        Five-person MHCI capstone team working directly with Surefront&rsquo;s product and engineering leads over eight months. I worked on user research and product design, and on the coded prototype used to test the analytics interactions.
+                        Five-person MHCI capstone team, working directly with Surefront&rsquo;s product and engineering leads. My scope was three things. I owned primary research end to end, thirty-plus interviews, the study protocol, and synthesis. I owned the trend signals module below, from the tab-switching finding that justified it through to the shipped screens. And I led the coded analytics prototype, so the interaction patterns could be tested with merchandisers rather than described to them.
                       </p>
                     </div>
 
@@ -2392,35 +2648,139 @@ function SurefrontCaseStudyBody() {
                 </div>
               </div>
 
-              {/* Right, product imagery */}
+              {/* Right, research exhibit then product imagery. The interviews
+                  panel leads: it sits beside the Research column on the left, so
+                  the two halves of the row cover the same beat before the page
+                  moves on to what was designed. */}
               <div className="lg:col-span-7 space-y-4">
-                <figure className="space-y-2">
+                {/* 481px source: rendering it wider only upscales an already small
+                    export. Left-aligned in the column rather than stretched. */}
+                <figure className="space-y-2 max-w-[481px]">
                   <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                    <Image loading="lazy" src="/images/03/surefront/SurefrontInterviews.png" alt="Breakdown of thirty-plus research participants by role and company type, with averages for years of experience, in-house PLM selection team members, and PLM consultants" width={dimsOf("/images/03/surefront/SurefrontInterviews.png").w} height={dimsOf("/images/03/surefront/SurefrontInterviews.png").h} sizes="(max-width: 640px) 100vw, 481px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                  </div>
+                  <figcaption className="text-sm text-meta leading-relaxed">
+                    Who the thirty-plus interviews actually reached, by role and company type. Twelve years of experience on average, seven people who had sat on an in-house PLM selection team, and three consultants who run PLM selection and implementation for a living. Recruiting, protocol, and synthesis were mine.
+                  </figcaption>
+                </figure>
+
+                <figure className="space-y-2">
+                  {/* Annotated: the screenshot alone cannot say which parts are the
+                      design decision and which were already there. Pins are
+                      aria-hidden decoration; the numbered legend below carries the
+                      text, so nothing is lost without them. Positions are % of the
+                      image box, so they track it at every breakpoint. */}
+                  <div className="relative w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
                     <Image loading="lazy" src="/images/03/surefront/surefront-lineplanning.jpg" alt="Line planning workspace showing season KPIs, style rows, and a merchant notes panel" width={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").w} height={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                    {[
+                      // Placed on labels and chrome, never on data: the KPI values,
+                      // their targets, and every style row stay readable underneath.
+                      { n: 1, left: "26%", top: "22%" },
+                      { n: 2, left: "30%", top: "35.5%" },
+                      { n: 3, left: "79%", top: "19%" },
+                    ].map(({ n, left, top }) => (
+                      <span
+                        key={n}
+                        aria-hidden="true"
+                        style={{ left, top, background: "var(--mark-fill)", borderColor: "var(--mark-ring)", color: "var(--mark-glyph)" }}
+                        className="absolute -translate-x-1/2 -translate-y-1/2 grid h-5 w-5 md:h-6 md:w-6 place-items-center rounded-full border text-2xs md:text-xs font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+                      >
+                        {n}
+                      </span>
+                    ))}
                   </div>
                   <figcaption className="text-sm text-meta leading-relaxed">
                     Line planning: assortment, targets, and merchant intent in one editable view, replacing the line sheet and spreadsheet pair.
                   </figcaption>
+                  <ol className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-2 pt-1">
+                    {[
+                      "Season targets sit on the plan itself, so net sales, cost, and margin are read against goal rather than in a separate sheet.",
+                      "Assortment and line sheet collapsed into one editable table, the pair merchandisers previously kept in parallel.",
+                      "Merchant intent, notes and focus colours, captured beside the assortment it refers to instead of in email.",
+                    ].map((text, i) => (
+                      <li key={i} className="flex gap-2 text-sm text-body leading-snug">
+                        <span className="text-accent shrink-0 tabular-nums">{i + 1}</span>
+                        <span>{text}</span>
+                      </li>
+                    ))}
+                  </ol>
                 </figure>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <figure className="space-y-2">
-                    <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                      <Image loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart beside the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                    </div>
-                    <figcaption className="text-sm text-meta leading-relaxed">
-                      Analytics, built as a coded prototype so interactions could be tested rather than described.
-                    </figcaption>
-                  </figure>
+                {/* Full width, not the old two-up: at half column these read as
+                    texture rather than as screens anyone can inspect. */}
+                <figure className="space-y-2">
+                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                    <Image loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                  </div>
+                  <figcaption className="text-sm text-meta leading-relaxed">
+                    Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.
+                  </figcaption>
+                </figure>
+              </div>
 
-                  <figure className="space-y-2">
-                    <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                      <Image loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 1024px) 50vw, 30vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                    </div>
-                    <figcaption className="text-sm text-meta leading-relaxed">
-                      Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.
-                    </figcaption>
-                  </figure>
+              {/* Trend signals: the module that started the whole thesis, shown as
+                  it shipped and as it should have been. Kept honest — the revision
+                  is labelled as a revision, not passed off as delivered work. */}
+              <div className="lg:col-span-12 pt-16">
+                <SectionLabel>Trend Signals</SectionLabel>
+
+                <p className={`${outfit.className} text-2xl md:text-3xl font-light text-ink leading-snug max-w-3xl mb-4`}>
+                  Merchandisers were spotting trends in three tabs, none of them the PLM.
+                </p>
+                <p className="text-base text-body leading-relaxed max-w-2xl mb-10">
+                  Instagram for what people were wearing, Google Trends for whether it was growing, then the PLM to see
+                  whether they had anything like it. The trend and the line lived in different tools, so the answer to
+                  &ldquo;should we make this&rdquo; was assembled by hand every time. This module put the signal next to
+                  the catalogue it applies to.
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                  <div className="lg:col-span-4">
+                    <figure className="space-y-2 max-w-[346px]">
+                      <div className="w-full overflow-hidden rounded-sm border border-line bg-raised">
+                        <Image loading="lazy" src="/images/03/surefront/trend_forecasting_dashboard 1.png" alt="The trend dashboard as shipped, with a purple gradient background, a mocked social post, and a product tile with a retail price" width={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").w} height={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").h} sizes="(max-width: 640px) 100vw, 346px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        <span className="text-ink">As shipped.</span> It works, and it tested well on comprehension. It also
+                        reads as a shopping app: a consumer gradient, a mocked influencer post, and a product tile with a
+                        retail price, in a tool whose users are merchandisers and product developers.
+                      </figcaption>
+                    </figure>
+                  </div>
+
+                  <div className="lg:col-span-8">
+                    <figure className="space-y-2">
+                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised p-2 sm:p-3">
+                        <TrendSignalsMock />
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        <span className="text-ink">Revision, not delivered work.</span> Same data, same module, rebuilt in the
+                        register its users actually work in. Built in code rather than redrawn as an image, so it stays sharp
+                        at any size and follows the page rather than sitting on it as a screenshot.
+                      </figcaption>
+                    </figure>
+                  </div>
+                </div>
+
+                <div className="pt-10">
+                  <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-4">What changed, and why</span>
+                  {/* Three, not six. The gradient, the persona and the mocked social
+                      post are all visible in the comparison above and do not need
+                      prose; these three are the ones that are design reasoning rather
+                      than taste. They also run in order: make the signal trustworthy,
+                      then readable, then actionable against the line. */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                    {[
+                      ["A price tag, in a PLM", "The $89.99 tile answered a shopper's question. Merchandisers are asking whether they already carry anything like it, so it became matching styles in your line: style number, season, colourway, sell-through. That is the whole argument for putting trends inside the PLM rather than beside it."],
+                      ["A score with nothing behind it", "The shipped version showed a bare 95 and asked to be trusted. Momentum now names its inputs, keeps growth, volume and weeks sustained on the row, and says how they combine. A number a merchandiser cannot argue with is one they will not act on."],
+                      ["Data with no reading", "The growth curve showed a shape and left the interpretation to the viewer. It now carries the read: sustained six-week growth is a season-level shift, and should be planned against rather than chased in-season."],
+                    ].map(([h, body]) => (
+                      <div key={h}>
+                        <span className="block text-ink mb-1.5">{h}</span>
+                        <p className="text-base text-body leading-relaxed">{body}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -2436,6 +2796,29 @@ function SurefrontCaseStudyBody() {
                       </div>
                       <figcaption className="text-sm text-meta leading-relaxed">
                         Creating a jacket in five sizes and four colors meant duplicating the base product nineteen times and relinking every child. Restructured into one variant-set step, with per-variant editing only where something genuinely differs.
+                      </figcaption>
+                    </figure>
+
+                    {/* The diagram above claims the collapse; this shows it happening.
+                        Nineteen -> one is the headline stat now, so it should not rest
+                        on a before/after drawing alone. Same preload="none" + poster
+                        treatment as the analytics clip: nothing ships until play. */}
+                    <figure className="space-y-2 pt-6">
+                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                        <video
+                          controls
+                          preload="none"
+                          playsInline
+                          poster="/images/03/surefront/style-creation-poster.jpg"
+                          className="w-full h-auto block"
+                        >
+                          <source src="/images/03/surefront/style-creation.mp4" type="video/mp4" />
+                          Your browser does not support embedded video. The clip shows one style being
+                          created with every size and colour variant selected in a single pass.
+                        </video>
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        One pass, every variant. Sizes and colours are multi-selected on the style itself, and fabric, finish, and the measurement sheet are pulled from the centralized libraries rather than retyped, which is the second decision below doing the work that makes the first one possible.
                       </figcaption>
                     </figure>
                   </div>
@@ -2463,43 +2846,11 @@ function SurefrontCaseStudyBody() {
                 </div>
               </div>
 
-              {/* Full width, outcome */}
-              <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-16">
-                <div className="lg:col-span-5 text-base text-body leading-relaxed">
-                  <SectionLabel>Outcome</SectionLabel>
-                  <p className="mb-4">
-                    Designers and product developers scored the redesigned workflows four to five out of five on whether they would buy the software. Merchandisers described the line planner as strategic at a glance, and the concept campaign confirmed the demand independently of our interview pool.
-                  </p>
-                  <p>
-                    We handed off a design system and implementation guidelines, feasibility ratings agreed with Surefront&rsquo;s engineer feature by feature, and a quarterly roadmap running from Q4 2025 to Q4 2026.
-                  </p>
-                </div>
-
-                <div className="lg:col-span-7">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {[
-                      { value: "30+", label: "Interviews" },
-                      { value: "11", label: "Usability sessions" },
-                      { value: "5", label: "Co-design partners" },
-                      { value: "4–5 / 5", label: "Would-buy score" },
-                    ].map(({ value, label }) => (
-                      <div key={label} className="rounded-sm border border-line bg-raised p-5">
-                        <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>
-                        <span className="block text-sm uppercase tracking-[0.16em] text-meta leading-relaxed">{label}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 rounded-sm border border-line bg-panel-2 p-5 text-base text-body leading-relaxed">
-                    <span className="block text-sm uppercase tracking-[0.16em] text-meta mb-2">Left open</span>
-                    Pivot-table depth, libraries that differ company to company, and migrating legacy data from systems that all report their numbers differently. Each is named in the handoff rather than designed around.
-                  </div>
-                </div>
-              </div>
-
-              {/* Outcome section. Every figure and quote below is drawn from the
-                  Surefront x CMU summer report, Jan-Aug 2025. */}
-              <div className="lg:col-span-12 pt-20 border-t border-line-strong mt-16">
+              {/* Deep dive: the analytics module, and the version of it that failed.
+                  Every figure and quote below is drawn from the Surefront x CMU
+                  summer report, Jan-Aug 2025. Placed before Outcome: this is the
+                  design story, so it should not read as an appendix to the result. */}
+              <div className="lg:col-span-12 pt-16">
                 <SectionLabel>Analytics Dashboard</SectionLabel>
 
                 <p className={`${outfit.className} text-2xl md:text-3xl font-light text-ink leading-snug max-w-3xl mb-4`}>
@@ -2510,6 +2861,18 @@ function SurefrontCaseStudyBody() {
                   weeks for a product developer to migrate data out of the PLM into Excel before they could judge
                   whether a season was balanced.
                 </p>
+
+                {/* Capped at 545px: the source is 1089px wide, so anything larger
+                    is upscaling on a 2x display, and this is dense UI where the
+                    legibility is the whole point. */}
+                <figure className="space-y-2 mb-10 max-w-[545px]">
+                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                    <Image loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart bound to the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 640px) 100vw, 545px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                  </div>
+                  <figcaption className="text-sm text-meta leading-relaxed">
+                    Version two: the chart and the catalogue on one screen, so a filter is always visibly acting on the products behind the numbers.
+                  </figcaption>
+                </figure>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                   <div className="lg:col-span-7 space-y-6">
@@ -2534,6 +2897,31 @@ function SurefrontCaseStudyBody() {
                         tables already gave them. Version two bound the chart to the catalogue and added the third axis.
                       </p>
                     </div>
+
+                    {/* The coded prototype, version two. A still cannot show a filter
+                        acting on the products, which is the whole thing testing said
+                        version one failed at, so this claim is carried by the clip.
+                        preload="none" keeps the 9.9MB off the initial page load: the
+                        poster is all that ships until someone presses play. */}
+                    <figure className="space-y-2 pt-2">
+                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                        <video
+                          controls
+                          preload="none"
+                          playsInline
+                          poster="/images/03/surefront/analytics-prototype-poster.jpg"
+                          className="w-full h-auto block"
+                        >
+                          <source src="/images/03/surefront/analytics-prototype.mp4" type="video/mp4" />
+                          Your browser does not support embedded video. The clip shows filters in the
+                          coded analytics prototype updating the product catalogue and the stacked chart together.
+                        </video>
+                      </div>
+                      <figcaption className="text-sm text-meta leading-relaxed">
+                        Version two, running. Filter chips narrow the catalogue and the chart at the same time, and
+                        Stack&nbsp;By adds the third dimension that flat charts could not carry. Coded prototype, mine.
+                      </figcaption>
+                    </figure>
                   </div>
 
                   <div className="lg:col-span-5 space-y-4">
@@ -2541,6 +2929,13 @@ function SurefrontCaseStudyBody() {
                       { value: "2\u20133 wks", label: "Wait for a season\u2019s data, before" },
                       { value: "Q1\u2013Q3 2026", label: "Analytics milestones on Surefront\u2019s roadmap" },
                       { value: "2", label: "Coded prototype rounds with merchandisers" },
+                      // Was a placeholder invented from the brief's example figure
+                      // ("9 companies, 6 verticals, 3 countries") and never confirmed,
+                      // so it is not shippable as a research claim. Replaced with a
+                      // number this page already states twice, in the Research bullets
+                      // and in "How it was tested" directly below, and which belongs to
+                      // this row's subject: how the analytics work was actually built.
+                      { value: "5", label: "Merchandisers in weekly co-design" },
                     ].map(({ value, label }) => (
                       <div key={label} className="rounded-sm border border-line bg-raised p-5">
                         <span className={`${outfit.className} block text-2xl text-ink mb-2`}>{value}</span>

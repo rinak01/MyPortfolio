@@ -85,7 +85,11 @@
   --body:          #A3A3A3;
   --body-2:        #B0B0B0;
   --muted:         #8F8F8F;
-  --meta:          #7D7D7D;
+  /* #7D7D7D failed AA as body-size text on the raised surfaces it actually
+     sits on: 4.48:1 on --raised, 4.23:1 on --panel-2. Every figcaption and
+     stat-card label uses this token at 13px, so it has to clear 4.5:1.
+     #868686 gives 5.06 / 4.78 / 5.37 (raised / panel-2 / ground). */
+  --meta:          #868686;
   /* decorative only — too low-contrast for text on this ground (2.8:1);
      anything that has to be read uses --meta */
   --faint:         #5A5A5A;
