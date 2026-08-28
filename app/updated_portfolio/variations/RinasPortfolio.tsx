@@ -474,7 +474,7 @@ const CASE_STUDIES: CaseStudy[] = [
   {
     num: "03",
     org: "CMU × Surefront",
-    title: "Making PLM the place apparel teams actually work",
+    title: "Redesigning PLM for Apparel Line Planning",
     meta: "2024 Winter – 2025 Summer · MHCI Capstone",
     // Subtitle history, kept for comparison per Rina's request:
     // v1, accurate but abstract: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it."
@@ -2634,7 +2634,7 @@ function SurefrontCaseStudyBody() {
                   <span className="text-sm uppercase tracking-[0.2em] text-accent">CMU &times; Surefront</span>
                 </div>
                 <h2 className={`${outfit.className} text-3xl font-light text-ink mb-1`}>
-                  Making PLM the place apparel teams actually work
+                  Redesigning PLM for Apparel Line Planning
                 </h2>
                 <p className="text-sm tracking-widest uppercase text-body">
                   2024 Winter – 2025 Summer &nbsp;·&nbsp; MHCI Capstone &nbsp;·&nbsp; UX Research &amp; Product Design
