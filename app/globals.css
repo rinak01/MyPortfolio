@@ -57,6 +57,15 @@
   --dgm-text:      #EFF6FF;   /* pale note plates — unchanged */
   --dgm-text-2:    #E5E7EB;
   --dgm-plate:     rgba(226,234,246,0.75);
+  /* Text sitting directly ON --dgm-plate, which flips with the theme while
+     --dgm-fill deliberately does not (it is ink for the white boxes inside
+     the SVG, which are white in both themes). The SmaSH panels previously
+     used --dgm-fill and fixed slate-* values here, so the formal accuracy
+     labels and the ">90%" metric measured 1.04:1 on the dark plate and the
+     secondary text vanished on the light one. */
+  --dgm-on-plate:   #0F172A;
+  --dgm-on-plate-2: #475569;
+  --dgm-on-plate-3: #64748B;
 
   /* pastels tuned for near-black go opaque and dark for paper */
   --cat-spatial:   #1D4ED8;
@@ -129,6 +138,9 @@
   --dgm-text:      #EFF6FF;
   --dgm-text-2:    #E5E7EB;
   --dgm-plate:     rgba(11,28,48,0.55);
+  --dgm-on-plate:   #F8FAFC;
+  --dgm-on-plate-2: #CBD5E1;
+  --dgm-on-plate-3: #94A3B8;
 
   /* archive category pills */
   --cat-spatial:   #93C5FD;
