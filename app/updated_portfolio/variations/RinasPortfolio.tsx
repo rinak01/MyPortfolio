@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Outfit, DM_Sans } from "next/font/google";
 import { dimsOf } from "./imageDims";
 import ProactiveAgentDemo from "./ProactiveAgentDemo";
+import { TankCardRow, TankCard } from "./TankCards";
 
 // The archive tile and the modal hero are a layoutId pair, so both halves must
 // be motion components. Created once at module scope — rebuilding it per render
@@ -327,6 +328,10 @@ function FilteredThumb({
   return (
     <motion.button
       type="button"
+      // Addressable from outside the grid. TankHero's fourth card links to
+      // #project-luminous-jellyfish; without an id here that anchor is dead.
+      // Case studies already carry project-${num}, so this uses the label.
+      id={`project-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}
       // A div with an onClick is invisible to the keyboard and announces
       // nothing. These 21 thumbs are the whole archive, so they are buttons:
       // tabbable, Enter/Space activated, and named for the project they open.
@@ -717,13 +722,73 @@ function CaseStudyDetail({
   );
 }
 
-function CaseStudyCards({ items, outfitClass }: { items: CaseStudy[]; outfitClass: string }) {
+/* ─── Selected Projects deck ───────────────────────────────────────────────
+   The four cards that used to spread inside the tank hero, moved down here.
+   Look comes from TankCards; behaviour is unchanged from the cards this
+   replaced — the three studies still stamp #project-01/02/03 for deep links
+   and still open CaseStudyDetail, so the long-form bodies stay reachable.
+   The fourth is an archive tile and opens the archive modal instead.
+   ────────────────────────────────────────────────────────────────────────── */
+
+// "2025 Jun – 2026 Jan" → "2025—26"; a single-year meta stays one year.
+function yearsOf(meta: string): string {
+  const ys = meta.match(/\d{4}/g) ?? [];
+  if (!ys.length) return "";
+  const first = ys[0];
+  const last = ys[ys.length - 1];
+  return first === last ? first : `${first}—${last.slice(2)}`;
+}
+
+const STUDY_TINT = ["#9FE0DA", "#C8D8E8", "#E9A23B"];
+
+function CaseStudyTankCard({ item, index }: { item: CaseStudy; index: number }) {
+  const [open, setOpen] = useState(false);
   return (
-    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
-        <CaseStudyCard key={item.id} item={item} outfitClass={outfitClass} />
+    <Fragment>
+      <TankCard
+        index={index}
+        id={`project-${item.num}`}
+        expanded={open}
+        onOpen={() => setOpen(true)}
+        view={{
+          title: item.title,
+          type: item.tags[0],
+          year: yearsOf(item.meta),
+          note: item.desc,
+          thumb: item.img,
+          tint: STUDY_TINT[index] ?? "#9FE0DA",
+          fit: item.fit === "contain" ? "contain" : "cover",
+        }}
+      />
+      <AnimatePresence>
+        {open && <CaseStudyDetail item={item} onClose={() => setOpen(false)} />}
+      </AnimatePresence>
+    </Fragment>
+  );
+}
+
+function SelectedProjectCards({ onOpenProject }: { onOpenProject: (item: GridItem) => void }) {
+  const jellyfish = ALL_PROJECTS.find((p) => p.label === "Luminous Jellyfish");
+  return (
+    <TankCardRow>
+      {CASE_STUDIES.map((cs, i) => (
+        <CaseStudyTankCard key={cs.id} item={cs} index={i} />
       ))}
-    </div>
+      {jellyfish && (
+        <TankCard
+          index={3}
+          view={{
+            title: jellyfish.label,
+            type: jellyfish.categories[0],
+            year: jellyfish.year ?? "",
+            note: jellyfish.desc,
+            thumb: jellyfish.src,
+            tint: "#F58BA0",
+          }}
+          onOpen={() => onOpenProject(jellyfish)}
+        />
+      )}
+    </TankCardRow>
   );
 }
 
@@ -1224,13 +1289,8 @@ const slowFade = {
   }
 };
 
-const lineReveal = {
-  hidden: { scaleX: 0, originX: 0 },
-  visible: {
-    scaleX: 1,
-    transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1], delay: 0.1 }
-  }
-};
+// lineReveal lived here for the header's gradient rule. That header moved to
+// TankHero, and it was the only caller.
 
 // Label / section heading style
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
@@ -1258,6 +1318,12 @@ const NAV_ITEMS = [
 
 function ScrollNav() {
   const [active, setActive] = useState("selected-projects");
+  // The nav is fixed, so it used to sit over the tank hero — in the same
+  // right-hand lane as the hero's day gauge and clock, which collided. It
+  // also had nothing to point at up there: every target is below the hero,
+  // so it reported "Selected Projects" active while you were looking at a
+  // reef. It now appears only once there is something to navigate.
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     // Scroll-based active detection: find the last section whose top
@@ -1272,6 +1338,9 @@ function ScrollNav() {
         if (rect.top <= activationLine) current = id;
       }
       setActive(current);
+
+      const first = document.getElementById(NAV_ITEMS[0].id);
+      setVisible(!!first && first.getBoundingClientRect().top <= window.innerHeight * 0.9);
     };
 
     updateActive();
@@ -1284,12 +1353,24 @@ function ScrollNav() {
   }, []);
 
   return (
-    <nav className="fixed right-5 top-[320px] z-50 hidden lg:flex flex-col items-center gap-0">
+    <nav
+      aria-hidden={!visible}
+      // Centred rather than pinned at a magic 320px: a fixed offset drifts
+      // against viewport height, sitting too low on a short window and too
+      // high on a tall one. Centring holds the same optical position on any
+      // screen. right-6 gives the rail a little more air off the edge.
+      className={`fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col items-center gap-0
+        transition-opacity duration-300 motion-safe:transition-[opacity,transform] motion-safe:duration-300
+        ${visible ? "opacity-100" : "opacity-0 pointer-events-none motion-safe:translate-x-2"}`}
+    >
       {NAV_ITEMS.map(({ id, label }, i) => (
         <div key={id} className="flex flex-col items-center">
           {/* Dot + tooltip row */}
           <a
             href={`#${id}`}
+            // Not just aria-hidden: a hidden-but-tabbable dot would still take
+            // focus during the hero and scroll the page out from under you.
+            tabIndex={visible ? undefined : -1}
             onClick={(e) => {
               e.preventDefault();
               document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -1325,30 +1406,47 @@ function ScrollNav() {
 
 // ─── Back-to-Top Button (clean modern circular button) ─────────────────────
 function BackToTopButton() {
+  // Was visible from 0.6 of a viewport, which during the 700vh hero meant it
+  // sat over the tank almost immediately — a near-solid white disc competing
+  // with the name for attention. It now waits until the projects are in view,
+  // i.e. until the hero is genuinely behind you.
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setVisible(window.scrollY > window.innerHeight * 0.6);
+      const first = document.getElementById("selected-projects");
+      setVisible(!!first && first.getBoundingClientRect().top <= window.innerHeight * 0.5);
     };
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, []);
 
   return (
     <motion.button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       initial={false}
-      animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 12 }}
-      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+      // Materialises rather than fading: scale and opacity move together on a
+      // critically damped spring, because nothing was thrown by the user.
+      animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.9 }}
+      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+      // 44x44 is the visible size and the hit area both.
       className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50
         w-11 h-11 rounded-full flex items-center justify-center
-        bg-white/95 hover:bg-white border border-black/5
-        shadow-[0_4px_16px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_22px_rgba(0,0,0,0.35)]
-        hover:-translate-y-0.5 active:translate-y-0 active:scale-90 active:duration-150
-        transition-all duration-250 backdrop-blur-sm cursor-pointer
+        bg-[rgba(10,20,27,0.62)] backdrop-blur-md
+        border border-[rgba(159,224,218,0.32)]
+        shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_30px_-12px_rgba(2,12,18,0.9)]
+        hover:bg-[rgba(14,28,36,0.78)] hover:border-[rgba(159,224,218,0.55)]
+        active:scale-[0.94] active:duration-100
+        focus-visible:outline-2 focus-visible:outline focus-visible:outline-[#9FE0DA] focus-visible:outline-offset-3
+        transition-[background-color,border-color,transform] duration-250 cursor-pointer
         ${visible ? "" : "pointer-events-none"}`}
+      aria-hidden={!visible}
+      tabIndex={visible ? undefined : -1}
       aria-label="Back to top"
     >
       <svg
@@ -1356,7 +1454,7 @@ function BackToTopButton() {
         height="16"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="var(--dgm-fill)"
+        stroke="rgba(240,236,229,0.92)"
         strokeWidth="2.25"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -3322,66 +3420,22 @@ export default function RinasPortfolio() {
         {/* Subtle material texture overlay */}
         <div className="fixed inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
 
-        {/* ─── Header ─── */}
-        {/* mobile fix: tighter horizontal + top padding on phones */}
-        <header className="px-5 sm:px-8 md:px-16 pt-16 sm:pt-20 md:pt-24 pb-10 sm:pb-12 md:pb-16 max-w-[1600px] mx-auto">
-          <motion.div initial="hidden" animate="visible" variants={slowFade}
-            className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
-            <div>
-              <div className="flex items-baseline gap-6 mb-6 flex-wrap sm:flex-nowrap">
-                <h1 className={`${outfit.className} text-5xl md:text-7xl font-light text-ink tracking-tight`}>
-                  Rina Kim
-                </h1>
-                {/* mobile fix: bigger tap target (≥40px tall via py-2.5 + min-h on phones) and slightly larger label */}
-                <a
-                  href="/images/Resume_RinaKim.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-4 lg:px-3.5 py-2.5 lg:py-1.5 min-h-[40px] lg:min-h-0 rounded-sm text-xs lg:text-2xs font-semibold uppercase tracking-[0.15em] border transition-all duration-250 active:scale-[0.96] active:duration-150 cursor-pointer relative -translate-y-0 lg:-translate-y-[9px]
-                  bg-btn-face text-body border-accent-deep/40 shadow-[0_4px_12px_rgba(0,0,0,0.5)] hover:bg-accent-deep hover:text-ground hover:border-accent-deep hover:shadow-[0_0_15px_rgba(179,157,130,0.35)] shrink-0"
-                >
-                  <span className="pl-[0.15em] text-center">Resume</span>
-                </a>
-              </div>
-              <p className="text-sm tracking-[0.15em] uppercase text-[var(--meta)] mb-2">
-                <span className="font-semibold text-[var(--body)]">Product Designer</span>, UX/UI Design ·{" "}
-                <button
-                  type="button"
-                  onClick={() => document.getElementById("selected-projects")?.scrollIntoView({ behavior: "smooth" })}
-                  aria-label="Jump to Selected Projects"
-                  className="relative inline cursor-pointer uppercase tracking-[0.15em] transition-all duration-400 ease-out active:opacity-60 active:duration-150
-                  hover:text-[var(--ink)]
-                  hover:[text-shadow:0_0_8px_rgba(234,234,234,0.45),0_0_18px_rgba(201,180,154,0.25)]"
-                >
-                  Prototyping
-                </button>
-                {" "}· Systems Thinking
-              </p>
-              <p className="text-base text-[var(--body)] leading-relaxed max-w-xl mt-6">
-                Masters in Human-Computer Interaction from <span className="text-[var(--ink)] font-medium">Carnegie Mellon University</span>.
-                Previously at <span className="text-[var(--ink)] font-medium">BMW Group Technology Office</span>.
-                Specializing in Automotive HMI, Interface Design, and Rapid Prototyping that bridge research and production.
-              </p>
-            </div>
-            <div className="text-right text-sm leading-relaxed text-body">
-            </div>
-          </motion.div>
-          <motion.div initial="hidden" animate="visible" variants={lineReveal}
-            className="w-full h-[1px] bg-gradient-to-r from-accent-deep/40 via-accent-deep/10 to-transparent" />
-        </header>
+        {/* The header hero (name, Resume, role line, bio) now lives in
+            TankHero, which holds it on the flat ground after the tank
+            goes dark. Rendering it here too would state it twice. */}
 
         {/* mobile fix: reduce side padding + section spacing on phones (was 32px/160px, now 20px/64px) */}
-        <main className="max-w-[1600px] mx-auto px-5 sm:px-8 md:px-16 pb-16 sm:pb-24 md:pb-32 space-y-16 sm:space-y-24 md:space-y-40">
+        {/* Top padding gives the first section air as the hero's sticky stage
+            releases. Without it the Selected Projects heading scrolled in hard
+            against the tank with no gap, which read as a clipped overflow. */}
+        <main className="max-w-[1600px] mx-auto px-5 sm:px-8 md:px-16 pt-20 sm:pt-28 md:pt-36 pb-16 sm:pb-24 md:pb-32 space-y-16 sm:space-y-24 md:space-y-40">
 
           {/* ─── Selected Projects (notched article cards, opens the page) ─── */}
           <section id="selected-projects">
-            <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[var(--ink)] mb-3`}>
+            <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[var(--ink)] mb-10`}>
               Selected Projects
             </h2>
-            <p className="text-sm text-[var(--muted)] leading-relaxed mb-10 max-w-xl">
-              Three I&rsquo;d want to talk through. Each one opens up in full below.
-            </p>
-            <CaseStudyCards items={CASE_STUDIES} outfitClass={outfit.className} />
+            <SelectedProjectCards onOpenProject={setSelectedProject} />
           </section>
 
           {/* The three long-form case studies are not rendered inline any more.
