@@ -162,13 +162,17 @@ const CSS = `
    frame painted into each plate reads as a frame instead of stray verticals. */
 /* One group per phase, cross-faded as a unit: the plate plus its mirrors. */
 .tk-plate { position:absolute; inset:0; }
-/* The plate itself, whole and unscaled — every painted wall stays in frame. */
-.tk-plate img.tk-bg { position:absolute; display:block; }
+/* The plate itself. max-width:none matters: the base stylesheet clamps images
+   to 100% of their container, which is harmless while the plate is contained
+   but silently squashes it the moment it is scaled to fill — the left offset
+   still assumes the full width, so the picture ends up off-screen. */
+.tk-plate img.tk-bg { position:absolute; display:block; max-width:none; }
 /* Mirrored continuations. Blur only, deliberately no brightness or
    saturation change: any of those puts a step exactly at the seam, which is
    the one place the mirror exists to make continuous. All the darkening is
    the veil's job, and the veil starts fully transparent at the join. */
-.tk-plate img.tk-edge { position:absolute; display:block; filter:blur(10px); }
+.tk-plate img.tk-edge { position:absolute; display:block; max-width:none;
+  filter:blur(10px); }
 .tk-veil { position:absolute; pointer-events:none; }
 .tk-panel::after { content:''; position:absolute; inset:0; pointer-events:none;
   box-shadow:inset 0 0 90px 20px rgba(2,7,12,0.55); }
@@ -524,12 +528,30 @@ export default function TankHero() {
   const panelW = vp.w;
   const panelH = vp.h;
 
-  /* Where the contained plate actually paints, and how much is left over.
-     Only one axis ever has leftover: whichever the window is longer in. */
-  const plateScale = Math.min(panelW / PLATE_W, panelH / PLATE_H);
+  /* Contain keeps the aquarium's painted border in frame, and the mirrored
+     strips beside it stay small on a landscape window. On a portrait one it
+     collapses: a 16:9 plate in a 0.46-aspect viewport paints 375x218 and
+     leaves 74% of the screen as blur. So the fit is chosen by how much of the
+     screen the plate would actually cover — below three quarters, filling
+     beats framing, and the border is the thing that gives. */
+  const containScale = Math.min(panelW / PLATE_W, panelH / PLATE_H);
+  const covered = (PLATE_W * containScale * (PLATE_H * containScale)) / (panelW * panelH);
+  const filling = covered < 0.75;
+  const plateScale = filling ? Math.max(panelW / PLATE_W, panelH / PLATE_H) : containScale;
   const drawW = PLATE_W * plateScale;
   const drawH = PLATE_H * plateScale;
-  const padX = (panelW - drawW) / 2;
+  /* Horizontal anchor for the crop: 0.5 centres it, higher favours the right
+     of the plate, which is where the anemone cluster and the brighter coral
+     sit. Only applied when filling — a contained plate has nothing to crop,
+     and biasing it would just slide it around inside its own strips. */
+  const anchorX = filling ? 0.62 : 0.5;
+  /* A small fixed nudge on top of the anchor, in real pixels rather than a
+     fraction, so the shift stays the same size on any portrait screen.
+     Clamped so it can never pull an edge off the plate. */
+  const nudgeX = filling ? 12 : 0;
+  /* Negative when filling, which is what stops the mirrors and veils below
+     from rendering: there is nothing left over to cover. */
+  const padX = Math.min(0, Math.max(panelW - drawW, (panelW - drawW) * anchorX + nudgeX));
   const padY = (panelH - drawH) / 2;
 
   /* time-of-day scrub — the cycle now completes at 0.40 rather than 0.60,
