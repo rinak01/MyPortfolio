@@ -4,12 +4,21 @@ import React from "react";
 import { newsreader, spaceMono } from "./tankType";
 
 /* The card deck that used to spread inside the tank hero, moved down into
-   Selected Projects and rebuilt for normal page flow. Absolute positioning
-   and the scroll-driven stack are gone; the overlap, rotation and vertical
-   stagger that gave the deck its look are kept as static layout.
+   Selected Projects and rebuilt for normal page flow. Absolute positioning,
+   the overlap and the scroll-driven stack are gone: the four cards sit in a
+   gapped grid, every one of them fully readable without hovering or
+   scrolling anything. The deck's tilt survives — a couple of degrees of
+   static rotation per card — because the grid's real gaps swallow the few
+   px a tilt that small shifts a corner by, so nothing needs to overlap for
+   the tilt to be safe.
 
    Scoped under .tkc-root, deliberately NOT .tk-root: the hero owns that
    scope, and names this generic would otherwise collide. */
+
+// Same values the old overlapping deck used. Kept small on purpose: this is
+// the amount of tilt the grid's gap (16-20px) can absorb without a rotated
+// corner crossing into the neighbouring column.
+const ROT = [-1.6, 0.9, -0.7, 1.3];
 
 export type TankCardView = {
   title: string;
@@ -21,12 +30,9 @@ export type TankCardView = {
   /* Diagrams and dashboards are letterboxed rather than cropped — a 4:5
      centre crop of a flowchart is unreadable. */
   fit?: "cover" | "contain";
+  /* Where a cover crop is anchored, e.g. "left center". Defaults to centre. */
+  pos?: string;
 };
-
-/* Final geometry from the hero's `layout` object, so the row reads the same:
-   ~3% overlap, a little rotation, rows one and three sitting lower. */
-const ROT = [-1.6, 0.9, -0.7, 1.3];
-const RISE = [0, -18, 6, -14];
 
 const CSS = `
 .tkc-root { --bone:#E8E2D6; --foam:#9FE0DA;
@@ -37,21 +43,32 @@ const CSS = `
   text-transform:uppercase; letter-spacing:0.2em; font-size:10px; font-weight:400;
   color:rgba(232,226,214,0.5); }
 
-.tkc-row { display:flex; align-items:flex-start; }
-.tkc-card { position:relative; flex:1 1 0; min-width:0; }
-.tkc-card + .tkc-card { margin-left:-3%; }
+/* Four equal columns with real gaps — no overlap, no rotation, no stagger,
+   so nothing covers a neighbour and no card needs to be raised to be read.
+   align-items:start lets each card keep its own natural height. */
+.tkc-row { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:20px; align-items:start; }
+.tkc-card { position:relative; min-width:0; z-index:1; }
+/* Raise the hovered/focused card above every neighbour it might be
+   overlapped by — not just the one next to it in DOM order — so the thumb
+   bleed below never traps a card underneath. */
+.tkc-card:hover, .tkc-card:focus-within { z-index:30; }
 
 .tkc-inner { background:rgba(8,16,24,0.62); backdrop-filter:blur(9px);
   -webkit-backdrop-filter:blur(9px); border:1px solid rgba(232,226,214,0.13);
   border-radius:2px; padding:9px 9px 12px;
-  transition:transform .45s cubic-bezier(.2,.7,.3,1), border-color .45s; }
-/* Hover lifts the card and pulls it clear of the two it overlaps. */
-.tkc-card:hover, .tkc-card:focus-within { z-index:20; }
+  transition:transform .35s cubic-bezier(.2,.7,.3,1), border-color .45s; }
+/* Hover lifts the card straight up, independent of the tilt: the rotation
+   lives on .tkc-card (the parent), the lift on .tkc-inner (the child), so
+   they compose instead of one replacing the other. Nothing to reorder or
+   pull clear of any more — the grid already keeps every card separate. */
 .tkc-card:hover .tkc-inner, .tkc-card:focus-within .tkc-inner {
-  transform:translateY(-10px); border-color:rgba(232,226,214,0.4); }
+  transform:translateY(-6px); border-color:rgba(232,226,214,0.4); }
 
-.tkc-thumb { position:relative; width:100%; aspect-ratio:4/5; overflow:hidden;
-  border-radius:1px; background:#0A1017; }
+.tkc-thumb { position:relative; width:100%; aspect-ratio:4/5; border-radius:1px; background:#0A1017; }
+.tkc-thumb-fill { position:absolute; inset:0;
+  overflow:hidden; border-radius:2px; background:#0A1017;
+  border:1px solid rgba(232,226,214,0.13); }
 .tkc-thumb img { width:100%; height:100%; display:block; }
 .tkc-thumb img.cover { object-fit:cover; }
 .tkc-thumb img.contain { object-fit:contain; padding:10px; }
@@ -75,16 +92,16 @@ const CSS = `
 .tkc-note { margin:6px 0 0; font-weight:300; line-height:1.4; font-size:0.86rem;
   color:rgba(232,226,214,0.62); }
 
+/* Fewer columns as the row runs out of width. The note stays visible at
+   every size — a card that hides its description is a collapsed card. */
+@media (max-width: 1024px) {
+  .tkc-row { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; }
+}
+@media (max-width: 560px) {
+  .tkc-row { grid-template-columns:minmax(0, 1fr); gap:16px; }
+}
 @media (max-width: 760px) {
-  .tkc-row { flex-wrap:wrap; }
-  .tkc-card { flex:0 0 50%; padding:0 5px 14px; }
-  .tkc-card + .tkc-card { margin-left:0; }
-  /* Overlap and rotation are a wide-row effect; in a 2x2 they just collide. */
-  .tkc-card { transform:none !important; }
-  /* No line clamp on the title here: these cards are in normal flow, so a
-     third line grows the card instead of overflowing a fixed panel. */
   .tkc-card h3 { font-size:1.05rem; }
-  .tkc-note { display:none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .tkc-card { transform:none !important; }
@@ -103,14 +120,14 @@ export function TankCardRow({ children }: { children: React.ReactNode }) {
 
 export function TankCard({
   view,
-  index,
   id,
+  index = 0,
   onOpen,
   expanded,
 }: {
   view: TankCardView;
-  index: number;
   id?: string;
+  index?: number;
   onOpen: () => void;
   expanded?: boolean;
 }) {
@@ -119,24 +136,24 @@ export function TankCard({
       id={id}
       // scroll-mt keeps a deep-linked card clear of the viewport edge.
       className="tkc-card scroll-mt-24"
-      style={{
-        zIndex: 10 + index,
-        transform: `rotate(${ROT[index % 4]}deg) translateY(${RISE[index % 4]}px)`,
-      }}
+      style={{ transform: `rotate(${ROT[index % ROT.length]}deg)` }}
     >
       <div className="tkc-inner" style={{ boxShadow: `0 22px 60px -26px ${view.tint}66` }}>
         <div className="tkc-thumb">
-          <img
-            src={view.thumb}
-            alt={`${view.title} — ${view.type}`}
-            className={view.fit === "contain" ? "contain" : "cover"}
-            loading="lazy"
-            draggable={false}
-          />
-          <div
-            className="tkc-veil"
-            style={{ background: `linear-gradient(180deg, transparent 55%, ${view.tint}22)` }}
-          />
+          <div className="tkc-thumb-fill">
+            <img
+              src={view.thumb}
+              alt={`${view.title} — ${view.type}`}
+              className={view.fit === "contain" ? "contain" : "cover"}
+              style={view.pos ? { objectPosition: view.pos } : undefined}
+              loading="lazy"
+              draggable={false}
+            />
+            <div
+              className="tkc-veil"
+              style={{ background: `linear-gradient(180deg, transparent 55%, ${view.tint}22)` }}
+            />
+          </div>
         </div>
         <div className="tkc-meta">
           <span className="tkc-mono">{view.type}</span>

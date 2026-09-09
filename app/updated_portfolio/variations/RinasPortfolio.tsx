@@ -6,6 +6,9 @@ import { motion, AnimatePresence, MotionConfig, useIsPresent } from "framer-moti
 import Image from "next/image";
 import { Outfit, DM_Sans } from "next/font/google";
 import { dimsOf } from "./imageDims";
+import { Overlay } from "./Overlay";
+import { LightboxGroup, ZoomableImage, ZoomableBlock } from "./Lightbox";
+import { Figure } from "./Figure";
 import ProactiveAgentDemo from "./ProactiveAgentDemo";
 import { TankCardRow, TankCard } from "./TankCards";
 
@@ -451,10 +454,12 @@ interface CaseStudy {
   id: string;            // stable key; the body renders in the overlay, not on the page
   img: string;
   fit?: "cover" | "contain";  // diagrams need contain, photography needs cover
+  pos?: string;                // object-position for the card crop; default is centre
   Body: () => ReactElement;   // the matching long-form section, shared with the modal below
 }
 
-// Mirrors the three long-form case studies below, in the same order.
+// Display order for the Selected Projects row. `num` is the study's own
+// identity, not its slot, so #project-01/02/03 survive a reorder.
 const CASE_STUDIES: CaseStudy[] = [
   {
     num: "01",
@@ -467,6 +472,27 @@ const CASE_STUDIES: CaseStudy[] = [
     id: "bmw-adaptive-ui",
     img: "/images/01/neueklasse.webp",
     Body: BMWCaseStudyBody,
+  },
+  {
+    num: "03",
+    org: "CMU × Surefront",
+    title: "Redesigning PLM for Apparel Line Planning",
+    meta: "2024 Winter – 2025 Summer · MHCI Capstone",
+    // Subtitle history, kept for comparison per Rina's request:
+    // v1, accurate but abstract: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it."
+    // v2, concrete but unsupported — the trends/tab-switching story belongs to the
+    //     Trends module that was cut in 2fc16aa, so the body never paid it off:
+    //     "Merchandisers were checking Instagram, Google Trends, and their PLM in three different tabs to spot a trend. We put the trend data inside the PLM so the tab-switching stopped."
+    desc: "Designers duplicated one jacket nineteen times to create it. Merchandisers waited three weeks for data the PLM already held.",
+    outcome: "Team scored 4–5 of 5 on willingness to buy and shipped a design system, engineer-agreed feasibility ratings, and a roadmap through Q4 2026, on research and a prototype I owned.",
+    tags: ["Enterprise UX", "Product Design"],
+    id: "cmu-surefront-plm",
+    img: "/images/03/surefront/surefront-lineplanning.jpg",
+    // A 4:5 crop of this 1091x705 screen keeps ~52% of its width. Centred, that
+    // landed on empty table rows. 12% starts the slice just past the left nav
+    // rail, so it holds the style thumbnails and the KPI tiles.
+    pos: "12% center",
+    Body: SurefrontCaseStudyBody,
   },
   {
     num: "02",
@@ -485,23 +511,6 @@ const CASE_STUDIES: CaseStudy[] = [
     img: "/images/02/proactive agent pipeline.png",
     fit: "contain",
     Body: SmashCaseStudyBody,
-  },
-  {
-    num: "03",
-    org: "CMU × Surefront",
-    title: "Redesigning PLM for Apparel Line Planning",
-    meta: "2024 Winter – 2025 Summer · MHCI Capstone",
-    // Subtitle history, kept for comparison per Rina's request:
-    // v1, accurate but abstract: "Give apparel teams a reason to work inside the PLM instead of beside it, in a market where every team already owns one and quietly works around it."
-    // v2, concrete but unsupported — the trends/tab-switching story belongs to the
-    //     Trends module that was cut in 2fc16aa, so the body never paid it off:
-    //     "Merchandisers were checking Instagram, Google Trends, and their PLM in three different tabs to spot a trend. We put the trend data inside the PLM so the tab-switching stopped."
-    desc: "Designers duplicated one jacket nineteen times to create it. Merchandisers waited three weeks for data the PLM already held. Both worked around the system meant to hold their work.",
-    outcome: "Team scored 4–5 of 5 on willingness to buy and shipped a design system, engineer-agreed feasibility ratings, and a roadmap through Q4 2026, on research and a prototype I owned.",
-    tags: ["Enterprise UX", "Product Design"],
-    id: "cmu-surefront-plm",
-    img: "/images/03/surefront/surefront-lineplanning.jpg",
-    Body: SurefrontCaseStudyBody,
   },
 ];
 
@@ -704,7 +713,13 @@ function CaseStudyDetail({
         className="relative z-10 w-full max-w-6xl max-h-[88vh] overflow-y-auto rounded-lg border border-line-soft shadow-[0_20px_80px_rgba(0,0,0,0.45)] px-5 py-12 sm:px-10 sm:py-16 md:px-16"
         onClick={(e) => e.stopPropagation()}
       >
-        <Body />
+        {/* One group per case study: the arrow keys step through this
+            study's figures and stop at its edges. Compact — a case-study
+            figure is read at a glance, so the click-to-zoom opens as a
+            closer look at roughly twice its own size, not a takeover. */}
+        <LightboxGroup compact>
+          <Body />
+        </LightboxGroup>
       </motion.div>
 
       {/* Close button, floats on the backdrop so it never overlaps content */}
@@ -739,15 +754,20 @@ function yearsOf(meta: string): string {
   return first === last ? first : `${first}—${last.slice(2)}`;
 }
 
-const STUDY_TINT = ["#9FE0DA", "#C8D8E8", "#E9A23B"];
+// Keyed by study, not by slot, so reordering the row does not recolour cards.
+const STUDY_TINT: Record<string, string> = {
+  "bmw-adaptive-ui": "#9FE0DA",
+  "cmu-proactive-agent": "#C8D8E8",
+  "cmu-surefront-plm": "#E9A23B",
+};
 
 function CaseStudyTankCard({ item, index }: { item: CaseStudy; index: number }) {
   const [open, setOpen] = useState(false);
   return (
     <Fragment>
       <TankCard
-        index={index}
         id={`project-${item.num}`}
+        index={index}
         expanded={open}
         onOpen={() => setOpen(true)}
         view={{
@@ -756,8 +776,9 @@ function CaseStudyTankCard({ item, index }: { item: CaseStudy; index: number }) 
           year: yearsOf(item.meta),
           note: item.desc,
           thumb: item.img,
-          tint: STUDY_TINT[index] ?? "#9FE0DA",
+          tint: STUDY_TINT[item.id] ?? "#9FE0DA",
           fit: item.fit === "contain" ? "contain" : "cover",
+          pos: item.pos,
         }}
       />
       <AnimatePresence>
@@ -776,7 +797,7 @@ function SelectedProjectCards({ onOpenProject }: { onOpenProject: (item: GridIte
       ))}
       {jellyfish && (
         <TankCard
-          index={3}
+          index={CASE_STUDIES.length}
           view={{
             title: jellyfish.label,
             type: jellyfish.categories[0],
@@ -792,114 +813,6 @@ function SelectedProjectCards({ onOpenProject }: { onOpenProject: (item: GridIte
   );
 }
 
-/* ─── Overlay ──────────────────────────────────────────────────────────────
-   One dialog shell, consumed by both the case-study and the archive modal.
-   They were two copies of the same markup that had drifted apart: only one
-   carried dialog semantics, and the scrim was tokenised in one and hardcoded
-   in the other. Everything a dialog owes the user — role, label, Escape,
-   scroll lock, focus trap, focus return — lives here, so a caller cannot
-   forget it and the two cannot drift again.
-   ────────────────────────────────────────────────────────────────────────── */
-function Overlay({
-  label,
-  onClose,
-  onKeyDown,
-  children,
-}: {
-  label: string;
-  onClose: () => void;
-  onKeyDown?: (e: KeyboardEvent) => void;
-  children: ReactNode;
-}) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  // Held in refs so the effect runs once per open. Callers pass inline
-  // closures, and re-running would yank focus back to the first control
-  // every time a parent re-rendered.
-  const closeRef = useRef(onClose);
-  const keyRef = useRef(onKeyDown);
-  // Kept fresh after every render — writing a ref during render is not allowed.
-  useEffect(() => {
-    closeRef.current = onClose;
-    keyRef.current = onKeyDown;
-  });
-
-  useEffect(() => {
-    const opener = document.activeElement as HTMLElement | null;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const focusables = () =>
-      Array.from(
-        containerRef.current?.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        ) ?? []
-      ).filter((el) => el.offsetParent !== null);
-
-    // Land focus inside the dialog so the next Tab continues here, not behind it.
-    (focusables()[0] ?? containerRef.current)?.focus();
-
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        closeRef.current();
-        return;
-      }
-      if (e.key === "Tab") {
-        const els = focusables();
-        if (els.length === 0) {
-          e.preventDefault();
-          return;
-        }
-        const first = els[0];
-        const last = els[els.length - 1];
-        const active = document.activeElement;
-        const inside = containerRef.current?.contains(active ?? null);
-        if (e.shiftKey && (active === first || !inside)) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && active === last) {
-          e.preventDefault();
-          first.focus();
-        }
-        return;
-      }
-      keyRef.current?.(e);
-    };
-
-    window.addEventListener("keydown", handleKey);
-    return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = prevOverflow;
-      opener?.focus?.();
-    };
-  }, []);
-
-  return (
-    <motion.div
-      ref={containerRef}
-      role="dialog"
-      aria-modal="true"
-      aria-label={label}
-      tabIndex={-1}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 focus:outline-none"
-      onClick={onClose}
-    >
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "var(--scrim)",
-          backdropFilter: "blur(18px) saturate(120%)",
-          WebkitBackdropFilter: "blur(18px) saturate(120%)",
-        }}
-      />
-      {children}
-    </motion.div>
-  );
-}
-
 // ─── ProjectModal, opens when a selected-projects thumb is clicked ─────────
 function ProjectModal({
   item,
@@ -911,6 +824,7 @@ function ProjectModal({
   hasNext,
   index,
   total,
+  compact,
 }: {
   item: GridItem;
   outfitClass: string;
@@ -921,6 +835,11 @@ function ProjectModal({
   hasNext: boolean;
   index: number;
   total: number;
+  /* This modal is shared: the Selected Projects hero row and the full
+     archive grid both open it. Only the hero row's click-to-zoom is
+     compact — those are the four projects meant to be read at a glance,
+     not the whole archive. Passed by the caller, not decided in here. */
+  compact?: boolean;
 }) {
   // Build image list, use `images` if provided, else fall back to single `src`
   const images = item.images && item.images.length > 0
@@ -964,7 +883,10 @@ function ProjectModal({
       >
         <div className="flex flex-col md:flex-row md:items-start">
 
-          {/* Image column, magazine spread: hero shot + editorial grid */}
+          {/* Image column, magazine spread: hero shot + editorial grid.
+              One lightbox group: the arrows step through this project's own
+              shots, not the next project's. */}
+          <LightboxGroup compact={compact}>
           <div className="w-full md:w-3/5 bg-sunken flex flex-col">
             {/* Optional video, sits above the hero shot when present */}
             {/* Hero row: shots read together, side by side, above everything */}
@@ -974,15 +896,15 @@ function ProjectModal({
                   {item.heroRow.images.map((shot) => (
                     <div key={shot.src} className="flex flex-col gap-2">
                       {/* Fixed ratio so the three line up; sources differ by <1% */}
-                      <div className="relative w-full bg-black overflow-hidden aspect-[695/1000]">
-                        <Image
+                      <Figure ratio="aspect-[695/1000]">
+                        <ZoomableImage
                           src={shot.src}
                           alt={`${item.label} — ${shot.label}`}
                           fill
                           sizes="(max-width: 768px) 30vw, 180px"
                           className="object-cover"
                         />
-                      </div>
+                      </Figure>
                       <span className="text-2xs uppercase tracking-[0.16em] text-meta text-center leading-snug">
                         {shot.label}
                       </span>
@@ -990,68 +912,48 @@ function ProjectModal({
                   ))}
                 </div>
                 {item.heroRow.caption && (
-                  <figcaption className="pt-4 px-1">
-                    <div className="h-px w-8 bg-accent/45 mb-2" />
-                    <p className="text-xs md:text-sm text-body italic leading-snug">
-                      {item.heroRow.caption}
-                    </p>
+                  <figcaption className="text-sm text-meta leading-relaxed pt-4 px-1">
+                    {item.heroRow.caption}
                   </figcaption>
                 )}
               </figure>
             )}
 
             {item.video && getYouTubeId(item.video.url) && (
-              <figure className="flex flex-col bg-black">
-                <div className="relative w-full aspect-video">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${getYouTubeId(item.video.url)}`}
-                    title={`${item.label} demo video`}
-                    className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-                {item.video.caption && (
-                  <figcaption className="px-5 md:px-7 py-4">
-                    <div className="h-px w-8 bg-accent/50 mb-2.5" />
-                    <p className="text-xs md:text-sm text-body-2 italic leading-snug">
-                      {item.video.caption}
-                    </p>
-                  </figcaption>
-                )}
-              </figure>
+              <Figure bleed ratio="aspect-video" caption={item.video.caption}>
+                <iframe
+                  src={`https://www.youtube.com/embed/${getYouTubeId(item.video.url)}`}
+                  title={`${item.label} demo video`}
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </Figure>
             )}
 
             {/* Optional interactive demo iframe, sits above hero shot when present */}
             {item.demo && (
-              <figure className="flex flex-col bg-black">
-                <div
-                  className="relative w-full bg-black"
-                  style={{ height: item.demo.height ?? undefined, aspectRatio: item.demo.aspect ?? (item.demo.height ? undefined : "3 / 4") }}
-                >
-                  <iframe
-                    src={item.demo.url}
-                    title={`${item.label} interactive demo`}
-                    className="absolute inset-0 w-full h-full border-0"
-                    loading="lazy"
-                    sandbox="allow-scripts allow-same-origin"
-                  />
-                </div>
-                {item.demo.caption && (
-                  <figcaption className="px-5 md:px-7 py-4">
-                    <div className="h-px w-8 bg-accent/50 mb-2.5" />
-                    <p className="text-xs md:text-sm text-body-2 italic leading-snug">
-                      {item.demo.caption}
-                    </p>
-                  </figcaption>
-                )}
-              </figure>
+              <Figure
+                bleed
+                caption={item.demo.caption}
+                wellStyle={{ height: item.demo.height ?? undefined, aspectRatio: item.demo.aspect ?? (item.demo.height ? undefined : "3 / 4") }}
+              >
+                <iframe
+                  src={item.demo.url}
+                  title={`${item.label} interactive demo`}
+                  className="absolute inset-0 w-full h-full border-0"
+                  loading="lazy"
+                  sandbox="allow-scripts allow-same-origin"
+                />
+              </Figure>
             )}
 
             {/* Hero, feature shot, full bleed */}
-            <figure className="flex flex-col">
-              <div className="relative w-full bg-black">
-                <MotionImage
+            <Figure
+              bleed
+              caption={images[0].caption}
+            >
+                <ZoomableImage
                   layoutId={heroIsThumb ? `archive-${item.alt}` : undefined}
                   src={images[0].src}
                   alt={images[0].caption || item.alt}
@@ -1059,47 +961,28 @@ function ProjectModal({
                   height={dimsOf(images[0].src).h}
                   sizes="(max-width: 768px) 100vw, 60vw"
                   className={`w-full h-auto block ${item.scaleClass ?? ""}`}
-                  transition={{ layout: { type: "spring", bounce: 0, duration: 0.4 } }}
                 />
-              </div>
-              {images[0].caption && (
-                <figcaption className="px-5 md:px-7 py-4">
-                  <div className="h-px w-8 bg-accent/50 mb-2.5" />
-                  <p className="text-xs md:text-sm text-body-2 italic leading-snug">
-                    {images[0].caption}
-                  </p>
-                </figcaption>
-              )}
-            </figure>
+            </Figure>
 
             {/* Editorial stack: single column, natural aspect ratios for full legibility */}
             {images.length > 1 && (
               <div className="flex flex-col gap-y-7 px-3 md:px-4 pt-3 pb-5 md:pb-6">
                 {images.slice(1).map((img, i) => (
-                  <figure key={`${img.src}-${i}`} className="flex flex-col">
-                    <div className="relative w-full bg-black overflow-hidden">
-                      <Image
-                        src={img.src}
-                        alt={img.caption || `${item.label}`}
-                        width={dimsOf(img.src).w}
-                        height={dimsOf(img.src).h}
-                        sizes="(max-width: 768px) 100vw, 60vw"
-                        className="w-full h-auto block"
-                      />
-                    </div>
-                    {img.caption && (
-                      <figcaption className="pt-3 px-1">
-                        <div className="h-px w-8 bg-accent/45 mb-2" />
-                        <p className="text-xs md:text-sm text-body italic leading-snug">
-                          {img.caption}
-                        </p>
-                      </figcaption>
-                    )}
-                  </figure>
+                  <Figure key={`${img.src}-${i}`} caption={img.caption}>
+                    <ZoomableImage
+                      src={img.src}
+                      alt={img.caption || `${item.label}`}
+                      width={dimsOf(img.src).w}
+                      height={dimsOf(img.src).h}
+                      sizes="(max-width: 768px) 100vw, 60vw"
+                      className="w-full h-auto block"
+                    />
+                  </Figure>
                 ))}
               </div>
             )}
           </div>
+          </LightboxGroup>
 
           {/* Details column, sticky to top of scroll panel on desktop */}
           <div className="w-full md:w-2/5 p-6 md:p-8 flex flex-col gap-4 bg-gradient-to-b from-sunken to-sunken md:sticky md:top-0 md:self-start md:max-h-[88vh] md:overflow-y-auto"
@@ -1549,21 +1432,32 @@ function BMWCaseStudyBody() {
 
               {/* Right, imagery */}
               <div className="lg:col-span-8 space-y-4">
-                <div className="relative aspect-[21/9] overflow-hidden bg-raised rounded-sm">
-                  <Image src="/images/01/neueklasse.webp" alt="BMW Interface" fill
+                <Figure ratio="aspect-[21/9]">
+                  <ZoomableImage src="/images/01/neueklasse.webp" alt="BMW Interface" fill
                     sizes="(max-width: 1024px) 100vw, 66vw"
-                    className="object-cover opacity-80 hover:opacity-100 hover:scale-[1.02] transition-all duration-400 ease-out" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="aspect-video bg-raised rounded-sm p-6 flex items-center justify-center">
+                    className="object-cover" />
+                </Figure>
+                {/* mobile fix: stack the pair. Two columns of a 375px viewport left the
+                    diagram 90px of content, which is not a diagram. */}
+                {/* items-start, not stretched: the two diagrams carry different
+                    amounts of content, and forcing the shorter one to the
+                    taller one's height gave it half a card of empty floor. They
+                    align at the top, where the reading starts. */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                  {/* Two exports of one diagram, light-mode and dark-mode. The
+                      theme class has to sit on the trigger, not on the image:
+                      display:none inside a flex item still leaves the item
+                      holding its share of the row, which halved the visible
+                      one. */}
+                  <Figure inset="md">
                     <>
-                      <Image src="/images/01/layers_whitetext.png" alt="Layers diagram" width={dimsOf("/images/01/layers_whitetext.png").w} height={dimsOf("/images/01/layers_whitetext.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="only-dark w-full h-auto opacity-90" />
-                      <Image src="/images/01/layers.png" alt="Layers diagram" width={dimsOf("/images/01/layers.png").w} height={dimsOf("/images/01/layers.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="only-light w-full h-auto opacity-90" />
+                      <ZoomableImage src="/images/01/layers_whitetext.png" alt="Layers diagram" width={dimsOf("/images/01/layers_whitetext.png").w} height={dimsOf("/images/01/layers_whitetext.png").h} sizes="(max-width: 1024px) 50vw, 33vw" wrapperClassName="only-dark" className="w-full h-auto" />
+                      <ZoomableImage src="/images/01/layers.png" alt="Layers diagram" width={dimsOf("/images/01/layers.png").w} height={dimsOf("/images/01/layers.png").h} sizes="(max-width: 1024px) 50vw, 33vw" wrapperClassName="only-light" className="w-full h-auto" />
                     </>
-                  </div>
-                  <div className="aspect-video bg-raised rounded-sm p-6 flex items-center justify-center">
-                    <Image src="/images/01/pipeline.png" alt="Pipeline diagram" width={dimsOf("/images/01/pipeline.png").w} height={dimsOf("/images/01/pipeline.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="w-full h-auto opacity-90" />
-                  </div>
+                  </Figure>
+                  <Figure light inset="md">
+                    <ZoomableImage src="/images/01/pipeline.png" alt="Pipeline diagram" width={dimsOf("/images/01/pipeline.png").w} height={dimsOf("/images/01/pipeline.png").h} sizes="(max-width: 1024px) 50vw, 33vw" className="w-full h-auto" />
+                  </Figure>
                 </div>
               </div>
 
@@ -1579,6 +1473,7 @@ function BMWCaseStudyBody() {
 
                 {/* Agent → Capabilities mapping */}
                 <div className="lg:col-span-7">
+                  <ZoomableBlock label="Agent to capabilities mapping">
                   <div className="bg-panel-2 rounded-lg border border-line-soft shadow-[0_4px_24px_rgba(0,0,0,0.55)] p-5 md:p-6">
                     <div className="grid grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 items-stretch">
                       {/* Agent column */}
@@ -1625,6 +1520,7 @@ function BMWCaseStudyBody() {
                       </div>
                     </div>
                   </div>
+                  </ZoomableBlock>
                 </div>
               </div>
 
@@ -1649,6 +1545,7 @@ function BMWCaseStudyBody() {
                 </div>
                 <div className="lg:col-span-7">
                   {/* ── Inline Agent Architecture Diagram ── */}
+                  <ZoomableBlock label="Agent architecture diagram">
                   <div className="bg-panel-2 rounded-lg p-5 md:p-7 border border-line-soft shadow-[0_4px_24px_rgba(0,0,0,0.55)]">
                     {/* ── Main Agent ── */}
                     <div className="flex justify-center mb-3">
@@ -1739,6 +1636,7 @@ function BMWCaseStudyBody() {
                       ))}
                     </div>
                   </div>
+                  </ZoomableBlock>
                 </div>
               </div>
 
@@ -2375,7 +2273,7 @@ function SmashCaseStudyBody() {
               <div className="lg:col-span-12 order-4 grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
                 {/* NLP diagram */}
                 {/* <div className="bg-raised rounded-sm p-6 flex items-center justify-center">
-                <Image loading="lazy" src="/images/02/NL01.png" alt="NLP Semantic Analysis" width={dimsOf("/images/02/NL01.png").w} height={dimsOf("/images/02/NL01.png").h} sizes="(max-width: 1024px) 100vw, 50vw" className="w-[85%] h-auto opacity-70 dark-invert" />
+                <ZoomableImage loading="lazy" src="/images/02/NL01.png" alt="NLP Semantic Analysis" width={dimsOf("/images/02/NL01.png").w} height={dimsOf("/images/02/NL01.png").h} sizes="(max-width: 1024px) 100vw, 50vw" className="w-[85%] h-auto opacity-70 dark-invert" />
               </div> */}
                 {/* ── Response Accuracy, Formal vs Informal Comparison ── */}
                 <div
@@ -2546,7 +2444,7 @@ function SmashCaseStudyBody() {
                     <span className="text-2xs uppercase tracking-[0.2em] text-[var(--dgm-on-plate-3)]">Limited Proficiency</span>
                   </div>
                   <div className="w-full max-w-[452px] overflow-hidden rounded-sm bg-white">
-                    <Image loading="lazy" src="/images/02/updatedGraph.png" alt="Bar chart titled Proactive Agent Response Accuracy, Limited Proficiency In Language, comparing woodworking and non-woodworking responses across four speech conditions" width={dimsOf("/images/02/updatedGraph.png").w} height={dimsOf("/images/02/updatedGraph.png").h} sizes="(max-width: 640px) 100vw, 452px" className="w-full h-auto" />
+                    <ZoomableImage loading="lazy" src="/images/02/updatedGraph.png" alt="Bar chart titled Proactive Agent Response Accuracy, Limited Proficiency In Language, comparing woodworking and non-woodworking responses across four speech conditions" width={dimsOf("/images/02/updatedGraph.png").w} height={dimsOf("/images/02/updatedGraph.png").h} sizes="(max-width: 640px) 100vw, 452px" className="w-full h-auto" />
                   </div>
                   {/* The caption used to compare this directly against the panel
                       opposite, which invited the reader to treat two different
@@ -3015,23 +2913,22 @@ function SurefrontCaseStudyBody() {
               <div className="lg:col-span-7 space-y-4">
                 {/* 481px source: rendering it wider only upscales an already small
                     export. Left-aligned in the column rather than stretched. */}
-                <figure className="space-y-2 max-w-[481px]">
-                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                    <Image loading="lazy" src="/images/03/surefront/SurefrontInterviews.png" alt="Breakdown of thirty-plus research participants by role and company type, with averages for years of experience, in-house PLM selection team members, and PLM consultants" width={dimsOf("/images/03/surefront/SurefrontInterviews.png").w} height={dimsOf("/images/03/surefront/SurefrontInterviews.png").h} sizes="(max-width: 640px) 100vw, 481px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                  </div>
-                  <figcaption className="text-sm text-meta leading-relaxed">
-                    Who the thirty-plus interviews actually reached, by role and company type. Twelve years of experience on average, seven people who had sat on an in-house PLM selection team, and three consultants who run PLM selection and implementation for a living. Recruiting, protocol, and synthesis were mine.
-                  </figcaption>
-                </figure>
+                <Figure
+                  className="max-w-[481px]"
+                  caption="Who the thirty-plus interviews actually reached, by role and company type. Twelve years of experience on average, seven people who had sat on an in-house PLM selection team, and three consultants who run PLM selection and implementation for a living. Recruiting, protocol, and synthesis were mine."
+                >
+                    <ZoomableImage loading="lazy" src="/images/03/surefront/SurefrontInterviews.png" alt="Breakdown of thirty-plus research participants by role and company type, with averages for years of experience, in-house PLM selection team members, and PLM consultants" width={dimsOf("/images/03/surefront/SurefrontInterviews.png").w} height={dimsOf("/images/03/surefront/SurefrontInterviews.png").h} sizes="(max-width: 640px) 100vw, 481px" className="w-full h-auto" />
+                </Figure>
 
-                <figure className="space-y-2">
-                  {/* Annotated: the screenshot alone cannot say which parts are the
-                      design decision and which were already there. Pins are
-                      aria-hidden decoration; the numbered legend below carries the
-                      text, so nothing is lost without them. Positions are % of the
-                      image box, so they track it at every breakpoint. */}
-                  <div className="relative w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                    <Image loading="lazy" src="/images/03/surefront/surefront-lineplanning.jpg" alt="Line planning workspace showing season KPIs, style rows, and a merchant notes panel" width={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").w} height={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
+                {/* Annotated: the screenshot alone cannot say which parts are the
+                    design decision and which were already there. Pins are
+                    aria-hidden decoration; the numbered legend below carries the
+                    text, so nothing is lost without them. Positions are % of the
+                    image box, so they track it at every breakpoint — the well is
+                    always `relative`, so they measure against the picture. */}
+                <div className="space-y-2">
+                <Figure caption="Line planning: assortment, targets, and merchant intent in one editable view, replacing the line sheet and spreadsheet pair.">
+                    <ZoomableImage loading="lazy" src="/images/03/surefront/surefront-lineplanning.jpg" alt="Line planning workspace showing season KPIs, style rows, and a merchant notes panel" width={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").w} height={dimsOf("/images/03/surefront/surefront-lineplanning.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto" />
                     {[
                       // Placed on labels and chrome, never on data: the KPI values,
                       // their targets, and every style row stay readable underneath.
@@ -3048,10 +2945,9 @@ function SurefrontCaseStudyBody() {
                         {n}
                       </span>
                     ))}
-                  </div>
-                  <figcaption className="text-sm text-meta leading-relaxed">
-                    Line planning: assortment, targets, and merchant intent in one editable view, replacing the line sheet and spreadsheet pair.
-                  </figcaption>
+                  </Figure>
+                  {/* The legend the pins point at. Outside the figure's caption
+                      because it is three parallel statements, not a sentence. */}
                   <ol className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-2 pt-1">
                     {[
                       "Season targets sit on the plan itself, so net sales, cost, and margin are read against goal rather than in a separate sheet.",
@@ -3064,18 +2960,13 @@ function SurefrontCaseStudyBody() {
                       </li>
                     ))}
                   </ol>
-                </figure>
+                </div>
 
                 {/* Full width, not the old two-up: at half column these read as
                     texture rather than as screens anyone can inspect. */}
-                <figure className="space-y-2">
-                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                    <Image loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                  </div>
-                  <figcaption className="text-sm text-meta leading-relaxed">
-                    Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.
-                  </figcaption>
-                </figure>
+                <Figure caption="Centralized libraries: fabrics, colors, components, and measurement sheets as reusable records.">
+                    <ZoomableImage loading="lazy" src="/images/03/surefront/surefront-library.jpg" alt="Centralized fabric library with filters and coded material records" width={dimsOf("/images/03/surefront/surefront-library.jpg").w} height={dimsOf("/images/03/surefront/surefront-library.jpg").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto" />
+                </Figure>
               </div>
 
               {/* Trend signals: the module that started the whole thesis, shown as
@@ -3096,29 +2987,20 @@ function SurefrontCaseStudyBody() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
                   <div className="lg:col-span-4">
-                    <figure className="space-y-2 max-w-[346px]">
-                      <div className="w-full overflow-hidden rounded-sm border border-line bg-raised">
-                        <Image loading="lazy" src="/images/03/surefront/trend_forecasting_dashboard 1.png" alt="The trend dashboard as shipped, with a purple gradient background, a mocked social post, and a product tile with a retail price" width={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").w} height={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").h} sizes="(max-width: 640px) 100vw, 346px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                      </div>
-                      <figcaption className="text-sm text-meta leading-relaxed">
-                        <span className="text-ink">As shipped.</span> It works, and it tested well on comprehension. It also
-                        reads as a shopping app: a consumer gradient, a mocked influencer post, and a product tile with a
-                        retail price, in a tool whose users are merchandisers and product developers.
-                      </figcaption>
-                    </figure>
+                    <Figure className="max-w-[346px]" caption={<><span className="text-ink">As shipped.</span> It works, and it tested well on comprehension. It also reads as a shopping app: a consumer gradient, a mocked influencer post, and a product tile with a retail price, in a tool whose users are merchandisers and product developers.</>}>
+                        <ZoomableImage loading="lazy" src="/images/03/surefront/trend_forecasting_dashboard 1.png" alt="The trend dashboard as shipped, with a purple gradient background, a mocked social post, and a product tile with a retail price" width={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").w} height={dimsOf("/images/03/surefront/trend_forecasting_dashboard 1.png").h} sizes="(max-width: 640px) 100vw, 346px" className="w-full h-auto" />
+                    </Figure>
                   </div>
 
                   <div className="lg:col-span-8">
-                    <figure className="space-y-2">
-                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised p-2 sm:p-3">
+                    <Figure
+                      wellClassName="p-2 sm:p-3"
+                      caption={<><span className="text-ink">Revision, not delivered work.</span> Same data, same module, rebuilt in the register its users actually work in. Built in code rather than redrawn as an image, so it stays sharp at any size and follows the page rather than sitting on it as a screenshot.</>}
+                    >
+                      <ZoomableBlock label="Trend signals module, rebuilt">
                         <TrendSignalsMock />
-                      </div>
-                      <figcaption className="text-sm text-meta leading-relaxed">
-                        <span className="text-ink">Revision, not delivered work.</span> Same data, same module, rebuilt in the
-                        register its users actually work in. Built in code rather than redrawn as an image, so it stays sharp
-                        at any size and follows the page rather than sitting on it as a screenshot.
-                      </figcaption>
-                    </figure>
+                      </ZoomableBlock>
+                    </Figure>
                   </div>
                 </div>
 
@@ -3150,21 +3032,15 @@ function SurefrontCaseStudyBody() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                   <div className="lg:col-span-7">
-                    <figure className="space-y-2">
-                      <div className="w-full overflow-hidden rounded-sm border border-line bg-white/[0.96] p-3">
-                        <Image loading="lazy" src="/images/03/surefront/surefront-style-flow.png" alt="Before and after diagram of style creation, from four steps repeated per variant to a maximum of two" width={dimsOf("/images/03/surefront/surefront-style-flow.png").w} height={dimsOf("/images/03/surefront/surefront-style-flow.png").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto" />
-                      </div>
-                      <figcaption className="text-sm text-meta leading-relaxed">
-                        Creating a jacket in five sizes and four colors meant duplicating the base product nineteen times and relinking every child. Restructured into one variant-set step, with per-variant editing only where something genuinely differs.
-                      </figcaption>
-                    </figure>
+                    <Figure light inset="sm" caption="Creating a jacket in five sizes and four colors meant duplicating the base product nineteen times and relinking every child. Restructured into one variant-set step, with per-variant editing only where something genuinely differs.">
+                        <ZoomableImage loading="lazy" src="/images/03/surefront/surefront-style-flow.png" alt="Before and after diagram of style creation, from four steps repeated per variant to a maximum of two" width={dimsOf("/images/03/surefront/surefront-style-flow.png").w} height={dimsOf("/images/03/surefront/surefront-style-flow.png").h} sizes="(max-width: 1024px) 100vw, 60vw" className="w-full h-auto" />
+                    </Figure>
 
                     {/* The diagram above claims the collapse; this shows it happening.
                         Nineteen -> one is the headline stat now, so it should not rest
                         on a before/after drawing alone. Same preload="none" + poster
                         treatment as the analytics clip: nothing ships until play. */}
-                    <figure className="space-y-2 pt-6">
-                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                    <Figure className="pt-6" caption="One pass, every variant. Sizes and colours are multi-selected on the style itself, and fabric, finish, and the measurement sheet are pulled from the centralized libraries rather than retyped, which is the second decision below doing the work that makes the first one possible.">
                         <video
                           controls
                           preload="none"
@@ -3176,11 +3052,7 @@ function SurefrontCaseStudyBody() {
                           Your browser does not support embedded video. The clip shows one style being
                           created with every size and colour variant selected in a single pass.
                         </video>
-                      </div>
-                      <figcaption className="text-sm text-meta leading-relaxed">
-                        One pass, every variant. Sizes and colours are multi-selected on the style itself, and fabric, finish, and the measurement sheet are pulled from the centralized libraries rather than retyped, which is the second decision below doing the work that makes the first one possible.
-                      </figcaption>
-                    </figure>
+                    </Figure>
                   </div>
 
                   <div className="lg:col-span-5 space-y-6 text-base text-body leading-relaxed">
@@ -3225,14 +3097,12 @@ function SurefrontCaseStudyBody() {
                 {/* Capped at 545px: the source is 1089px wide, so anything larger
                     is upscaling on a 2x display, and this is dense UI where the
                     legibility is the whole point. */}
-                <figure className="space-y-2 mb-10 max-w-[545px]">
-                  <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
-                    <Image loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart bound to the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 640px) 100vw, 545px" className="w-full h-auto opacity-95 hover:opacity-100 transition-opacity duration-400 ease-out" />
-                  </div>
-                  <figcaption className="text-sm text-meta leading-relaxed">
-                    Version two: the chart and the catalogue on one screen, so a filter is always visibly acting on the products behind the numbers.
-                  </figcaption>
-                </figure>
+                <Figure
+                  className="mb-10 max-w-[545px]"
+                  caption="Version two: the chart and the catalogue on one screen, so a filter is always visibly acting on the products behind the numbers."
+                >
+                    <ZoomableImage loading="lazy" src="/images/03/surefront/surefront-analytics.jpg" alt="Analytics dashboard with a stacked bar chart bound to the product catalogue" width={dimsOf("/images/03/surefront/surefront-analytics.jpg").w} height={dimsOf("/images/03/surefront/surefront-analytics.jpg").h} sizes="(max-width: 640px) 100vw, 545px" className="w-full h-auto" />
+                </Figure>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                   <div className="lg:col-span-7 space-y-6">
@@ -3263,8 +3133,7 @@ function SurefrontCaseStudyBody() {
                         version one failed at, so this claim is carried by the clip.
                         preload="none" keeps the 9.9MB off the initial page load: the
                         poster is all that ships until someone presses play. */}
-                    <figure className="space-y-2 pt-2">
-                      <div className="w-full overflow-hidden rounded-sm border border-accent/15 bg-raised">
+                    <Figure className="pt-2" caption={<>Version two, running. Filter chips narrow the catalogue and the chart at the same time, and Stack&nbsp;By adds the third dimension that flat charts could not carry. Coded prototype, mine.</>}>
                         <video
                           controls
                           preload="none"
@@ -3276,12 +3145,7 @@ function SurefrontCaseStudyBody() {
                           Your browser does not support embedded video. The clip shows filters in the
                           coded analytics prototype updating the product catalogue and the stacked chart together.
                         </video>
-                      </div>
-                      <figcaption className="text-sm text-meta leading-relaxed">
-                        Version two, running. Filter chips narrow the catalogue and the chart at the same time, and
-                        Stack&nbsp;By adds the third dimension that flat charts could not carry. Coded prototype, mine.
-                      </figcaption>
-                    </figure>
+                    </Figure>
                   </div>
 
                   <div className="lg:col-span-5 space-y-4">
@@ -3324,6 +3188,11 @@ export default function RinasPortfolio() {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [hearts, setHearts] = useState<{ id: number; x: number; y: number; scale: number; rotation: number; fill: string; highlight: string; outline: string }[]>([]);
   const [selectedProject, setSelectedProject] = useState<GridItem | null>(null);
+  // Which surface opened ProjectModal: the Selected Projects hero row (the
+  // jellyfish tile) or the full archive grid further down. Only the hero
+  // row's click-to-zoom is compact, so ProjectModal needs to know which one
+  // it was, and neither trigger carries that on its own.
+  const [selectedFromHero, setSelectedFromHero] = useState(false);
 
   // Filtered list mirrors what's rendered in the grid, used for modal prev/next
   const filteredProjects = activeFilter === null
@@ -3435,7 +3304,9 @@ export default function RinasPortfolio() {
             <h2 className={`${outfit.className} text-3xl md:text-4xl font-light text-[var(--ink)] mb-10`}>
               Selected Projects
             </h2>
-            <SelectedProjectCards onOpenProject={setSelectedProject} />
+            <SelectedProjectCards
+              onOpenProject={(item) => { setSelectedFromHero(true); setSelectedProject(item); }}
+            />
           </section>
 
           {/* The three long-form case studies are not rendered inline any more.
@@ -3559,7 +3430,7 @@ export default function RinasPortfolio() {
                       item={item}
                       activeFilter={activeFilter}
                       outfitClass={outfit.className}
-                      onOpen={setSelectedProject}
+                      onOpen={(i) => { setSelectedFromHero(false); setSelectedProject(i); }}
                     />
                   ))}
                 </AnimatePresence>
@@ -3960,6 +3831,7 @@ export default function RinasPortfolio() {
               key={selectedProject.alt}
               item={selectedProject}
               outfitClass={outfit.className}
+              compact={selectedFromHero}
               onClose={() => setSelectedProject(null)}
               onPrev={() => {
                 if (selectedIndex > 0) setSelectedProject(filteredProjects[selectedIndex - 1]);

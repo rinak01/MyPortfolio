@@ -153,7 +153,7 @@ const CSS = `
 .tk-mono { font-family:var(--tk-mono), ui-monospace, 'SFMono-Regular', Menlo, monospace;
   text-transform:uppercase; letter-spacing:0.2em; font-size:10px; font-weight:400; }
 
-.tk-scroller { position:relative; height:700vh; }
+.tk-scroller { position:relative; height:500vh; }
 .tk-stage { position:sticky; top:0; height:100vh; overflow:hidden;
   display:flex; align-items:center; justify-content:center; }
 
@@ -381,6 +381,13 @@ const CSS = `
   font-size:var(--type-sub); line-height:1.5; font-weight:400;
   color:var(--ink-low);
   text-shadow:0 1px 3px rgba(2,10,16,0.85), 0 0 8px rgba(2,10,16,0.5); }
+/* Skills alone gets bullets: three short nouns read faster stacked than
+   run together in a comma sentence, unlike Education/Previously which are
+   already single facts. */
+.tk-skill-list { margin:0; padding:0; list-style:none; display:grid; gap:0.3rem; }
+.tk-skill-list li { position:relative; padding-left:0.95rem; }
+.tk-skill-list li::before { content:''; position:absolute; left:0; top:0.55em;
+  width:4px; height:4px; border-radius:50%; background:var(--ink-low); }
 
 @media (max-width: 760px) {
   .tk-glass { padding:1.4rem; }
@@ -417,8 +424,12 @@ const CSS = `
    was 130px wide. The matte is 40px now and cannot hold a 56px instrument,
    so the dial moved inside the panel: 64px from the viewport edge puts it
    24px in from the frame, and it carries its own scrim below because the
-   reef behind it is lit. */
-.tk-gauge { position:absolute; right:64px; top:50%; transform:translateY(-50%);
+   reef behind it is lit.
+   Corner, not mid-height: centred on the right edge it floated in open
+   water, competing with the title and the jellyfish cluster for the same
+   band of attention. A gauge reads as a HUD element, and HUD elements live
+   in corners. */
+.tk-gauge { position:absolute; right:186px; top:64px;
   display:flex; flex-direction:column; align-items:center; gap:12px;
   isolation:isolate; }
 /* Glass, not blur. backdrop-filter redistributes background detail but
@@ -431,7 +442,11 @@ const CSS = `
    animating background and a per-frame repaint here shimmers at the edges. */
 /* Sized as a square and centred, so border-radius gives a true circle. It
    was inset per-edge off a taller-than-wide flex column, which made an oval:
-   108 x 123. 132 clears the ring and still contains the label at its widest. */
+   108 x 123. 132 clears the ring and still contains the label at its widest.
+   Falls to zero at the rim on purpose: that's what reads as glass over the
+   reef rather than an opaque disc. The dial's own position (raised clear of
+   the corner brace) is what keeps this honest now, not a raised opacity
+   floor here. */
 .tk-gauge::before { content:''; position:absolute; z-index:0;
   left:50%; top:50%; width:132px; height:132px;
   transform:translate(-50%,-50%);
@@ -550,8 +565,13 @@ export default function TankHero() {
      Clamped so it can never pull an edge off the plate. */
   const nudgeX = filling ? 12 : 0;
   /* Negative when filling, which is what stops the mirrors and veils below
-     from rendering: there is nothing left over to cover. */
-  const padX = Math.min(0, Math.max(panelW - drawW, (panelW - drawW) * anchorX + nudgeX));
+     from rendering: there is nothing left over to cover. When contained
+     (not filling) there's nothing to crop either, so the plate just centers
+     in the leftover width instead of running the filling-mode clamp, which
+     forced padX to 0 and anchored the plate flush-left. */
+  const padX = filling
+    ? Math.min(0, Math.max(panelW - drawW, (panelW - drawW) * anchorX + nudgeX))
+    : (panelW - drawW) / 2;
   const padY = (panelH - drawH) / 2;
 
   /* time-of-day scrub — the cycle now completes at 0.40 rather than 0.60,
@@ -576,10 +596,6 @@ export default function TankHero() {
   const [sunX, sunY] = polar(sunAngle, DIAL_R);
   const sunColor = discAt(dialMinutes);
   const dialPhase = phaseAt(dialMinutes);
-  /* Held at full strength throughout. Fading it out with the tank would have
-     hidden the last quarter of its own sweep, and it has something to say
-     once the circle closes. */
-  const dialOn = 1;
   /* Once the day has come all the way round and the card is up, the readout
      stops reporting a phase and says hello instead. Cross-faded rather than
      swapped so the two never both read at once. */
@@ -596,6 +612,12 @@ export default function TankHero() {
   const flat = easeInOut(clamp((p - 0.58) / 0.16)) * REEF_REST;
   const glassOn = easeOut((p - 0.7) / 0.14);
   const blur = reduced ? 0 : (flat / REEF_REST) * 4;
+  /* Shares the glass pane's own fade, inverted: the pane's top-right corner
+     rises into the dial's corner as it materialises, and past a point the
+     two are close enough to read as colliding. The dial has said what it
+     has to say by then anyway — the day's already come full circle — so it
+     yields the corner instead of fighting the card for it. */
+  const dialOn = 1 - glassOn;
 
   return (
     <div className={`tk-root ${newsreader.variable} ${spaceMono.variable}`}>
@@ -753,8 +775,8 @@ export default function TankHero() {
                   <div className="tk-glass-id">
                     <p className="tk-mono tk-glass-eyebrow">Product Designer</p>
                     <h2 className="tk-glass-name">{NAME}</h2>
-                    {/* Nested under FOCUS this read as a caption qualifying the
-                        focus areas. It is a statement about the person, so it
+                    {/* Nested under SKILLS this read as a caption qualifying the
+                        skills list. It is a statement about the person, so it
                         sits with the name at body size. */}
                     <p className="tk-glass-line">Bridging research and production.</p>
                     <a className="tk-mono tk-resume" href={RESUME} target="_blank" rel="noopener noreferrer">
@@ -768,7 +790,7 @@ export default function TankHero() {
                         by its label, not by parsing a sentence. A description
                         list is literally what this is, so dl/dt/dd. The old
                         role line is gone — it listed the same disciplines the
-                        Focus row now carries. */}
+                        Skills row now carries. */}
                     <dl className="tk-glass-facts">
                       <div>
                         <dt className="tk-mono">Education</dt>
@@ -782,8 +804,14 @@ export default function TankHero() {
                         <dd>BMW Group Technology Office</dd>
                       </div>
                       <div>
-                        <dt className="tk-mono">Focus</dt>
-                        <dd>Automotive HMI, Interface Design, Rapid Prototyping</dd>
+                        <dt className="tk-mono">Skills</dt>
+                        <dd>
+                          <ul className="tk-skill-list">
+                            <li>UI/UX Design</li>
+                            <li>User Research</li>
+                            <li>Rapid Prototyping</li>
+                          </ul>
+                        </dd>
                       </div>
                     </dl>
                   </div>
