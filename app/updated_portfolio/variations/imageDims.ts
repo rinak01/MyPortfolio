@@ -66,6 +66,7 @@ export const IMG_DIMS: Record<string, { w: number; h: number }> = {
   "/images/prototypes/LuminousJellyfish/state_curious.png": { w: 2560, h: 1440 },
   "/images/prototypes/LuminousJellyfish/state_happy.png": { w: 2560, h: 1440 },
   "/images/prototypes/LuminousJellyfish/state_idle.png": { w: 2560, h: 1440 },
+  "/images/prototypes/LuminousJellyfish/state_thinking_full.jpg": { w: 1920, h: 1080 },
   "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_01.JPG": { w: 4000, h: 8000 },
   "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_02.JPG": { w: 4000, h: 8000 },
   "/images/prototypes/MIT Reality Hack 2024/RH24_Banner_Design_04_Final.JPG": { w: 4000, h: 8000 },

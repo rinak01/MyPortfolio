@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useId, Fragment } from "react";
-import type { ReactElement, ReactNode } from "react";
+import type { ComponentType, ReactElement, ReactNode } from "react";
 import { motion, AnimatePresence, MotionConfig, useIsPresent } from "framer-motion";
 import Image from "next/image";
 import { Outfit, DM_Sans } from "next/font/google";
@@ -10,6 +10,7 @@ import { Overlay } from "./Overlay";
 import { LightboxGroup, ZoomableImage, ZoomableBlock } from "./Lightbox";
 import { Figure } from "./Figure";
 import ProactiveAgentDemo from "./ProactiveAgentDemo";
+import JellyfishSystem from "./JellyfishSystem";
 import { TankCardRow, TankCard } from "./TankCards";
 
 // The archive tile and the modal hero are a layoutId pair, so both halves must
@@ -83,6 +84,9 @@ export interface GridItem {
   // Optional interactive demo shown at the top of the modal's image column via iframe.
   // Use for self-contained HTML pages served from /public.
   demo?: { url: string; caption?: string; height?: string; aspect?: string };
+  // Optional full-width block above the two-column split, for a project whose
+  // argument is motion or interaction and cannot be carried by stills.
+  feature?: ComponentType;
   // Process images shown by scrolling the modal's image column.
   // If omitted, the modal falls back to a single image from `src`.
   // First entry = hero/final shot, subsequent entries = build/process shots.
@@ -128,18 +132,16 @@ export const ALL_PROJECTS: GridItem[] = [
     ]
   },
     {
-    src: "/images/prototypes/LuminousJellyfish/Jellyfish_InEnclosure.png", alt: "Luminous Jellyfish", tag: "Light Interface · Ambient Agent", label: "Luminous Jellyfish", desc: "A wordless agent that expresses emotion, status, and intent purely through light, staying readable from midnight to noon", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Ambient Computing", "Interface Design", "Multimodal Systems"], year: "2026", context: "The June 19th Project · Designer", tools: ["Light modelling", "Contrast normalisation", "Motion design", "Particle systems"], notes: "How can we design real-time agent state indicators (emotion, status, intent) that remain readable in bright ambient light while preventing user cognitive overload?\n\nThe answer is a creature with no words and no face. The reef sets ambient light; the jellyfish emits light. Because the creature is always read against its environment, its expression is normalised against ambient rather than set as an absolute — emit = base(state) × (1 + k · (1 − ambient)), with k ≈ 0.8 so Night reads bold and Day stays legible.", designThinking: "Day caps the brightness channel at 1.00, and that ceiling is the interesting constraint rather than a limitation. Once brightness runs out, high-arousal states like Happy have to be carried by particles and motion instead, which forces the expression system to be multi-channel from the start.\n\nThe second rule is traceability: the jellyfish has no words and no face, so everything the user learns about it, they learn by watching light change in response to their own voice. A reply the user cannot trace back to something they did is not a reply, it is noise.\n\nEach mechanism was built for a jellyfish in a tank, but each answers a constraint any real-time agent interface faces under changing ambient light.", images: [
-      { src: "/images/prototypes/LuminousJellyfish/Jellyfish_InEnclosure.png", caption: "The creature drifting in its glass enclosure above a bioluminescent reef." },
-      { src: "/images/prototypes/LuminousJellyfish/reef_day.jpg", caption: "Day: ambient light at its peak, where the emission channel saturates and motion has to carry expression." },
-      { src: "/images/prototypes/LuminousJellyfish/reef_day_detail01.png", caption: "Day detail: the reef's bioluminescent coral bed, dimmer pocket beneath the canopy." },
-      { src: "/images/prototypes/LuminousJellyfish/reef_day_detail02.png", caption: "Day detail: the same coral bed under full sunbeam." },
-      { src: "/images/prototypes/LuminousJellyfish/reef_dusk.jpg", caption: "Dusk: the crossover point where emitted light begins to outrun ambient." },
-      { src: "/images/prototypes/LuminousJellyfish/reef_night.jpg", caption: "Night: ambient near zero, the same emotion rendered at a fraction of the daytime output." },
-      { src: "/images/prototypes/LuminousJellyfish/night_enclosure01.png", caption: "Night detail: the coral bed's bioluminescence carrying the scene with no ambient light left." },
+    src: "/images/prototypes/LuminousJellyfish/Jellyfish_InEnclosure.png", alt: "Luminous Jellyfish", tag: "Light Interface · Ambient Agent", label: "Luminous Jellyfish", desc: "A wordless agent that expresses emotion, status, and intent purely through light, staying readable from midnight to noon", colSpan: 2, aspectClass: "aspect-[16/9]", categories: ["Ambient Computing", "Interface Design", "Multimodal Systems"], year: "2026", context: "The June 19th Project · Designer", tools: ["Motion design", "Design tokens", "State machines", "Light modelling", "Particle systems", "GLSL"], feature: JellyfishSystem, notes: "How can we design real-time agent state indicators (emotion, status, intent) that remain readable in bright ambient light while preventing user cognitive overload?\n\nThe answer is a creature with no words and no face, living in a lit glass tank whose light follows the visitor's real local time. The tank sets ambient light; the jellyfish emits light. Because the creature is always read against its environment, its expression is normalised against ambient rather than set as an absolute: emit = base(state) × (1 + k · (1 − ambient)), with k ≈ 0.8 so Night reads bold and Day stays legible.", designThinking: "Day caps the brightness channel at 1.00, and that ceiling is the interesting constraint rather than a limitation. Once brightness runs out, high-arousal states like Happy have to be carried by particles and motion instead, which forces the expression system to be multi-channel from the start.\n\nThe second rule is traceability: the jellyfish has no words and no face, so everything a visitor learns about it, they learn by watching light change in response to their own cursor or touch. A reply the visitor cannot trace back to something they did is not a reply, it is noise.\n\nThe third is restraint in the vocabulary itself: one light word at a time, and a lower-priority word is dropped, never queued. That rule was reconsidered and kept, because a simple rule the visitor can learn beats protecting a rare signal.", images: [
+      { src: "/images/prototypes/LuminousJellyfish/Jellyfish_InEnclosure.png", caption: "Establishing shot: the simpler enclosure variant of the creature, drawn for wide views inside the lit tank." },
+      { src: "/images/prototypes/LuminousJellyfish/reef_day_detail01.png", caption: "Day detail: the reef bed in the shaded pocket beneath the canopy." },
+      { src: "/images/prototypes/LuminousJellyfish/reef_day_detail02.png", caption: "Day detail: the same reef bed under a full sunbeam from the water surface." },
+      { src: "/images/prototypes/LuminousJellyfish/night_enclosure01.png", caption: "Night detail: coral glow carrying the tank once ambient light is gone." },
       { src: "/images/prototypes/LuminousJellyfish/night_enclosure02.png", caption: "Night detail: close on the reef's glowing anemones against the dark." },
       { src: "/images/prototypes/LuminousJellyfish/state_happy.png", caption: "Happy: particles and motion added once brightness alone hits its ceiling." },
       { src: "/images/prototypes/LuminousJellyfish/state_idle.png", caption: "Idle: contracted silhouette and dimmed, slower pulse." },
       { src: "/images/prototypes/LuminousJellyfish/state_curious.png", caption: "Curious: alert posture, tendrils reaching outward toward the stimulus." },
+      { src: "/images/prototypes/LuminousJellyfish/state_thinking_full.jpg", caption: "Surprised: lavender shimmer draws inward, tendrils stilled." },
     ]
   },
     {
@@ -856,6 +858,7 @@ function ProjectModal({
   // the same asset; otherwise it would cross-fade two different pictures
   // mid-flight, which reads as a glitch rather than a transition.
   const heroIsThumb = images[0].src === item.src;
+  const Feature = item.feature;
 
   // Escape, the scroll lock and the focus trap belong to every dialog and are
   // Overlay's job. Only the gallery's own arrow-key stepping lives here.
@@ -1109,6 +1112,11 @@ function ProjectModal({
           </div>
         </div>
 
+        {Feature && (
+          <div className="border-t border-line-soft">
+            <Feature />
+          </div>
+        )}
       </motion.div>
 
       {/* Close button, floats on backdrop above the panel so it doesn't overlap content */}
