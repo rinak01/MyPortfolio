@@ -21,7 +21,7 @@ const IMG = {
 };
 
 const NAME = "Rina Kim";
-const RESUME = "/images/Resume_RinaKim.pdf";
+const RESUME = "/images/Resume - Rina Kim.pdf";
 
 type Phase = {
   key: string;
