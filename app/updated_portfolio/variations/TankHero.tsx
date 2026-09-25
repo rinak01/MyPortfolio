@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { newsreader, spaceMono } from "./tankType";
 
@@ -366,7 +367,8 @@ const CSS = `
 .tk-nb { white-space:nowrap; }
 .tk-glass-facts > div { display:grid;
   grid-template-columns:clamp(6rem, 9vw, 7.5rem) minmax(0,1fr);
-  gap:1.5rem; align-items:baseline; }
+  column-gap:1.5rem; row-gap:1.5rem; align-items:baseline; }
+.tk-glass-facts > div.tk-fact-group { row-gap:0.25rem; }
 .tk-glass-facts dt { margin:0 0 0 -0.06em; font-size:var(--type-label);
   letter-spacing:var(--track-label); line-height:1.2;
   font-weight:700; color:var(--ink-low);
@@ -381,8 +383,14 @@ const CSS = `
   font-size:var(--type-sub); line-height:1.5; font-weight:400;
   color:var(--ink-low);
   text-shadow:0 1px 3px rgba(2,10,16,0.85), 0 0 8px rgba(2,10,16,0.5); }
+/* Matches .tk-fact-sub's voice (italic quiet caption) rather than the bold
+   mono label style, since it plays the same supporting role as Education's
+   institution line — full ink-low, no extra opacity dip that killed contrast. */
+.tk-glass-facts dt.tk-fact-tag { font-style:italic; font-weight:400; text-transform:none;
+  letter-spacing:0; font-size:var(--type-sub); color:var(--ink-low);
+  text-shadow:0 1px 3px rgba(2,10,16,0.85), 0 0 8px rgba(2,10,16,0.5); }
 /* Skills alone gets bullets: three short nouns read faster stacked than
-   run together in a comma sentence, unlike Education/Previously which are
+   run together in a comma sentence, unlike Education/Experience which are
    already single facts. */
 .tk-skill-list { margin:0; padding:0; list-style:none; display:grid; gap:0.3rem; }
 .tk-skill-list li { position:relative; padding-left:0.95rem; }
@@ -649,8 +657,19 @@ export default function TankHero() {
         <div className="tk-stage">
           <div className="tk-panel" style={{ width: `${panelW}px`, height: `${panelH}px` }}>
             {PHASES.map((ph, i) => {
-              const o = i === i0 ? 1 - f : i === i0 + 1 ? f : 0;
-              const box = { top: padY, width: drawW, height: drawH } as const;
+              // o is exactly 0 for every phase but the current one and the
+              // next, so only those two are ever visible. Mounting the rest
+              // just means dusk and night compete with dawn for bandwidth on
+              // first load, so they wait until the scroll actually reaches
+              // them.
+              if (i !== i0 && i !== i0 + 1) return null;
+              const o = i === i0 ? 1 - f : f;
+              const box = { top: padY, width: Math.round(drawW), height: Math.round(drawH) } as const;
+              // Only the true dawn plate — the very first thing painted —
+              // gets a fetch-priority boost. Everything else, including the
+              // day plate mounted alongside it for the first crossfade, loads
+              // at normal priority so it never steals dawn's bandwidth.
+              const isDawn = i === 0;
               return (
                 <div
                   key={ph.key}
@@ -664,30 +683,39 @@ export default function TankHero() {
                       off into the dark. */}
                   {padX > 1 && (
                     <>
-                      <img className="tk-edge" src={ph.src} alt="" aria-hidden="true"
-                        draggable={false}
+                      <Image className="tk-edge" src={ph.src} alt="" aria-hidden="true"
+                        draggable={false} width={box.width} height={box.height}
+                        sizes="100vw" decoding="async"
                         style={{ ...box, left: padX - drawW, transform: "scaleX(-1)" }} />
-                      <img className="tk-edge" src={ph.src} alt="" aria-hidden="true"
-                        draggable={false}
+                      <Image className="tk-edge" src={ph.src} alt="" aria-hidden="true"
+                        draggable={false} width={box.width} height={box.height}
+                        sizes="100vw" decoding="async"
                         style={{ ...box, left: padX + drawW, transform: "scaleX(-1)" }} />
                     </>
                   )}
                   {padY > 1 && (
                     <>
-                      <img className="tk-edge" src={ph.src} alt="" aria-hidden="true"
-                        draggable={false}
+                      <Image className="tk-edge" src={ph.src} alt="" aria-hidden="true"
+                        draggable={false} width={box.width} height={box.height}
+                        sizes="100vw" decoding="async"
                         style={{ left: padX, width: drawW, height: drawH, top: padY - drawH, transform: "scaleY(-1)" }} />
-                      <img className="tk-edge" src={ph.src} alt="" aria-hidden="true"
-                        draggable={false}
+                      <Image className="tk-edge" src={ph.src} alt="" aria-hidden="true"
+                        draggable={false} width={box.width} height={box.height}
+                        sizes="100vw" decoding="async"
                         style={{ left: padX, width: drawW, height: drawH, top: padY + drawH, transform: "scaleY(-1)" }} />
                     </>
                   )}
-                  <img
+                  <Image
                     className="tk-bg"
                     src={ph.src}
-                    alt={i === 0 ? "A reef tank lit from above, drawn in soft gouache." : ""}
-                    aria-hidden={i !== 0}
+                    alt={isDawn ? "A reef tank lit from above, drawn in soft gouache." : ""}
+                    aria-hidden={!isDawn}
                     draggable={false}
+                    width={box.width}
+                    height={box.height}
+                    sizes="100vw"
+                    priority={isDawn}
+                    decoding="async"
                     style={{ ...box, left: padX }}
                   />
                 </div>
@@ -799,9 +827,11 @@ export default function TankHero() {
                           <span className="tk-fact-sub">Carnegie Mellon University</span>
                         </dd>
                       </div>
-                      <div>
-                        <dt className="tk-mono">Previously</dt>
-                        <dd>BMW Group Technology Office</dd>
+                      <div className="tk-fact-group">
+                        <dt className="tk-mono">Experience</dt>
+                        <dd>2+ years</dd>
+                        <dt className="tk-fact-tag">Previously</dt>
+                        <dd className="tk-fact-sub">BMW Group Technology Office</dd>
                       </div>
                       <div>
                         <dt className="tk-mono">Skills</dt>
