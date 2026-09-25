@@ -407,7 +407,11 @@ const CSS = `
     padding-left:0; padding-top:1.3rem; }
   .tk-glass-facts { gap:1.7rem; }
   .tk-glass-facts > div { grid-template-columns:1fr; gap:0.3rem; }
-
+  /* Single-column stacking flattens Experience/2+ years/Previously/BMW into
+     four evenly-gapped rows, erasing which pair goes together. Gap stays
+     uniform (grid can't vary it per-row), so the second pair's own margin
+     carries the extra separation instead. */
+  .tk-glass-facts > div.tk-fact-group dt.tk-fact-tag { margin-top:0.85rem; }
 }
 /* Frostier and near-solid when the viewer has asked for less transparency. */
 @media (prefers-reduced-transparency: reduce) {
