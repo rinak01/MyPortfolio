@@ -312,28 +312,19 @@ function FilterCategoryButton({
 // ─── FilteredThumb ────────────────────────────────────────────────────────────
 function FilteredThumb({
   item,
-  activeFilter,
   outfitClass,
   onOpen,
 }: {
   item: GridItem;
-  activeFilter: Category | null;
   outfitClass: string;
   onOpen: (item: GridItem) => void;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
   // False for the ~200ms an exiting tile spends fading out under
   // AnimatePresence. Without this, a filtered-out tile stayed fully
   // clickable and tabbable at opacity 0 for that whole window — a keyboard
   // user tabbing right after a filter change could land on an invisible
   // ghost tile.
   const isPresent = useIsPresent();
-
-  // Color logic:
-  // - Filter active → always full color (only matches are rendered)
-  // - No filter + hovering → full color
-  // - No filter + not hovering → grayscale
-  const inColor = activeFilter !== null || isHovered;
 
   return (
     <motion.button
@@ -366,10 +357,6 @@ function FilteredThumb({
       tabIndex={isPresent ? undefined : -1}
       aria-hidden={!isPresent}
       className={`${COL_SPAN_CLASS[item.colSpan ?? 3]} group cursor-pointer flex flex-col text-left`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onFocus={() => setIsHovered(true)}
-      onBlur={() => setIsHovered(false)}
     >
       {/* Image well: aspect-ratio container holds the picture + (desktop-only) hover overlay */}
       <div className={`${item.aspectClass ?? "aspect-[16/9]"} bg-raised overflow-hidden rounded-sm relative`}>
@@ -388,7 +375,7 @@ function FilteredThumb({
           style={{ objectPosition: item.objectPosition ?? "center" }}
           className={`object-cover ${item.scaleClass ?? ""}`}
           animate={{
-            filter: inColor ? "grayscale(0%) brightness(1)" : "var(--thumb-idle)",
+            filter: "grayscale(0%) brightness(1)",
           }}
           transition={{
             duration: 0.4, ease: [0.25, 0.1, 0.25, 1],
@@ -3441,7 +3428,6 @@ export default function RinasPortfolio() {
                     <FilteredThumb
                       key={item.alt}
                       item={item}
-                      activeFilter={activeFilter}
                       outfitClass={outfit.className}
                       onOpen={(i) => { setSelectedFromHero(false); setSelectedProject(i); }}
                     />
